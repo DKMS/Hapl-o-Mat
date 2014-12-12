@@ -4,6 +4,8 @@
 #include <array>
 #include <vector>
 
+class GlidFile;
+
 class Report{
 
   typedef std::vector<std::array<std::string, 2>> listOfLoci_t;
@@ -25,7 +27,7 @@ class GLReport : public Report{
   }
   
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
-  void resolve(std::vector<GLReport> & listOfReports);
+  void resolve(std::vector<GLReport> & listOfReports, const GlidFile & glid);
   
  private:
   std::vector<size_t> inLoci;

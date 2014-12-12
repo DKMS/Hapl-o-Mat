@@ -20,7 +20,7 @@ void GLDataProcessing::dataProcessing(){
 
     GLReport report(line, booleanLociToDo);
     std::vector<GLReport> listOfReports;
-    report.resolve(listOfReports);
+    report.resolve(listOfReports, glid);
     
 
   }
