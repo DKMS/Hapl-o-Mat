@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 
 #include "DataProcessing.h"
 #include "Utility.h"
@@ -13,7 +14,6 @@ void DataProcessingDKMS::dataProcessing(){
   if(std::getline(file, line)){
     readLocusNames(line);
   }
-
 }
 
 void DataProcessingDKMS::readLocusNames(const std::string line){
