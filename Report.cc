@@ -7,7 +7,6 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
 
   std::string rightPartOfLine = rightOfFirstDelim(line, ';');
   strVec_t codes = split(rightPartOfLine, ':');
-
   inLoci.reserve(codes.size());
   size_t counter = 0;
   for(auto code : codes){
@@ -17,4 +16,10 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
     }
     counter ++;
   }
+}
+
+void GLReport::resolve(std::vector<GLReport> & listOfReports){
+
+  
+
 }

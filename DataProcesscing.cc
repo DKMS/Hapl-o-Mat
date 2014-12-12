@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "DataProcessing.h"
+#include "Glid.h"
 #include "Report.h"
 #include "Utility.h"
 
@@ -11,6 +12,8 @@ void GLDataProcessing::dataProcessing(){
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
 
+  GlidFile glid(glidFileName);
+
   std::string line;
   while(std::getline(inputFile, line)){
 
@@ -19,7 +22,7 @@ void GLDataProcessing::dataProcessing(){
 
     GLReport report(line, booleanLociToDo);
     std::vector<GLReport> listOfReports;
-    //    report.resolve(listOfReports);
+    report.resolve(listOfReports);
     
 
   }
