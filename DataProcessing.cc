@@ -3,6 +3,7 @@
 
 #include "DataProcessing.h"
 #include "Utility.h"
+#include "Report.h"
 
 
 void DataProcessingDKMS::dataProcessing(){
@@ -13,6 +14,14 @@ void DataProcessingDKMS::dataProcessing(){
   std::string line;
   if(std::getline(file, line)){
     readLocusNames(line);
+  }
+
+  while(std::getline(file, line)){
+
+    if(line.length() == 1 || line.length() == 0)
+      continue;
+    
+    HReport report(line, locusNames);
   }
 }
 
@@ -32,4 +41,13 @@ void DataProcessingGL::dataProcessing(){
 
   std::ifstream file;
   openFile(file, fileName);
+
+  std::string line;
+  while(std::getline(file, line)){  
+    if(line.length() == 1 || line.length() == 0)
+      continue;
+    
+    GLReport report(line, doLoci);
+    report.resolveInputCodes();
+  }
 }

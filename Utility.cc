@@ -1,5 +1,6 @@
-#include<iostream>
-#include"Utility.h"
+#include <iostream>
+#include <sstream>
+#include "Utility.h"
 
 void openFile(std::ifstream & file,const std::string fileName){
 
@@ -10,4 +11,16 @@ void openFile(std::ifstream & file,const std::string fileName){
               << std::endl;
     exit (EXIT_FAILURE);
   }
+}
+
+strVec_t split(const std::string &s, char delim){
+
+  strVec_t elems;
+  elems.reserve(2);
+  std::stringstream ss(s);
+  std::string item;
+  while (std::getline(ss, item, delim)) {
+    elems.push_back(item);
+  }
+  return elems;
 }
