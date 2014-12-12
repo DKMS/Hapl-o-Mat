@@ -12,8 +12,6 @@ void GLDataProcessing::dataProcessing(){
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
 
-  GlidFile glid(glidFileName);
-
   std::string line;
   while(std::getline(inputFile, line)){
 

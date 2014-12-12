@@ -1,5 +1,5 @@
 #ifndef Glid_header
-#define glid_header
+#define Glid_header
 
 #include <string>
 #include <unordered_map>
