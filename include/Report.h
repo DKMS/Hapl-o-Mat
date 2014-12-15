@@ -44,7 +44,7 @@ class HReport : public Report{
   
   void translateLine(const std::string line, const strVec_t lociNames);
   void resolve(std::vector<HReport> & listOfReports);
-  const strVec_t & resolveNMDPCode(const std::string code) const;
+  void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
 
  private:
   strArrVec_t inLoci;

@@ -72,10 +72,36 @@ void HReport::translateLine(const std::string line, const strVec_t lociNames){
   }
 }
 
-const strVec_t & HReport::resolveNMDPCode(const std::string code) const{
+void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
 
-  
-
+  std::string nmdpCode = findNMDPCode(code);
+  auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
+  if(itFileNMDPCodes == fileNMDPCodes.getList().end()){
+    std::cout << "Could not find NMDP-Code "
+	      << nmdpCode
+	      << std::endl;
+    exit (EXIT_FAILURE);
+  }
+  else{
+    std::string newCode = code;
+    size_t positionNMDPCodeInCode = code.find(nmdpCode);
+    newCode.erase(positionNMDPCodeInCode);
+    if(itFileNMDPCodes->second.find(':') != std::string::npos){
+      std::size_t posLastColon = newCode.find_last_of(':');
+      newCode.erase(posLastColon);
+      posLastColon = newCode.find_last_of(':');
+      if(posLastColon == std::string::npos)
+	posLastColon = newCode.find_last_of('*');
+      newCode.erase(posLastColon+1);
+    }
+    strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
+    for(auto itSplittedCode : splittedCode)
+      {
+	std::string newCode2 = newCode;
+	newCode2.append(itSplittedCode);
+	newCodes.push_back(newCode2);
+      }
+  }
 }
 
 void HReport::resolve(std::vector<HReport> & listOfReports){
@@ -86,7 +112,7 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
     for(auto code : locus){
       strVec_t codes;
       if(checkNMDPCode(code)){
-	//resolve nmdp into codes
+	resolveNMDPCode(code, codes);
 	codes.push_back(code);
       }
       else{

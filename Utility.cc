@@ -62,3 +62,19 @@ bool checkNMDPCode(const std::string code){
 
   return in;
 }
+
+std::string findNMDPCode(const std::string code){
+
+  std::string shortCode = rightOfFirstDelim(code, '*');
+  auto itBegin = std::find_if(shortCode.begin(), shortCode.end(), isLetter);
+  auto itEnd = std::find_if(itBegin, shortCode.end(), isNoLetter);
+
+  std::string multiAlleleCode;
+  for(auto it=itBegin;
+      it != itEnd;
+      it++){
+    multiAlleleCode += *it;
+  }
+
+  return multiAlleleCode;
+}
