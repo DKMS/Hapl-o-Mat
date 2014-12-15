@@ -1,9 +1,10 @@
+#include <sstream>
+#include <iostream>
+
 #include "Report.h"
 #include "Locus.h"
 #include "Glid.h"
 #include "Utility.h"
-
-#include <iostream>
 
 void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
 
@@ -44,6 +45,29 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
   }//for inLoci
 
   //build report from listOfLoci by cartesian product
+}
+
+void HReport::translateLine(const std::string line, const strVec_t lociNames){
+
+  std::stringstream ss(line);
+  std::string entry;
+  if(ss >> entry)
+    id = entry;
+
+  auto locusName = lociNames.cbegin();
+  std::string entry2;
+  while(ss >> entry >> entry2){
+    std::string code1 = *locusName;
+    locusName ++;
+    std::string code2 = *locusName;
+    locusName ++;
+    code1.append(entry);
+    code2.append(entry2);
+    strArr_t locus;
+    locus.at(0) = code1;
+    locus.at(1) = code2;
+    inLoci.push_back(locus);
+  }
 }
 
 void HReport::resolve(std::vector<HReport> & listOfReports){

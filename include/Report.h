@@ -35,16 +35,17 @@ class GLReport : public Report{
 };
 
 class HReport : public Report{
-
+  
  public:
- HReport(const std::string line, const strVec_t & lociNames){
-    
+ HReport(const std::string line, const strVec_t & lociNames) : inLoci(){
+    translateLine(line, lociNames);
   }
-
- void resolve(std::vector<HReport> & listOfReports);
+  
+  void translateLine(const std::string line, const strVec_t lociNames);
+  void resolve(std::vector<HReport> & listOfReports);
 
  private:
-
+  strArrVec_t inLoci;
 
 };
 

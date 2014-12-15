@@ -59,9 +59,10 @@ void DKMSDataProcessing::readLociNames(const std::string line){
   std::stringstream ss(line);
   std::string name;
   if (ss >> name){
-    while(ss >> name >> name){
+    while(ss >> name){
       lociNames.push_back(name);
       numberLoci ++;
     }
   }
+  numberLoci /= 2;
 }
