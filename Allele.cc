@@ -2,7 +2,7 @@
 
 #include "Allele.h"
 
-void Allele::printCodePrecision() const{
+void Allele::printCodePrecision(const codePrecision precision) const{
 
   switch(precision){
   case codePrecision::g:

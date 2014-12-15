@@ -25,10 +25,11 @@ class Allele{
   
   virtual void translateTo4d() = 0;
 
-  void printCodePrecision() const;
+  void printCodePrecision(const codePrecision precision) const;
   double getFrequency() const {return frequency;}
   std::string getCode() const {return code;}
   codePrecision getPrecision() const {return precision;}
+  codePrecision getWantedPrecision() const {return wantedPrecision;}
 
  protected:
   std::string code;
