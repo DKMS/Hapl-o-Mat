@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include "Utility.h"
 
@@ -27,3 +28,37 @@ strVec_t split(const std::string &s, char delim){
   return elems;
 }
 
+bool checkLastLetter(const std::string code, const char lastLetter){
+
+  auto it = code.rbegin();
+  char lastCharacter = *it;
+  it++;
+  char NextToLastCharacter = *it;
+  if(lastCharacter == lastLetter && isNoLetter(NextToLastCharacter)){
+    return true;
+  }
+  return false;
+}
+
+bool checkNMDPCode(const std::string code){
+
+  bool in = false;
+  std::string shortCode = rightOfFirstDelim(code, '*');
+
+  auto it = std::find_if(shortCode.begin(), shortCode.end(), isLetter);
+
+  if(it != shortCode.end())
+    {
+      it++;
+      in = isLetter(*it);
+    }
+
+  if(shortCode.compare("XXX") == 0 || shortCode.compare("xxx") ==0){
+    in = false;
+  }
+  if(shortCode.find(":XXX") != std::string::npos || shortCode.find(":xxx") != std::string::npos){
+    in = false;
+  }
+
+  return in;
+}

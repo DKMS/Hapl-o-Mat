@@ -6,13 +6,13 @@
 class Allele{
 
  public:
-  virtual void translateTo4d() = 0;
 
-  void identifyType();
+  virtual void translateTo4d() = 0;
 
  protected:
   std::string code;
   double frequency;
+
 };
 
 class Allele6d : public Allele{
