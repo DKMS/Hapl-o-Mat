@@ -72,4 +72,32 @@ void HReport::translateLine(const std::string line, const strVec_t lociNames){
 
 void HReport::resolve(std::vector<HReport> & listOfReports){
 
+  for(auto locus : inLoci){
+    strVecArr_t locusPositions;
+    size_t counter = 0;
+    bool bothNMDP = true;
+    for(auto code : locus){
+      strVec_t codes;
+      if(checkNMDPCode(code)){
+	//resolve nmdp into codes
+	codes.push_back(code);
+      }
+      else{
+	bothNMDP = false;
+	codes.push_back(code);
+      }
+      locusPositions.at(counter) = codes;
+      counter ++;
+    }
+
+    std::unique_ptr<Locus> pLocus;
+    if(bothNMDP){
+      std::unique_ptr<UnphasedLocus> pLocusTmp (new UnphasedLocus(locusPositions));
+      pLocus = std::move(pLocusTmp);
+    }
+    else{
+      std::unique_ptr<PhasedLocus> pLocusTmp (new PhasedLocus(locusPositions));
+      pLocus = std::move(pLocusTmp);
+    }
+  }//for inLoci
 }
