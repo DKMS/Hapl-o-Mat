@@ -9,18 +9,38 @@
 class Locus{
 
  public:
-  explicit Locus() : unphasedLocus(), phasedLocus(), resolvedPhasedLocus(){}
-  explicit Locus(const unphasedLocus_t & in_unphasedLocus) : unphasedLocus(in_unphasedLocus), phasedLocus(), resolvedPhasedLocus(){}
-  explicit Locus(const phasedLocus_t & in_phasedLocus) : unphasedLocus(), phasedLocus(in_phasedLocus), resolvedPhasedLocus(){}
+  explicit Locus() : resolvedPhasedLocus(){}
+  
+  virtual void resolve() = 0;
 
   void checkCodes();
-  void H2Filter();
-  void resolve();
+
+ protected:
+  std::vector<std::array<std::shared_ptr<Allele>, 2>> resolvedPhasedLocus;
+};
+
+class PhasedLocus : public Locus{
+
+ public:
+ PhasedLocus(const strArrVec_t & in_phasedLocus) : Locus(), phasedLocus(in_phasedLocus){}
+
+  virtual void resolve();
 
  private:
-  unphasedLocus_t unphasedLocus;
-  phasedLocus_t phasedLocus;
-  std::vector<std::array<std::shared_ptr<Allele>, 2>> resolvedPhasedLocus;
+  strArrVec_t phasedLocus;
+};
+
+class UnphasedLocus : public Locus{
+
+ public:
+ UnphasedLocus(const strVecArr_t & in_unphasedLocus) : Locus(), unphasedLocus(in_unphasedLocus){}
+
+  void H2Filter();
+
+  virtual void resolve();
+
+ private:
+  strVecArr_t unphasedLocus;
 };
 
 #endif

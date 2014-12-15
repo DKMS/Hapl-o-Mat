@@ -22,9 +22,7 @@ void GlidFile::readAndResolveFile(){
   std::string line;
   while(std::getline(file, line)){
     strVec_t entries = split(line, ';');
-    Locus locus;
-    resolve(entries.at(1), locus);
-    std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), locus);
+    std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), resolve(entries.at(1)));
     if(! inserted.second){
       std::cerr << fileName
                 << ": Glid::readAndResolveFile: Collision of "
@@ -34,41 +32,46 @@ void GlidFile::readAndResolveFile(){
   }
 }
 
-void GlidFile::resolve(const std::string line, Locus & locus) const{
+std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
+
+  std::shared_ptr<Locus> pLocus;
 
   if(line.find("|") != std::string::npos){
     strVec_t genotypes = split(line, '|');
 
-    phasedLocus_t phasedLocus;
+    strArrVec_t in_phasedLocus;
     for(auto genotype : genotypes){
       strVec_t alleles = split(genotype, '+');
       std::array<std::string, 2> splittedGenotype;
       for(size_t pos = 0; pos < alleles.size(); pos++)
 	splittedGenotype.at(pos) = alleles.at(pos);
-      phasedLocus.push_back(splittedGenotype);
+      in_phasedLocus.push_back(splittedGenotype);
     }
-    Locus newLocus(phasedLocus);
-    locus = newLocus;
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus);
   }
   else if (line.find("/") != std::string::npos){
     strVec_t separatePlus;
     separatePlus = split(line, '+');
     strVec_t lhs = split(separatePlus.at(0), '/');
     strVec_t rhs = split(separatePlus.at(1), '/');
-    unphasedLocus_t unphasedLocus;
-    unphasedLocus.at(0) = lhs;
-    unphasedLocus.at(1) = rhs;
-    Locus newLocus(unphasedLocus);
-    locus = newLocus;
-  }
+    strVecArr_t in_unphasedLocus;
+    in_unphasedLocus.at(0) = lhs;
+    in_unphasedLocus.at(1) = rhs;
+    UnphasedLocus unphasedLocus(in_unphasedLocus);
+    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus);
+    }
   else{
-    phasedLocus_t phasedLocus;
+    strArrVec_t in_phasedLocus;
     strVec_t alleles = split(line, '+');    
     std::array<std::string, 2> splittedGenotype;
     for(size_t pos = 0; pos < alleles.size(); pos++)
       splittedGenotype.at(pos) = alleles.at(pos);
-    phasedLocus.push_back(splittedGenotype);
-    Locus newLocus(phasedLocus);
-    locus = newLocus;
+    in_phasedLocus.push_back(splittedGenotype);
+    PhasedLocus phasedLocus(in_phasedLocus);
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus);
   }
+
+  pLocus->resolve();
+  return pLocus;
+
 }

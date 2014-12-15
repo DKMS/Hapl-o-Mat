@@ -37,7 +37,7 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
 	exit(EXIT_FAILURE);
       }
       else{
-	Locus locus = itGlid->second;
+	std::shared_ptr<Locus> locus = itGlid->second;
 	//build reports from locus
       }
     }//else code=0
