@@ -9,21 +9,13 @@
 class Locus{
 
  public:
-  enum codePrecision{
-    g,
-    fourDigit,
-    G,
-    sixDigit,
-    eightDigit,
-    nmdp
-  };
 
   explicit Locus() : resolvedPhasedLocus(){}
   
   virtual void resolve() = 0;
 
-  codePrecision identifyCodePrecision(const std::string code) const;
-  void printCodePrecision(const codePrecision precision) const;
+  Allele::codePrecision identifyCodePrecision(const std::string code) const;
+
   void checkCodes();
 
  protected:
@@ -46,9 +38,9 @@ class UnphasedLocus : public Locus{
  public:
  UnphasedLocus(const strVecArr_t & in_unphasedLocus) : Locus(), unphasedLocus(in_unphasedLocus){}
 
-  void H2Filter();
-
   virtual void resolve();
+
+  void H2Filter();
 
  private:
   strVecArr_t unphasedLocus;

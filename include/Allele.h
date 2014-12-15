@@ -6,10 +6,21 @@
 class Allele{
 
  public:
+  enum codePrecision{
+    g,
+    fourDigit,
+    G,
+    sixDigit,
+    eightDigit,
+    nmdp
+  };
 
   virtual void translateTo4d() = 0;
 
+  void printCodePrecision() const;
+
  protected:
+  codePrecision precision;
   std::string code;
   double frequency;
 
