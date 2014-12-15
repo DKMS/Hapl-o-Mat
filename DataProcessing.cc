@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "DataProcessing.h"
 #include "Glid.h"
@@ -21,7 +22,7 @@ void GLDataProcessing::dataProcessing(){
     GLReport report(line, booleanLociToDo);
     std::vector<GLReport> listOfReports;
     report.resolve(listOfReports, glid);
-    
+  
 
   }
 
@@ -42,11 +43,10 @@ void DKMSDataProcessing::dataProcessing(){
 
     if(line.length() == 1 || line.length() == 0)
       continue;
-    /*
+
     HReport report(line, lociNames);
     std::vector<HReport> listOfReports;
     report.resolve(listOfReports);
-    */
   }
 
   

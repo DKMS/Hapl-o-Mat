@@ -38,8 +38,14 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
       }
       else{
 	std::shared_ptr<Locus> locus = itGlid->second;
-	//build reports from locus
+	//build genotypes at locus, save in listOfLoci
       }
     }//else code=0
   }//for inLoci
+
+  //build report from listOfLoci by cartesian product
+}
+
+void HReport::resolve(std::vector<HReport> & listOfReports){
+
 }

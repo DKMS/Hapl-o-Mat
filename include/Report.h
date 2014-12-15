@@ -23,7 +23,7 @@ class Report{
 class GLReport : public Report{
 
  public:
-  GLReport(const std::string line, const std::vector<bool> & booleanLociToDo){
+ GLReport(const std::string line, const std::vector<bool> & booleanLociToDo) : inLoci(){
     translateLine(line, booleanLociToDo);
   }
   
@@ -35,6 +35,16 @@ class GLReport : public Report{
 };
 
 class HReport : public Report{
+
+ public:
+ HReport(const std::string line, const strVec_t & lociNames){
+    
+  }
+
+ void resolve(std::vector<HReport> & listOfReports);
+
+ private:
+
 
 };
 
