@@ -7,9 +7,7 @@
 Allele::codePrecision Locus::identifyCodePrecision(const std::string code) const{
 
   Allele::codePrecision precision;
-  if(checkNMDPCode(code))
-    precision = Allele::codePrecision::nmdp;
-  else if(checkLastLetter(code, 'g'))
+  if(checkLastLetter(code, 'g'))
     precision = Allele::codePrecision::g;
   else if(checkLastLetter(code, 'G'))
     precision = Allele::codePrecision::G;
@@ -71,12 +69,6 @@ std::unique_ptr<Allele> Locus::createAllele(const std::string code, const double
   case Allele::codePrecision::eightDigit:
     {
       std::unique_ptr<Allele> pAlleleTmp (new Allele8d(code, precision, alleleFrequency));
-      pAllele = std::move(pAlleleTmp);
-      break;
-    }
-  case Allele::codePrecision::nmdp:
-    {
-      std::unique_ptr<Allele> pAlleleTmp (new AlleleNMDP(code, precision, alleleFrequency));
       pAllele = std::move(pAlleleTmp);
       break;
     }

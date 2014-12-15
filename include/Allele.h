@@ -12,7 +12,6 @@ class Allele{
     G,
     sixDigit,
     eightDigit,
-    nmdp
   };
 
   Allele(const std::string in_code,
@@ -96,19 +95,6 @@ class Allele8d : public Allele{
 	  const double in_frequency)
    : Allele(in_code, in_precision, in_frequency){}
   
-  virtual void translateTo4d(){};
-  
- private:
-};
-
-
-class AlleleNMDP : public Allele{
-  
- public:
- AlleleNMDP(const std::string in_code,
-	    const codePrecision in_precision,
-	    const double in_frequency)
-   : Allele(in_code, in_precision, in_frequency){}
   virtual void translateTo4d(){};
   
  private:

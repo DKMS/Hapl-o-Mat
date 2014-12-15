@@ -30,10 +30,5 @@ void Allele::printCodePrecision() const{
       std::cout << "8d" << std::endl;
       break;
     }
-  case codePrecision::nmdp:
-    {
-      std::cout << "NMDP" << std::endl;
-      break;
-    }
   }
 }

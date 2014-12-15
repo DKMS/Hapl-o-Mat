@@ -113,7 +113,6 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
       strVec_t codes;
       if(checkNMDPCode(code)){
 	resolveNMDPCode(code, codes);
-	codes.push_back(code);
       }
       else{
 	codes.push_back(code);
@@ -123,5 +122,6 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
     }
     
     std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions));
+    pLocus->resolve();
   }//for inLoci
 }
