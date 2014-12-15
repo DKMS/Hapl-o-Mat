@@ -37,38 +37,38 @@ Allele::codePrecision Locus::identifyCodePrecision(const std::string code) const
   return precision;
 }
 
-std::unique_ptr<Allele> Locus::createAllele(const std::string code, const double alleleFrequency){
+std::unique_ptr<Allele> Locus::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
   std::unique_ptr<Allele>  pAllele;
   Allele::codePrecision precision = identifyCodePrecision(code);
   switch(precision){
   case Allele::codePrecision::g:
     {
-      std::unique_ptr<Allele> pAlleleTmp (new Alleleg(code, precision, alleleFrequency));
+      std::unique_ptr<Allele> pAlleleTmp (new Alleleg(code, precision, wantedPrecision, alleleFrequency));
       pAllele = std::move(pAlleleTmp);
       break;
     }
   case Allele::codePrecision::fourDigit:
     {
-      std::unique_ptr<Allele> pAlleleTmp (new Allele4d(code, precision, alleleFrequency));
+      std::unique_ptr<Allele> pAlleleTmp (new Allele4d(code, precision, wantedPrecision, alleleFrequency));
       pAllele = std::move(pAlleleTmp);
       break;
     }
   case Allele::codePrecision::G:
     {
-      std::unique_ptr<Allele> pAlleleTmp (new AlleleG(code, precision, alleleFrequency));
+      std::unique_ptr<Allele> pAlleleTmp (new AlleleG(code, precision, wantedPrecision, alleleFrequency));
       pAllele = std::move(pAlleleTmp);
       break;
     }
   case Allele::codePrecision::sixDigit:
     {
-      std::unique_ptr<Allele> pAlleleTmp (new Allele6d(code, precision, alleleFrequency));
+      std::unique_ptr<Allele> pAlleleTmp (new Allele6d(code, precision, wantedPrecision, alleleFrequency));
       pAllele = std::move(pAlleleTmp);
       break;
     }
   case Allele::codePrecision::eightDigit:
     {
-      std::unique_ptr<Allele> pAlleleTmp (new Allele8d(code, precision, alleleFrequency));
+      std::unique_ptr<Allele> pAlleleTmp (new Allele8d(code, precision, wantedPrecision, alleleFrequency));
       pAllele = std::move(pAlleleTmp);
       break;
     }
@@ -82,7 +82,7 @@ void PhasedLocus::resolve(){
   for(auto locusPosition : phasedLocus){
     double alleleFrequency = 1. / static_cast<double>(phasedLocus.size());
     for(auto code : locusPosition){
-      std::unique_ptr<Allele> pAllele = createAllele(code, alleleFrequency);
+      std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision();
 
@@ -96,7 +96,7 @@ void UnphasedLocus::resolve(){
   for(auto locusPosition : unphasedLocus){
     for(auto code : locusPosition){
       double alleleFrequency = 1. / static_cast<double>(locusPosition.size());
-      std::unique_ptr<Allele> pAllele = createAllele(code, alleleFrequency);
+      std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision();
 

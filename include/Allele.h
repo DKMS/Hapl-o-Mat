@@ -14,13 +14,15 @@ class Allele{
     eightDigit,
   };
 
-  Allele(const std::string in_code,
-	 const codePrecision in_precision,
-	 const double in_frequency)
-    : code(in_code),
+ explicit Allele(const std::string in_code,
+		 const codePrecision in_precision,
+		 const codePrecision in_wantedPrecision,
+		 const double in_frequency)
+   : code(in_code),
     precision(in_precision),
+    wantedPrecision(in_wantedPrecision),
     frequency(in_frequency){}
-
+  
   virtual void translateTo4d() = 0;
 
   void printCodePrecision() const;
@@ -31,6 +33,7 @@ class Allele{
  protected:
   std::string code;
   codePrecision precision;
+  codePrecision wantedPrecision;
   double frequency;
 
 };
@@ -38,10 +41,11 @@ class Allele{
 class Alleleg : public Allele{
 
  public:
- Alleleg(const std::string in_code,
-	 const codePrecision in_precision,
-	 const double in_frequency)
-   : Allele(in_code, in_precision, in_frequency){}
+ explicit Alleleg(const std::string in_code,
+		  const codePrecision in_precision,
+		  const codePrecision in_wantedPrecision,
+		  const double in_frequency)
+   : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
   
   virtual void translateTo4d(){};
 
@@ -51,10 +55,11 @@ class Alleleg : public Allele{
 class Allele4d : public Allele{
 
  public:
- Allele4d(const std::string in_code,
-	  const codePrecision in_precision,
-	  const double in_frequency)
-   : Allele(in_code, in_precision, in_frequency){}
+  explicit Allele4d(const std::string in_code,
+		    const codePrecision in_precision,
+		    const codePrecision in_wantedPrecision,
+		    const double in_frequency)
+    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
   
   virtual void translateTo4d(){};
 
@@ -65,27 +70,29 @@ class Allele4d : public Allele{
 class AlleleG : public Allele{
 
  public:
- AlleleG(const std::string in_code,
-	 const codePrecision in_precision,
-	 const double in_frequency)
-   : Allele(in_code, in_precision, in_frequency){}
+  explicit AlleleG(const std::string in_code,
+		   const codePrecision in_precision,
+		   const codePrecision in_wantedPrecision,
+		   const double in_frequency)
+    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
   
   virtual void translateTo4d(){};
 
  private:
-
+  
 };
 
 class Allele6d : public Allele{
-
+  
  public:
- Allele6d(const std::string in_code,
-	  const codePrecision in_precision,
-	  const double in_frequency)
-   : Allele(in_code, in_precision, in_frequency){}
+  explicit Allele6d(const std::string in_code,
+		    const codePrecision in_precision,
+		    const codePrecision in_wantedPrecision,
+		    const double in_frequency)
+    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
   
   virtual void translateTo4d(){};
-
+  
  private:
 };
 
@@ -93,10 +100,11 @@ class Allele6d : public Allele{
 class Allele8d : public Allele{
 
  public:
- Allele8d(const std::string in_code,
-	  const codePrecision in_precision,
-	  const double in_frequency)
-   : Allele(in_code, in_precision, in_frequency){}
+  explicit Allele8d(const std::string in_code,
+		    const codePrecision in_precision,
+		    const codePrecision in_wantedPrecision,
+		    const double in_frequency)
+    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
   
   virtual void translateTo4d(){};
   

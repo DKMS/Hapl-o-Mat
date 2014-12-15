@@ -14,7 +14,7 @@ class Locus{
   
   virtual void resolve() = 0;
 
-  std::unique_ptr<Allele> createAllele(const std::string code, const double alleleFrequency);
+  std::unique_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision,  const double alleleFrequency);
   Allele::codePrecision identifyCodePrecision(const std::string code) const;
   void checkCodes();
   void setWantedPrecision(const Allele::codePrecision in_wantedPrecision) {wantedPrecision = in_wantedPrecision;}
