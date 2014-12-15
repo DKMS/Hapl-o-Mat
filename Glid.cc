@@ -22,14 +22,16 @@ void GlidFile::readAndResolveFile(){
   std::string line;
   while(std::getline(file, line)){
     strVec_t entries = split(line, ';');
-    std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), resolve(entries.at(1)));
-    if(! inserted.second){
-      std::cerr << fileName
-                << ": Glid::readAndResolveFile: Collision of "
-                << stoull(entries.at(0))
-                << std::endl;
-    }
-  }
+    if(entries.at(0) != "0"){
+      std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), resolve(entries.at(1)));
+      if(! inserted.second){
+	std::cerr << fileName
+		  << ": Glid::readAndResolveFile: Collision of "
+		  << stoull(entries.at(0))
+		  << std::endl;
+      }
+    }//!=0
+  }//while
 }
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{

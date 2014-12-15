@@ -93,7 +93,7 @@ void PhasedLocus::resolve(){
       std::cout << code << std::endl;
  
       std::unique_ptr<Allele> pAllele = createAllele(code, alleleFrequency);
-      
+      pAllele->printCodePrecision();
 
     }
     std::cout << std::endl;
