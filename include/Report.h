@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 
+#include "File.h"
 #include "Typedefs.h"
 
 class GlidFile;
@@ -43,10 +44,11 @@ class HReport : public Report{
   
   void translateLine(const std::string line, const strVec_t lociNames);
   void resolve(std::vector<HReport> & listOfReports);
+  const strVec_t & resolveNMDPCode(const std::string code) const;
 
  private:
   strArrVec_t inLoci;
-
+  static FileNMDPCodes fileNMDPCodes;
 };
 
 #endif

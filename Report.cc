@@ -6,6 +6,8 @@
 #include "Glid.h"
 #include "Utility.h"
 
+FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt", 271600);
+
 void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
 
   id = leftOfFirstDelim(line, ';');
@@ -68,6 +70,12 @@ void HReport::translateLine(const std::string line, const strVec_t lociNames){
     locus.at(1) = code2;
     inLoci.push_back(locus);
   }
+}
+
+const strVec_t & HReport::resolveNMDPCode(const std::string code) const{
+
+  
+
 }
 
 void HReport::resolve(std::vector<HReport> & listOfReports){
