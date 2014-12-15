@@ -4,17 +4,18 @@
 #include <array>
 #include <vector>
 
+#include "Typedefs.h"
+
 class GlidFile;
 
 class Report{
 
-  typedef std::vector<std::array<std::string, 2>> listOfLoci_t;
  public:
   void buildPhenotype();
   void buildHaploAndDiplotypes();
 
  protected:
-  listOfLoci_t listOfLoci;
+  strArrVec_t listOfLoci;
   std::string id;
   double frequency;
 };
