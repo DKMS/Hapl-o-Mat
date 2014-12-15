@@ -26,8 +26,7 @@ class PhasedLocus : public Locus{
 
  public:
  PhasedLocus(const strArrVec_t & in_phasedLocus) : Locus(), phasedLocus(in_phasedLocus){}
- PhasedLocus(const strVecArr_t & in_unphasedLocus) : Locus(), phasedLocus(){}
-
+  
   virtual void resolve();
 
  private:

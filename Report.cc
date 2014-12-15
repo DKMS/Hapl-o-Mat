@@ -38,7 +38,7 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
 	exit(EXIT_FAILURE);
       }
       else{
-	std::shared_ptr<Locus> locus = itGlid->second;
+	std::shared_ptr<Locus> pLocus = itGlid->second;
 	//build genotypes at locus, save in listOfLoci
       }
     }//else code=0
@@ -75,7 +75,6 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
   for(auto locus : inLoci){
     strVecArr_t locusPositions;
     size_t counter = 0;
-    bool bothNMDP = true;
     for(auto code : locus){
       strVec_t codes;
       if(checkNMDPCode(code)){
@@ -83,21 +82,12 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
 	codes.push_back(code);
       }
       else{
-	bothNMDP = false;
 	codes.push_back(code);
       }
       locusPositions.at(counter) = codes;
       counter ++;
     }
-
-    std::unique_ptr<Locus> pLocus;
-    if(bothNMDP){
-      std::unique_ptr<UnphasedLocus> pLocusTmp (new UnphasedLocus(locusPositions));
-      pLocus = std::move(pLocusTmp);
-    }
-    else{
-      std::unique_ptr<PhasedLocus> pLocusTmp (new PhasedLocus(locusPositions));
-      pLocus = std::move(pLocusTmp);
-    }
+    
+    std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions));
   }//for inLoci
 }
