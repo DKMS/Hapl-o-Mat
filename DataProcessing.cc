@@ -19,7 +19,7 @@ void GLDataProcessing::dataProcessing(){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLReport report(line, booleanLociToDo);
+    GLReport report(line, booleanLociToDo, wantedPrecision);
     std::vector<GLReport> listOfReports;
     report.resolve(listOfReports, glid);
   
@@ -44,7 +44,7 @@ void DKMSDataProcessing::dataProcessing(){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    HReport report(line, lociNames);
+    HReport report(line, lociNames, wantedPrecision);
     std::vector<HReport> listOfReports;
     report.resolve(listOfReports);
   }

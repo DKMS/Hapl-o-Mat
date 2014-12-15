@@ -41,6 +41,7 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
       }
       else{
 	std::shared_ptr<Locus> pLocus = itGlid->second;
+	pLocus->setWantedPrecision(wantedPrecision);
 	//build genotypes at locus, save in listOfLoci
       }
     }//else code=0
@@ -121,7 +122,7 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
       counter ++;
     }
     
-    std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions));
+    std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision));
     pLocus->resolve();
   }//for inLoci
 }
