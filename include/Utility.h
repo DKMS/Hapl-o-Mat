@@ -41,5 +41,7 @@ strVec_t split(const std::string &s, char delim);
 bool checkLastLetter(const std::string code, const char lastLetter);
 bool checkNMDPCode(const std::string code);
 std::string findNMDPCode(const std::string code);
+inline std::string getLocus(const std::string & code){return leftOfFirstDelim(code, '*');}
+
 
 #endif
