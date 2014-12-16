@@ -30,6 +30,7 @@ class Allele{
   virtual void translateTo6d() = 0;
   virtual void translateTo8d() = 0;
 
+  void translate();
   void printCodePrecision(const codePrecision precision) const;
   double getFrequency() const {return frequency;}
   std::string getCode() const {return code;}

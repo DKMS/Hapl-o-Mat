@@ -37,6 +37,38 @@ void Allele::printCodePrecision(const codePrecision precision) const{
   }
 }
 
+void Allele::translate(){
+
+  switch(wantedPrecision){
+  case Allele::codePrecision::g:
+    {
+      this->translateTog();
+      std::cout << this->getCode() << std::endl;
+      break;
+    }
+  case Allele::codePrecision::fourDigit:
+    {
+      this->translateTo4d();
+      break;
+    }
+  case Allele::codePrecision::G:
+    {
+      this->translateToG();
+      break;
+    }
+  case Allele::codePrecision::sixDigit:
+    {
+      this->translateTo6d();
+      break;
+    }
+  case Allele::codePrecision::eightDigit:
+    {
+      this->translateTo8d();
+      break;
+    }
+  }//switch                                             
+}
+
 void Allele::allelesTog(){
 
   std::string locus = getLocus(code);

@@ -87,35 +87,8 @@ void PhasedLocus::resolve(){
       std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
+      pAllele->translate();
 
-      switch(wantedPrecision){
-      case Allele::codePrecision::g:
-	{
-	  pAllele->translateTog();
-	  std::cout << pAllele->getCode() << std::endl;
-	  break;
-	}
-      case Allele::codePrecision::fourDigit:
-	{
-	  pAllele->translateTo4d();
-	  break;
-	}
-      case Allele::codePrecision::G:
-	{
-	  pAllele->translateToG();
-	  break;
-	}
-      case Allele::codePrecision::sixDigit:
-	{
-	  pAllele->translateTo6d();
-	  break;
-	}
-      case Allele::codePrecision::eightDigit:
-	{
-	  pAllele->translateTo8d();
-	  break;
-	}
-      }//switch
     }
     std::cout << std::endl;
   }
@@ -131,34 +104,7 @@ void UnphasedLocus::resolve(){
       std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
-
-      switch(wantedPrecision){
-      case Allele::codePrecision::g:
-	{
-	  pAllele->translateTog();
-	  break;
-	}
-      case Allele::codePrecision::fourDigit:
-	{
-	  pAllele->translateTo4d();
-	  break;
-	}
-      case Allele::codePrecision::G:
-	{
-	  pAllele->translateToG();
-	  break;
-	}
-      case Allele::codePrecision::sixDigit:
-	{
-	  pAllele->translateTo6d();
-	  break;
-	}
-      case Allele::codePrecision::eightDigit:
-	{
-	  pAllele->translateTo8d();
-	  break;
-	}
-      }//switch
+      pAllele->translate();
     }
     std::cout << std::endl;
   }
