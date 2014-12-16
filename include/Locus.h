@@ -34,21 +34,6 @@ class PhasedLocus : public Locus{
     {
       setWantedPrecision(in_wantedPrecision);
     }
-  explicit PhasedLocus(const strVecArr_t & in_unphasedLocus,
-		       const Allele::codePrecision in_wantedPrecision)
-    : Locus(),
-    phasedLocus() 
-    {
-      setWantedPrecision(in_wantedPrecision);
-      for(auto allele1 : in_unphasedLocus[0]){
-	strArr_t newLocus;
-	newLocus.at(0)=allele1; 
-	for(auto allele2 : in_unphasedLocus[1]){
-	  newLocus.at(1)=allele2; 
-	  phasedLocus.push_back(newLocus);
-	}
-      }
-    }  
   
   virtual void resolve();
 

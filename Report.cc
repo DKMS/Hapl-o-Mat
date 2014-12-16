@@ -110,29 +110,19 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
   for(auto locus : inLoci){
     strVecArr_t locusPositions;
     size_t counter = 0;
-    bool bothNMDP = true;
     for(auto code : locus){
       strVec_t codes;
       if(checkNMDPCode(code)){
 	resolveNMDPCode(code, codes);
       }
       else{
-	bothNMDP = false;
 	codes.push_back(code);
       }
       locusPositions.at(counter) = codes;
       counter ++;
     }
     
-    std::unique_ptr<Locus> pLocus;
-    if(bothNMDP){
-      std::unique_ptr<Locus> pLocusTmp (new UnphasedLocus(locusPositions, wantedPrecision));
-      pLocus = std::move(pLocusTmp);
-    }
-    else{
-      std::unique_ptr<Locus> pLocusTmp (new PhasedLocus(locusPositions, wantedPrecision));
-      pLocus = std::move(pLocusTmp);
-    }
+    std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision));
 
     pLocus->resolve();
   }//for inLoci

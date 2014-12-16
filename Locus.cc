@@ -13,13 +13,8 @@ void PhasedLocus::resolve(){
     for(auto code : locusPosition){
       std::shared_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::vector<std::shared_ptr<Allele>> listOfpAlleles = pAllele->translate();
-      for(auto it : listOfpAlleles){
-	std::cout << it->getCode() << std::endl;
-	std::cout << it->getFrequency() << std::endl;
-	it->printCodePrecision(it->getPrecision());
-      }
-    }
-  }
+    }//for LocusPosition
+  }//for phasedLocus
 }
 
 void UnphasedLocus::resolve(){
@@ -31,6 +26,12 @@ void UnphasedLocus::resolve(){
       double alleleFrequency = 1. / static_cast<double>(locusPosition.size());
       std::shared_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::vector<std::shared_ptr<Allele>> listOfpAlleles = pAllele->translate();
+      for(auto it : listOfpAlleles){
+	std::cout << it->getCode() << std::endl;
+	std::cout << it->getFrequency() << std::endl;
+	it->printCodePrecision(it->getPrecision());
+      }
     }
+    std::cout << std::endl;
   }
 }
