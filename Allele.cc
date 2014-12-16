@@ -1,6 +1,9 @@
 #include <iostream>
 
 #include "Allele.h"
+#include "Utility.h"
+
+FileAllelesTog Allele::fileAllelesTog("data/H1g.txt", 200);
 
 void Allele::printCodePrecision(const codePrecision precision) const{
 
@@ -32,3 +35,37 @@ void Allele::printCodePrecision(const codePrecision precision) const{
     }
   }
 }
+
+
+void Allele4d::translateTog(){
+
+  std::string locus = getLocus(code);
+  FileAllelesTog::list_t::const_iterator pos;
+  FileAllelesTog::list_t::const_iterator lastPos;
+  fileAllelesTog.findPositionLocus(locus, pos, lastPos);
+  
+  bool found = false;
+  while(pos != lastPos && found==false){
+    for(auto entry = pos->second.cbegin();
+	entry != pos->second.cend() && found==false;
+	entry ++){
+      if(code == *entry){
+	code = pos->first;
+	found = true;
+      }
+    }//for entries line
+    pos ++;
+  }//while lines in fileAllelesTog
+}
+void Allele4d::translateTo4d(){
+
+}
+void Allele4d::translateToG(){
+
+}
+void Allele4d::translateTo6d(){
+
+}
+void Allele4d::translateTo8d(){
+
+}  

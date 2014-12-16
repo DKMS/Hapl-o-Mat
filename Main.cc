@@ -15,7 +15,7 @@ int main(){
   lociToDo.push_back("DQB1");
 
   //  std::unique_ptr<DataProcessing> pDataProcessing (new GLDataProcessing("reports.pull", "reports.glid", lociToDo,   Allele::codePrecision::fourDigit));
-  std::unique_ptr<DataProcessing> pDataProcessing (new DKMSDataProcessing("reports.txt", Allele::codePrecision::fourDigit));
+  std::unique_ptr<DataProcessing> pDataProcessing (new DKMSDataProcessing("reports.txt", Allele::codePrecision::g));
 
   pDataProcessing->dataProcessing();
 

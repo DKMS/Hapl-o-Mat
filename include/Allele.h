@@ -1,6 +1,7 @@
 #ifndef Allele_header
 #define Allele_header
 
+#include "File.h"
 #include "Typedefs.h"
 
 class Allele{
@@ -23,7 +24,11 @@ class Allele{
     wantedPrecision(in_wantedPrecision),
     frequency(in_frequency){}
   
+  virtual void translateTog() = 0;
   virtual void translateTo4d() = 0;
+  virtual void translateToG() = 0;
+  virtual void translateTo6d() = 0;
+  virtual void translateTo8d() = 0;
 
   void printCodePrecision(const codePrecision precision) const;
   double getFrequency() const {return frequency;}
@@ -36,7 +41,7 @@ class Allele{
   codePrecision precision;
   codePrecision wantedPrecision;
   double frequency;
-
+  static FileAllelesTog fileAllelesTog;
 };
 
 class Alleleg : public Allele{
@@ -47,8 +52,12 @@ class Alleleg : public Allele{
 		  const codePrecision in_wantedPrecision,
 		  const double in_frequency)
    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
-  
+
+  virtual void translateTog(){};
   virtual void translateTo4d(){};
+  virtual void translateToG(){};
+  virtual void translateTo6d(){};
+  virtual void translateTo8d(){};  
 
  private:
 };
@@ -62,7 +71,11 @@ class Allele4d : public Allele{
 		    const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
   
-  virtual void translateTo4d(){};
+  virtual void translateTog();
+  virtual void translateTo4d();
+  virtual void translateToG();
+  virtual void translateTo6d();
+  virtual void translateTo8d();  
 
  private:
 
@@ -76,8 +89,12 @@ class AlleleG : public Allele{
 		   const codePrecision in_wantedPrecision,
 		   const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
-  
+
+  virtual void translateTog(){};
   virtual void translateTo4d(){};
+  virtual void translateToG(){};
+  virtual void translateTo6d(){};
+  virtual void translateTo8d(){};  
 
  private:
   
@@ -91,8 +108,12 @@ class Allele6d : public Allele{
 		    const codePrecision in_wantedPrecision,
 		    const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
-  
+
+  virtual void translateTog(){};
   virtual void translateTo4d(){};
+  virtual void translateToG(){};
+  virtual void translateTo6d(){};
+  virtual void translateTo8d(){};  
   
  private:
 };
@@ -106,10 +127,15 @@ class Allele8d : public Allele{
 		    const codePrecision in_wantedPrecision,
 		    const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
-  
+
+  virtual void translateTog(){};
   virtual void translateTo4d(){};
+  virtual void translateToG(){};
+  virtual void translateTo6d(){};
+  virtual void translateTo8d(){};  
   
  private:
 };
+
 
 #endif
