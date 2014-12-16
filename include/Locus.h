@@ -11,6 +11,7 @@ class Locus{
  public:
 
   explicit Locus() : resolvedPhasedLocus(), wantedPrecision(){}
+  virtual ~Locus(){}
   
   virtual void resolve() = 0;
 

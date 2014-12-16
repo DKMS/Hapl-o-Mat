@@ -14,6 +14,7 @@ class DataProcessing{
 			  const Allele::codePrecision in_wantedPrecision)
     : inputFileName(in_inputFileName),
     wantedPrecision(in_wantedPrecision){}
+  virtual ~DataProcessing(){}
 
   virtual void dataProcessing() = 0;
 
