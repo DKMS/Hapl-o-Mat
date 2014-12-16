@@ -8,7 +8,7 @@ FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1G.txt", 200);
 FilegOrGToAlleles AlleleG::fileGToAlleles("data/H1G.txt", 200);
 
-std::shared_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
+std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
   std::shared_ptr<Allele> pAllele;
   Allele::codePrecision precision = identifyCodePrecision(code);
@@ -44,7 +44,7 @@ std::shared_ptr<Allele> createAllele(const std::string code, const Allele::codeP
   return pAllele;
 }
 
-Allele::codePrecision identifyCodePrecision(const std::string code){
+Allele::codePrecision Allele::identifyCodePrecision(const std::string code){
 
   Allele::codePrecision precision;
   if(checkLastLetter(code, 'g'))

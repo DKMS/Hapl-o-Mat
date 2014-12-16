@@ -33,6 +33,8 @@ class Allele{
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d() = 0;
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d() = 0;
 
+  static std::shared_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency);
+  static Allele::codePrecision identifyCodePrecision(const std::string code);
   std::vector<std::shared_ptr<Allele>> translate();
   std::string allelesTog();
   void printCodePrecision(const codePrecision precision) const;
@@ -50,9 +52,6 @@ class Allele{
   static FileAllelesTogOrG fileAllelesTog;
   static FileAllelesTogOrG fileAllelesToG;
 };
-
-std::shared_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency);
-Allele::codePrecision identifyCodePrecision(const std::string code);
 
 class Alleleg : public Allele{
 
