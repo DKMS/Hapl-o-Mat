@@ -143,8 +143,9 @@ void Allele::translate(){
   }//switch                                             
 }
 
-void Allele::allelesTog(){
+std::string Allele::allelesTog(){
 
+  std::string codeInPrecision;
   std::string locus = getLocus(code);
   FileAllelesTogOrG::list_t::const_iterator pos;
   FileAllelesTogOrG::list_t::const_iterator lastPos;
@@ -166,11 +167,15 @@ void Allele::allelesTog(){
   if(found == false){
     codeInPrecision = cutCode(code, 1);
   }
+
+  return codeInPrecision;
 }
 
 void Allele4d::translateTog(){
   
-  allelesTog();
+  std::string codeInPrecision =  allelesTog();
+  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
+  pCodesInPrecision.push_back(pAlleleg);
 }
 
 void Allele4d::translateTo4d(){
@@ -191,7 +196,6 @@ void Allele4d::translateTo8d(){
 
 void Alleleg::translateTog(){
 
-  codeInPrecision = code;
 }
 
 void AlleleG::translateTog(){
@@ -212,7 +216,6 @@ void AlleleG::translateTog(){
     std::unique_ptr<Allele> pAllele = createAllele(newCode, wantedPrecision, frequency);
     pAllele->translate();
     std::cout << pAllele->getCode() << std::endl;
-    std::cout << pAllele->getCodeInPrecision() << std::endl;
     std::cout << pAllele->getFrequency() << std::endl;
   }
 
@@ -222,10 +225,16 @@ void AlleleG::translateTog(){
 
 void Allele6d::translateTog(){
 
-  allelesTog();
+  std::string codeInPrecision =  allelesTog();
+  Alleleg alleleg(codeInPrecision, frequency);
+  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
+  pCodesInPrecision.push_back(pAlleleg);
 }
 
 void Allele8d::translateTog(){
 
-  allelesTog();
+  std::string codeInPrecision =  allelesTog();
+  Alleleg alleleg(codeInPrecision, frequency);
+  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
+  pCodesInPrecision.push_back(pAlleleg);
 }

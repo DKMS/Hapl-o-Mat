@@ -22,10 +22,10 @@ class Allele{
 		 const codePrecision in_wantedPrecision,
 		 const double in_frequency)
    : code(in_code),
-    codeInPrecision(),
     precision(in_precision),
     wantedPrecision(in_wantedPrecision),
     frequency(in_frequency){}
+  virtual ~Allele(){}
   
   virtual void translateTog() = 0;
   virtual void translateTo4d() = 0;
@@ -34,20 +34,20 @@ class Allele{
   virtual void translateTo8d() = 0;
 
   void translate();
+  std::string allelesTog();
   void printCodePrecision(const codePrecision precision) const;
   double getFrequency() const {return frequency;}
   std::string getCode() const {return code;}
-  std::string getCodeInPrecision() const {return codeInPrecision;}
   codePrecision getPrecision() const {return precision;}
   codePrecision getWantedPrecision() const {return wantedPrecision;}
-  void allelesTog();
+  const std::vector<std::shared_ptr<Allele>> getPCodesInPrecision() const {return pCodesInPrecision;}
 
  protected:
   std::string code;
-  std::string codeInPrecision;
   codePrecision precision;
   codePrecision wantedPrecision;
   double frequency;
+  std::vector<std::shared_ptr<Allele>> pCodesInPrecision;
   static FileAllelesTogOrG fileAllelesTog;
   static FileAllelesTogOrG fileAllelesToG;
 };
@@ -58,12 +58,15 @@ Allele::codePrecision identifyCodePrecision(const std::string code);
 class Alleleg : public Allele{
 
  public:
- explicit Alleleg(const std::string in_code,
-		  const codePrecision in_precision,
-		  const codePrecision in_wantedPrecision,
-		  const double in_frequency)
-   : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
-
+  explicit Alleleg(const std::string in_code,
+		   const codePrecision in_precision,
+		   const codePrecision in_wantedPrecision,
+		   const double in_frequency)
+    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
+  explicit Alleleg(const std::string in_code,
+		   const double in_frequency)
+    : Allele(in_code, codePrecision::g, codePrecision::g, in_frequency){}
+  
   virtual void translateTog();
   virtual void translateTo4d(){};
   virtual void translateToG(){};

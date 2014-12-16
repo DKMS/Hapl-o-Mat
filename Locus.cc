@@ -15,7 +15,8 @@ void PhasedLocus::resolve(){
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
       pAllele->translate();
-      std::cout << pAllele->getCodeInPrecision() << std::endl;
+      for(auto it : pAllele->getPCodesInPrecision())
+	std::cout << it->getCode() << std::endl;
     }
     std::cout << std::endl;
   }
