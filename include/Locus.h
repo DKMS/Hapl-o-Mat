@@ -44,14 +44,15 @@ class PhasedLocus : public Locus{
 class UnphasedLocus : public Locus{
 
  public:
- explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus) : Locus(), unphasedLocus(in_unphasedLocus){}
- explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus,
-	       const Allele::codePrecision in_wantedPrecision)
-   : Locus(),
-    unphasedLocus(in_unphasedLocus)
-  {
-    setWantedPrecision(in_wantedPrecision);
-  }
+  explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus) : Locus(), unphasedLocus(in_unphasedLocus), pAllelesAtBothLocusPositions(){}
+  explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus,
+			 const Allele::codePrecision in_wantedPrecision)
+    : Locus(),
+    unphasedLocus(in_unphasedLocus),
+    pAllelesAtBothLocusPositions()
+    {
+      setWantedPrecision(in_wantedPrecision);
+    }
 
   virtual void resolve();
 
@@ -59,6 +60,7 @@ class UnphasedLocus : public Locus{
 
  private:
   strVecArr_t unphasedLocus;
+  std::array<std::vector<std::shared_ptr<Allele>>,2> pAllelesAtBothLocusPositions;
 };
 
 #endif

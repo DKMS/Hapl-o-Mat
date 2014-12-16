@@ -20,18 +20,24 @@ void PhasedLocus::resolve(){
 void UnphasedLocus::resolve(){
 
   std::cout << "unphased" << std::endl;
-
+  auto locusPositionResult = pAllelesAtBothLocusPositions.begin();
   for(auto locusPosition : unphasedLocus){
     for(auto code : locusPosition){
       double alleleFrequency = 1. / static_cast<double>(locusPosition.size());
       std::shared_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
-      std::vector<std::shared_ptr<Allele>> listOfpAlleles = pAllele->translate();
-      for(auto it : listOfpAlleles){
-	std::cout << it->getCode() << std::endl;
-	std::cout << it->getFrequency() << std::endl;
-	it->printCodePrecision(it->getPrecision());
-      }
+      std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
+      locusPositionResult->insert(locusPositionResult->end(), pAllelesAtOneLocusPosition.begin(), pAllelesAtOneLocusPosition.end());
+    }
+    locusPositionResult ++;
+  }
+
+  for(auto it : pAllelesAtBothLocusPositions){
+    for(auto it2 : it){
+      std::cout << it2->getCode() << std::endl;
+      std::cout << it2->getFrequency() << std::endl;
+      it2->printCodePrecision(it2->getPrecision());
     }
     std::cout << std::endl;
   }
+
 }
