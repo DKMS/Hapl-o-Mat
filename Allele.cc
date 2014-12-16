@@ -81,6 +81,12 @@ void Allele4d::translateTo8d(){
 
 }  
 
+void AlleleG::translateTog(){
+
+  
+
+}
+
 void Allele6d::translateTog(){
 
   allelesTog();

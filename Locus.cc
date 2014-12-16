@@ -77,9 +77,9 @@ std::unique_ptr<Allele> Locus::createAllele(const std::string code, const Allele
   return pAllele;
 }
 
-
-
 void PhasedLocus::resolve(){
+
+  std::cout << "phased" << std::endl;
 
   for(auto locusPosition : phasedLocus){
     double alleleFrequency = 1. / static_cast<double>(phasedLocus.size());
@@ -88,11 +88,11 @@ void PhasedLocus::resolve(){
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
       pAllele->printCodePrecision(pAllele->getWantedPrecision());
+
       switch(wantedPrecision){
       case Allele::codePrecision::g:
 	{
 	  pAllele->translateTog();
-	  std::cout << pAllele->getCode() << std::endl;
 	  break;
 	}
       case Allele::codePrecision::fourDigit:
@@ -122,6 +122,8 @@ void PhasedLocus::resolve(){
 }
 
 void UnphasedLocus::resolve(){
+
+  std::cout << "unphased" << std::endl;
 
   for(auto locusPosition : unphasedLocus){
     for(auto code : locusPosition){

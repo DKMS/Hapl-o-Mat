@@ -91,7 +91,7 @@ class AlleleG : public Allele{
 		   const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
 
-  virtual void translateTog(){};
+  virtual void translateTog();
   virtual void translateTo4d(){};
   virtual void translateToG(){};
   virtual void translateTo6d(){};
