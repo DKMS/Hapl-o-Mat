@@ -43,7 +43,6 @@ void Allele::translate(){
   case Allele::codePrecision::g:
     {
       this->translateTog();
-      std::cout << this->getCode() << std::endl;
       break;
     }
   case Allele::codePrecision::fourDigit:
@@ -82,15 +81,16 @@ void Allele::allelesTog(){
 	entry != pos->second.cend() && found==false;
 	entry ++){
       if(code == *entry){
-	code = pos->first;
+	codeInPrecision = pos->first;
 	found = true;
       }
     }//for entries line
     pos ++;
   }//while lines in fileAllelesTog
 
-  if(found == false)
-    code = cutCode(code, 1);
+  if(found == false){
+    codeInPrecision = cutCode(code, 1);
+  }
 }
 
 void Allele4d::translateTog(){
@@ -113,6 +113,11 @@ void Allele4d::translateTo6d(){
 void Allele4d::translateTo8d(){
 
 }  
+
+void Alleleg::translateTog(){
+
+  codeInPrecision = code;
+}
 
 void AlleleG::translateTog(){
 

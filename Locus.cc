@@ -88,7 +88,7 @@ void PhasedLocus::resolve(){
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
       pAllele->translate();
-
+      std::cout << pAllele->getCodeInPrecision() << std::endl;
     }
     std::cout << std::endl;
   }

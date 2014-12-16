@@ -20,6 +20,7 @@ class Allele{
 		 const codePrecision in_wantedPrecision,
 		 const double in_frequency)
    : code(in_code),
+    codeInPrecision(),
     precision(in_precision),
     wantedPrecision(in_wantedPrecision),
     frequency(in_frequency){}
@@ -34,12 +35,14 @@ class Allele{
   void printCodePrecision(const codePrecision precision) const;
   double getFrequency() const {return frequency;}
   std::string getCode() const {return code;}
+  std::string getCodeInPrecision() const {return codeInPrecision;}
   codePrecision getPrecision() const {return precision;}
   codePrecision getWantedPrecision() const {return wantedPrecision;}
   void allelesTog();
 
  protected:
   std::string code;
+  std::string codeInPrecision;
   codePrecision precision;
   codePrecision wantedPrecision;
   double frequency;
@@ -56,7 +59,7 @@ class Alleleg : public Allele{
 		  const double in_frequency)
    : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
 
-  virtual void translateTog(){};
+  virtual void translateTog();
   virtual void translateTo4d(){};
   virtual void translateToG(){};
   virtual void translateTo6d(){};
