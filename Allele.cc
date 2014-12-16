@@ -208,9 +208,12 @@ void AlleleG::translateTog(){
   else{
     codes = itGToAlleles->second;
   }
-  for(auto it : codes){
-    std::cout << it << std::endl;
-    //    std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
+  for(auto newCode : codes){
+    std::unique_ptr<Allele> pAllele = createAllele(newCode, wantedPrecision, frequency);
+    pAllele->translate();
+    std::cout << pAllele->getCode() << std::endl;
+    std::cout << pAllele->getCodeInPrecision() << std::endl;
+    std::cout << pAllele->getFrequency() << std::endl;
   }
 
 
