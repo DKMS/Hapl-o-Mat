@@ -52,6 +52,9 @@ class Allele{
   static FileAllelesTogOrG fileAllelesToG;
 };
 
+std::unique_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency);
+Allele::codePrecision identifyCodePrecision(const std::string code);
+
 class Alleleg : public Allele{
 
  public:
