@@ -48,10 +48,10 @@ class FileNMDPCodes : public File<std::unordered_map<std::string, std::string>>{
   void readFile();
 };
 
-class FileAllelesTog : public File<std::vector<std::pair<std::string, std::vector<std::string>>>>{
+class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, std::vector<std::string>>>>{
 
  public:
-  explicit FileAllelesTog(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileAllelesTogOrG(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
     readFile();
   }
 

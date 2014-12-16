@@ -29,7 +29,7 @@ void FileNMDPCodes::readFile(){
   file.close();
 }
 
-void FileAllelesTog::readFile(){
+void FileAllelesTogOrG::readFile(){
 
   std::ifstream file;
   openFileToRead(fileName, file);

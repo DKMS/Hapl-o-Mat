@@ -87,12 +87,12 @@ void PhasedLocus::resolve(){
       std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
-      pAllele->printCodePrecision(pAllele->getWantedPrecision());
 
       switch(wantedPrecision){
       case Allele::codePrecision::g:
 	{
 	  pAllele->translateTog();
+	  std::cout << pAllele->getCode() << std::endl;
 	  break;
 	}
       case Allele::codePrecision::fourDigit:
@@ -131,12 +131,11 @@ void UnphasedLocus::resolve(){
       std::unique_ptr<Allele> pAllele = createAllele(code, wantedPrecision, alleleFrequency);
       std::cout << pAllele->getCode() << "\t" << pAllele->getFrequency() << std::endl;
       pAllele->printCodePrecision(pAllele->getPrecision());
-      pAllele->printCodePrecision(pAllele->getWantedPrecision());
+
       switch(wantedPrecision){
       case Allele::codePrecision::g:
 	{
 	  pAllele->translateTog();
-	  std::cout << pAllele->getCode() << std::endl;
 	  break;
 	}
       case Allele::codePrecision::fourDigit:

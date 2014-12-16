@@ -3,7 +3,8 @@
 #include "Allele.h"
 #include "Utility.h"
 
-FileAllelesTog Allele::fileAllelesTog("data/H1g.txt", 200);
+FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
+FileAllelesTogOrG Allele::fileAllelesToG("data/H1G.txt", 200);
 
 void Allele::printCodePrecision(const codePrecision precision) const{
 
@@ -39,8 +40,8 @@ void Allele::printCodePrecision(const codePrecision precision) const{
 void Allele::allelesTog(){
 
   std::string locus = getLocus(code);
-  FileAllelesTog::list_t::const_iterator pos;
-  FileAllelesTog::list_t::const_iterator lastPos;
+  FileAllelesTogOrG::list_t::const_iterator pos;
+  FileAllelesTogOrG::list_t::const_iterator lastPos;
   fileAllelesTog.findPositionLocus(locus, pos, lastPos);
   
   bool found = false;

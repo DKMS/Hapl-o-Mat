@@ -42,7 +42,8 @@ class Allele{
   codePrecision precision;
   codePrecision wantedPrecision;
   double frequency;
-  static FileAllelesTog fileAllelesTog;
+  static FileAllelesTogOrG fileAllelesTog;
+  static FileAllelesTogOrG fileAllelesToG;
 };
 
 class Alleleg : public Allele{
