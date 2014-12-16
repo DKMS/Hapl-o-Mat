@@ -27,7 +27,7 @@ class File{
     else
       lastPos = itPos->second;
   }
-
+  std::string getFileName() const {return fileName;}
 
  protected:
   virtual void readFile() = 0;

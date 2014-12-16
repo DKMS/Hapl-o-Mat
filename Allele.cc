@@ -5,6 +5,8 @@
 
 FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1G.txt", 200);
+FilegOrGToAlleles AlleleG::fileGToAlleles("data/H1G.txt", 200);
+
 
 void Allele::printCodePrecision(const codePrecision precision) const{
 
@@ -121,7 +123,20 @@ void Alleleg::translateTog(){
 
 void AlleleG::translateTog(){
 
-  
+  strVec_t codes;
+  auto itGToAlleles = fileGToAlleles.getList().find(code);
+  if(itGToAlleles == fileGToAlleles.getList().cend()){
+    std::cout << "Key "
+	      << code
+	      << " not in "
+	      << fileGToAlleles.getFileName()
+	      << std::endl;
+  }
+  else{
+    codes = itGToAlleles->second;
+  }
+  for(auto it : codes)
+    std::cout << it << std::endl;
 
 }
 

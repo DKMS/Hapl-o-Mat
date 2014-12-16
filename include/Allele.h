@@ -1,6 +1,8 @@
 #ifndef Allele_header
 #define Allele_header
 
+#include <memory>
+
 #include "File.h"
 #include "Typedefs.h"
 
@@ -103,7 +105,8 @@ class AlleleG : public Allele{
   virtual void translateTo8d(){};  
 
  private:
-  
+  static FilegOrGToAlleles fileGToAlleles;
+
 };
 
 class Allele6d : public Allele{
