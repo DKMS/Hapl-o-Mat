@@ -59,5 +59,15 @@ class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, std::ve
   void readFile();
 };
 
+class FilegOrGToAlleles : public File<std::unordered_map<std::string, std::vector<std::string>>>{
+
+ public:
+  explicit FilegOrGToAlleles(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+    readFile();
+  }
+
+ private:
+  void readFile();
+};
 
 #endif

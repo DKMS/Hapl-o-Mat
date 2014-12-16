@@ -59,3 +59,32 @@ void FileAllelesTogOrG::readFile(){
 
   file.close();
 }
+
+void FilegOrGToAlleles::readFile(){
+
+  std::ifstream file;
+  openFileToRead(fileName, file);
+
+  std::string line;
+  while(std::getline(file, line)){
+    std::stringstream ss(line);
+    std::string key;
+    ss >> key;
+    std::string entry;
+    strVec_t translation;
+    while(ss >> entry){
+      translation.push_back(entry);
+    }
+    std::pair<list_t::iterator, bool> inserted = list.emplace(key, translation);
+    if(! inserted.second){
+      std::cerr << "In file"
+		<< fileName
+		<< "key "
+		<< key
+		<< "already occupied. "
+		<< std::endl;
+    }
+  }//while
+  
+  file.close();
+}
