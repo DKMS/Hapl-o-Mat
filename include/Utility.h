@@ -28,6 +28,16 @@ inline std::string leftOfFirstDelim(const std::string &s, char delim){
   return leftPart;
 }
 
+inline std::string leftOfLastDelim(const std::string &s, char delim){
+
+  std::size_t position = s.find_last_of(delim);
+
+  std::string leftPart;
+  leftPart.insert(0, s, 0, position);
+
+  return leftPart;
+}
+
 inline bool isLetter(const char c){
   return std::isalpha(c);
 }
@@ -42,6 +52,7 @@ bool checkLastLetter(const std::string code, const char lastLetter);
 bool checkNMDPCode(const std::string code);
 std::string findNMDPCode(const std::string code);
 inline std::string getLocus(const std::string & code){return leftOfFirstDelim(code, '*');}
+std::string cutCode(const std::string &s, const size_t toNumberColons);
 
 
 #endif

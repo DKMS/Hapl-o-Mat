@@ -78,3 +78,21 @@ std::string findNMDPCode(const std::string code){
 
   return multiAlleleCode;
 }
+
+std::string cutCode(const std::string &s, const size_t toNumberColons){
+
+  size_t numberColons = std::count(s.begin(), s.end(), ':');
+  std::string out = s;
+
+  if(numberColons > toNumberColons){
+    char lastElem = out.back();
+    for(size_t colon = 0; colon < numberColons - toNumberColons; colon++){
+      out = leftOfLastDelim(out, ':');
+    }
+    if(isLetter(lastElem)){
+      out.push_back(lastElem);
+    }
+  }
+
+  return out;
+}

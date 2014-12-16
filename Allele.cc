@@ -36,8 +36,7 @@ void Allele::printCodePrecision(const codePrecision precision) const{
   }
 }
 
-
-void Allele4d::translateTog(){
+void Allele::allelesTog(){
 
   std::string locus = getLocus(code);
   FileAllelesTog::list_t::const_iterator pos;
@@ -56,16 +55,38 @@ void Allele4d::translateTog(){
     }//for entries line
     pos ++;
   }//while lines in fileAllelesTog
+
+  if(found == false)
+    code = cutCode(code, 1);
 }
+
+void Allele4d::translateTog(){
+  
+  allelesTog();
+}
+
 void Allele4d::translateTo4d(){
 
 }
+
 void Allele4d::translateToG(){
 
 }
+
 void Allele4d::translateTo6d(){
 
 }
+
 void Allele4d::translateTo8d(){
 
 }  
+
+void Allele6d::translateTog(){
+
+  allelesTog();
+}
+
+void Allele8d::translateTog(){
+
+  allelesTog();
+}
