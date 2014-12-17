@@ -29,7 +29,8 @@ class DataProcessing{
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
 
-
+  size_t getNumberDonors() const {return numberDonors;}
+  size_t getNumberRemovedDonors() const {return numberRemovedDonors;}
 
  protected:
   std::string inputFileName;
