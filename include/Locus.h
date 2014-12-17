@@ -19,7 +19,7 @@ class Locus{
   void setWantedPrecision(const Allele::codePrecision in_wantedPrecision) {wantedPrecision = in_wantedPrecision;}
 
  protected:
-  std::vector<std::array<std::shared_ptr<Allele>, 2>> pAllelesAtPhasedLocus;
+  std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtPhasedLocus;
   Allele::codePrecision wantedPrecision;
 };
 

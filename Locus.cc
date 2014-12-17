@@ -33,32 +33,22 @@ void UnphasedLocus::resolve(){
     pAllelesAtBothLocusPositions.push_back(allPAllelesAtOneLocusPosition);
   }
 
-  for(auto it : pAllelesAtBothLocusPositions){
-    for(auto it2 : it){
-      std::cout << "summary" << std::endl;
-      std::cout << it2->getCode() << std::endl;
-      std::cout << it2->getFrequency() << std::endl;
-      it2->printCodePrecision(it2->getPrecision());
-    }
-    std::cout << std::endl;
-  }
-
   buildResolvedPhasedLocus();
 
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 
 
-  std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtPhasedLocusTmp;
-  cartesianProduct(pAllelesAtPhasedLocusTmp, pAllelesAtBothLocusPositions);
 
-  for(auto it : pAllelesAtPhasedLocusTmp){
+  cartesianProduct(pAllelesAtPhasedLocus, pAllelesAtBothLocusPositions);
+
+  std::cout << "summary" << std::endl;
+  for(auto it : pAllelesAtPhasedLocus){
     for(auto it2 : it){
       std::cout << it2->getCode() << std::endl;
+      std::cout << it2->getFrequency() << std::endl;
+      it2->printCodePrecision(it2->getPrecision());
     }
     std::cout << std::endl;
   }
-
-  //  std::move(pAllelesAtPhasedLocusTmp.at(0).begin(), pAllelesAtPhasedLocusTmp.at(0).end(), pAllelesAtPhasedLocus.at(0).begin());
-  //  std::move(pAllelesAtPhasedLocusTmp.at(1).begin(), pAllelesAtPhasedLocusTmp.at(1).end(), pAllelesAtPhasedLocus.at(1).begin());
 }
