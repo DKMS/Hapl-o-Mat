@@ -34,21 +34,9 @@ void UnphasedLocus::resolve(){
   }
 
   buildResolvedPhasedLocus();
-
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 
 
-
   cartesianProduct(pAllelesAtPhasedLocus, pAllelesAtBothLocusPositions);
-
-  std::cout << "summary" << std::endl;
-  for(auto it : pAllelesAtPhasedLocus){
-    for(auto it2 : it){
-      std::cout << it2->getCode() << std::endl;
-      std::cout << it2->getFrequency() << std::endl;
-      it2->printCodePrecision(it2->getPrecision());
-    }
-    std::cout << std::endl;
-  }
 }

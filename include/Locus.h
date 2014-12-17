@@ -17,6 +17,7 @@ class Locus{
 
   void checkCodes();
   void setWantedPrecision(const Allele::codePrecision in_wantedPrecision) {wantedPrecision = in_wantedPrecision;}
+  const std::vector<std::vector<std::shared_ptr<Allele>>>& getPAllelesAtPhasedLocus() const {return pAllelesAtPhasedLocus;}
 
  protected:
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtPhasedLocus;

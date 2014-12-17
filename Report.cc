@@ -125,5 +125,16 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
     std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision));
 
     pLocus->resolve();
+    std::cout << "summary" << std::endl;
+    for(auto it : pLocus->getPAllelesAtPhasedLocus()){
+      for(auto it2 : it){
+	std::cout << it2->getCode() << std::endl;
+	std::cout << it2->getFrequency() << std::endl;
+	it2->printCodePrecision(it2->getPrecision());
+      }
+      std::cout << std::endl;
+    }
+
+
   }//for inLoci
 }
