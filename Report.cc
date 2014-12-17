@@ -107,6 +107,8 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 
 void HReport::resolve(std::vector<HReport> & listOfReports){
 
+  std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+
   for(auto locus : inLoci){
     strVecArr_t locusPositions;
     size_t counter = 0;
@@ -122,19 +124,28 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
       counter ++;
     }
     
-    std::unique_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision));
-
+    std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision));
     pLocus->resolve();
-    std::cout << "summary" << std::endl;
-    for(auto it : pLocus->getPAllelesAtPhasedLocus()){
-      for(auto it2 : it){
-	std::cout << it2->getCode() << std::endl;
-	std::cout << it2->getFrequency() << std::endl;
-	it2->printCodePrecision(it2->getPrecision());
-      }
-      std::cout << std::endl;
-    }
-
-
+    std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+    pLocus->reduce(genotypesAtLocus);
+    genotypesAtLoci.push_back(genotypesAtLocus);
   }//for inLoci
+  
+  std::vector<std::vector<std::pair<strArr_t, double>>> reports;
+  cartesianProduct(reports, genotypesAtLoci);
+  
+  for(auto report : reports){
+    strArrVec_t newGenotypeAtLoci;
+    double newFrequency = 1.;
+    for(auto locus : report){
+      newGenotypeAtLoci.push_back(locus.first);
+      newFrequency *= locus.second;
+    }
+    HReport newReport(newGenotypeAtLoci, newFrequency, id);
+    listOfReports.push_back(newReport);
+    
+    for(auto it : newReport.getGenotypeAtLoci())
+      std::cout << it.at(0) << "+" << it.at(1) << std::endl;
+    std::cout << newReport.getId() << "\t" << newReport.getFrequency() << std::endl;
+  }
 }

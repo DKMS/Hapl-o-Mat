@@ -156,3 +156,7 @@ void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::
 }
   
 template void cartesianProduct<std::shared_ptr<Allele>>(std::vector<std::vector<std::shared_ptr<Allele>>> & out, const std::vector<std::vector<std::shared_ptr<Allele>>> & in);
+							
+template void cartesianProduct<std::pair<strArr_t, double>>(std::vector<std::vector<std::pair<strArr_t, double>>> & out,
+							    const std::vector<std::vector<std::pair<strArr_t, double>>> & in);
+														

@@ -14,16 +14,28 @@ class Report{
 
  public:
  Report(const Allele::codePrecision in_wantedPrecision)
-   : listOfLoci(),
+   : genotypeAtLoci(),
     id(),
     frequency(),
     wantedPrecision(in_wantedPrecision){}
 
+  Report(const strArrVec_t & in_genotypeAtLoci,
+	 const double in_frequency, 
+	 const std::string in_id)
+    : genotypeAtLoci(in_genotypeAtLoci),
+    id(in_id),
+    frequency(in_frequency),
+    wantedPrecision(){}
+
   void buildPhenotype();
   void buildHaploAndDiplotypes();
 
+  std::string getId() const {return id;}
+  double getFrequency() const {return frequency;}
+  const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
+
  protected:
-  strArrVec_t listOfLoci;
+  strArrVec_t genotypeAtLoci;
   std::string id;
   double frequency;
   Allele::codePrecision wantedPrecision;
@@ -59,6 +71,10 @@ class HReport : public Report{
       {
 	translateLine(line, lociNames);
       }
+
+  HReport(const strArrVec_t & in_genotypeAtLoci,
+	 const double in_frequency, 
+	 const std::string in_id) : Report(in_genotypeAtLoci, in_frequency, in_id){}
   
   void translateLine(const std::string line, const strVec_t lociNames);
   void resolve(std::vector<HReport> & listOfReports);

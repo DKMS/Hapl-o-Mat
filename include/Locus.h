@@ -17,6 +17,7 @@ class Locus{
 
   void checkCodes();
   void setWantedPrecision(const Allele::codePrecision in_wantedPrecision) {wantedPrecision = in_wantedPrecision;}
+  void reduce(std::vector<std::pair<strArr_t, double>> & genotypes);
   const std::vector<std::vector<std::shared_ptr<Allele>>>& getPAllelesAtPhasedLocus() const {return pAllelesAtPhasedLocus;}
 
  protected:

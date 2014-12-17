@@ -4,6 +4,20 @@
 #include "Locus.h"
 #include "Utility.h"
 
+void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
+
+  for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
+
+    strArr_t genotype;
+    double genotypeFrequency = 1.;
+    for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++ ){
+      genotype.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
+      genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
+    }
+    genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
+  }
+}
+
 void PhasedLocus::resolve(){
 
   std::cout << "phased" << std::endl;
