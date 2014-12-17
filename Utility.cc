@@ -96,3 +96,63 @@ std::string cutCode(const std::string &s, const size_t toNumberColons){
 
   return out;
 }
+
+template<typename T>
+void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in){
+
+  struct Digits {
+    typename std::vector<T>::const_iterator begin;
+    typename std::vector<T>::const_iterator end;
+    typename std::vector<T>::const_iterator me;
+  };
+  typedef std::vector<Digits> digitsVector_t;
+  
+  digitsVector_t vectorDigits;
+
+  //initialise vectorDigits, each digit points to one vector in in,                                                                                   
+  //me starts at the beginning                                                                                                                        
+  for(auto it = in.cbegin();
+      it != in.cend();
+      ++it) {
+    Digits digit = {(*it).begin(), (*it).end(), (*it).begin()};
+    vectorDigits.push_back(digit);
+  }
+    
+  while(1) {
+    // Construct your first product vector by pulling                                                                                                 
+    // out the element of each vector via the iterator.                                                                                               
+    std::vector<T> result;
+    for(auto it = vectorDigits.cbegin();
+	it != vectorDigits.cend();
+	it++) {
+      result.push_back(*(it->me));
+    }
+    out.push_back(result);
+    
+    //build new combination                                                                                                                           
+    for(auto it = vectorDigits.begin(); ; ) {
+      //increase index of leftmost vector by one                                                                                                      
+      ++(it->me);
+      //if we already are at the last index                                                                                                           
+      if(it->me == it->end) {
+	//check if also the next vector is at its end                                                                                                 
+	if(it+1 == vectorDigits.end()) {
+	  //then we are done                                                                                                                          
+	  return;
+	}
+	else {
+	  //set vector to its first element and go to the next vector                                                                                 
+	  //->next step in for loop                                                                                                                   
+	  it->me = it->begin;
+	  ++it;
+	}
+      }
+      else {
+	//we built a new combination, leave for-loop and go back to begin of while-loop                                                               
+	break;
+      }
+    }
+  }
+}
+  
+  template void cartesianProduct<int>(std::vector<std::vector<int>> & out, const std::vector<std::vector<int>> & in);

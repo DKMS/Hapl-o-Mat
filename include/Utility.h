@@ -2,8 +2,10 @@
 #define Utility_header
 
 #include <fstream>
+#include <memory>
 
 #include "Typedefs.h"
+#include "Allele.h"
 
 void openFileToRead(const std::string fileName, std::ifstream & file);
 
@@ -53,6 +55,9 @@ bool checkNMDPCode(const std::string code);
 std::string findNMDPCode(const std::string code);
 inline std::string getLocus(const std::string & code){return leftOfFirstDelim(code, '*');}
 std::string cutCode(const std::string &s, const size_t toNumberColons);
+
+template<typename T>
+void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in);
 
 
 #endif
