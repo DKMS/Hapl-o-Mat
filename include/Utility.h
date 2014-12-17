@@ -10,6 +10,7 @@
 const double ZERO = 1e-14;
 
 void openFileToRead(const std::string fileName, std::ifstream & file);
+void openFileToWrite(const std::string fileName, std::ofstream & file);
 
 inline std::string rightOfFirstDelim(const std::string &s, char delim){
 

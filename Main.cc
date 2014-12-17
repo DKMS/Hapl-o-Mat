@@ -16,8 +16,8 @@ int main(){
   lociToDo.push_back("DRB1");
   lociToDo.push_back("DQB1");
 
-  //  std::unique_ptr<DataProcessing> pDataProcessing (new GLDataProcessing("reports.pull", "reports.glid", lociToDo,   Allele::codePrecision::fourDigit));
-  std::unique_ptr<DataProcessing> pDataProcessing (new DKMSDataProcessing("reports.txt", Allele::codePrecision::g,.0001));
+  //  std::unique_ptr<DataProcessing> pDataProcessing (new GLDataProcessing("reports.pull", "results/haplotypes.dat", "results/phenotypes.dat", "reports.glid", lociToDo,   Allele::codePrecision::fourDigit));
+  std::unique_ptr<DataProcessing> pDataProcessing (new DKMSDataProcessing("reports.txt", "results/haplotypes.dat", "results/phenotypes.dat", Allele::codePrecision::g,.0001));
 
   PhenotypeList pList;
   HaplotypeList hList;

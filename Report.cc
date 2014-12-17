@@ -1,4 +1,5 @@
 #include <sstream>
+#include <fstream>
 #include <iostream>
 
 #include "Report.h"
@@ -81,7 +82,7 @@ void Report::writeCombinations() const {
     }
 }
 
-void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList) const{
+void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList, std::ofstream & haplotypesFile) const{
 
   auto i1end = haplotypeCombinations.cend();
   for(auto i1 = haplotypeCombinations.cbegin();
@@ -119,13 +120,13 @@ void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, Haplot
       std::pair<HaplotypeList::iterator, bool> inserted2 = haplotypeList.add(codeHaplotype2);
       
       if(inserted1.second){
-	//	fileHaplo << codeHaplotype1 << "\n";
+	haplotypesFile << codeHaplotype1 << std::endl;
       }
       else{
 	inserted1.first->second.incrementNumber();
       }
       if(inserted2.second){
-	//	fileHaplo << codeHaplotype2 << "\n";
+	haplotypesFile << codeHaplotype2 << std::endl;
       }
       else{
 	inserted2.first->second.incrementNumber();

@@ -16,6 +16,17 @@ void openFileToRead(const std::string fileName, std::ifstream & file){
   }
 }
 
+void openFileToWrite(const std::string fileName, std::ofstream & file){
+
+  file.open(fileName, std::ifstream::out);
+  if(!file.is_open()) {
+    std::cerr << "Could not open file: "
+              << fileName
+              << std::endl;
+    exit (EXIT_FAILURE);
+  }
+}
+
 strVec_t split(const std::string &s, char delim){
 
   strVec_t elems;

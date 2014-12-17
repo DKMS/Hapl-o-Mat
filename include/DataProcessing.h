@@ -14,9 +14,13 @@ class DataProcessing{
 
  public:
   explicit DataProcessing(const std::string in_inputFileName,
+			  const std::string in_haplotypesFileName,
+			  const std::string in_phenotypesFileName,
 			  const Allele::codePrecision in_wantedPrecision,
 			  const double in_minimalFrequency)
     : inputFileName(in_inputFileName),
+    haplotypesFileName(in_haplotypesFileName),
+    phenotypesFileName(in_phenotypesFileName),
     wantedPrecision(in_wantedPrecision),
     minimalFrequency(in_minimalFrequency),
     numberDonors(0),
@@ -29,6 +33,8 @@ class DataProcessing{
 
  protected:
   std::string inputFileName;
+  std::string haplotypesFileName;
+  std::string phenotypesFileName;
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
   double minimalFrequency;
@@ -40,11 +46,13 @@ class GLDataProcessing : public DataProcessing{
 
  public:
   explicit GLDataProcessing(const std::string in_inputFileName,
+			    const std::string in_haplotypesFileName,
+			    const std::string in_phenotypesFileName,
 			    const std::string in_glidFileName,
 			    const strVec_t & in_lociToDo,
 			    const Allele::codePrecision in_wantedPrecision,
 			    const double in_minimalFrequency)
-    : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency),
+    : DataProcessing(in_inputFileName, in_haplotypesFileName, in_phenotypesFileName, in_wantedPrecision, in_minimalFrequency),
     glidFileName(in_glidFileName),
     lociToDo(in_lociToDo),
     glid(glidFileName)
@@ -70,9 +78,11 @@ class DKMSDataProcessing : public DataProcessing{
 
  public:
   explicit DKMSDataProcessing(const std::string in_inputFileName,
+			      const std::string in_haplotypesFileName,
+			      const std::string in_phenotypesFileName,
 			      const Allele::codePrecision in_wantedPrecision,
 			      const double in_minimalFrequency)
-    : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency), lociNames(){}
+    : DataProcessing(in_inputFileName, in_haplotypesFileName, in_phenotypesFileName, in_wantedPrecision, in_minimalFrequency), lociNames(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 

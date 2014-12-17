@@ -3,6 +3,7 @@
 
 #include <array>
 #include <vector>
+#include <fstream>
 
 #include "File.h"
 #include "Typedefs.h"
@@ -43,7 +44,7 @@ class Report{
   void findCombinations(const size_t size);
   void writeCombinations() const;
   std::string buildPhenotypeCode() const;
-  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList) const;
+  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList, std::ofstream & haplotypesFile) const;
 
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}

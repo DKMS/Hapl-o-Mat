@@ -34,6 +34,10 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
+  std::ofstream haplotypesFile;
+  openFileToWrite(haplotypesFileName, haplotypesFile);
+  std::ofstream phenotypesFile;
+  openFileToWrite(phenotypesFileName, phenotypesFile);
 
   std::string line;
   if(std::getline(inputFile, line))
@@ -62,17 +66,23 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
       numberDonors ++;
     
       for(auto oneReport : listOfReports){
-
+	
 	std::string phenotypeCode = oneReport.buildPhenotypeCode();
+	phenotypesFile << oneReport.getId() << "\t"
+		       << oneReport.getFrequency() << "\t"
+		       << phenotypeCode
+		       << std::endl;
 	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
 	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
 	if(inserted.second)
-	  oneReport.buildHaploAndDiplotypes(inserted.first, hList);
+	  oneReport.buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile);
       }//for listOfReports
     }//else
   }//while
     
   inputFile.close();
+  haplotypesFile.close();
+  phenotypesFile.close();
 }
 
 void DKMSDataProcessing::readLociNames(const std::string line){
