@@ -86,5 +86,6 @@ void DKMSDataProcessing::readLociNames(const std::string line){
       numberLoci ++;
     }
   }
+  numberLoci ++;
   numberLoci /= 2;
 }
