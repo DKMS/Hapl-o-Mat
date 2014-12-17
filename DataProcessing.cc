@@ -47,6 +47,21 @@ void DKMSDataProcessing::dataProcessing(){
     HReport report(line, lociNames, wantedPrecision);
     std::vector<HReport> listOfReports;
     report.resolve(listOfReports);
+
+    double avrFrequencyOfReports = 1. / static_cast<double>(listOfReports.size());
+    if(avrFrequencyOfReports - minimalFrequency < ZERO){
+      numberRemovedDonors ++;
+      std::cout << "Report "
+		<< report.getId()
+		<< " with average frequency of "
+		<< avrFrequencyOfReports
+		<< " comes below allowed frequency. Report discarded."
+		<< std::endl;
+    }
+    else{
+      numberDonors ++;
+    }
+    
   }
 
   

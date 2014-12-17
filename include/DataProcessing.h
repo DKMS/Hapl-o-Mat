@@ -15,7 +15,9 @@ class DataProcessing{
 			  const double in_minimalFrequency)
     : inputFileName(in_inputFileName),
     wantedPrecision(in_wantedPrecision),
-    minimalFrequency(in_minimalFrequency){}
+    minimalFrequency(in_minimalFrequency),
+    numberDonors(0),
+    numberRemovedDonors(0){}
   virtual ~DataProcessing(){}
 
   virtual void dataProcessing() = 0;
@@ -27,6 +29,8 @@ class DataProcessing{
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
   double minimalFrequency;
+  size_t numberDonors;
+  size_t numberRemovedDonors;
 };
 
 class GLDataProcessing : public DataProcessing{
@@ -65,7 +69,7 @@ class DKMSDataProcessing : public DataProcessing{
   explicit DKMSDataProcessing(const std::string in_inputFileName,
 			      const Allele::codePrecision in_wantedPrecision,
 			      const double in_minimalFrequency)
-    : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency){}
+    : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency), lociNames(){}
 
   virtual void dataProcessing();
 

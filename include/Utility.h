@@ -7,6 +7,8 @@
 #include "Typedefs.h"
 #include "Allele.h"
 
+const double ZERO = 1e-14;
+
 void openFileToRead(const std::string fileName, std::ifstream & file);
 
 inline std::string rightOfFirstDelim(const std::string &s, char delim){
