@@ -66,9 +66,8 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 	std::string phenotypeCode = oneReport.buildPhenotypeCode();
 	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
 	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
-	//	if(inserted.second)
-	//	buildDiploAndHaplotypes(*(*it), inserted.first, haplotypeList);
-	  
+	if(inserted.second)
+	  oneReport.buildHaploAndDiplotypes(inserted.first, hList);
       }//for listOfReports
     }//else
   }//while

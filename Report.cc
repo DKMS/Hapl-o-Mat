@@ -32,17 +32,16 @@ void Report::findCombinations(const size_t size){
   bool done = false;
   while (!done){
 
-    //add combo to list                                                                                                                               
+    //add combo to list                                                                                                                              
     haplotypeCombinations.push_back(combo);
-
-    //new combo                                                                                                                                       
+    //new combo                                                                                                                                     
     auto it=combo.end();
     it --;
-    //can last entry be increased                                                                                                                     
+    //can last entry be increased                                                                                                                    
     if(*it == false){
       *it = true;
     }
-    //look for entry that can be increased                                                                                                            
+    //look for entry that can be increased                                                                                                        
     else{
       while(*it == true){
         if(it==combo.begin()){
@@ -52,7 +51,7 @@ void Report::findCombinations(const size_t size){
         it --;
       }
       *it = true;
-      //set all entries larger than it to false                                                                                                       
+      //set all entries larger than it to false                                                                                                  
       for(it = it+1;
           it != combo.end();
           it++)
@@ -60,9 +59,9 @@ void Report::findCombinations(const size_t size){
     }
   }
 
-  //removed negated combos                                                                                                                            
-  // 000 - 111, 001 - 110, 010 - 101, ...                                                                                                             
-  //exactly the other half of the vector                                                                                                              
+  //removed negated combos                                                                                                                     
+  // 000 - 111, 001 - 110, 010 - 101, ...                                                                                                       
+  //exactly the other half of the vector                                                                                                            
   haplotypeCombinations.resize(haplotypeCombinations.size()/2);
 }
 
@@ -82,63 +81,57 @@ void Report::writeCombinations() const {
     }
 }
 
-
 void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList) const{
 
-  /*
   auto i1end = haplotypeCombinations.cend();
   for(auto i1 = haplotypeCombinations.cbegin();
       i1 != i1end;
       i1++)
     {
-      //build haplotypes                                                                                                                              
-      std::string signatureHaplotype1;
-      std::string signatureHaplotype2;
+      std::string codeHaplotype1;
+      std::string codeHaplotype2;
       
-      auto itSignature = report.c_separatedReportBegin();
-      
+      auto genotypeAtLocus = genotypeAtLoci.cbegin();
+     
       auto i2end = i1->cend();
       for(auto i2 = i1->cbegin();
           i2 != i2end;
           i2++)
         {
           if(*i2){
-            signatureHaplotype2.append(*itSignature);
-            itSignature++;
-            signatureHaplotype1.append(*itSignature);
+            codeHaplotype2.append(genotypeAtLocus->at(0));
+            codeHaplotype1.append(genotypeAtLocus->at(1));
           }
           else{
-            signatureHaplotype1.append(*itSignature);
-            itSignature++;
-            signatureHaplotype2.append(*itSignature);
+	    codeHaplotype1.append(genotypeAtLocus->at(0));
+	    codeHaplotype2.append(genotypeAtLocus->at(1));
           }
-	  
-          signatureHaplotype1.append(parameters.getHaplotypeDelimiter());
-          signatureHaplotype2.append(parameters.getHaplotypeDelimiter());
-          itSignature ++;
+	  codeHaplotype1.append("~");
+          codeHaplotype2.append("~");
+	  genotypeAtLocus ++;
         }
-      //remove last ,                                                                                                                                 
-      signatureHaplotype1.pop_back();
-      signatureHaplotype2.pop_back();
       
-      //add haplotypes to list                                                                                                                        
-      std::pair<HaplotypeList::iterator, bool> inserted1 = haplotypeList.add(signatureHaplotype1);
-      std::pair<HaplotypeList::iterator, bool> inserted2 = haplotypeList.add(signatureHaplotype2);
+      codeHaplotype1.pop_back();
+      codeHaplotype2.pop_back();
+      
+      //add haplotypes to list                                                                                                                     
+      std::pair<HaplotypeList::iterator, bool> inserted1 = haplotypeList.add(codeHaplotype1);
+      std::pair<HaplotypeList::iterator, bool> inserted2 = haplotypeList.add(codeHaplotype2);
       
       if(inserted1.second){
-	fileHaplo << signatureHaplotype1 << "\n";
+	//	fileHaplo << codeHaplotype1 << "\n";
       }
       else{
 	inserted1.first->second.incrementNumber();
       }
       if(inserted2.second){
-	fileHaplo << signatureHaplotype2 << "\n";
+	//	fileHaplo << codeHaplotype2 << "\n";
       }
       else{
 	inserted2.first->second.incrementNumber();
       }
       
-      //build diplotype                                                                                                                               
+      //build diplotype                                                                                                                          
       size_t id1 = inserted1.first->first;
       size_t id2 = inserted2.first->first;
       
@@ -150,9 +143,8 @@ void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, Haplot
       else
 	diplotype.sameHaplotype = false;
       
-      phenotype->second.addDiplotype(diplotype);
+      itPhenotype->second.addDiplotype(diplotype);
     }//haplotypeCombinations  
-  */
 }
 
 
@@ -291,9 +283,5 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
     }
     HReport newReport(newGenotypeAtLoci, newFrequency, numberLoci, id);
     listOfReports.push_back(newReport);
-    
-    for(auto it : newReport.getGenotypeAtLoci())
-      std::cout << it.at(0) << "+" << it.at(1) << std::endl;
-    std::cout << newReport.getId() << "\t" << newReport.getFrequency() << std::endl;
-  }
+  }//reports
 }

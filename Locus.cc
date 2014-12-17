@@ -20,8 +20,6 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
 void PhasedLocus::resolve(){
 
-  std::cout << "phased" << std::endl;
-
   for(auto locusPosition : phasedLocus){
     double alleleFrequency = 1. / static_cast<double>(phasedLocus.size());
     for(auto code : locusPosition){
@@ -33,7 +31,6 @@ void PhasedLocus::resolve(){
 
 void UnphasedLocus::resolve(){
 
-  std::cout << "unphased" << std::endl;
   //H2filter if [0],[1] have more than one element
 
   for(auto locusPosition : unphasedLocus){
