@@ -47,6 +47,8 @@ int main(int argc, char *argv[]){
 									  "results/phenotypes.dat",
 									  Allele::codePrecision::g,
 									  .0001));
+
+  std::cout << "#########Data-preprocessing" << std::endl;
   PhenotypeList pList;
   HaplotypeList hList;
   pDataProcessing->dataProcessing(pList, hList);
@@ -56,7 +58,8 @@ int main(int argc, char *argv[]){
   std::cout << "\t Phenotypes: " << pList.getSize() << std::endl;
   std::cout << "\t Haplotypes: " << hList.getSize() << std::endl;
   std::cout << std::endl;
-  std::cout << "EM-algorithm" << std::endl;
+
+  std::cout << "#########EM-algorithm" << std::endl;
 
   /*
   hList.initialiseFrequencies(pList);

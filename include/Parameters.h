@@ -2,6 +2,7 @@
 #define Parameters_header
 
 #include <string>
+#include <fstream>
 
 #include "Typedefs.h"
 #include "Allele.h"
@@ -43,9 +44,6 @@ class Parameters{
   size_t seed;
 
   size_t printPrecision;
-
-  
-
 };
 
 class ParametersGL : public Parameters{
@@ -57,10 +55,12 @@ class ParametersGL : public Parameters{
     print();
   }
 
-  virtual void init(){};
-  virtual void print() const {};
+  virtual void init();
+  virtual void print() const;
 
  private:
+  void loci_assign(const std::string line);
+
   std::string pullFileName;
   std::string glidFileName;
   
