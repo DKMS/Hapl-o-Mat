@@ -11,9 +11,11 @@ class DataProcessing{
 
  public:
   explicit DataProcessing(const std::string in_inputFileName,
-			  const Allele::codePrecision in_wantedPrecision)
+			  const Allele::codePrecision in_wantedPrecision,
+			  const double in_minimalFrequency)
     : inputFileName(in_inputFileName),
-    wantedPrecision(in_wantedPrecision){}
+    wantedPrecision(in_wantedPrecision),
+    minimalFrequency(in_minimalFrequency){}
   virtual ~DataProcessing(){}
 
   virtual void dataProcessing() = 0;
@@ -24,6 +26,7 @@ class DataProcessing{
   std::string inputFileName;
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
+  double minimalFrequency;
 };
 
 class GLDataProcessing : public DataProcessing{
@@ -32,8 +35,9 @@ class GLDataProcessing : public DataProcessing{
   explicit GLDataProcessing(const std::string in_inputFileName,
 			    const std::string in_glidFileName,
 			    const strVec_t & in_lociToDo,
-			    const Allele::codePrecision in_wantedPrecision)
-    : DataProcessing(in_inputFileName, in_wantedPrecision),
+			    const Allele::codePrecision in_wantedPrecision,
+			    const double in_minimalFrequency)
+    : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency),
     glidFileName(in_glidFileName),
     lociToDo(in_lociToDo),
     glid(glidFileName)
@@ -59,8 +63,9 @@ class DKMSDataProcessing : public DataProcessing{
 
  public:
   explicit DKMSDataProcessing(const std::string in_inputFileName,
-			      const Allele::codePrecision in_wantedPrecision)
-    : DataProcessing(in_inputFileName, in_wantedPrecision){}
+			      const Allele::codePrecision in_wantedPrecision,
+			      const double in_minimalFrequency)
+    : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency){}
 
   virtual void dataProcessing();
 
