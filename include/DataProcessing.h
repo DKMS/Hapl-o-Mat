@@ -7,6 +7,9 @@
 #include "Typedefs.h"
 #include "Allele.h"
 
+class PhenotypeList;
+class HaplotypeList;
+
 class DataProcessing{
 
  public:
@@ -20,7 +23,7 @@ class DataProcessing{
     numberRemovedDonors(0){}
   virtual ~DataProcessing(){}
 
-  virtual void dataProcessing() = 0;
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
 
 
 
@@ -54,7 +57,7 @@ class GLDataProcessing : public DataProcessing{
       }
     }
 
-  virtual void dataProcessing();
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 
  private:
   std::string glidFileName;
@@ -71,7 +74,7 @@ class DKMSDataProcessing : public DataProcessing{
 			      const double in_minimalFrequency)
     : DataProcessing(in_inputFileName, in_wantedPrecision, in_minimalFrequency), lociNames(){}
 
-  virtual void dataProcessing();
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 
   void readLociNames(const std::string line);
 

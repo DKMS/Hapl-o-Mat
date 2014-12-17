@@ -1,9 +1,11 @@
+#include <memory>
+
 #include "DataProcessing.h"
 #include "Allele.h"
 #include "Locus.h"
 #include "Typedefs.h"
-
-#include <memory>
+#include "Phenotype.h"
+#include "Haplotype.h"
 
 int main(){
   
@@ -17,6 +19,9 @@ int main(){
   //  std::unique_ptr<DataProcessing> pDataProcessing (new GLDataProcessing("reports.pull", "reports.glid", lociToDo,   Allele::codePrecision::fourDigit));
   std::unique_ptr<DataProcessing> pDataProcessing (new DKMSDataProcessing("reports.txt", Allele::codePrecision::g,.0001));
 
-  pDataProcessing->dataProcessing();
+  PhenotypeList pList;
+  HaplotypeList hList;
+
+  pDataProcessing->dataProcessing(pList, hList);
 
 }

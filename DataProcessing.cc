@@ -6,9 +6,9 @@
 #include "Glid.h"
 #include "Report.h"
 #include "Utility.h"
+#include "Phenotype.h"
 
-
-void GLDataProcessing::dataProcessing(){
+void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -19,7 +19,7 @@ void GLDataProcessing::dataProcessing(){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLReport report(line, booleanLociToDo, wantedPrecision);
+    GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
     std::vector<GLReport> listOfReports;
     report.resolve(listOfReports, glid);
   
@@ -30,7 +30,7 @@ void GLDataProcessing::dataProcessing(){
   
 }
 
-void DKMSDataProcessing::dataProcessing(){
+void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -44,7 +44,7 @@ void DKMSDataProcessing::dataProcessing(){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    HReport report(line, lociNames, wantedPrecision);
+    HReport report(line, lociNames, numberLoci, wantedPrecision);
     std::vector<HReport> listOfReports;
     report.resolve(listOfReports);
 
@@ -60,13 +60,20 @@ void DKMSDataProcessing::dataProcessing(){
     }
     else{
       numberDonors ++;
-    }
     
-  }
+      for(auto oneReport : listOfReports){
 
-  
+	std::string phenotypeCode = oneReport.buildPhenotypeCode();
+	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
+	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
+	//	if(inserted.second)
+	//	buildDiploAndHaplotypes(*(*it), inserted.first, haplotypeList);
+	  
+      }//for listOfReports
+    }//else
+  }//while
+    
   inputFile.close();
-
 }
 
 void DKMSDataProcessing::readLociNames(const std::string line){
