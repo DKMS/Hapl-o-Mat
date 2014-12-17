@@ -1,0 +1,12 @@
+#file names
+FILENAME_INPUT=reports.txt
+FILENAME_HAPLOTYPES=results/haplotypes.dat
+FILENAME_PHENOTYPES=results/phenotypes.dat
+FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
+#reports
+CODE_PRECISION=g
+MINIMAL_FREQUENCY_PHENOTYPES=1e-5
+#EM-algorithm
+INITIALISATION_HAPLOTYPE_FREQUENCIES=numberOccurence
+EPSILON=1e-6x
+SEED=1000

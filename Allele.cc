@@ -77,35 +77,37 @@ Allele::codePrecision Allele::identifyCodePrecision(const std::string code){
   return precision;
 }
 
-void Allele::printCodePrecision(const codePrecision precision) const{
+std::string Allele::printCodePrecision(const codePrecision precision){
 
+  std::string out;
   switch(precision){
   case codePrecision::g:
     {
-      std::cout << "g" << std::endl;
+      out = "g";
       break;
     }
   case codePrecision::fourDigit:
     {
-      std::cout << "4d" << std::endl;
+      out = "4d";
       break;
     }
   case codePrecision::G:
     {
-      std::cout << "G" << std::endl;
+      out = "G";
       break;
     }
   case codePrecision::sixDigit:
     {
-      std::cout << "6d" << std::endl;
+      out = "6d";
       break;
     }
   case codePrecision::eightDigit:
     {
-      std::cout << "8d" << std::endl;
+      out = "8d";
       break;
     }
   }
+  return out;
 }
 
 std::vector<std::shared_ptr<Allele>> Allele::translate(){

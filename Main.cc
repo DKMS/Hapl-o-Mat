@@ -1,3 +1,4 @@
+#include <string>
 #include <iostream>
 #include <memory>
 
@@ -7,8 +8,31 @@
 #include "Typedefs.h"
 #include "Phenotype.h"
 #include "Haplotype.h"
+#include "Parameters.h"
 
-int main(){
+int main(int argc, char *argv[]){
+
+  std::string format;
+  if (argc == 2)
+    format = argv[1];
+  else{
+    std::cerr << "Specify a file format (DKMS, GL)" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
+  std::unique_ptr<Parameters> pParameters;
+  if(format == "DKMS"){
+    std::unique_ptr<Parameters> pParametersTmp(new ParametersDKMS());
+    pParameters = move(pParametersTmp);
+  }
+  else if(format == "GL"){
+    std::unique_ptr<Parameters> pParametersTmp(new ParametersGL());
+    pParameters = move(pParametersTmp);
+  }
+  else{
+    std::cerr << "Specify one of the file formats (DKMS, GL)" << std::endl;
+    exit(EXIT_FAILURE);
+  }
   
   strVec_t lociToDo;
   lociToDo.push_back("A");

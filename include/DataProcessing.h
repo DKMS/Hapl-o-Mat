@@ -21,6 +21,7 @@ class DataProcessing{
     : inputFileName(in_inputFileName),
     haplotypesFileName(in_haplotypesFileName),
     phenotypesFileName(in_phenotypesFileName),
+    numberLoci(0),
     wantedPrecision(in_wantedPrecision),
     minimalFrequency(in_minimalFrequency),
     numberDonors(0),

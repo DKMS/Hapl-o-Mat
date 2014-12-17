@@ -1,6 +1,7 @@
 #ifndef Allele_header
 #define Allele_header
 
+#include <string>
 #include <memory>
 
 #include "File.h"
@@ -37,7 +38,7 @@ class Allele{
   static Allele::codePrecision identifyCodePrecision(const std::string code);
   std::vector<std::shared_ptr<Allele>> translate();
   std::string allelesTog();
-  void printCodePrecision(const codePrecision precision) const;
+  static std::string printCodePrecision(const codePrecision precision);
   double getFrequency() const {return frequency;}
   void multiplyFrequency(const double factor) {frequency *= factor;}
   std::string getCode() const {return code;}
