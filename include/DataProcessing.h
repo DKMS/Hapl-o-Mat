@@ -23,6 +23,7 @@ class DataProcessing{
     minimalFrequency(),
     numberDonors(0),
     numberRemovedDonors(0){}
+
   virtual ~DataProcessing(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
@@ -45,17 +46,24 @@ class GLDataProcessing : public DataProcessing{
 
  public:
   explicit GLDataProcessing(const ParametersGL & parameters)
-    : DataProcessing(), glidFileName(), lociToDo(), booleanLociToDo(), glid(parameters.getGlidFileName())
+    : DataProcessing(),
+    glidFileName(parameters.getGlidFileName()),
+    lociToDo(parameters.getLociToDo()),
+    booleanLociToDo(),
+    glid(glidFileName)
     {
-      
-      /*
-      for(auto locus : in_lociToDo){
+      haplotypesFileName = parameters.getHaplotypesFileName();
+      phenotypesFileName = parameters.getPhenotypesFileName();
+      wantedPrecision = parameters.getWantedPrecision();
+      minimalFrequency = parameters.getMinimalFrequency();
+
+      inputFileName = parameters.getPullFileName();      
+      for(auto locus : lociToDo){
 	if(locus != "None")
 	  booleanLociToDo.push_back(true);
 	else
 	  booleanLociToDo.push_back(false);
       }
-      */
     }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
@@ -73,6 +81,12 @@ class DKMSDataProcessing : public DataProcessing{
   explicit DKMSDataProcessing(const ParametersDKMS & parameters)
     : DataProcessing(), lociNames()
     {
+      haplotypesFileName = parameters.getHaplotypesFileName();
+      phenotypesFileName = parameters.getPhenotypesFileName();
+      wantedPrecision = parameters.getWantedPrecision();
+      minimalFrequency = parameters.getMinimalFrequency();
+
+      inputFileName = parameters.getInputFileName();
     }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);

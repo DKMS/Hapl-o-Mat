@@ -21,6 +21,11 @@ class Parameters{
   virtual void init() = 0;
   virtual void print() const = 0;
 
+  std::string getHaplotypesFileName() const {return haplotypesFileName;}
+  std::string getPhenotypesFileName() const {return phenotypesFileName;}
+  Allele::codePrecision getWantedPrecision() const {return precision;}
+  double getMinimalFrequency() const {return minimalFrequency;}
+
  protected:
   void val_assign(size_t & out, const std::string line);  
   void val_assign(double & out, const std::string line);  
@@ -54,18 +59,19 @@ class ParametersGL : public Parameters{
     init();
     print();
   }
-
+  
   virtual void init();
   virtual void print() const;
-
+  
   std::string getGlidFileName() const {return glidFileName;}
-
+  std::string getPullFileName() const {return pullFileName;}
+  strVec_t getLociToDo() const {return lociToDo;}
+  
  private:
   void loci_assign(const std::string line);
-
+  
   std::string pullFileName;
   std::string glidFileName;
-  
   strVec_t lociToDo;
 };
 
@@ -80,6 +86,8 @@ class ParametersDKMS : public Parameters{
 
   virtual void init();
   virtual void print() const;
+
+  std::string getInputFileName() const {return inputFileName;}
 
  private:
   std::string inputFileName;
