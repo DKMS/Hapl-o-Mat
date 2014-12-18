@@ -70,7 +70,6 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
 
-  std::cout << numberLoci << std::endl;
   haplotypeCombinations.findCombinations(numberLoci);
 
   std::string line;
