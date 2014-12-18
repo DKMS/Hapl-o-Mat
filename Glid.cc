@@ -59,7 +59,6 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
     strVecArr_t in_unphasedLocus;
     in_unphasedLocus.at(0) = lhs;
     in_unphasedLocus.at(1) = rhs;
-    UnphasedLocus unphasedLocus(in_unphasedLocus);
     pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus);
     }
   else{
@@ -69,11 +68,9 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
     for(size_t pos = 0; pos < alleles.size(); pos++)
       splittedGenotype.at(pos) = alleles.at(pos);
     in_phasedLocus.push_back(splittedGenotype);
-    PhasedLocus phasedLocus(in_phasedLocus);
     pLocus = std::make_shared<PhasedLocus> (in_phasedLocus);
   }
 
   pLocus->resolve();
   return pLocus;
-
 }

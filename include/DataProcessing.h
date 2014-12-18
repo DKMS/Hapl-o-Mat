@@ -68,7 +68,7 @@ class GLDataProcessing : public DataProcessing{
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
     booleanLociToDo(),
-    glid(glidFileName)
+    glid(glidFileName, parameters.getWantedPrecision()) 
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
