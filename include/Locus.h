@@ -16,7 +16,6 @@ class Locus{
   virtual void resolve() = 0;
 
   void checkCodes();
-  void setWantedPrecision(const Allele::codePrecision in_wantedPrecision) {wantedPrecision = in_wantedPrecision;}
   void reduce(std::vector<std::pair<strArr_t, double>> & genotypes);
   const std::vector<std::vector<std::shared_ptr<Allele>>>& getPAllelesAtPhasedLocus() const {return pAllelesAtPhasedLocus;}
 
@@ -34,7 +33,7 @@ class PhasedLocus : public Locus{
     : Locus(),
     phasedLocus(in_phasedLocus)
     {
-      setWantedPrecision(in_wantedPrecision);
+      wantedPrecision = in_wantedPrecision;
     }
   
   virtual void resolve();
@@ -56,7 +55,7 @@ class UnphasedLocus : public Locus{
     unphasedLocus(in_unphasedLocus),
     pAllelesAtBothLocusPositions()
     {
-      setWantedPrecision(in_wantedPrecision);
+      wantedPrecision = in_wantedPrecision;
       pAllelesAtBothLocusPositions.reserve(2);
     }
 

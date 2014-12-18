@@ -81,8 +81,6 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
     std::vector<GLReport> listOfReports;
     report.resolve(listOfReports, glid);
-  
-
   }
 
   inputFile.close();
