@@ -6,7 +6,7 @@ FILENAME_PHENOTYPES=results/phenotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
 FILENAME_EPSILON=results/epsilonVsSteps.dat
 #reports
-CODE_PRECISION=g
+CODE_PRECISION=asItIs
 MINIMAL_FREQUENCY_PHENOTYPES=1e-5
 LOCI=A,C,B,DQB1,DRB1
 #EM-algorithm

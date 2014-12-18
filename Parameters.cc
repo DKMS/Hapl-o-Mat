@@ -49,6 +49,8 @@ void Parameters::precision_assign(const std::string line){
     precision = Allele::codePrecision::sixDigit;
   else if(value == "8d")
     precision = Allele::codePrecision::eightDigit;
+  else if(value == "asItIs")
+    precision = Allele::codePrecision::asItIs;
   else{
     std::cerr << "No code precision specified" << std::endl;
     exit(EXIT_FAILURE);

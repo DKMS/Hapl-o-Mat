@@ -21,7 +21,6 @@ std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allel
   case Allele::codePrecision::fourDigit:
     {
       pAllele = std::make_shared<Allele4d> (code, precision, wantedPrecision, alleleFrequency);
-
       break;
     }
   case Allele::codePrecision::G:
@@ -37,6 +36,10 @@ std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allel
   case Allele::codePrecision::eightDigit:
     {
       pAllele = std::make_shared<Allele8d> (code, precision, wantedPrecision, alleleFrequency);
+      break;
+    }
+  case Allele::codePrecision::asItIs:
+    {
       break;
     }
   }//switch
@@ -106,6 +109,10 @@ std::string Allele::printCodePrecision(const codePrecision precision){
       out = "8d";
       break;
     }
+  case Allele::codePrecision::asItIs:
+    {
+      break;
+    }
   }
   return out;
 }
@@ -136,6 +143,13 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
   case Allele::codePrecision::eightDigit:
     {
       //      return this->translateTo8d();
+      break;
+    }
+  case Allele::codePrecision::asItIs:
+    {
+      std::vector<std::shared_ptr<Allele>> listOfPAlleleg;
+      listOfPAlleleg.push_back(this->create(code, precision, Allele::codePrecision::asItIs, frequency));
+      return listOfPAlleleg;
       break;
     }
   }//switch                                             
