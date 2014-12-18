@@ -21,32 +21,23 @@ int main(int argc, char *argv[]){
   }
 
   std::unique_ptr<Parameters> pParameters;
+  std::unique_ptr<DataProcessing> pDataProcessing;
   if(format == "DKMS"){
-    std::unique_ptr<Parameters> pParametersTmp(new ParametersDKMS());
-    pParameters = move(pParametersTmp);
+    std::unique_ptr<ParametersDKMS> pParametersTmp(new ParametersDKMS());
+    std::unique_ptr<DataProcessing> pDataProcessingTmp(new DKMSDataProcessing(*pParametersTmp));
+    pParameters = std::move(pParametersTmp);
+    pDataProcessing = std::move(pDataProcessingTmp);
   }
   else if(format == "GL"){
-    std::unique_ptr<Parameters> pParametersTmp(new ParametersGL());
-    pParameters = move(pParametersTmp);
+    std::unique_ptr<ParametersGL>pParametersTmp(new ParametersGL());
+    std::unique_ptr<DataProcessing> pDataProcessingTmp(new GLDataProcessing(*pParametersTmp));
+    pParameters = std::move(pParametersTmp);
+    pDataProcessing = std::move(pDataProcessingTmp);
   }
   else{
     std::cerr << "Specify one of the file formats (DKMS, GL)" << std::endl;
     exit(EXIT_FAILURE);
   }
-  
-  strVec_t lociToDo;
-  lociToDo.push_back("A");
-  lociToDo.push_back("C");
-  lociToDo.push_back("None");
-  lociToDo.push_back("DRB1");
-  lociToDo.push_back("DQB1");
-
-  //  std::unique_ptr<DataProcessing> pDataProcessing (new GLDataProcessing("reports.pull", "results/haplotypes.dat", "results/phenotypes.dat", "reports.glid", lociToDo,   Allele::codePrecision::fourDigit));
-  std::unique_ptr<DataProcessing> pDataProcessing (new DKMSDataProcessing("reports.txt",
-									  "results/haplotypes.dat",
-									  "results/phenotypes.dat",
-									  Allele::codePrecision::g,
-									  .0001));
 
   std::cout << "#########Data-preprocessing" << std::endl;
   PhenotypeList pList;

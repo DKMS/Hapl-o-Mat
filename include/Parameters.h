@@ -58,6 +58,8 @@ class ParametersGL : public Parameters{
   virtual void init();
   virtual void print() const;
 
+  std::string getGlidFileName() const {return glidFileName;}
+
  private:
   void loci_assign(const std::string line);
 

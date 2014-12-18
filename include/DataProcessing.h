@@ -6,6 +6,7 @@
 #include "Glid.h"
 #include "Typedefs.h"
 #include "Allele.h"
+#include "Parameters.h"
 
 class PhenotypeList;
 class HaplotypeList;
@@ -13,17 +14,13 @@ class HaplotypeList;
 class DataProcessing{
 
  public:
-  explicit DataProcessing(const std::string in_inputFileName,
-			  const std::string in_haplotypesFileName,
-			  const std::string in_phenotypesFileName,
-			  const Allele::codePrecision in_wantedPrecision,
-			  const double in_minimalFrequency)
-    : inputFileName(in_inputFileName),
-    haplotypesFileName(in_haplotypesFileName),
-    phenotypesFileName(in_phenotypesFileName),
+  explicit DataProcessing()
+    : inputFileName(),
+    haplotypesFileName(),
+    phenotypesFileName(),
     numberLoci(0),
-    wantedPrecision(in_wantedPrecision),
-    minimalFrequency(in_minimalFrequency),
+    wantedPrecision(),
+    minimalFrequency(),
     numberDonors(0),
     numberRemovedDonors(0){}
   virtual ~DataProcessing(){}
@@ -47,24 +44,18 @@ class DataProcessing{
 class GLDataProcessing : public DataProcessing{
 
  public:
-  explicit GLDataProcessing(const std::string in_inputFileName,
-			    const std::string in_haplotypesFileName,
-			    const std::string in_phenotypesFileName,
-			    const std::string in_glidFileName,
-			    const strVec_t & in_lociToDo,
-			    const Allele::codePrecision in_wantedPrecision,
-			    const double in_minimalFrequency)
-    : DataProcessing(in_inputFileName, in_haplotypesFileName, in_phenotypesFileName, in_wantedPrecision, in_minimalFrequency),
-    glidFileName(in_glidFileName),
-    lociToDo(in_lociToDo),
-    glid(glidFileName)
+  explicit GLDataProcessing(const ParametersGL & parameters)
+    : DataProcessing(), glidFileName(), lociToDo(), booleanLociToDo(), glid(parameters.getGlidFileName())
     {
+      
+      /*
       for(auto locus : in_lociToDo){
 	if(locus != "None")
 	  booleanLociToDo.push_back(true);
 	else
 	  booleanLociToDo.push_back(false);
       }
+      */
     }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
@@ -79,12 +70,10 @@ class GLDataProcessing : public DataProcessing{
 class DKMSDataProcessing : public DataProcessing{
 
  public:
-  explicit DKMSDataProcessing(const std::string in_inputFileName,
-			      const std::string in_haplotypesFileName,
-			      const std::string in_phenotypesFileName,
-			      const Allele::codePrecision in_wantedPrecision,
-			      const double in_minimalFrequency)
-    : DataProcessing(in_inputFileName, in_haplotypesFileName, in_phenotypesFileName, in_wantedPrecision, in_minimalFrequency), lociNames(){}
+  explicit DKMSDataProcessing(const ParametersDKMS & parameters)
+    : DataProcessing(), lociNames()
+    {
+    }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 
