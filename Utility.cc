@@ -96,12 +96,8 @@ std::string cutCode(const std::string &s, const size_t toNumberColons){
   std::string out = s;
 
   if(numberColons > toNumberColons){
-    char lastElem = out.back();
     for(size_t colon = 0; colon < numberColons - toNumberColons; colon++){
       out = leftOfLastDelim(out, ':');
-    }
-    if(isLetter(lastElem)){
-      out.push_back(lastElem);
     }
   }
 
