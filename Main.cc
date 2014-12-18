@@ -41,9 +41,10 @@ int main(int argc, char *argv[]){
 
   std::cout << "#########Data-preprocessing" << std::endl;
   PhenotypeList pList;
-  HaplotypeList hList;
+  HaplotypeList hList(*pParameters);
   pDataProcessing->dataProcessing(pList, hList);
 
+  std::cout << "\t Number loci: " << pDataProcessing->getNumberLoci() << std::endl;
   std::cout << "\t Removed reports: " << pDataProcessing->getNumberRemovedDonors() << std::endl;
   std::cout << "\t Leftover Reports: " << pDataProcessing->getNumberDonors() << std::endl;
   std::cout << "\t Phenotypes: " << pList.getSize() << std::endl;
@@ -52,8 +53,9 @@ int main(int argc, char *argv[]){
 
   std::cout << "#########EM-algorithm" << std::endl;
 
-  /*
+
   hList.initialiseFrequencies(pList);
+  /*
   EMAlgorithm(pList, hList);
   hList.writeFrequenciesToFile();
   */

@@ -7,6 +7,7 @@
 #include "Report.h"
 #include "Utility.h"
 #include "Phenotype.h"
+#include "Haplotype.h"
 
 void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
@@ -27,7 +28,8 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
   }
 
   inputFile.close();
-  
+  hList.setNumberLoci(numberLoci);
+  hList.setNumberDonors(numberDonors);
 }
 
 void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
@@ -83,6 +85,9 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
   inputFile.close();
   haplotypesFile.close();
   phenotypesFile.close();
+
+  hList.setNumberLoci(numberLoci);
+  hList.setNumberDonors(numberDonors);
 }
 
 void DKMSDataProcessing::readLociNames(const std::string line){

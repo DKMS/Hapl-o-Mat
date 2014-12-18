@@ -23,8 +23,12 @@ class Parameters{
 
   std::string getHaplotypesFileName() const {return haplotypesFileName;}
   std::string getPhenotypesFileName() const {return phenotypesFileName;}
+  std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
   Allele::codePrecision getWantedPrecision() const {return precision;}
   double getMinimalFrequency() const {return minimalFrequency;}
+  initialisationHaplotypeFrequencies getInitType() const {return initType;}
+  double getEpsilon() const {return epsilon;}
+  size_t getSeed() const {return seed;}
 
  protected:
   void val_assign(size_t & out, const std::string line);  

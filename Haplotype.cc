@@ -1,11 +1,13 @@
-#include "Haplotype.h"
-#include "Phenotype.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>
 #include <iostream> 
 #include <algorithm>
-#include <omp.h>
+
+#include "Haplotype.h"
+#include "Phenotype.h"
+#include "Utility.h"
+
 
 /*
 void EMAlgorithm(PhenotypeList & phenotypes, HaplotypeList & haplotypes){
@@ -38,16 +40,17 @@ void EMAlgorithm(PhenotypeList & phenotypes, HaplotypeList & haplotypes){
   std::cout << "Used " << counter <<" steps" << std::endl;
   file.close();
 }
+*/
 
 void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
   
-  switch(parameters.getInitialisationHaplotypeFrequencies()){
-  case Parameters::numberOccurence:
+  switch(initType){
+  case Parameters::initialisationHaplotypeFrequencies::numberOccurence:
     {
       initialiseNumberOccurence(phenotypes);
       break;
     }
-  case Parameters::perturbation:
+  case Parameters::initialisationHaplotypeFrequencies::perturbation:
     {
       initialiseNumberOccurence(phenotypes);
       initialisePerturbation();
@@ -59,7 +62,7 @@ void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
       for(auto it = listBegin();
 	  it != listEnd();
 	  it ++){
-	double number = randomNumber();
+	double number = rng() + 1.;
 	normalisation += number;
 	it->second.setFrequency(number);
       }
@@ -73,46 +76,11 @@ void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
     }
   }//switch
 }
-  
-void HaplotypeList::writeFrequenciesToFile() const{
-
-  std::fstream file;
-  file.open(parameters.getHaploFileName());
-  std::fstream fileOut;
-  fileOut.open(parameters.getHaploFrequenciesFileName(), std::ifstream::out);
-  fileOut.precision(14);
-  fileOut << std::fixed;
-
-  std::string code;
-  while(file >> code){
-    size_t hashValue = string_hash(code);
-    auto pos = hashList.find(hashValue);
-    if(pos != hashList.end()){
-      double freq = pos->second.getFrequency();
-      if(parameters.getMonteCarlo()){
-	fileOut << code
-		<< "\t";
-	fileOut << freq
-		<< "\n";
-      }//if Monte Carlo
-      else{
-	if(freq > parameters.getEpsilon()){
-	  fileOut << code
-		  << "\t";
-	  fileOut << freq
-		  << "\n";
-	}
-      }//else Montecarlo
-    }
-  }
-  file.close();
-  fileOut.close();
-}
 
 void HaplotypeList::initialiseNumberOccurence(const PhenotypeList & phenotypes){
 
-  double factor = static_cast<double>(pow(2, parameters.getNumberLoci()));
-  factor *= static_cast<double>(parameters.getNumberDonors());
+  double factor = static_cast<double>(pow(2, numberLoci));
+  factor *= static_cast<double>(numberDonors);
 
   auto itPhenoEnd = phenotypes.c_listEnd();
   for(auto itPheno = phenotypes.c_listBegin();
@@ -153,9 +121,45 @@ void HaplotypeList::initialisePerturbation(){
       it ++){
     it->second.multiplyFrequency(normalisation);
   }
-
 }
 
+void HaplotypeList::writeFrequenciesToFile() const{
+
+  std::ifstream inFile;
+  openFileToRead(haplotypesFileName ,inFile);
+  std::ofstream outFile;
+  openFileToWrite(haplotypeFrequenciesFileName ,outFile);
+  outFile.precision(14);
+  outFile << std::fixed;
+
+  std::string code;
+  while(inFile >> code){
+    size_t hashValue = string_hash(code);
+    auto pos = hashList.find(hashValue);
+    if(pos != hashList.end()){
+      double freq = pos->second.getFrequency();
+
+      //      if(parameters.getMonteCarlo()){
+      //	fileOut << code
+      //		<< "\t";
+      //	fileOut << freq
+      //		<< "\n";
+      //}//if Monte Carlo
+    //      else{
+      if(freq > epsilon){
+	outFile << code
+		<< "\t";
+	outFile << freq
+		<< "\n";
+      }
+      //      }//else Montecarlo
+    }
+  }
+  inFile.close();
+  outFile.close();
+}
+
+/*
 void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon){
 
     //save old frequencies, initialize haplotype frequencies to zero

@@ -1,7 +1,10 @@
 #ifndef Haplotype_header
 #define Haplotype_header
 
+#include<random>
+
 #include "Hash.h"
+#include "Parameters.h"
 
 class PhenotypeList;
 
@@ -25,7 +28,14 @@ class Haplotype{
 class HaplotypeList : public Hash<Haplotype>{
 
  public:
-  explicit HaplotypeList() {}
+  explicit HaplotypeList(const Parameters & parameters)
+    : haplotypesFileName(parameters.getHaplotypesFileName()),
+    haplotypeFrequenciesFileName(parameters.getHaplotypeFrequenciesFileName()),
+    numberLoci(0),
+    numberDonors(0),
+    initType(parameters.getInitType()),
+    epsilon(parameters.getEpsilon()),
+    rng(parameters.getSeed()){}
 
   double getFrequency(const size_t id) const{
     auto pos = hashList.find(id);
@@ -35,9 +45,12 @@ class HaplotypeList : public Hash<Haplotype>{
     else
       return pos->second.getFrequency();
   }
+  void setNumberLoci(const size_t in) {numberLoci = in;}
+  void setNumberDonors(const size_t in) {numberDonors = in;}
   void initialiseFrequencies(const PhenotypeList & phenotypes);
   void initialiseNumberOccurence(const PhenotypeList & phenotypes);
   void initialisePerturbation();
+  void EMAlgorithm(PhenotypeList & phenotypes);
   void maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon);
   void maximization(const PhenotypeList & phenotypes);
   void writeFrequenciesToFile() const;
@@ -46,8 +59,15 @@ class HaplotypeList : public Hash<Haplotype>{
   //  HaplotypeList(const HaplotypeList &);
   //  HaplotypeList& operator=(const HaplotypeList &);
 
+  std::string haplotypesFileName;
+  std::string haplotypeFrequenciesFileName;
+  size_t numberLoci;
+  size_t numberDonors;
+  Parameters::initialisationHaplotypeFrequencies initType;
+  double epsilon;
+  std::mt19937 rng;
 };
 
-void EMAlgorithm(PhenotypeList & phenotypes, HaplotypeList & haplotypes);
+
 
 #endif
