@@ -7,6 +7,7 @@
 
 void FileNMDPCodes::readFile(){
 
+  std::cout << "Read in file " << fileName << std::endl;
   std::ifstream file;
   openFileToRead(fileName, file);
 
@@ -31,6 +32,7 @@ void FileNMDPCodes::readFile(){
 
 void FileAllelesTogOrG::readFile(){
 
+  std::cout << "Read in file " << fileName << std::endl;
   std::ifstream file;
   openFileToRead(fileName, file);
 
@@ -61,6 +63,8 @@ void FileAllelesTogOrG::readFile(){
 }
 
 void FilegOrGToAlleles::readFile(){
+
+  std::cout << "Read in file " << fileName << std::endl;
 
   std::ifstream file;
   openFileToRead(fileName, file);
