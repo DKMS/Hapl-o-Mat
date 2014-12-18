@@ -11,6 +11,21 @@
 class PhenotypeList;
 class HaplotypeList;
 
+class HaplotypeCombinations{
+
+ public:
+  typedef std::vector<std::vector<bool>> list_t;
+  
+ HaplotypeCombinations() : list(){}
+
+  void findCombinations(const size_t size);
+  void writeCombinations() const;
+  const list_t & getList() const {return list;}
+
+ private:
+  list_t list;
+};
+
 class DataProcessing{
 
  public:
@@ -22,7 +37,8 @@ class DataProcessing{
     wantedPrecision(),
     minimalFrequency(),
     numberDonors(0),
-    numberRemovedDonors(0){}
+    numberRemovedDonors(0),
+    haplotypeCombinations(){}
 
   virtual ~DataProcessing(){}
 
@@ -41,6 +57,7 @@ class DataProcessing{
   double minimalFrequency;
   size_t numberDonors;
   size_t numberRemovedDonors;
+  HaplotypeCombinations haplotypeCombinations;
 };
 
 class GLDataProcessing : public DataProcessing{
@@ -60,8 +77,10 @@ class GLDataProcessing : public DataProcessing{
 
       inputFileName = parameters.getPullFileName();      
       for(auto locus : lociToDo){
-	if(locus != "None")
+	if(locus != "None"){
 	  booleanLociToDo.push_back(true);
+	  numberLoci ++;
+	}
 	else
 	  booleanLociToDo.push_back(false);
       }

@@ -9,10 +9,69 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 
-void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void HaplotypeCombinations::findCombinations(const size_t size){
 
+  std::vector<bool> combo (size, false);
+
+  bool done = false;
+  while (!done){
+
+    //add combo to list                                                                                                                              
+    list.push_back(combo);
+    //new combo                                                                                                                                     
+    auto it=combo.end();
+    it --;
+    //can last entry be increased                                                                                                                    
+    if(*it == false){
+      *it = true;
+    }
+    //look for entry that can be increased                                                                                                        
+    else{
+      while(*it == true){
+        if(it==combo.begin()){
+          done = true;
+          break;
+	}
+        it --;
+      }
+      *it = true;
+      //set all entries larger than it to false                                                                                                  
+      for(it = it+1;
+          it != combo.end();
+          it++)
+        *it = false;
+    }
+  }
+
+  //removed negated combos                                                                                                                     
+  // 000 - 111, 001 - 110, 010 - 101, ...                                                                                                       
+  //exactly the other half of the vector                                                                                                            
+  list.resize(list.size()/2);
+}
+
+void HaplotypeCombinations::writeCombinations() const {
+
+  for(auto i1 = list.cbegin();
+      i1 != list.cend();
+      i1++)
+    {
+      for(auto i2 = i1->cbegin();
+          i2 != i1->cend();
+          i2++)
+        {
+	  std::cout << *i2;
+        }
+      std::cout << std::endl;
+    }
+}
+
+void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+  
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
+
+  std::cout << numberLoci << std::endl;
+  haplotypeCombinations.findCombinations(numberLoci);
 
   std::string line;
   while(std::getline(inputFile, line)){
@@ -44,6 +103,8 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
   std::string line;
   if(std::getline(inputFile, line))
     readLociNames(line);
+
+  haplotypeCombinations.findCombinations(numberLoci);
 
   while(std::getline(inputFile, line)){
 
@@ -77,7 +138,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
 	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
 	if(inserted.second)
-	  oneReport.buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile);
+	  oneReport.buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
       }//for listOfReports
     }//else
   }//while

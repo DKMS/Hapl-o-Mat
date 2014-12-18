@@ -8,9 +8,9 @@
 #include "Utility.h"
 #include "Phenotype.h"
 #include "Haplotype.h"
+#include "DataProcessing.h"
 
 FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt", 271600);
-std::vector<std::vector<bool>> Report::haplotypeCombinations;
 
 std::string Report::buildPhenotypeCode() const{
 
@@ -26,66 +26,13 @@ std::string Report::buildPhenotypeCode() const{
   return phenotypeCode;
 }
 
-void Report::findCombinations(const size_t size){
+void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
+				     HaplotypeList & haplotypeList,
+				     std::ofstream & haplotypesFile,
+				     const HaplotypeCombinations & haplotypeCombinations) const{
 
-  std::vector<bool> combo (size, false);
-
-  bool done = false;
-  while (!done){
-
-    //add combo to list                                                                                                                              
-    haplotypeCombinations.push_back(combo);
-    //new combo                                                                                                                                     
-    auto it=combo.end();
-    it --;
-    //can last entry be increased                                                                                                                    
-    if(*it == false){
-      *it = true;
-    }
-    //look for entry that can be increased                                                                                                        
-    else{
-      while(*it == true){
-        if(it==combo.begin()){
-          done = true;
-          break;
-	}
-        it --;
-      }
-      *it = true;
-      //set all entries larger than it to false                                                                                                  
-      for(it = it+1;
-          it != combo.end();
-          it++)
-        *it = false;
-    }
-  }
-
-  //removed negated combos                                                                                                                     
-  // 000 - 111, 001 - 110, 010 - 101, ...                                                                                                       
-  //exactly the other half of the vector                                                                                                            
-  haplotypeCombinations.resize(haplotypeCombinations.size()/2);
-}
-
-void Report::writeCombinations() const {
-
-  for(auto i1 = haplotypeCombinations.cbegin();
-      i1 != haplotypeCombinations.cend();
-      i1++)
-    {
-      for(auto i2 = i1->cbegin();
-          i2 != i1->cend();
-          i2++)
-        {
-	  std::cout << *i2;
-        }
-      std::cout << std::endl;
-    }
-}
-
-void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList, std::ofstream & haplotypesFile) const{
-
-  auto i1end = haplotypeCombinations.cend();
-  for(auto i1 = haplotypeCombinations.cbegin();
+  auto i1end = haplotypeCombinations.getList().cend();
+  for(auto i1 = haplotypeCombinations.getList().cbegin();
       i1 != i1end;
       i1++)
     {

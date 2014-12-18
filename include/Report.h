@@ -11,8 +11,8 @@
 #include "Phenotype.h"
 
 class GlidFile;
-
 class HaplotypeList;
+class HaplotypeCombinations;
 
 class Report{
 
@@ -24,7 +24,6 @@ class Report{
     numberLoci(in_numberLoci),
     wantedPrecision(in_wantedPrecision)
     {
-      findCombinations(numberLoci);
       genotypeAtLoci.reserve(numberLoci);
     }
 
@@ -41,10 +40,11 @@ class Report{
 	genotypeAtLoci.reserve(numberLoci);
       }
 
-  void findCombinations(const size_t size);
-  void writeCombinations() const;
   std::string buildPhenotypeCode() const;
-  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype, HaplotypeList & haplotypeList, std::ofstream & haplotypesFile) const;
+  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
+			       HaplotypeList & haplotypeList,
+			       std::ofstream & haplotypesFile,
+			       const HaplotypeCombinations & haplotypeCombinations) const;
 
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}
@@ -56,7 +56,6 @@ class Report{
   double frequency;
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
-  static std::vector<std::vector<bool>> haplotypeCombinations;
 };
 
 class GLReport : public Report{
