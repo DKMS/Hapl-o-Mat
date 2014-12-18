@@ -150,11 +150,12 @@ std::string Allele::allelesTog(){
   fileAllelesTog.findPositionLocus(locus, pos, lastPos);
   
   bool found = false;
+  std::string codeToFind = cutCode(code, 1);
   while(pos != lastPos && found==false){
     for(auto entry = pos->second.cbegin();
 	entry != pos->second.cend() && found==false;
 	entry ++){
-      if(code == *entry){
+      if(codeToFind == *entry){
 	codeInPrecision = pos->first;
 	found = true;
       }
@@ -163,7 +164,7 @@ std::string Allele::allelesTog(){
   }//while lines in fileAllelesTog
 
   if(found == false){
-    codeInPrecision = cutCode(code, 1);
+    codeInPrecision = codeToFind;
   }
 
   return codeInPrecision;
