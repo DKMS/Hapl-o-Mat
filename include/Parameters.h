@@ -24,6 +24,7 @@ class Parameters{
   std::string getHaplotypesFileName() const {return haplotypesFileName;}
   std::string getPhenotypesFileName() const {return phenotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
+  std::string getEpsilonFileName() const {return epsilonFileName;}
   Allele::codePrecision getWantedPrecision() const {return precision;}
   double getMinimalFrequency() const {return minimalFrequency;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}

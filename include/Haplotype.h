@@ -31,6 +31,7 @@ class HaplotypeList : public Hash<Haplotype>{
   explicit HaplotypeList(const Parameters & parameters)
     : haplotypesFileName(parameters.getHaplotypesFileName()),
     haplotypeFrequenciesFileName(parameters.getHaplotypeFrequenciesFileName()),
+    epsilonFileName(parameters.getEpsilonFileName()),
     numberLoci(0),
     numberDonors(0),
     initType(parameters.getInitType()),
@@ -61,6 +62,7 @@ class HaplotypeList : public Hash<Haplotype>{
 
   std::string haplotypesFileName;
   std::string haplotypeFrequenciesFileName;
+  std::string epsilonFileName;
   size_t numberLoci;
   size_t numberDonors;
   Parameters::initialisationHaplotypeFrequencies initType;

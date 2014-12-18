@@ -8,19 +8,12 @@
 #include "Phenotype.h"
 #include "Utility.h"
 
-
-/*
-void EMAlgorithm(PhenotypeList & phenotypes, HaplotypeList & haplotypes){
-
-  std::fstream file;
-  file.open(parameters.getEpsilonFileName(), std::ifstream::out);
-  if(!file.is_open()) {
-    std::cout << "Could not open file: "
-              << parameters.getEpsilonFileName()
-              << std::endl;
-  }
-  file.precision(14);
-  file << std::scientific;
+void HaplotypeList::EMAlgorithm(PhenotypeList & phenotypes){
+ 
+  std::ofstream epsilonFile;
+  openFileToWrite(epsilonFileName, epsilonFile);
+  epsilonFile.precision(14);
+  epsilonFile << std::scientific;
 
   bool stop;
   size_t counter = 0;
@@ -28,19 +21,18 @@ void EMAlgorithm(PhenotypeList & phenotypes, HaplotypeList & haplotypes){
     counter ++;
     stop = false;
 
-    phenotypes.expectationStep(haplotypes);
+    phenotypes.expectationStep(*this);
     double largestEpsilon = 0.;
-    haplotypes.maximizationStep(phenotypes, largestEpsilon);
+    maximizationStep(phenotypes, largestEpsilon);
     
-    if(largestEpsilon - parameters.getEpsilon() < ZERO ){
+    if(largestEpsilon - epsilon < ZERO ){
       stop = true;
     }
-    file << largestEpsilon << std::endl;
+    epsilonFile << largestEpsilon << std::endl;
   } while(!stop);
   std::cout << "Used " << counter <<" steps" << std::endl;
-  file.close();
+  epsilonFile.close();
 }
-*/
 
 void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
   
@@ -159,7 +151,6 @@ void HaplotypeList::writeFrequenciesToFile() const{
   outFile.close();
 }
 
-/*
 void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon){
 
     //save old frequencies, initialize haplotype frequencies to zero
@@ -179,7 +170,7 @@ void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & 
     for(auto it = hashList.begin();
 	it != hashList.end();
 	it++, itOld ++){
-      it->second.multiplyFrequency(.5 / static_cast<double>(parameters.getNumberDonors()));
+      it->second.multiplyFrequency(.5 / static_cast<double>(numberDonors));
       
       double possibleEpsilon = fabs(it->second.getFrequency() - *itOld);
       if(possibleEpsilon > largestEpsilon){
@@ -227,5 +218,3 @@ void HaplotypeList::maximization(const PhenotypeList & phenotypes){
       }//for diplo
   }
 }
-
-*/

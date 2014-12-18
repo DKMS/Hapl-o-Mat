@@ -53,11 +53,7 @@ int main(int argc, char *argv[]){
 
   std::cout << "#########EM-algorithm" << std::endl;
 
-
   hList.initialiseFrequencies(pList);
-  /*
-  EMAlgorithm(pList, hList);
+  hList.EMAlgorithm(pList);
   hList.writeFrequenciesToFile();
-  */
-
 }
