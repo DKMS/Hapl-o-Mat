@@ -21,10 +21,10 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 void PhasedLocus::resolve(){
 
   for(auto genotype : phasedLocus){
-    double alleleFrequency = 1. / static_cast<double>(phasedLocus.size());
+    double genotypeFrequency = 1. / static_cast<double>(phasedLocus.size());
     std::vector<std::vector<std::shared_ptr<Allele>>> allpAllelesAtBothLocusPositions;
     for(auto code : genotype){
-      std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, alleleFrequency);
+      std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, sqrt(genotypeFrequency));
       std::vector<std::shared_ptr<Allele>> pAllelesAtFirstGenotype = pAllele->translate();
       allpAllelesAtBothLocusPositions.push_back(pAllelesAtFirstGenotype);
     }//for LocusPosition
