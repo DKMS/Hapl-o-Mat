@@ -69,6 +69,10 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
   
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
+  std::ofstream haplotypesFile;
+  openFileToWrite(haplotypesFileName, haplotypesFile);
+  std::ofstream phenotypesFile;
+  openFileToWrite(phenotypesFileName, phenotypesFile);
 
   haplotypeCombinations.findCombinations(numberLoci);
 
@@ -81,7 +85,35 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
     std::vector<GLReport> listOfReports;
     report.resolve(listOfReports, glid);
-  }
+
+    double avrFrequencyOfReports = 1. / static_cast<double>(listOfReports.size());
+    if(avrFrequencyOfReports - minimalFrequency < ZERO){
+      numberRemovedDonors ++;
+      std::cout << "Report "
+		<< report.getId()
+		<< " with average frequency of "
+		<< avrFrequencyOfReports
+		<< " comes below allowed frequency. Report discarded."
+		<< std::endl;
+    }
+    else{
+      numberDonors ++;
+    
+      for(auto oneReport : listOfReports){
+	
+	std::string phenotypeCode = oneReport.buildPhenotypeCode();
+	phenotypesFile << oneReport.getId() << "\t"
+		       << oneReport.getFrequency() << "\t"
+		       << phenotypeCode
+		       << std::endl;
+	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
+	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
+	if(inserted.second)
+	  oneReport.buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
+      }//for listOfReports
+    }//else
+
+  }//while
 
   inputFile.close();
   hList.setNumberLoci(numberLoci);

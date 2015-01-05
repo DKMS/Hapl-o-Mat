@@ -70,6 +70,11 @@ class GLReport : public Report{
       {
 	translateLine(line, booleanLociToDo);
       }
+  explicit GLReport(const strArrVec_t & in_genotypeAtLoci,
+		   const double in_frequency,
+		   const size_t in_numberLoci, 
+		   const std::string in_id)
+    : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
   
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
   void resolve(std::vector<GLReport> & listOfReports, const GlidFile & glid);
@@ -91,10 +96,10 @@ class HReport : public Report{
 	translateLine(line, lociNames);
       }
 
-  HReport(const strArrVec_t & in_genotypeAtLoci,
-	  const double in_frequency,
-	  const size_t in_numberLoci, 
-	  const std::string in_id)
+  explicit HReport(const strArrVec_t & in_genotypeAtLoci,
+		   const double in_frequency,
+		   const size_t in_numberLoci, 
+		   const std::string in_id)
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
   
   void translateLine(const std::string line, const strVec_t lociNames);

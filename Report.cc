@@ -95,7 +95,6 @@ void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
     }//haplotypeCombinations  
 }
 
-
 void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
 
   id = leftOfFirstDelim(line, ';');
@@ -115,6 +114,8 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
 
 void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & glid){
 
+  std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+
   for(auto code : inLoci){
     if(code == 0){
       //      resolveXXX()
@@ -129,13 +130,32 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
       }
       else{
 	std::shared_ptr<Locus> pLocus = itGlid->second;
-	pLocus->setWantedPrecision(wantedPrecision);
-	//build genotypes at locus, save in listOfLoci
+	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	pLocus->reduce(genotypesAtLocus);
+	genotypesAtLoci.push_back(genotypesAtLocus);	
       }
     }//else code=0
   }//for inLoci
 
-  //build report from listOfLoci by cartesian product
+  for(auto report : genotypesAtLoci){
+    for(auto it : report){
+      std::cout << it.first.at(0) << " " << it.first.at(1) << " " << it.second << std::endl;
+    }
+  }
+
+  std::vector<std::vector<std::pair<strArr_t, double>>> reports;
+  cartesianProduct(reports, genotypesAtLoci);
+  
+  for(auto report : reports){
+    strArrVec_t newGenotypeAtLoci;
+    double newFrequency = 1.;
+    for(auto locus : report){
+      newGenotypeAtLoci.push_back(locus.first);
+      newFrequency *= locus.second;
+    }
+    GLReport newReport(newGenotypeAtLoci, newFrequency, numberLoci, id);
+    listOfReports.push_back(newReport);
+  }//reports
 }
 
 void HReport::translateLine(const std::string line, const strVec_t lociNames){
