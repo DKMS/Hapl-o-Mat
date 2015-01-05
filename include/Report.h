@@ -77,7 +77,7 @@ class GLReport : public Report{
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
   
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
-  void resolve(std::vector<GLReport> & listOfReports, const GlidFile & glid);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid);
   
  private:
   std::vector<size_t> inLoci;
@@ -103,7 +103,7 @@ class HReport : public Report{
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
   
   void translateLine(const std::string line, const strVec_t lociNames);
-  void resolve(std::vector<HReport> & listOfReports);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
 
  private:

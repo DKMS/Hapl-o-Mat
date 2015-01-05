@@ -83,10 +83,10 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
       continue;
 
     GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
-    std::vector<GLReport> listOfReports;
-    report.resolve(listOfReports, glid);
+    std::vector<std::shared_ptr<Report>> listOfpReports;
+    report.resolve(listOfpReports, glid);
 
-    double avrFrequencyOfReports = 1. / static_cast<double>(listOfReports.size());
+    double avrFrequencyOfReports = 1. / static_cast<double>(listOfpReports.size());
     if(avrFrequencyOfReports - minimalFrequency < ZERO){
       numberRemovedDonors ++;
       std::cout << "Report "
@@ -99,17 +99,17 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     else{
       numberDonors ++;
     
-      for(auto oneReport : listOfReports){
+      for(auto oneReport : listOfpReports){
 	
-	std::string phenotypeCode = oneReport.buildPhenotypeCode();
-	phenotypesFile << oneReport.getId() << "\t"
-		       << oneReport.getFrequency() << "\t"
+	std::string phenotypeCode = oneReport->buildPhenotypeCode();
+	phenotypesFile << oneReport->getId() << "\t"
+		       << oneReport->getFrequency() << "\t"
 		       << phenotypeCode
 		       << std::endl;
 	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
-	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
+	inserted.first->second.addToNumInDonors(oneReport->getFrequency());
 	if(inserted.second)
-	  oneReport.buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
+	  oneReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
       }//for listOfReports
     }//else
 
@@ -141,10 +141,10 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
       continue;
 
     HReport report(line, lociNames, numberLoci, wantedPrecision);
-    std::vector<HReport> listOfReports;
-    report.resolve(listOfReports);
+    std::vector<std::shared_ptr<Report>> listOfpReports;
+    report.resolve(listOfpReports);
 
-    double avrFrequencyOfReports = 1. / static_cast<double>(listOfReports.size());
+    double avrFrequencyOfReports = 1. / static_cast<double>(listOfpReports.size());
     if(avrFrequencyOfReports - minimalFrequency < ZERO){
       numberRemovedDonors ++;
       std::cout << "Report "
@@ -157,17 +157,17 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
     else{
       numberDonors ++;
     
-      for(auto oneReport : listOfReports){
+      for(auto oneReport : listOfpReports){
 	
-	std::string phenotypeCode = oneReport.buildPhenotypeCode();
-	phenotypesFile << oneReport.getId() << "\t"
-		       << oneReport.getFrequency() << "\t"
+	std::string phenotypeCode = oneReport->buildPhenotypeCode();
+	phenotypesFile << oneReport->getId() << "\t"
+		       << oneReport->getFrequency() << "\t"
 		       << phenotypeCode
 		       << std::endl;
 	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
-	inserted.first->second.addToNumInDonors(oneReport.getFrequency());
+	inserted.first->second.addToNumInDonors(oneReport->getFrequency());
 	if(inserted.second)
-	  oneReport.buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
+	  oneReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
       }//for listOfReports
     }//else
   }//while

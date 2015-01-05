@@ -112,7 +112,7 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
   }
 }
 
-void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & glid){
+void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
@@ -153,7 +153,7 @@ void GLReport::resolve(std::vector<GLReport> & listOfReports, const GlidFile & g
       newGenotypeAtLoci.push_back(locus.first);
       newFrequency *= locus.second;
     }
-    GLReport newReport(newGenotypeAtLoci, newFrequency, numberLoci, id);
+    std::shared_ptr<Report> newReport = std::make_shared<GLReport> (newGenotypeAtLoci, newFrequency, numberLoci, id);
     listOfReports.push_back(newReport);
   }//reports
 }
@@ -213,7 +213,7 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
   }
 }
 
-void HReport::resolve(std::vector<HReport> & listOfReports){
+  void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
@@ -249,7 +249,8 @@ void HReport::resolve(std::vector<HReport> & listOfReports){
       newGenotypeAtLoci.push_back(locus.first);
       newFrequency *= locus.second;
     }
-    HReport newReport(newGenotypeAtLoci, newFrequency, numberLoci, id);
+
+    std::shared_ptr<Report> newReport = std::make_shared<HReport> (newGenotypeAtLoci, newFrequency, numberLoci, id);
     listOfReports.push_back(newReport);
   }//reports
 }
