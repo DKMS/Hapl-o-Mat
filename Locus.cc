@@ -20,12 +20,16 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
 void PhasedLocus::resolve(){
 
-  for(auto locusPosition : phasedLocus){
+  for(auto genotype : phasedLocus){
     double alleleFrequency = 1. / static_cast<double>(phasedLocus.size());
-    for(auto code : locusPosition){
+    std::vector<std::vector<std::shared_ptr<Allele>>> allpAllelesAtBothLocusPositions;
+    for(auto code : genotype){
       std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, alleleFrequency);
-      std::vector<std::shared_ptr<Allele>> listOfpAlleles = pAllele->translate();
+      std::vector<std::shared_ptr<Allele>> pAllelesAtFirstGenotype = pAllele->translate();
+      allpAllelesAtBothLocusPositions.push_back(pAllelesAtFirstGenotype);
     }//for LocusPosition
+
+    cartesianProduct(pAllelesAtPhasedLocus, allpAllelesAtBothLocusPositions);    
   }//for phasedLocus
 }
 
@@ -41,7 +45,7 @@ void UnphasedLocus::resolve(){
       std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
       allPAllelesAtOneLocusPosition.insert(allPAllelesAtOneLocusPosition.end(), pAllelesAtOneLocusPosition.begin(), pAllelesAtOneLocusPosition.end());
     }
-    pAllelesAtBothLocusPositions.push_back(allPAllelesAtOneLocusPosition);
+    pAllelesAtBothLocusPositions.push_back(allPAllelesAtOneLocusPosition); 
   }
 
   buildResolvedPhasedLocus();
