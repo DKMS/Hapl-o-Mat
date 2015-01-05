@@ -95,6 +95,23 @@ void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
     }//haplotypeCombinations  
 }
 
+void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
+				const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci){
+
+  std::vector<std::vector<std::pair<strArr_t, double>>> reports;
+  cartesianProduct(reports, genotypesAtLoci);
+  
+  for(auto report : reports){
+    strArrVec_t newGenotypeAtLoci;
+    double newFrequency = 1.;
+    for(auto locus : report){
+      newGenotypeAtLoci.push_back(locus.first);
+      newFrequency *= locus.second;
+    }
+    listOfReports.push_back(this->create(newGenotypeAtLoci, newFrequency, numberLoci, id));
+  }//reports
+}
+
 void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
 
   id = leftOfFirstDelim(line, ';');
@@ -143,19 +160,8 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, con
     }
   }
 
-  std::vector<std::vector<std::pair<strArr_t, double>>> reports;
-  cartesianProduct(reports, genotypesAtLoci);
-  
-  for(auto report : reports){
-    strArrVec_t newGenotypeAtLoci;
-    double newFrequency = 1.;
-    for(auto locus : report){
-      newGenotypeAtLoci.push_back(locus.first);
-      newFrequency *= locus.second;
-    }
-    std::shared_ptr<Report> newReport = std::make_shared<GLReport> (newGenotypeAtLoci, newFrequency, numberLoci, id);
-    listOfReports.push_back(newReport);
-  }//reports
+  buildListOfReports(listOfReports,
+		     genotypesAtLoci);
 }
 
 void HReport::translateLine(const std::string line, const strVec_t lociNames){
@@ -213,7 +219,7 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
   }
 }
 
-  void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
+void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
@@ -239,18 +245,6 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
     genotypesAtLoci.push_back(genotypesAtLocus);
   }//for inLoci
   
-  std::vector<std::vector<std::pair<strArr_t, double>>> reports;
-  cartesianProduct(reports, genotypesAtLoci);
-  
-  for(auto report : reports){
-    strArrVec_t newGenotypeAtLoci;
-    double newFrequency = 1.;
-    for(auto locus : report){
-      newGenotypeAtLoci.push_back(locus.first);
-      newFrequency *= locus.second;
-    }
-
-    std::shared_ptr<Report> newReport = std::make_shared<HReport> (newGenotypeAtLoci, newFrequency, numberLoci, id);
-    listOfReports.push_back(newReport);
-  }//reports
+  buildListOfReports(listOfReports,
+		     genotypesAtLoci);
 }

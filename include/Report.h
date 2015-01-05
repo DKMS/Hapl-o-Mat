@@ -40,12 +40,19 @@ class Report{
 	genotypeAtLoci.reserve(numberLoci);
       }
 
+  virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
+					 const double in_frequency, 
+					 const size_t in_numberLoci,
+					 const std::string in_id) = 0;
+
   std::string buildPhenotypeCode() const;
   void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
 			       HaplotypeList & haplotypeList,
 			       std::ofstream & haplotypesFile,
-			       const HaplotypeCombinations & haplotypeCombinations) const;
-
+			       const HaplotypeCombinations & haplotypeCombinations) const; 
+  void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
+			  const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
+  
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}
   const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
@@ -76,6 +83,18 @@ class GLReport : public Report{
 		   const std::string in_id)
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
   
+  virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
+					 const double in_frequency, 
+					 const size_t in_numberLoci,
+					 const std::string in_id)
+    {
+      std::shared_ptr<Report> pReport = std::make_shared<GLReport> (in_genotypeAtLoci,
+								    in_frequency, 
+								    in_numberLoci,
+								    in_id);
+      return pReport;
+    }
+
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
   void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid);
   
@@ -101,6 +120,18 @@ class HReport : public Report{
 		   const size_t in_numberLoci, 
 		   const std::string in_id)
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
+
+  virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
+					 const double in_frequency, 
+					 const size_t in_numberLoci,
+					 const std::string in_id)
+    {
+      std::shared_ptr<Report> pReport = std::make_shared<HReport> (in_genotypeAtLoci,
+								   in_frequency, 
+								   in_numberLoci,
+								   in_id);
+      return pReport;
+    }
   
   void translateLine(const std::string line, const strVec_t lociNames);
   void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
