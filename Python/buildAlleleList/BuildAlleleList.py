@@ -5,7 +5,7 @@
 #Extract all unique alleles from an input file in GL-string format as in *.glid.
 
 fileInName = raw_input("Enter input file name:\n")
-fileOutName = raw_input("Enter output file name:\n")
+fileOutName = 'alleleList.txt'
 
 A = set()
 B = set()
