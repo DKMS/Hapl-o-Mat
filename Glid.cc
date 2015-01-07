@@ -22,8 +22,7 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus){
 
   UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision);
   unphasedLocus.resolve();
-
-  //  std::vector<std::pair<strArr_t, double>> genotypes
+  unphasedLocus.reduce(genotypes);
 }
 
 void GlidFile::reserveSize(){
@@ -57,6 +56,9 @@ void GlidFile::readAndResolveFile(){
 
   AllPossibleGenotypes possibleGenotypesLocusA("A", wantedPrecision);
   AllPossibleGenotypes possibleGenotypesLocusB("B", wantedPrecision);
+
+  for(auto it : possibleGenotypesLocusA.getGenotypes())
+    std::cout << it.first.at(0) << "  " << it.first.at(0) << "  " << it.second << std::endl;
 }
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
