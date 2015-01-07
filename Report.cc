@@ -96,7 +96,7 @@ void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
-				const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci){
+				const std::vector<std::vector<std::pair<strArr_t,double>>> & genotypesAtLoci){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> reports;
   cartesianProduct(reports, genotypesAtLoci);
@@ -128,8 +128,8 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
     counter ++;
   }
 }
-
-void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid){
+				
+void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid, const double minimalFrequency){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
@@ -154,8 +154,20 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, con
     }//else code=0
   }//for inLoci
 
-  buildListOfReports(listOfReports,
-		     genotypesAtLoci);
+  double numberOfReports = 1.;
+  for(auto locus : genotypesAtLoci)
+    numberOfReports *= static_cast<double>(locus.size());
+
+  if(1./numberOfReports - minimalFrequency < ZERO){
+    std::cout << "Report "
+              << id
+              << " with "
+              << numberOfReports
+              << " phenotypes comes below allowed frequency. Report discarded."
+              << std::endl;
+  }
+  else
+    buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
 void HReport::translateLine(const std::string line, const strVec_t lociNames){
@@ -213,7 +225,8 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
   }
 }
 
-void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
+void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+		      const double minimalFrequency){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
@@ -239,6 +252,18 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
     genotypesAtLoci.push_back(genotypesAtLocus);
   }//for inLoci
   
-  buildListOfReports(listOfReports,
-		     genotypesAtLoci);
+  double numberOfReports = 1.;
+  for(auto locus : genotypesAtLoci)
+    numberOfReports *= static_cast<double>(locus.size());
+
+  if(1./numberOfReports - minimalFrequency < ZERO){
+    std::cout << "Report "
+              << id
+              << " with "
+              << numberOfReports
+              << " phenotypes comes below allowed frequency. Report discarded."
+              << std::endl;
+  }
+  else
+    buildListOfReports(listOfReports, genotypesAtLoci);
 }

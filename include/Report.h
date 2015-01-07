@@ -96,7 +96,7 @@ class GLReport : public Report{
     }
 
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
-  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid, const double minimalFrequency);
   
  private:
   std::vector<size_t> inLoci;
@@ -134,7 +134,7 @@ class HReport : public Report{
     }
   
   void translateLine(const std::string line, const strVec_t lociNames);
-  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const double minimalFrequency);
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
 
  private:

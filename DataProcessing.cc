@@ -72,16 +72,8 @@ void DataProcessing::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 					       std::ofstream & phenotypesFile,
 					       std::ofstream & haplotypesFile){
 
-  double avrFrequencyOfReports = 1. / static_cast<double>(listOfpReports.size());
-  if(avrFrequencyOfReports - minimalFrequency < ZERO){
+  if(listOfpReports.empty())
     numberRemovedDonors ++;
-    std::cout << "Report "
-	      << report.getId()
-	      << " with average frequency of "
-	      << avrFrequencyOfReports
-	      << " comes below allowed frequency. Report discarded."
-	      << std::endl;
-  }
   else{
     numberDonors ++;
     
@@ -119,7 +111,7 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
 
     GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
     std::vector<std::shared_ptr<Report>> listOfpReports;
-    report.resolve(listOfpReports, glid);
+    report.resolve(listOfpReports, glid, minimalFrequency);
 
     buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
@@ -151,7 +143,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 
     HReport report(line, lociNames, numberLoci, wantedPrecision);
     std::vector<std::shared_ptr<Report>> listOfpReports;
-    report.resolve(listOfpReports);
+    report.resolve(listOfpReports, minimalFrequency);
 
     buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
