@@ -55,7 +55,7 @@ class GlidFile{
   const Allele::codePrecision wantedPrecision;
   strVec_t lociToDo;
   list_t list;
-  std::map<std::string, AllPossibleGenotypes> possibleGenotypesForAllLoci;
+  std::map<size_t, AllPossibleGenotypes> possibleGenotypesForAllLoci;
 };
 
 

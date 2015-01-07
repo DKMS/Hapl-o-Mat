@@ -57,13 +57,12 @@ void GlidFile::readAndResolveFile(){
     }//!=0
   }//while
 
+  size_t pos = 0;
   for(auto locus : lociToDo){
     if(locus != "NONE")
-      possibleGenotypesForAllLoci.emplace(locus, AllPossibleGenotypes(locus, wantedPrecision));
+      possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, wantedPrecision));
+    pos ++;
   }
-
-  //  for(auto it : possibleGenotypesLocusA.getGenotypes())
-  //    std::cout << it.first.at(0) << "  " << it.first.at(0) << "  " << it.second << std::endl;
 }
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
