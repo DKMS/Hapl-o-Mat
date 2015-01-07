@@ -111,7 +111,7 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
 
     GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
     std::vector<std::shared_ptr<Report>> listOfpReports;
-    report.resolve(listOfpReports, glid, minimalFrequency);
+    report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
     buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
   }//while

@@ -129,16 +129,27 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
   }
 }
 				
-void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid, const double minimalFrequency){
+void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+		       const GlidFile & glid,
+		       const double minimalFrequency,
+		       const bool resolveUnknownGenotype){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
-  bool containsZeroGenotype = false;
+  bool discardReport = false;
 
   for(auto code : inLoci){
     if(code == 0){
-      containsZeroGenotype = true;
-      break;
-      //      resolveXXX()
+      if(resolveUnknownGenotype){
+	//      resolveXXX()
+      }
+      else{
+	discardReport = true;
+	std::cout << "Report "
+		  << id
+		  << " contains Glid 0. Report discarded."
+		  << std::endl;
+	break;
+      }
     }
     else{
       auto itGlid = glid.getList().find(code);
@@ -157,13 +168,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, con
     }//else code=0
   }//for inLoci
 
-  if(containsZeroGenotype == true){
-      std::cout << "Report "
-		<< id
-		<< " contains Glid 0. Report discarded."
-		<< std::endl;
-  }
-  else{
+  if(!discardReport){
     double numberOfReports = 1.;
     for(auto locus : genotypesAtLoci)
       numberOfReports *= static_cast<double>(locus.size());

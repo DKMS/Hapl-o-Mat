@@ -96,7 +96,10 @@ class GLReport : public Report{
     }
 
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
-  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid, const double minimalFrequency);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+	       const GlidFile & glid,
+	       const double minimalFrequency, 
+	       const bool resolveUnknownGenotype);
   
  private:
   std::vector<size_t> inLoci;
