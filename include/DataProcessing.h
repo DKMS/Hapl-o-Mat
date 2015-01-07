@@ -45,12 +45,12 @@ class DataProcessing{
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
 
-void buildHaploDiploPhenoTypes(PhenotypeList & pList,
-			       HaplotypeList & hList,
-			       const Report & report,
-			       std::vector<std::shared_ptr<Report>> & listOfpReports,
-			       std::ofstream & phenotypesFile,
-			       std::ofstream & haplotypesFile);
+  void buildHaploDiploPhenoTypes(PhenotypeList & pList,
+				 HaplotypeList & hList,
+				 const Report & report,
+				 std::vector<std::shared_ptr<Report>> & listOfpReports,
+				 std::ofstream & phenotypesFile,
+				 std::ofstream & haplotypesFile);
 
   size_t getNumberLoci() const {return numberLoci;}
   size_t getNumberDonors() const {return numberDonors;}
@@ -85,12 +85,13 @@ class GLDataProcessing : public DataProcessing{
 
       inputFileName = parameters.getPullFileName();      
       for(auto locus : lociToDo){
-	if(locus != "None"){
+	if(locus == "None" || locus == "NONE"){
+	  booleanLociToDo.push_back(false);
+	}
+	else{
 	  booleanLociToDo.push_back(true);
 	  numberLoci ++;
 	}
-	else
-	  booleanLociToDo.push_back(false);
       }
     }
 
