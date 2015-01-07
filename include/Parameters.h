@@ -71,6 +71,7 @@ class ParametersGL : public Parameters{
   
   std::string getGlidFileName() const {return glidFileName;}
   std::string getPullFileName() const {return pullFileName;}
+  std::string getAlleleListFileName() const {return alleleListFileName;}
   strVec_t getLociToDo() const {return lociToDo;}
   bool getResolveUnknownGenotype() const {return resolveUnknownGenotype;}
 
@@ -79,6 +80,7 @@ class ParametersGL : public Parameters{
   
   std::string pullFileName;
   std::string glidFileName;
+  std::string alleleListFileName;
   strVec_t lociToDo;
   bool resolveUnknownGenotype;
 };
