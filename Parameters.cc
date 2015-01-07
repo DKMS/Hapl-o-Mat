@@ -21,6 +21,23 @@ void Parameters::val_assign(std::string & out, const std::string line){
   out = line.substr(pos + 1);
 }
 
+void Parameters::bool_assign(bool & out, const std::string line){
+  size_t pos = line.find("=");
+  std::string value = line.substr(pos + 1);
+  if(value == "true") out = true;
+  else if(value == "false") out = false;
+  else if(value == "True") out = true;
+  else if(value == "False") out = false;
+  else{
+    std::cout << "Incorrect value "
+	      << value
+	      << " in "
+	      << line
+	      << std::endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
 void Parameters::initType_assign(const std::string line){
   size_t pos = line.find("=");
   std::string value = line.substr(pos + 1);
@@ -103,6 +120,7 @@ void ParametersGL::init(){
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("CODE_PRECISION") != std::string::npos) precision_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
+    else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
     else if(line.find("LOCI") != std::string::npos) loci_assign(line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
@@ -138,6 +156,11 @@ void ParametersGL::print() const {
   std::cout << "#########Parameters resolving reports" << std::endl;
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
   std::cout << "\t Resolve codes to precision: " << Allele::printCodePrecision(precision) << std::endl;
+  std::cout << "\t Resolve ambigious reports: ";
+  if(resolveUnknownGenotype)
+    std::cout << "yes" << std::endl;
+  else
+    std::cout << "no" << std::endl;
   std::cout << "\t Consider loci: ";
   for(auto locus : lociToDo){std::cout << locus << " ";}
   std::cout << std::endl;

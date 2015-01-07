@@ -35,6 +35,7 @@ class Parameters{
   void val_assign(size_t & out, const std::string line);  
   void val_assign(double & out, const std::string line);  
   void val_assign(std::string & out, const std::string line);  
+  void bool_assign(bool & out, const std::string line);
   void initType_assign(const std::string line);
   void precision_assign(const std::string line);
   void computePrintPrecision();
@@ -78,6 +79,7 @@ class ParametersGL : public Parameters{
   std::string pullFileName;
   std::string glidFileName;
   strVec_t lociToDo;
+  bool resolveUnknownGenotype;
 };
 
 class ParametersDKMS : public Parameters{

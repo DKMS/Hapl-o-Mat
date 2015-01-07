@@ -1,6 +1,6 @@
 #file names
-FILENAME_PULL=reports.pull
-FILENAME_GLID=reports.glid
+FILENAME_PULL=A.pull
+FILENAME_GLID=A.glid
 FILENAME_HAPLOTYPES=results/haplotypes.dat
 FILENAME_PHENOTYPES=results/phenotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
@@ -8,8 +8,9 @@ FILENAME_EPSILON=results/epsilonVsSteps.dat
 #reports
 CODE_PRECISION=asItIs
 MINIMAL_FREQUENCY_PHENOTYPES=1e-5
-LOCI=A,C,B,DQB1,DRB1
+RESOLVE_UNKNOWN_GENOTYPE=true
+LOCI=A,C,B,DRB1,NONE
 #EM-algorithm
 INITIALISATION_HAPLOTYPE_FREQUENCIES=numberOccurence
-EPSILON=1e-6
-SEED=1000
+EPSILON=1e-8
+SEED=0
