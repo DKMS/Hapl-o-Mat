@@ -21,7 +21,7 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus){
     in_unphasedLocus.at(1).push_back(*pos);
   }
 
-  UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision);
+  UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision, false);
   unphasedLocus.resolve();
   unphasedLocus.reduce(genotypes);
 }
@@ -90,7 +90,7 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
     strVecArr_t in_unphasedLocus;
     in_unphasedLocus.at(0) = lhs;
     in_unphasedLocus.at(1) = rhs;
-    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedPrecision);
+    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedPrecision, doH2Filter);
     }
   else{
     strArrVec_t in_phasedLocus;

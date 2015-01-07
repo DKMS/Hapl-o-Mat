@@ -143,7 +143,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 
     HReport report(line, lociNames, numberLoci, wantedPrecision);
     std::vector<std::shared_ptr<Report>> listOfpReports;
-    report.resolve(listOfpReports, minimalFrequency);
+    report.resolve(listOfpReports, minimalFrequency, doH2Filter);
 
     buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
   }//while

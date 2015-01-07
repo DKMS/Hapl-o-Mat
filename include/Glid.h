@@ -34,10 +34,12 @@ class GlidFile{
  public:
   explicit GlidFile(const std::string in_fileName,
 		    const Allele::codePrecision in_wantedPrecision,
-		    const strVec_t in_lociToDo) 
+		    const strVec_t in_lociToDo,
+		    const bool in_doH2Filter) 
     : fileName(in_fileName),
     wantedPrecision(in_wantedPrecision),
     lociToDo(in_lociToDo),
+    doH2Filter(in_doH2Filter),
     list(),
     possibleGenotypesForAllLoci(){
     reserveSize();
@@ -55,6 +57,7 @@ class GlidFile{
   std::string fileName;
   const Allele::codePrecision wantedPrecision;
   strVec_t lociToDo;
+  bool doH2Filter;
   list_t list;
   std::map<size_t, AllPossibleGenotypes> possibleGenotypesForAllLoci;
 };

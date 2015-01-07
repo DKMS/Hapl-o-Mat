@@ -75,14 +75,13 @@ class GLDataProcessing : public DataProcessing{
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
     booleanLociToDo(),
-    glid(glidFileName, parameters.getWantedPrecision(), parameters.getLociToDo()),
+    glid(glidFileName, parameters.getWantedPrecision(), parameters.getLociToDo(), parameters.getDoH2Filter()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
       wantedPrecision = parameters.getWantedPrecision();
       minimalFrequency = parameters.getMinimalFrequency();
-
       inputFileName = parameters.getPullFileName();      
       for(auto locus : lociToDo){
 	if(locus == "NONE"){
@@ -109,13 +108,14 @@ class DKMSDataProcessing : public DataProcessing{
 
  public:
   explicit DKMSDataProcessing(const ParametersDKMS & parameters)
-    : DataProcessing(), lociNames()
+    : DataProcessing(),
+    doH2Filter(parameters.getDoH2Filter()),
+    lociNames()
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
       wantedPrecision = parameters.getWantedPrecision();
       minimalFrequency = parameters.getMinimalFrequency();
-
       inputFileName = parameters.getInputFileName();
     }
 
@@ -124,6 +124,7 @@ class DKMSDataProcessing : public DataProcessing{
   void readLociNames(const std::string line);
 
  private:
+  bool doH2Filter;
   strVec_t lociNames;
 };
 

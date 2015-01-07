@@ -35,7 +35,12 @@ void PhasedLocus::resolve(){
 
 void UnphasedLocus::resolve(){
 
-  //H2filter if [0],[1] have more than one element
+  if(doH2Filter){
+    if(unphasedLocus.at(0).size() > 1 && unphasedLocus.at(1).size()){
+      std::cout << "H2Filter" << std::endl;
+    }//if both locuspositions have more than one element
+  }//if doH2Filter
+
 
   for(auto locusPosition : unphasedLocus){
     std::vector<std::shared_ptr<Allele>> allPAllelesAtOneLocusPosition;

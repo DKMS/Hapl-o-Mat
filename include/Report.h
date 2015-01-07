@@ -134,7 +134,9 @@ class HReport : public Report{
     }
   
   void translateLine(const std::string line, const strVec_t lociNames);
-  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const double minimalFrequency);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+	       const double minimalFrequency,
+	       const bool doH2Filter);
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
 
  private:

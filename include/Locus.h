@@ -45,13 +45,19 @@ class PhasedLocus : public Locus{
 class UnphasedLocus : public Locus{
 
  public:
-  explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus) : Locus(), unphasedLocus(in_unphasedLocus), pAllelesAtBothLocusPositions()
+  explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus) 
+    : Locus(),
+    doH2Filter(false),
+    unphasedLocus(in_unphasedLocus),
+    pAllelesAtBothLocusPositions()
     {
       pAllelesAtBothLocusPositions.reserve(2);
     }
   explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus,
-			 const Allele::codePrecision in_wantedPrecision)
+			 const Allele::codePrecision in_wantedPrecision,
+			 const bool in_doH2Filter)
     : Locus(),
+    doH2Filter(in_doH2Filter),
     unphasedLocus(in_unphasedLocus),
     pAllelesAtBothLocusPositions()
     {
@@ -65,6 +71,7 @@ class UnphasedLocus : public Locus{
   void buildResolvedPhasedLocus();
 
  private:
+  bool doH2Filter;
   strVecArr_t unphasedLocus;
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtBothLocusPositions;
 };
