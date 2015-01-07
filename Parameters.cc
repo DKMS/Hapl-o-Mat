@@ -120,6 +120,7 @@ void ParametersGL::init(){
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("CODE_PRECISION") != std::string::npos) precision_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
+    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
     else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
     else if(line.find("LOCI") != std::string::npos) loci_assign(line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
@@ -157,9 +158,13 @@ void ParametersGL::print() const {
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
   std::cout << "\t Resolve codes to precision: " << Allele::printCodePrecision(precision) << std::endl;
   std::cout << "\t Resolve reports with unknown genotype: ";
-  if(resolveUnknownGenotype){
+  if(resolveUnknownGenotype)
     std::cout << "yes" << std::endl;
-  }
+  else
+    std::cout << "no" << std::endl;
+  std::cout << "\t Apply H2-filter ";
+  if(doH2Filter)
+    std::cout << "yes" << std::endl;
   else
     std::cout << "no" << std::endl;
   std::cout << "\t Consider loci: ";
@@ -189,6 +194,7 @@ void ParametersDKMS::init(){
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("CODE_PRECISION") != std::string::npos) precision_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
+    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("SEED") != std::string::npos) val_assign(seed, line);
@@ -215,6 +221,11 @@ void ParametersDKMS::print() const {
   std::cout << "#########Parameters resolving reports" << std::endl;
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
   std::cout << "\t Resolve codes to precision: " << Allele::printCodePrecision(precision) << std::endl;
+  std::cout << "\t Apply H2-filter ";
+  if(doH2Filter)
+    std::cout << "yes" << std::endl;
+  else
+    std::cout << "no" << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;

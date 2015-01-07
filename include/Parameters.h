@@ -28,6 +28,7 @@ class Parameters{
   std::string getEpsilonFileName() const {return epsilonFileName;}
   Allele::codePrecision getWantedPrecision() const {return precision;}
   double getMinimalFrequency() const {return minimalFrequency;}
+  bool getDoH2Filter() const {return doH2Filter;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}
   double getEpsilon() const {return epsilon;}
   size_t getSeed() const {return seed;}
@@ -51,6 +52,7 @@ class Parameters{
 
   Allele::codePrecision precision;
   double minimalFrequency;
+  bool doH2Filter;
   initialisationHaplotypeFrequencies initType;
   double epsilon;
   size_t seed;
