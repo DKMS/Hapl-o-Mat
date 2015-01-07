@@ -65,6 +65,41 @@ void HaplotypeCombinations::writeCombinations() const {
     }
 }
 
+void DataProcessing::buildHaploDiploPhenoTypes(PhenotypeList & pList,
+					       HaplotypeList & hList,
+					       const Report & report,
+					       std::vector<std::shared_ptr<Report>> & listOfpReports,
+					       std::ofstream & phenotypesFile,
+					       std::ofstream & haplotypesFile){
+
+  double avrFrequencyOfReports = 1. / static_cast<double>(listOfpReports.size());
+  if(avrFrequencyOfReports - minimalFrequency < ZERO){
+    numberRemovedDonors ++;
+    std::cout << "Report "
+	      << report.getId()
+	      << " with average frequency of "
+	      << avrFrequencyOfReports
+	      << " comes below allowed frequency. Report discarded."
+	      << std::endl;
+  }
+  else{
+    numberDonors ++;
+    
+    for(auto oneReport : listOfpReports){
+      
+      std::string phenotypeCode = oneReport->buildPhenotypeCode();
+      phenotypesFile << oneReport->getId() << "\t"
+		     << oneReport->getFrequency() << "\t"
+		     << phenotypeCode
+		     << std::endl;
+      std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
+      inserted.first->second.addToNumInDonors(oneReport->getFrequency());
+      if(inserted.second)
+	oneReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
+    }//for listOfReports
+  }//else
+}
+
 void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   
   std::ifstream inputFile;
@@ -86,33 +121,7 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid);
 
-    double avrFrequencyOfReports = 1. / static_cast<double>(listOfpReports.size());
-    if(avrFrequencyOfReports - minimalFrequency < ZERO){
-      numberRemovedDonors ++;
-      std::cout << "Report "
-		<< report.getId()
-		<< " with average frequency of "
-		<< avrFrequencyOfReports
-		<< " comes below allowed frequency. Report discarded."
-		<< std::endl;
-    }
-    else{
-      numberDonors ++;
-    
-      for(auto oneReport : listOfpReports){
-	
-	std::string phenotypeCode = oneReport->buildPhenotypeCode();
-	phenotypesFile << oneReport->getId() << "\t"
-		       << oneReport->getFrequency() << "\t"
-		       << phenotypeCode
-		       << std::endl;
-	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
-	inserted.first->second.addToNumInDonors(oneReport->getFrequency());
-	if(inserted.second)
-	  oneReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
-      }//for listOfReports
-    }//else
-
+    buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
 
   inputFile.close();
@@ -144,32 +153,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
-    double avrFrequencyOfReports = 1. / static_cast<double>(listOfpReports.size());
-    if(avrFrequencyOfReports - minimalFrequency < ZERO){
-      numberRemovedDonors ++;
-      std::cout << "Report "
-		<< report.getId()
-		<< " with average frequency of "
-		<< avrFrequencyOfReports
-		<< " comes below allowed frequency. Report discarded."
-		<< std::endl;
-    }
-    else{
-      numberDonors ++;
-    
-      for(auto oneReport : listOfpReports){
-	
-	std::string phenotypeCode = oneReport->buildPhenotypeCode();
-	phenotypesFile << oneReport->getId() << "\t"
-		       << oneReport->getFrequency() << "\t"
-		       << phenotypeCode
-		       << std::endl;
-	std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
-	inserted.first->second.addToNumInDonors(oneReport->getFrequency());
-	if(inserted.second)
-	  oneReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
-      }//for listOfReports
-    }//else
+    buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
     
   inputFile.close();

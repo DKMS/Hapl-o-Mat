@@ -10,6 +10,7 @@
 
 class PhenotypeList;
 class HaplotypeList;
+class Report;
 
 class HaplotypeCombinations{
 
@@ -43,6 +44,13 @@ class DataProcessing{
   virtual ~DataProcessing(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+
+void buildHaploDiploPhenoTypes(PhenotypeList & pList,
+			       HaplotypeList & hList,
+			       const Report & report,
+			       std::vector<std::shared_ptr<Report>> & listOfpReports,
+			       std::ofstream & phenotypesFile,
+			       std::ofstream & haplotypesFile);
 
   size_t getNumberLoci() const {return numberLoci;}
   size_t getNumberDonors() const {return numberDonors;}
