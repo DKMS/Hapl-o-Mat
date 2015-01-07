@@ -50,6 +50,8 @@ class PhenotypeList : public Hash<Phenotype>{
  void expectationStep(const HaplotypeList & haplotypeList);
 
  private:
+  PhenotypeList(const PhenotypeList &);
+  PhenotypeList& operator=(const PhenotypeList &);
 };
 
 

@@ -57,8 +57,8 @@ class HaplotypeList : public Hash<Haplotype>{
   void writeFrequenciesToFile() const;
 
  private:
-  //  HaplotypeList(const HaplotypeList &);
-  //  HaplotypeList& operator=(const HaplotypeList &);
+  HaplotypeList(const HaplotypeList &);
+  HaplotypeList& operator=(const HaplotypeList &);
 
   std::string haplotypesFileName;
   std::string haplotypeFrequenciesFileName;
