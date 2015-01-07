@@ -8,6 +8,26 @@
 #include "Locus.h"
 #include "Allele.h" 
 
+class AllPossibleGenotypes{
+
+ public:
+  explicit AllPossibleGenotypes(const std::string locus,
+				const Allele::codePrecision in_wantedPrecision)
+    : wantedPrecision(in_wantedPrecision),
+    genotypes()
+      {
+	buildGenotypes(locus);
+      }
+
+  void buildGenotypes(const std::string locus);
+  const std::vector<std::pair<strArr_t, double>> & getGenotypes() const {return genotypes;}
+
+ private:
+  const Allele::codePrecision wantedPrecision;
+  std::vector<std::pair<strArr_t, double>> genotypes;
+  static FileAlleles allAlleles;
+};
+
 class GlidFile{
   
   typedef std::unordered_map<size_t, std::shared_ptr<Locus>> list_t;

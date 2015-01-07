@@ -4,6 +4,28 @@
 #include "Glid.h"
 #include "Utility.h"
 
+FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt", 12000);
+
+void AllPossibleGenotypes::buildGenotypes(const std::string locus){
+
+  std::cout << "Built list of all possible genotypes for locus " << locus << std::endl;
+  
+  FileAlleles::list_t::const_iterator pos;
+  FileAlleles::list_t::const_iterator lastPos;
+  allAlleles.findPositionLocus(locus, pos, lastPos);
+
+  strVecArr_t in_unphasedLocus;
+  for(;pos < lastPos; pos++){
+    in_unphasedLocus.at(0).push_back(*pos);
+    in_unphasedLocus.at(1).push_back(*pos);
+  }
+
+  UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision);
+  unphasedLocus.resolve();
+
+  //  std::vector<std::pair<strArr_t, double>> genotypes
+}
+
 void GlidFile::reserveSize(){
 
   std::ifstream file;
@@ -32,6 +54,9 @@ void GlidFile::readAndResolveFile(){
       }
     }//!=0
   }//while
+
+  AllPossibleGenotypes possibleGenotypesLocusA("A", wantedPrecision);
+  AllPossibleGenotypes possibleGenotypesLocusB("B", wantedPrecision);
 }
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
