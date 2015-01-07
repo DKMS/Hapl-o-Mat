@@ -132,9 +132,12 @@ void GLReport::translateLine(const std::string line, const std::vector<bool> & b
 void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, const GlidFile & glid, const double minimalFrequency){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+  bool containsZeroGenotype = false;
 
   for(auto code : inLoci){
     if(code == 0){
+      containsZeroGenotype = true;
+      break;
       //      resolveXXX()
     }
     else{
@@ -154,20 +157,28 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, con
     }//else code=0
   }//for inLoci
 
-  double numberOfReports = 1.;
-  for(auto locus : genotypesAtLoci)
-    numberOfReports *= static_cast<double>(locus.size());
-
-  if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "Report "
-              << id
-              << " with "
-              << numberOfReports
-              << " phenotypes comes below allowed frequency. Report discarded."
-              << std::endl;
+  if(containsZeroGenotype == true){
+      std::cout << "Report "
+		<< id
+		<< " contains Glid 0. Report discarded."
+		<< std::endl;
   }
-  else
-    buildListOfReports(listOfReports, genotypesAtLoci);
+  else{
+    double numberOfReports = 1.;
+    for(auto locus : genotypesAtLoci)
+      numberOfReports *= static_cast<double>(locus.size());
+    
+    if(1./numberOfReports - minimalFrequency < ZERO){
+      std::cout << "Report "
+		<< id
+		<< " with "
+		<< numberOfReports
+		<< " phenotypes comes below allowed frequency. Report discarded."
+		<< std::endl;
+    }
+    else
+      buildListOfReports(listOfReports, genotypesAtLoci);
+  }
 }
 
 void HReport::translateLine(const std::string line, const strVec_t lociNames){
