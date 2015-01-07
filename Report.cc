@@ -154,12 +154,6 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports, con
     }//else code=0
   }//for inLoci
 
-  for(auto report : genotypesAtLoci){
-    for(auto it : report){
-      std::cout << it.first.at(0) << " " << it.first.at(1) << " " << it.second << std::endl;
-    }
-  }
-
   buildListOfReports(listOfReports,
 		     genotypesAtLoci);
 }
