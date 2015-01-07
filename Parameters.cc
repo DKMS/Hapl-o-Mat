@@ -156,7 +156,7 @@ void ParametersGL::print() const {
   std::cout << "#########Parameters resolving reports" << std::endl;
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
   std::cout << "\t Resolve codes to precision: " << Allele::printCodePrecision(precision) << std::endl;
-  std::cout << "\t Resolve ambigious reports: ";
+  std::cout << "\t Resolve reports with unknown genotype: ";
   if(resolveUnknownGenotype)
     std::cout << "yes" << std::endl;
   else
