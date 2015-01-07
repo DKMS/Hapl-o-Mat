@@ -72,7 +72,8 @@ class ParametersGL : public Parameters{
   std::string getGlidFileName() const {return glidFileName;}
   std::string getPullFileName() const {return pullFileName;}
   strVec_t getLociToDo() const {return lociToDo;}
-  
+  bool getResolveUnknownGenotype() const {return resolveUnknownGenotype;}
+
  private:
   void loci_assign(const std::string line);
   

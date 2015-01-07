@@ -76,7 +76,8 @@ class GLDataProcessing : public DataProcessing{
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
     booleanLociToDo(),
-    glid(glidFileName, parameters.getWantedPrecision()) 
+    glid(glidFileName, parameters.getWantedPrecision()),
+    resolveUnknownGenotype(parameters.getResolveUnknownGenotype())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
@@ -102,6 +103,7 @@ class GLDataProcessing : public DataProcessing{
   strVec_t lociToDo;
   std::vector<bool> booleanLociToDo;
   GlidFile glid;
+  bool resolveUnknownGenotype;
 };
 
 class DKMSDataProcessing : public DataProcessing{
