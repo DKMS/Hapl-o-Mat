@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 #include "Glid.h"
 #include "Utility.h"
@@ -8,7 +9,7 @@ FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt", 12000);
 
 void AllPossibleGenotypes::buildGenotypes(const std::string locus){
 
-  std::cout << "Built list of all possible genotypes for locus " << locus << std::endl;
+  std::cout << "Build list of all possible genotypes for locus " << locus << std::endl;
   
   FileAlleles::list_t::const_iterator pos;
   FileAlleles::list_t::const_iterator lastPos;
@@ -37,6 +38,8 @@ void GlidFile::reserveSize(){
 
 void GlidFile::readAndResolveFile(){
 
+  std::cout << "Resolve Glids" << std::endl;
+
   std::ifstream file;
   openFileToRead(fileName, file);
 
@@ -54,11 +57,13 @@ void GlidFile::readAndResolveFile(){
     }//!=0
   }//while
 
-  AllPossibleGenotypes possibleGenotypesLocusA("A", wantedPrecision);
-  AllPossibleGenotypes possibleGenotypesLocusB("B", wantedPrecision);
+  for(auto locus : lociToDo){
+    if(locus != "NONE")
+      possibleGenotypesForAllLoci.emplace(locus, AllPossibleGenotypes(locus, wantedPrecision));
+  }
 
-  for(auto it : possibleGenotypesLocusA.getGenotypes())
-    std::cout << it.first.at(0) << "  " << it.first.at(0) << "  " << it.second << std::endl;
+  //  for(auto it : possibleGenotypesLocusA.getGenotypes())
+  //    std::cout << it.first.at(0) << "  " << it.first.at(0) << "  " << it.second << std::endl;
 }
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{

@@ -33,10 +33,13 @@ class GlidFile{
   typedef std::unordered_map<size_t, std::shared_ptr<Locus>> list_t;
  public:
   explicit GlidFile(const std::string in_fileName,
-		    const Allele::codePrecision in_wantedPrecision) 
+		    const Allele::codePrecision in_wantedPrecision,
+		    const strVec_t in_lociToDo) 
     : fileName(in_fileName),
     wantedPrecision(in_wantedPrecision),
-    list(){
+    lociToDo(in_lociToDo),
+    list(),
+    possibleGenotypesForAllLoci(){
     reserveSize();
     readAndResolveFile();
   }
@@ -50,7 +53,9 @@ class GlidFile{
   
   std::string fileName;
   const Allele::codePrecision wantedPrecision;
+  strVec_t lociToDo;
   list_t list;
+  std::map<std::string, AllPossibleGenotypes> possibleGenotypesForAllLoci;
 };
 
 

@@ -76,7 +76,7 @@ class GLDataProcessing : public DataProcessing{
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
     booleanLociToDo(),
-    glid(glidFileName, parameters.getWantedPrecision()),
+    glid(glidFileName, parameters.getWantedPrecision(), parameters.getLociToDo()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
@@ -86,7 +86,7 @@ class GLDataProcessing : public DataProcessing{
 
       inputFileName = parameters.getPullFileName();      
       for(auto locus : lociToDo){
-	if(locus == "None" || locus == "NONE"){
+	if(locus == "NONE"){
 	  booleanLociToDo.push_back(false);
 	}
 	else{
