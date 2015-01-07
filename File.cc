@@ -92,3 +92,27 @@ void FilegOrGToAlleles::readFile(){
   
   file.close();
 }
+
+void FileAlleles::readFile(){
+
+  std::cout << "Read in file " << fileName << std::endl;
+
+  std::ifstream file;
+  openFileToRead(fileName, file);
+
+  std::string locusOld = "";
+  auto pos = list.cbegin();
+  std::string line;
+  while(std::getline(file, line)){
+    list.push_back(line);
+
+    std::string locus = getLocus(line);
+    if(locus.compare(locusOld)){
+      locusPosition.emplace(locus, pos);
+    }
+    locusOld = locus;
+    pos ++;
+  }//while
+
+  file.close();
+}
