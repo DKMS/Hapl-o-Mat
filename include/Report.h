@@ -17,7 +17,8 @@ class HaplotypeCombinations;
 class Report{
 
  public:
- Report(const Allele::codePrecision in_wantedPrecision, const size_t in_numberLoci)
+ explicit Report(const Allele::codePrecision in_wantedPrecision,
+		 const size_t in_numberLoci)
    : genotypeAtLoci(),
     id(),
     frequency(),
@@ -26,11 +27,10 @@ class Report{
     {
       genotypeAtLoci.reserve(numberLoci);
     }
-
-  Report(const strArrVec_t & in_genotypeAtLoci,
-	 const double in_frequency, 
-	 const size_t in_numberLoci,
-	 const std::string in_id)
+  explicit Report(const strArrVec_t & in_genotypeAtLoci,
+		  const double in_frequency, 
+		  const size_t in_numberLoci,
+		  const std::string in_id)
     : genotypeAtLoci(in_genotypeAtLoci),
     id(in_id),
     frequency(in_frequency),
@@ -39,11 +39,11 @@ class Report{
       {
 	genotypeAtLoci.reserve(numberLoci);
       }
-
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,
 					 const std::string in_id) = 0;
+  virtual ~Report(){}
 
   std::string buildPhenotypeCode() const;
   void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
@@ -68,21 +68,20 @@ class Report{
 class GLReport : public Report{
 
  public:
- explicit GLReport(const std::string line,
-		   const std::vector<bool> & booleanLociToDo,
-		   const size_t numberLoci,
-		   const Allele::codePrecision in_wantedPrecision) 
-   : Report(in_wantedPrecision, numberLoci),
+  explicit GLReport(const std::string line,
+		    const std::vector<bool> & booleanLociToDo,
+		    const size_t numberLoci,
+		    const Allele::codePrecision in_wantedPrecision) 
+    : Report(in_wantedPrecision, numberLoci),
     inLoci()
       {
 	translateLine(line, booleanLociToDo);
       }
   explicit GLReport(const strArrVec_t & in_genotypeAtLoci,
-		   const double in_frequency,
-		   const size_t in_numberLoci, 
-		   const std::string in_id)
+		    const double in_frequency,
+		    const size_t in_numberLoci, 
+		    const std::string in_id)
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
-  
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,
@@ -94,7 +93,7 @@ class GLReport : public Report{
 								    in_id);
       return pReport;
     }
-
+  
   void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
   void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	       const GlidFile & glid,
@@ -117,13 +116,11 @@ class HReport : public Report{
       {
 	translateLine(line, lociNames);
       }
-
   explicit HReport(const strArrVec_t & in_genotypeAtLoci,
 		   const double in_frequency,
 		   const size_t in_numberLoci, 
 		   const std::string in_id)
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
-
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,

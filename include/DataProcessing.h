@@ -17,7 +17,7 @@ class HaplotypeCombinations{
  public:
   typedef std::vector<std::vector<bool>> list_t;
   
- HaplotypeCombinations() : list(){}
+  explicit HaplotypeCombinations() : list(){}
 
   void findCombinations(const size_t size);
   void writeCombinations() const;
@@ -40,7 +40,6 @@ class DataProcessing{
     numberDonors(0),
     numberRemovedDonors(0),
     haplotypeCombinations(){}
-
   virtual ~DataProcessing(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;

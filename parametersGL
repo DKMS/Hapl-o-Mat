@@ -1,6 +1,6 @@
 #file names
-FILENAME_PULL=reports.pull
-FILENAME_GLID=reports.glid
+FILENAME_PULL=A.pull
+FILENAME_GLID=A.glid
 FILENAME_HAPLOTYPES=results/haplotypes.dat
 FILENAME_PHENOTYPES=results/phenotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat

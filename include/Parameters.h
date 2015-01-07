@@ -17,6 +17,7 @@ class Parameters{
   };
 
   explicit Parameters(){}
+  virtual ~Parameters(){}
 
   virtual void init() = 0;
   virtual void print() const = 0;
@@ -60,7 +61,7 @@ class Parameters{
 class ParametersGL : public Parameters{
 
  public:
-  ParametersGL(){
+  explicit ParametersGL(){
     parametersFileName = "parametersGL";
     init();
     print();
@@ -86,7 +87,7 @@ class ParametersGL : public Parameters{
 class ParametersDKMS : public Parameters{
 
  public:
-  ParametersDKMS(){
+  explicit ParametersDKMS(){
     parametersFileName = "parametersDKMS";
     init();
     print();

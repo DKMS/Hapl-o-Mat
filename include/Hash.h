@@ -13,7 +13,6 @@ class Hash{
   typedef typename typeHash_t::iterator iterator;
 
   explicit Hash() : hashList(){};
-  //explicit Hash(const Hash & other) : hashList() {hashList = other.hashList;}
 
   c_iterator c_listBegin() const {return hashList.cbegin();}
   c_iterator c_listEnd() const {return hashList.cend();}
