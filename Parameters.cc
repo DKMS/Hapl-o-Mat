@@ -118,7 +118,6 @@ void ParametersGL::init(){
     else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-    else if(line.find("FILENAME_ALLELELIST") != std::string::npos) val_assign(alleleListFileName, line);
     else if(line.find("CODE_PRECISION") != std::string::npos) precision_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
@@ -160,7 +159,6 @@ void ParametersGL::print() const {
   std::cout << "\t Resolve reports with unknown genotype: ";
   if(resolveUnknownGenotype){
     std::cout << "yes" << std::endl;
-    std::cout << "\t Read alleles from file: " << alleleListFileName << std::endl;
   }
   else
     std::cout << "no" << std::endl;
