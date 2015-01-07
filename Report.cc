@@ -140,7 +140,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   for(auto code : inLoci){
     if(code == 0){
       if(resolveUnknownGenotype){
-	//      resolveXXX()
+	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(genotypesAtLoci.size())->second.getGenotypes());
       }
       else{
 	discardReport = true;
@@ -163,7 +163,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	std::shared_ptr<Locus> pLocus = itGlid->second;
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
 	pLocus->reduce(genotypesAtLocus);
-	genotypesAtLoci.push_back(genotypesAtLocus);	
+	genotypesAtLoci.push_back(genotypesAtLocus);
       }
     }//else code=0
   }//for inLoci
