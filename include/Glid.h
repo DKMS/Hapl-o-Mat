@@ -45,6 +45,7 @@ class GlidFile{
   }
   
   const list_t & getList() const {return list;}
+  const std::map<size_t, AllPossibleGenotypes> & getPossibleGenotypesForAllLoci() const {return possibleGenotypesForAllLoci;}
 
  private:
   void reserveSize();
