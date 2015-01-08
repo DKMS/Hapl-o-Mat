@@ -61,6 +61,7 @@ void UnphasedLocus::resolve(){
 
 void UnphasedLocus::H2Filter(){
 
+  //build genotypes
   if(unphasedLocus.at(1).size() > unphasedLocus.at(0).size()){
     std::swap(unphasedLocus.at(1), unphasedLocus.at(0));
   }
@@ -84,9 +85,58 @@ void UnphasedLocus::H2Filter(){
     genotypesToHave.push_back(genotypes);
   }//alleleAtLocusPosition0
 
-  for(auto it : genotypesToHave){
-    for(auto it2 : it){
-      std::cout << it2 << std::endl;
+  //search file
+  std::string locus = getLocus(*genotypesToHave.cbegin()->cbegin());
+  FileH2::list_t::const_iterator pos;
+  FileH2::list_t::const_iterator lastPos;
+  fileH2.findPositionLocus(locus, pos, lastPos);
+
+  size_t oldTotalNumberAgreeing = 0;
+  std::vector<std::pair<size_t, std::vector<std::vector<std::string>>>> candidates;
+  while(pos < lastPos){
+    //go through every block in line and compare every element of the block with the list of genotypes
+    //if an agreement is found, increase numberAgreeing at the corresponding genotypesToHave position
+    std::vector<size_t> numbersAgreeing(genotypesToHave.size(), 0);
+    for(auto block : *pos){
+      for(auto element : block){
+	size_t toHavePosition = 0;
+	for(auto genotypes : genotypesToHave){
+	  for(auto genotype : genotypes){
+	    if(genotype == element){
+	      numbersAgreeing.at(toHavePosition) ++;
+	    }
+	  }//for genotypes
+	  toHavePosition ++;
+	}//for genotypesToHave
+      }//for element H2file
+    }//for block H2file
+    
+    //build candidate if numberAgreeing > 0 for every position
+    //compute total number of agreeing genotypes
+    size_t totalNumberAgreeing = 0;
+    bool toHaveFulfilled = true;
+    for(auto numberAgreeing : numbersAgreeing){
+      totalNumberAgreeing += numberAgreeing;
+      if(numberAgreeing > 0)
+	toHaveFulfilled = toHaveFulfilled && true;
+      else
+	toHaveFulfilled = false;
+    }//for numbersAgreeing
+    if(toHaveFulfilled && totalNumberAgreeing >= oldTotalNumberAgreeing){
+      auto candidate = std::make_pair(totalNumberAgreeing, *pos);
+      candidates.push_back(candidate);
+      oldTotalNumberAgreeing = totalNumberAgreeing;
+    }
+
+    pos ++;
+  }//while pos/line
+  
+  for(auto it : candidates){
+    for(auto it2 : it.second){
+      for(auto it3 : it2){
+	std::cout << it3 << " ";
+      }
+      std::cout << std::endl;
     }
     std::cout << std::endl;
   }
