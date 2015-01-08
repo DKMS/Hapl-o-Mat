@@ -41,11 +41,16 @@ with open("H2R4d.txt", 'w') as outFile:
                     shorterAllele = allele
                     if shorterAllele.count(':') == 3:
                         shorterAllele = allele.rsplit(':', 1)[0]
+                        if allele.endswith('N'):
+                            shorterAllele += 'N'
                         list1OfAlleleSets[i].add(shorterAllele)
                     if shorterAllele.count(':') == 2:
                         shorterAllele = shorterAllele.rsplit(':', 1)[0]
+                        if allele.endswith('N'):
+                            shorterAllele += 'N'
                         list1OfAlleleSets[i].add(shorterAllele)
                     list1OfAlleleSets[i] = sorted(list1OfAlleleSets[i])
+                    list1OfAlleleSets[i] = sorted(list1OfAlleleSets[i],key=len)
                     i +=1
 
                 i = 0
@@ -54,11 +59,16 @@ with open("H2R4d.txt", 'w') as outFile:
                     shorterAllele = allele
                     if shorterAllele.count(':') == 3:
                         shorterAllele = allele.rsplit(':', 1)[0]
+                        if allele.endswith('N'):
+                            shorterAllele += 'N'
                         list2OfAlleleSets[i].add(shorterAllele)
                     if shorterAllele.count(':') == 2:
                         shorterAllele = shorterAllele.rsplit(':', 1)[0]
+                        if allele.endswith('N'):
+                            shorterAllele += 'N'
                         list2OfAlleleSets[i].add(shorterAllele)
                     list2OfAlleleSets[i] = sorted(list2OfAlleleSets[i])
+                    list2OfAlleleSets[i] = sorted(list2OfAlleleSets[i],key=len)
                     i +=1
 
                 for set1 in list1OfAlleleSets:

@@ -36,11 +36,15 @@ with open("H2R.txt", 'w') as outFile:
                 for allele in alleleList1:
                     if allele.count(':') >= 2:
                         shorterAllele = allele.rsplit(':', 1)[0]
+                        if allele.endswith('N'):
+                            shorterAllele += 'N'
                         alleleList1.append(shorterAllele)
 
                 for allele in alleleList2:
                     if allele.count(':') >= 2:
                         shorterAllele = allele.rsplit(':', 1)[0]
+                        if allele.endswith('N'):
+                            shorterAllele += 'N'
                         alleleList2.append(shorterAllele)
 
                 alleleSet1 = set()
@@ -48,7 +52,9 @@ with open("H2R.txt", 'w') as outFile:
                 alleleSet1.update(alleleList1)
                 alleleSet2.update(alleleList2)
                 alleleSet1 = sorted(alleleSet1)
+                alleleSet1 = sorted(alleleSet1,key=len)
                 alleleSet2 = sorted(alleleSet2)
+                alleleSet2 = sorted(alleleSet2,key=len)
 
                 for newGenotype in itertools.product(alleleSet1, alleleSet2):
                     h2RLine += '+'.join(newGenotype) + '\t'
