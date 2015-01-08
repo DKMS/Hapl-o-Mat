@@ -46,7 +46,6 @@ class DataProcessing{
 
   void buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				 HaplotypeList & hList,
-				 const Report & report,
 				 std::vector<std::shared_ptr<Report>> & listOfpReports,
 				 std::ofstream & phenotypesFile,
 				 std::ofstream & haplotypesFile);

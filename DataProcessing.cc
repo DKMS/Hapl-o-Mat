@@ -67,7 +67,6 @@ void HaplotypeCombinations::writeCombinations() const {
 
 void DataProcessing::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 					       HaplotypeList & hList,
-					       const Report & report,
 					       std::vector<std::shared_ptr<Report>> & listOfpReports,
 					       std::ofstream & phenotypesFile,
 					       std::ofstream & haplotypesFile){
@@ -113,7 +112,7 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
-    buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
+    buildHaploDiploPhenoTypes(pList, hList, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
 
   inputFile.close();
@@ -145,7 +144,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, minimalFrequency, doH2Filter);
 
-    buildHaploDiploPhenoTypes(pList, hList, report, listOfpReports, phenotypesFile, haplotypesFile);
+    buildHaploDiploPhenoTypes(pList, hList, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
     
   inputFile.close();
