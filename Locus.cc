@@ -37,13 +37,27 @@ void PhasedLocus::resolve(){
 
 void UnphasedLocus::resolve(){
 
-  if(doH2Filter){
-    if(unphasedLocus.at(0).size() > 1 && unphasedLocus.at(1).size()){
-      std::cout << "H2Filter" << std::endl;
-      H2Filter();
-    }//if both locuspositions have more than one element
-  }//if doH2Filter
+  if(doH2Filter && unphasedLocus.at(0).size() > 1 && unphasedLocus.at(1).size() > 1){
+    
+    strArrVec_t in_phasedLocus;
+    H2Filter(in_phasedLocus);
+    for(auto it : in_phasedLocus)
+      std::cout << it.at(0) << "  " << it.at(1) << std::endl;
+    
+    if(in_phasedLocus.empty())
+      doResolve();
+    else{
+      PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
+      phasedLocus.resolve();
+      pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
+    }
+  }//if doH2Filter, both locuspositions have more than one element
+  else{
+    doResolve();
+  }
+}
 
+void UnphasedLocus::doResolve(){
 
   for(auto locusPosition : unphasedLocus){
     std::vector<std::shared_ptr<Allele>> allPAllelesAtOneLocusPosition;
@@ -59,7 +73,7 @@ void UnphasedLocus::resolve(){
   buildResolvedPhasedLocus();
 }
 
-void UnphasedLocus::H2Filter(){
+void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 
   //build genotypes
   if(unphasedLocus.at(1).size() > unphasedLocus.at(0).size()){
@@ -130,7 +144,7 @@ void UnphasedLocus::H2Filter(){
 
     pos ++;
   }//while pos/line
-  
+
   for(auto it : candidates){
     for(auto it2 : it.second){
       for(auto it3 : it2){
@@ -141,6 +155,25 @@ void UnphasedLocus::H2Filter(){
     std::cout << std::endl;
   }
 
+  //locus becomes phased if an H2-line was found, evaluate candidates
+  //locus stays unphased, do nothing
+  if(! candidates.empty()){
+    for(auto candidate : candidates){
+      if(candidate.first == oldTotalNumberAgreeing){
+	for(auto block : candidate.second){
+	  std::string genotype = *(block.cend()-1);
+	  strVec_t splittedGenotype = split(genotype, '+');
+	  strArr_t twoCodes;
+	  size_t counter = 0;
+	  for(auto code : splittedGenotype){
+	    twoCodes.at(counter) = code;
+	    counter ++;
+	  }//for splittedGenotype
+	  phasedLocus.push_back(twoCodes);
+	}//for block
+      }//if =totalNumberAgreeing
+    }//for candidates
+  }//if candidates empty
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 
