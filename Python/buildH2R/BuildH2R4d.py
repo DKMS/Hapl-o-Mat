@@ -76,7 +76,10 @@ with open("H2R4d.txt", 'w') as outFile:
                         line = ''
                         for allele1 in set1:
                             for allele2 in set2:
-                                line += '+'.join((allele1,allele2)) + ','
+                                if(allele1 < allele2):
+                                    line += '+'.join((allele1,allele2)) + ','
+                                else:
+                                    line += '+'.join((allele2,allele1)) + ','
                         line = line[:-1]
                         outFile.write(line + '\t')
             outFile.write('\n')
