@@ -62,11 +62,27 @@ void UnphasedLocus::doResolve(){
       double alleleFrequency = 1. / static_cast<double>(locusPosition.size());
       std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, alleleFrequency);
       std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
-      allPAllelesAtOneLocusPosition.insert(allPAllelesAtOneLocusPosition.end(), pAllelesAtOneLocusPosition.begin(), pAllelesAtOneLocusPosition.end());
-    }
+      for(auto pAlleleAtOneLocusPosition : pAllelesAtOneLocusPosition){
+	auto pos = find_if(allPAllelesAtOneLocusPosition.begin(),
+			   allPAllelesAtOneLocusPosition.end(),
+			   [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> allele)
+			   {
+			     return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
+			   });
+	
+	if(pos == allPAllelesAtOneLocusPosition.end()){
+	  allPAllelesAtOneLocusPosition.insert(allPAllelesAtOneLocusPosition.end(),
+					       pAllelesAtOneLocusPosition.begin(),
+					       pAllelesAtOneLocusPosition.end());
+	}
+	else{
+	  (*pos)->addFrequency(pAlleleAtOneLocusPosition->getFrequency());
+	}
+      }//for pAllelesAtOneLocusPosition
+    }//for locusPosition
     pAllelesAtBothLocusPositions.push_back(allPAllelesAtOneLocusPosition); 
   }
-
+  
   buildResolvedPhasedLocus();
 }
 
@@ -141,7 +157,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 
     pos ++;
   }//while pos/line
-
+  
   //locus becomes phased if an H2-line was found, evaluate candidates
   //locus stays unphased, do nothing
   if(! candidates.empty()){

@@ -46,6 +46,7 @@ class Allele{
   static std::string printCodePrecision(const codePrecision precision);
   double getFrequency() const {return frequency;}
   void multiplyFrequency(const double factor) {frequency *= factor;}
+  void addFrequency(const double factor) {frequency += factor;}
   std::string getCode() const {return code;}
   codePrecision getPrecision() const {return precision;}
   codePrecision getWantedPrecision() const {return wantedPrecision;}
