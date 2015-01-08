@@ -137,7 +137,6 @@ void FileH2::readFile(){
     list.push_back(H2line);
 
     std::string locus = getLocus(line);
-    std::cout << locus << std::endl;
     if(locus.compare(locusOld)){
       locusPosition.emplace(locus, pos);
     }
