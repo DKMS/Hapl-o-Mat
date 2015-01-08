@@ -61,13 +61,35 @@ void UnphasedLocus::resolve(){
 
 void UnphasedLocus::H2Filter(){
 
-  //build possible genotypes, sorted alphabetically or with inverted
-  for(auto locusPosition : unphasedLocus){
-    for(auto allele : locusPosition){
-      std::cout << allele << std::endl;
-    }
+  if(unphasedLocus.at(1).size() > unphasedLocus.at(0).size()){
+    std::swap(unphasedLocus.at(1), unphasedLocus.at(0));
   }
+  strVecVec_t genotypesToHave;
+  for(auto alleleAtLocusPosition0 : unphasedLocus.at(0)){
+    strVec_t genotypes;
+    for(auto alleleAtLocusPosition1 : unphasedLocus.at(1)){
+      std::string genotype;
+      if(alleleAtLocusPosition0 < alleleAtLocusPosition1){
+	genotype = alleleAtLocusPosition0;
+	genotype += "+";
+	genotype += alleleAtLocusPosition1;
+      }
+      else{
+	genotype = alleleAtLocusPosition1;
+	genotype += "+";
+	genotype += alleleAtLocusPosition0;
+      }
+      genotypes.push_back(genotype);
+    }//alleleAtLocusPosition1
+    genotypesToHave.push_back(genotypes);
+  }//alleleAtLocusPosition0
 
+  for(auto it : genotypesToHave){
+    for(auto it2 : it){
+      std::cout << it2 << std::endl;
+    }
+    std::cout << std::endl;
+  }
 
 }
 
