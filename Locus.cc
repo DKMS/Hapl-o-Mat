@@ -41,9 +41,6 @@ void UnphasedLocus::resolve(){
     
     strArrVec_t in_phasedLocus;
     H2Filter(in_phasedLocus);
-    for(auto it : in_phasedLocus)
-      std::cout << it.at(0) << "  " << it.at(1) << std::endl;
-    
     if(in_phasedLocus.empty())
       doResolve();
     else{
@@ -144,16 +141,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 
     pos ++;
   }//while pos/line
-
-  for(auto it : candidates){
-    for(auto it2 : it.second){
-      for(auto it3 : it2){
-	std::cout << it3 << " ";
-      }
-      std::cout << std::endl;
-    }
-    std::cout << std::endl;
-  }
 
   //locus becomes phased if an H2-line was found, evaluate candidates
   //locus stays unphased, do nothing
