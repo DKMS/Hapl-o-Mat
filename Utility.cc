@@ -104,6 +104,41 @@ std::string cutCode(const std::string &s, const size_t toNumberColons){
   return out;
 }
 
+void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
+		       const size_t n,
+		       const size_t k){ 
+
+  std::vector<size_t> combination(k, 0);
+  bool done = false;
+  while(!done){
+    //add combo to list
+    listOfCombinations.push_back(combination);
+
+    //new combination
+    auto it = combination.end();
+    it --;
+    //try to increase last entry
+    if(*it < n-1){
+      *it += 1;
+    }
+    else{
+      while(*it >= n-1){
+	if(it==combination.begin()){
+	  done=true;
+	  break;
+	}
+	it--;
+      }//while
+      *it += 1;
+      //reduce all entries between current and last element by one
+      for(it = it+1;
+	  it != combination.end();
+	  it++)
+	*it = 0;
+    }//else
+  }//while done
+}
+
 template<typename T>
 void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in){
 
@@ -167,4 +202,7 @@ template void cartesianProduct<std::shared_ptr<Allele>>(std::vector<std::vector<
 							
 template void cartesianProduct<std::pair<strArr_t, double>>(std::vector<std::vector<std::pair<strArr_t, double>>> & out,
 							    const std::vector<std::vector<std::pair<strArr_t, double>>> & in);
+
+template void cartesianProduct<std::string>(std::vector<std::vector<std::string>> & out,
+					    const std::vector<std::vector<std::string>> & in);
 														
