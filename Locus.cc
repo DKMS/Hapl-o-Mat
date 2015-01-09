@@ -34,7 +34,7 @@ void PhasedLocus::resolve(){
     cartesianProduct(pAllelesAtPhasedLocus, allpAllelesAtBothLocusPositions);    
   }//for phasedLocus
 
-  removeDuplicates();
+  removeDuplicates(1.);
 
   for(auto genotype = pAllelesAtPhasedLocus.begin();
       genotype != pAllelesAtPhasedLocus.end();
@@ -47,7 +47,7 @@ void PhasedLocus::resolve(){
   }
 }
 
-void Locus::removeDuplicates(){
+void Locus::removeDuplicates(const double factor){
 
   //sort genotype
   for(auto genotype = pAllelesAtPhasedLocus.begin();
@@ -77,7 +77,7 @@ void Locus::removeDuplicates(){
   //erase equal genotypes and add frequencies
   pAllelesAtPhasedLocus.erase(std::unique(pAllelesAtPhasedLocus.begin(),
 					  pAllelesAtPhasedLocus.end(),
-					  [](const std::vector<std::shared_ptr<Allele>> genotype1,
+					  [&factor](const std::vector<std::shared_ptr<Allele>> genotype1,
 					     const std::vector<std::shared_ptr<Allele>> genotype2)
 					    {
 					      bool equal = true;
@@ -103,6 +103,7 @@ void Locus::removeDuplicates(){
 						auto allele1 = genotype1.begin();
 						for(auto allele2 : genotype2){
 						  (*allele1)->addFrequency(allele2->getFrequency());
+						  (*allele1)->multiplyFrequency(factor);
 						  allele1 ++;
 						}
 					      }
@@ -169,7 +170,7 @@ void UnphasedLocus::doResolve(){
   }
 
   buildResolvedPhasedLocus();
-  removeDuplicates();
+  removeDuplicates(1./sqrt(2));
 
   for(auto it: pAllelesAtPhasedLocus)
     for(auto it2 : it)
