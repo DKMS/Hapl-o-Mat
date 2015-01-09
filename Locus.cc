@@ -46,7 +46,7 @@ void PhasedLocus::resolve(){
   }
 }
 
-void PhasedLocus::removeDuplicates(){
+void Locus::removeDuplicates(){
 
   //sort genotype
   for(auto genotype = pAllelesAtPhasedLocus.begin();
@@ -79,13 +79,18 @@ void PhasedLocus::removeDuplicates(){
 					      for(auto allele2 : genotype2){
 						if(allele2->getCode() == (*allele1)->getCode()){
 						  equal = equal && true;
-						  (*allele1)->addFrequency(allele2->getFrequency());
 						}
 						else
 						  equal = false;
 						allele1 ++;
 					      }//for
-					      
+			
+					      if(equal){
+						auto allele1 = genotype1.begin();
+						for(auto allele2 : genotype2){
+						  (*allele1)->addFrequency(allele2->getFrequency());
+						}
+					      }
 					      return equal;
 					    }),
 			      pAllelesAtPhasedLocus.end());
@@ -140,6 +145,7 @@ void UnphasedLocus::doResolve(){
   }
   
   buildResolvedPhasedLocus();
+  removeDuplicates();
 }
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
