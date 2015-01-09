@@ -38,6 +38,8 @@ class PhasedLocus : public Locus{
   
   virtual void resolve();
 
+  void removeDuplicates();
+
  private:
   strArrVec_t phasedLocus;
 };

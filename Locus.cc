@@ -33,6 +33,22 @@ void PhasedLocus::resolve(){
     cartesianProduct(pAllelesAtPhasedLocus, allpAllelesAtBothLocusPositions);    
   }//for phasedLocus
 
+  removeDuplicates();
+
+  for(auto genotype = pAllelesAtPhasedLocus.begin();
+      genotype != pAllelesAtPhasedLocus.end();
+      genotype ++){
+    for(auto allele = genotype->begin();
+	allele != genotype->end();
+	allele ++){
+      (*allele)->sqrtFrequency();
+    }
+  }
+}
+
+void PhasedLocus::removeDuplicates(){
+
+  //sort genotype
   for(auto genotype = pAllelesAtPhasedLocus.begin();
       genotype != pAllelesAtPhasedLocus.end();
       genotype ++){
@@ -42,6 +58,7 @@ void PhasedLocus::resolve(){
 	 });
   }//for pAllelesAtPhasedLocus
 
+  //sort list of genotypes
   sort(pAllelesAtPhasedLocus.begin(),
        pAllelesAtPhasedLocus.end(),
        [](const std::vector<std::shared_ptr<Allele>> genotype1,
@@ -51,6 +68,7 @@ void PhasedLocus::resolve(){
 	 }
        );
 
+  //erase equal genotypes and add frequencies
   pAllelesAtPhasedLocus.erase(std::unique(pAllelesAtPhasedLocus.begin(),
 					  pAllelesAtPhasedLocus.end(),
 					  [](const std::vector<std::shared_ptr<Allele>> genotype1,
@@ -71,16 +89,6 @@ void PhasedLocus::resolve(){
 					      return equal;
 					    }),
 			      pAllelesAtPhasedLocus.end());
-
-  for(auto genotype = pAllelesAtPhasedLocus.begin();
-      genotype != pAllelesAtPhasedLocus.end();
-      genotype ++){
-    for(auto allele = genotype->begin();
-	allele != genotype->end();
-	allele ++){
-      (*allele)->sqrtFrequency();
-    }
-  }
 }
 
 void UnphasedLocus::resolve(){
