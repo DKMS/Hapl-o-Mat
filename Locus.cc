@@ -69,11 +69,6 @@ void Locus::removeDuplicates(const double factor){
 	 }
        );
 
-  for(auto it: pAllelesAtPhasedLocus)
-    for(auto it2 : it)
-      std::cout << it2->getCode() << "  " << it2->getFrequency() << std::endl;
-  std::cout << std::endl;
-
   //erase equal genotypes and add frequencies
   pAllelesAtPhasedLocus.erase(std::unique(pAllelesAtPhasedLocus.begin(),
 					  pAllelesAtPhasedLocus.end(),
@@ -91,14 +86,6 @@ void Locus::removeDuplicates(const double factor){
 						allele1 ++;
 					      }//for
 
-					      std::cout << genotype1.at(0)->getCode() << "  " << genotype1.at(0)->getFrequency() << "  "
-							<< genotype1.at(1)->getCode() << "  " << genotype1.at(1)->getFrequency()
-							<< std::endl;
-					      std::cout << genotype2.at(0)->getCode() << "  " << genotype2.at(0)->getFrequency() << "  "
-							<< genotype2.at(1)->getCode() << "  " << genotype2.at(1)->getFrequency()
-							<< std::endl;
-					      std::cout << true << "  " << equal << std::endl;
-				
 					      if(equal){
 						auto allele1 = genotype1.begin();
 						for(auto allele2 : genotype2){
@@ -107,18 +94,9 @@ void Locus::removeDuplicates(const double factor){
 						  allele1 ++;
 						}
 					      }
-
-					      std::cout << genotype1.at(0)->getCode() << "  " << genotype1.at(0)->getFrequency() << "  "
-							<< genotype1.at(1)->getCode() << "  " << genotype1.at(1)->getFrequency()
-							<< std::endl;
-					      std::cout << genotype2.at(0)->getCode() << "  " << genotype2.at(0)->getFrequency() << "  "
-							<< genotype2.at(1)->getCode() << "  " << genotype2.at(1)->getFrequency()
-							<< std::endl;
-					      std::cout	<< std::endl;
 					      return equal;
 					    }),
 			      pAllelesAtPhasedLocus.end());
-
 }
 
 void UnphasedLocus::resolve(){
@@ -130,6 +108,7 @@ void UnphasedLocus::resolve(){
     if(in_phasedLocus.empty())
       doResolve();
     else{
+      std::cout << "found H2" << std::endl;
       PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
       phasedLocus.resolve();
       pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
@@ -171,11 +150,6 @@ void UnphasedLocus::doResolve(){
 
   buildResolvedPhasedLocus();
   removeDuplicates(1./sqrt(2));
-
-  for(auto it: pAllelesAtPhasedLocus)
-    for(auto it2 : it)
-      std::cout << it2->getCode() << "  " << it2->getFrequency() << std::endl;
-
 }
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
@@ -203,6 +177,13 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     }//alleleAtLocusPosition1
     genotypesToHave.push_back(genotypes);
   }//alleleAtLocusPosition0
+
+  for(auto it : genotypesToHave){
+    for(auto it2 : it){
+      std::cout << it2 << std::endl;
+    }
+    std::cout << std::endl;
+  }
 
   //search file
   std::string locus = getLocus(*genotypesToHave.cbegin()->cbegin());
