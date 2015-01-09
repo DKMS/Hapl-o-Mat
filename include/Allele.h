@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <cmath>
 
 #include "File.h"
 #include "Typedefs.h"
@@ -47,6 +48,7 @@ class Allele{
   double getFrequency() const {return frequency;}
   void multiplyFrequency(const double factor) {frequency *= factor;}
   void addFrequency(const double factor) {frequency += factor;}
+  void sqrtFrequency() {frequency = sqrt(frequency);}
   std::string getCode() const {return code;}
   codePrecision getPrecision() const {return precision;}
   codePrecision getWantedPrecision() const {return wantedPrecision;}

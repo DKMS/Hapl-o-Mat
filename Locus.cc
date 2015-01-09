@@ -26,13 +26,83 @@ void PhasedLocus::resolve(){
     double genotypeFrequency = 1. / static_cast<double>(phasedLocus.size());
     std::vector<std::vector<std::shared_ptr<Allele>>> allpAllelesAtBothLocusPositions;
     for(auto code : genotype){
-      std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, sqrt(genotypeFrequency));
+      std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, genotypeFrequency);
       std::vector<std::shared_ptr<Allele>> pAllelesAtFirstGenotype = pAllele->translate();
       allpAllelesAtBothLocusPositions.push_back(pAllelesAtFirstGenotype);
     }//for LocusPosition
-
     cartesianProduct(pAllelesAtPhasedLocus, allpAllelesAtBothLocusPositions);    
   }//for phasedLocus
+
+  for(auto genotype = pAllelesAtPhasedLocus.begin();
+      genotype != pAllelesAtPhasedLocus.end();
+      genotype ++){
+    sort(genotype->begin(), genotype->end(), [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs) 
+	 {
+	   return lhs->getCode() < rhs->getCode();
+	 });
+  }//for pAllelesAtPhasedLocus
+
+  sort(pAllelesAtPhasedLocus.begin(),
+       pAllelesAtPhasedLocus.end(),
+       [](const std::vector<std::shared_ptr<Allele>> genotype1,
+	  const std::vector<std::shared_ptr<Allele>> genotype2)
+	 {
+	   return (*genotype1.cbegin())->getCode() < (*genotype2.cbegin())->getCode();
+	 }
+       );
+
+  for(auto it : pAllelesAtPhasedLocus){
+    for(auto it2 : it){
+      std::cout << it2->getCode() << "  " << it2->getFrequency() << std::endl;
+    }
+    std::cout << std::endl;
+  }
+
+  pAllelesAtPhasedLocus.erase(std::unique(pAllelesAtPhasedLocus.begin(),
+					  pAllelesAtPhasedLocus.end(),
+					  [](const std::vector<std::shared_ptr<Allele>> genotype1,
+					     const std::vector<std::shared_ptr<Allele>> genotype2)
+					    {
+					      bool equal = true;
+					      auto allele1 = genotype1.begin();
+					      for(auto allele2 : genotype2){
+						std::cout << (*allele1)->getCode()
+							  << "  " << (*allele1)->getFrequency()
+							  << "  " << allele2->getCode()
+							  << "  " << allele2->getFrequency()
+							  << std::endl; 
+						if(allele2->getCode() == (*allele1)->getCode()){
+						  equal = equal && true;
+						  (*allele1)->addFrequency(allele2->getFrequency());
+						}
+						else
+						  equal = false;
+						allele1 ++;
+					      }//for
+					      
+					      return equal;
+					    }));
+
+  for(auto genotype = pAllelesAtPhasedLocus.begin();
+      genotype != pAllelesAtPhasedLocus.end();
+      genotype ++){
+    for(auto allele = genotype->begin();
+	allele != genotype->end();
+	allele ++){
+      (*allele)->sqrtFrequency();
+    }
+  }
+
+
+  std::cout << "final" << std::endl;
+  for(auto it : pAllelesAtPhasedLocus){
+    for(auto it2 : it){
+      std::cout << it2->getCode() << "  " << it2->getFrequency() << std::endl;
+    }
+    std::cout << std::endl;
+  }
+      
+
 }
 
 void UnphasedLocus::resolve(){
