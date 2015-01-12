@@ -123,15 +123,13 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
         everyElementIn = everyElementIn && true;
     }
     if(everyElementIn){
-
-      std::vector<size_t> copiedCombination = combination;
       bool alreadyIn = false;
       auto pos = find_if(listOfCombinations.cbegin(),
                          listOfCombinations.cend(),
-                         [& copiedCombination](const std::vector<size_t> otherCombination)
+                         [& combination](const std::vector<size_t> otherCombination)
                          {
-                           return equal(copiedCombination.cbegin(),
-					copiedCombination.cend(),
+                           return equal(combination.cbegin(),
+					combination.cend(),
 					otherCombination.cbegin());
                          }
                          );
@@ -139,7 +137,7 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
         alreadyIn = true;
 
       if(!alreadyIn){
-	listOfCombinations.push_back(copiedCombination);
+	listOfCombinations.push_back(combination);
       }
     }
 
