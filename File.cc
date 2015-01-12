@@ -117,7 +117,7 @@ void FileAlleles::readFile(){
   file.close();
 }
 
-void FileH2::readFile(){
+void FileH2Expanded::readFile(){
 
   std::cout << "Read in file " << fileName << std::endl;
   
@@ -135,6 +135,32 @@ void FileH2::readFile(){
       H2line.push_back(splittedElement);      
     }
     list.push_back(H2line);
+
+    std::string locus = getLocus(line);
+    if(locus.compare(locusOld)){
+      locusPosition.emplace(locus, pos);
+    }
+    locusOld = locus;
+    pos ++;
+  }//while
+
+  file.close();
+}
+
+
+void FileH2::readFile(){
+
+  std::cout << "Read in file " << fileName << std::endl;
+  
+  std::ifstream file;
+  openFileToRead(fileName, file);
+  
+  std::string locusOld = "";
+  auto pos = list.cbegin();
+  std::string line;
+  while(std::getline(file, line)){
+    std::vector<std::string> elementsInLine = split(line, '\t');
+    list.push_back(elementsInLine);
 
     std::string locus = getLocus(line);
     if(locus.compare(locusOld)){

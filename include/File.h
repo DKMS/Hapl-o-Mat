@@ -81,7 +81,18 @@ class FileAlleles : public File<std::vector<std::string>>{
   void readFile();
 };
 
-class FileH2 : public File<std::vector<std::vector<std::vector<std::string>>>>{
+class FileH2Expanded : public File<std::vector<std::vector<std::vector<std::string>>>>{
+
+ public:
+  explicit FileH2Expanded(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+    readFile();
+  }
+
+ private:
+  void readFile();
+};
+
+class FileH2 : public File<std::vector<std::vector<std::string>>>{
 
  public:
   explicit FileH2(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
@@ -91,5 +102,6 @@ class FileH2 : public File<std::vector<std::vector<std::vector<std::string>>>>{
  private:
   void readFile();
 };
+
 
 #endif
