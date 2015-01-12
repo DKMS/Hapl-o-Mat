@@ -111,8 +111,35 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
   std::vector<size_t> combination(k, 0);
   bool done = false;
   while(!done){
-    //add combo to list
-    listOfCombinations.push_back(combination);
+    //are all elements distinguishable
+    bool everyElementIn = true;
+    for(auto element : combination){
+      size_t numberOfElement = count(combination.cbegin(), combination.cend(), element);
+      if(numberOfElement != 1)
+	everyElementIn = false;
+      else
+	everyElementIn = everyElementIn && true;
+    }
+    if(everyElementIn){
+      std::vector<size_t> copiedCombination = combination;
+      //is the combination already in, order does not matter
+      bool alreadyIn = false;
+      sort(copiedCombination.begin(), copiedCombination.end());
+      auto pos = find_if(listOfCombinations.cbegin(),
+			 listOfCombinations.cend(),
+			 [& copiedCombination](const std::vector<size_t> otherCombination)
+			 {
+			   return equal(copiedCombination.cbegin(),
+					copiedCombination.cend(),
+					otherCombination.cbegin());
+			 }
+			 );
+      if(pos != listOfCombinations.cend())
+	alreadyIn = true;
+      //add combo to list
+      if(!alreadyIn)
+	listOfCombinations.push_back(copiedCombination);
+    }
 
     //new combination
     auto it = combination.end();
