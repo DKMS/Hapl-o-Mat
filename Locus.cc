@@ -108,7 +108,6 @@ void UnphasedLocus::resolve(){
     if(in_phasedLocus.empty())
       doResolve();
     else{
-      std::cout << "found H2" << std::endl;
       PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
       phasedLocus.resolve();
       pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
@@ -164,13 +163,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
        }
        );
 
-  for(auto locusPosition : unphasedLocus){
-    for(auto allele : locusPosition){
-      std::cout << allele << std::endl;
-    }
-    std::cout << std::endl;
-  }
-
   size_t numberAllelesLHS = unphasedLocus.at(0).size();
   size_t numberAllelesRHS = unphasedLocus.at(1).size();
   std::vector<std::vector<size_t>> combinations;
@@ -199,10 +191,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
       genotypeCombination.push_back(genotype);
       alleleLHS ++;
     }
-    for(auto it : genotypeCombination){
-      std::cout << it << std::endl;
-    }
-    std::cout << std::endl;
     possibleGenotypesInH2.push_back(genotypeCombination);
   }
   
@@ -251,7 +239,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     for(auto candidate : candidates){
       for(auto block : *candidate){
 	std::string genotype = *(block.cend()-1);
-	std::cout << genotype << std::endl;
 	strVec_t splittedGenotype = split(genotype, '+');
 	strArr_t twoCodes;
 	size_t counter = 0;
