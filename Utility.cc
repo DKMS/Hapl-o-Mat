@@ -108,62 +108,18 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
 		       const size_t n,
 		       const size_t k){ 
 
-  std::vector<size_t> combination(k, 0);
-  bool done = false;
-  while(!done){
-    //are all elements distinguishable
-    bool everyElementIn = true;
-    for(auto element : combination){
-      size_t numberOfElement = count(combination.cbegin(), combination.cend(), element);
-      if(numberOfElement != 1)
-	everyElementIn = false;
-      else
-	everyElementIn = everyElementIn && true;
+  std::vector<bool> v(n);
+  std::fill(v.begin() + k, v.end(), true);
+  do {
+    std::vector<size_t> combination;
+    combination.reserve(k);
+    for (size_t i = 0; i < n; ++i) {
+      if (!v[i]) {
+	combination.push_back(i);
+      }
     }
-    if(everyElementIn){
-      std::vector<size_t> copiedCombination = combination;
-      //is the combination already in, order does not matter
-      bool alreadyIn = false;
-      sort(copiedCombination.begin(), copiedCombination.end());
-      auto pos = find_if(listOfCombinations.cbegin(),
-			 listOfCombinations.cend(),
-			 [& copiedCombination](const std::vector<size_t> otherCombination)
-			 {
-			   return equal(copiedCombination.cbegin(),
-					copiedCombination.cend(),
-					otherCombination.cbegin());
-			 }
-			 );
-      if(pos != listOfCombinations.cend())
-	alreadyIn = true;
-      //add combo to list
-      if(!alreadyIn)
-	listOfCombinations.push_back(copiedCombination);
-    }
-
-    //new combination
-    auto it = combination.end();
-    it --;
-    //try to increase last entry
-    if(*it < n-1){
-      *it += 1;
-    }
-    else{
-      while(*it >= n-1){
-	if(it==combination.begin()){
-	  done=true;
-	  break;
-	}
-	it--;
-      }//while
-      *it += 1;
-      //reduce all entries between current and last element by one
-      for(it = it+1;
-	  it != combination.end();
-	  it++)
-	*it = 0;
-    }//else
-  }//while done
+    listOfCombinations.push_back(combination);
+  } while (std::next_permutation(v.begin(), v.end()));
 }
 
 template<typename T>
