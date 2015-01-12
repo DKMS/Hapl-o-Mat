@@ -154,6 +154,97 @@ void UnphasedLocus::doResolve(){
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 
+  size_t minimalNumberOfGenotypes = std::max(unphasedLocus.at(0).size(), unphasedLocus.at(1).size());
+  std::cout << minimalNumberOfGenotypes << std::endl;
+  //build genotypes
+  strVecVec_t unphasedLocusAsVector; 
+  for(auto locusPosition : unphasedLocus){
+    unphasedLocusAsVector.push_back(locusPosition);
+  }
+  strVecVec_t genotypes;
+  cartesianProduct(genotypes, unphasedLocusAsVector);
+  for(auto genotype = genotypes.begin();
+      genotype != genotypes.end();
+      genotype ++){
+    sort(genotype->begin(), genotype->end());
+  }
+
+  for(auto it : genotypes){
+    for(auto it2 : it){
+      std::cout << it2 << std::endl;
+    }
+      std::cout <<std::endl;
+  }
+
+  //build combinations
+  std::vector<std::vector<size_t>> combinations;
+  buildCombinations(combinations,
+		    genotypes.size(),
+		    minimalNumberOfGenotypes);
+
+  std::vector<strVecVec_t> genotypeCombinations;
+  for(auto combination : combinations){
+    strVecVec_t genotypeCombination;
+    for(auto element : combination){
+      genotypeCombination.push_back(genotypes.at(element));
+    }
+    sort(genotypeCombination.begin(),
+	 genotypeCombination.end());
+    genotypeCombinations.push_back(genotypeCombination);
+  }
+
+  //remove genotype combinations which do not include all alleles
+  //build genotypes forming a possible H2 line
+  strVec_t allAlleles;
+  for(auto locusPosition : unphasedLocusAsVector){
+    for(auto allele : locusPosition){
+      allAlleles.push_back(allele);
+    }
+  }
+  strVecVec_t possibleGenotypesInH2;
+  for(auto genotypeCombination : genotypeCombinations){
+    bool allAllelesIn = true;
+    for(auto allele : allAlleles){
+      auto pos = find_if(genotypeCombination.cbegin(),
+			 genotypeCombination.cend(),
+			 [&allele](const strVec_t genotype)
+			 {
+			   auto pos = find(genotype.cbegin(),
+					   genotype.cend(),
+					   allele);
+			   if(pos == genotype.cend())
+			     return false;
+			   else
+			     return true;
+			 }
+			 );
+      if(pos == genotypeCombination.cend())
+	allAllelesIn = false;
+    }//for allAlleles
+    if(allAllelesIn){
+      strVec_t genotypeWithPlusCombination;
+      for(auto genotype : genotypeCombination){
+	std::string genotypeWithPlus;
+	genotypeWithPlus += genotype.at(0);
+	genotypeWithPlus += "+";
+	genotypeWithPlus += genotype.at(1);	
+
+	genotypeWithPlusCombination.push_back(genotypeWithPlus);
+      }//genotypeCombination
+      sort(genotypeWithPlusCombination.begin(),
+	   genotypeWithPlusCombination.end());
+      possibleGenotypesInH2.push_back(genotypeWithPlusCombination);
+    }//if allAllelesIn
+  }//for genotypeCombinations
+
+  for(auto it : possibleGenotypesInH2){
+    for(auto it2 : it){
+	std::cout << it2 << "  ";
+    }
+    std::cout <<std::endl;
+  }
+  
+  /*
   //build genotypes
   if(unphasedLocus.at(1).size() > unphasedLocus.at(0).size()){
     std::swap(unphasedLocus.at(1), unphasedLocus.at(0));
@@ -178,13 +269,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     genotypesToHave.push_back(genotypes);
   }//alleleAtLocusPosition0
 
-  for(auto it : genotypesToHave){
-    for(auto it2 : it){
-      std::cout << it2 << std::endl;
-    }
-    std::cout << std::endl;
-  }
-
   //search file
   std::string locus = getLocus(*genotypesToHave.cbegin()->cbegin());
   FileH2::list_t::const_iterator pos;
@@ -193,7 +277,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 
   size_t oldTotalNumberAgreeing = 0;
   std::vector<std::pair<size_t, std::vector<std::vector<std::string>>>> candidates;
-  while(pos < lastPos){
+  while(pos != lastPos){
     //go through every block in line and compare every element of the block with the list of genotypes
     //if an agreement is found, increase numberAgreeing at the corresponding genotypesToHave position
     std::vector<size_t> numbersAgreeing(genotypesToHave.size(), 0);
@@ -250,6 +334,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
       }//if =totalNumberAgreeing
     }//for candidates
   }//if candidates empty
+*/
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 
