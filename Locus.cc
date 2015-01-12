@@ -154,94 +154,47 @@ void UnphasedLocus::doResolve(){
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 
-  size_t minimalNumberOfGenotypes = std::max(unphasedLocus.at(0).size(), unphasedLocus.at(1).size());
-  std::cout << minimalNumberOfGenotypes << std::endl;
-  //build genotypes
-  strVecVec_t unphasedLocusAsVector; 
+  sort(unphasedLocus.begin(),
+       unphasedLocus.end(),
+       [](
+	  const strVec_t listOfAlleles1,
+	  const strVec_t listOfAlleles2)
+       {
+	 return listOfAlleles1.size() > listOfAlleles2.size();
+       }
+       );
+
   for(auto locusPosition : unphasedLocus){
-    unphasedLocusAsVector.push_back(locusPosition);
-  }
-  strVecVec_t genotypes;
-  cartesianProduct(genotypes, unphasedLocusAsVector);
-  for(auto genotype = genotypes.begin();
-      genotype != genotypes.end();
-      genotype ++){
-    sort(genotype->begin(), genotype->end());
-  }
-
-  for(auto it : genotypes){
-    for(auto it2 : it){
-      std::cout << it2 << std::endl;
+    for(auto allele : locusPosition){
+      std::cout << allele << std::endl;
     }
-      std::cout <<std::endl;
+    std::cout << std::endl;
   }
 
-  //build combinations
+  size_t numberAllelesLHS = unphasedLocus.at(0).size();
+  size_t numberAllelesRHS = unphasedLocus.at(1).size();
   std::vector<std::vector<size_t>> combinations;
   buildCombinations(combinations,
-		    genotypes.size(),
-		    minimalNumberOfGenotypes);
+		    numberAllelesRHS,
+		    numberAllelesLHS);
 
-  std::vector<strVecVec_t> genotypeCombinations;
-  for(auto combination : combinations){
-    strVecVec_t genotypeCombination;
-    for(auto element : combination){
-      genotypeCombination.push_back(genotypes.at(element));
-    }
-    sort(genotypeCombination.begin(),
-	 genotypeCombination.end());
-    genotypeCombinations.push_back(genotypeCombination);
-  }
-
-  //remove genotype combinations which do not include all alleles
-  //build genotypes forming a possible H2 line
-  strVec_t allAlleles;
-  for(auto locusPosition : unphasedLocusAsVector){
-    for(auto allele : locusPosition){
-      allAlleles.push_back(allele);
-    }
-  }
   strVecVec_t possibleGenotypesInH2;
-  for(auto genotypeCombination : genotypeCombinations){
-    bool allAllelesIn = true;
-    for(auto allele : allAlleles){
-      auto pos = find_if(genotypeCombination.cbegin(),
-			 genotypeCombination.cend(),
-			 [&allele](const strVec_t genotype)
-			 {
-			   auto pos = find(genotype.cbegin(),
-					   genotype.cend(),
-					   allele);
-			   if(pos == genotype.cend())
-			     return false;
-			   else
-			     return true;
-			 }
-			 );
-      if(pos == genotypeCombination.cend())
-	allAllelesIn = false;
-    }//for allAlleles
-    if(allAllelesIn){
-      strVec_t genotypeWithPlusCombination;
-      for(auto genotype : genotypeCombination){
-	std::string genotypeWithPlus;
-	genotypeWithPlus += genotype.at(0);
-	genotypeWithPlus += "+";
-	genotypeWithPlus += genotype.at(1);	
-
-	genotypeWithPlusCombination.push_back(genotypeWithPlus);
-      }//genotypeCombination
-      sort(genotypeWithPlusCombination.begin(),
-	   genotypeWithPlusCombination.end());
-      possibleGenotypesInH2.push_back(genotypeWithPlusCombination);
-    }//if allAllelesIn
-  }//for genotypeCombinations
-
-  for(auto it : possibleGenotypesInH2){
-    for(auto it2 : it){
-	std::cout << it2 << "  ";
+  for(auto combination : combinations){
+    strVec_t genotypeCombination;
+    genotypeCombination.reserve(numberAllelesLHS);
+    auto alleleLHS = unphasedLocus.at(0).cbegin();
+    for(auto element : combination){
+      std::string genotype = *alleleLHS;
+      genotype += "+";
+      genotype += unphasedLocus.at(1).at(element);
+      genotypeCombination.push_back(genotype);
+      alleleLHS ++;
     }
-    std::cout <<std::endl;
+    for(auto it : genotypeCombination){
+      std::cout << it << std::endl;
+    }
+    std::cout << std::endl;
+    possibleGenotypesInH2.push_back(genotypeCombination);
   }
   
   //search H2 file
@@ -256,7 +209,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
   std::vector<FileH2::list_t::const_iterator> candidates;
   while(pos != lastPos){
     for(auto genotypes : possibleGenotypesInH2){
-      std::vector<bool> allGenotypesIn(minimalNumberOfGenotypes, false);
+      std::vector<bool> allGenotypesIn(numberAllelesLHS, false);
       for(auto block : *pos){
 	for(auto element : block){
 	  auto itAllGenotypesIn = allGenotypesIn.begin();
@@ -289,6 +242,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     for(auto candidate : candidates){
       for(auto block : *candidate){
 	std::string genotype = *(block.cend()-1);
+	std::cout << genotype << std::endl;
 	strVec_t splittedGenotype = split(genotype, '+');
 	strArr_t twoCodes;
 	size_t counter = 0;
