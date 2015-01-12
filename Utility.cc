@@ -111,8 +111,7 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
   std::vector<bool> v(n);
   std::fill(v.begin() + k, v.end(), true);
   do {
-    std::vector<size_t> combination;
-    combination.reserve(k);
+    std::vector<size_t> combination(k);
     for (size_t i = 0; i < n; ++i) {
       if (!v[i]) {
 	combination.push_back(i);
