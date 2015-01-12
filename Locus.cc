@@ -101,18 +101,38 @@ void Locus::removeDuplicates(const double factor){
 
 void UnphasedLocus::resolve(){
 
-  if(doH2Filter && unphasedLocus.at(0).size() > 1 && unphasedLocus.at(1).size() > 1){
-    
-    strArrVec_t in_phasedLocus;
-    H2Filter(in_phasedLocus);
-    if(in_phasedLocus.empty())
-      doResolve();
-    else{
-      PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
-      phasedLocus.resolve();
-      pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
-    }
-  }//if doH2Filter, both locuspositions have more than one element
+  if(doH2Filter){
+    strVecArr_t codesAtBothLocusPositions;
+    auto it_codesAtBothLocusPositions = codesAtBothLocusPositions.begin();
+    for(auto locusPosition : unphasedLocus){
+      std::vector<std::shared_ptr<Allele>> allPAllelesAtOneLocusPosition;
+      for(auto code : locusPosition){
+	std::shared_ptr<Allele> pAllele = Allele::createAllele(code, Allele::codePrecision::G, 1.);
+	std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
+	for(auto pAlleleAtOneLocusPosition : pAllelesAtOneLocusPosition){
+	  auto pos = find_if(allPAllelesAtOneLocusPosition.begin(),
+			     allPAllelesAtOneLocusPosition.end(),
+			     [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> allele)
+			     {
+			       return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
+			     });
+	  if(pos == allPAllelesAtOneLocusPosition.end()){
+	    allPAllelesAtOneLocusPosition.insert(allPAllelesAtOneLocusPosition.end(),
+						 pAllelesAtOneLocusPosition.begin(),
+						 pAllelesAtOneLocusPosition.end());
+	  }
+	}
+      }//for code
+      strVec_t allCodesAtOneLocusPosition;
+      for(auto allele : allPAllelesAtOneLocusPosition){
+	allCodesAtOneLocusPosition.push_back(allele->getCode());
+      }
+      *it_codesAtBothLocusPositions = allCodesAtOneLocusPosition;
+      it_codesAtBothLocusPositions ++;
+    }//for locusPosition
+    unphasedLocus = codesAtBothLocusPositions;
+
+  }//if doH2Filter
   else{
     doResolve();
   }
