@@ -6,6 +6,7 @@
 
 FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1G.txt", 200);
+FilegOrGToAlleles Alleleg::filegToAlleles("data/H1g.txt", 200);
 FilegOrGToAlleles AlleleG::fileGToAlleles("data/H1G.txt", 200);
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
@@ -303,47 +304,49 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateToG(){
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(){
 
+  std::cout << "not implemented yet" << std::endl;
+  //not the correct file to use, 4d should be remove from file
   /*
   strVec_t codes;
-  auto itGToAlleles = fileGToAlleles.getList().find(code);
-  if(itGToAlleles == fileGToAlleles.getList().cend()){
+  auto itgToAlleles = filegToAlleles.getList().find(code);
+  if(itgToAlleles == filegToAlleles.getList().cend()){
     std::cout << "Key "
 	      << code
 	      << " not in "
-	      << fileGToAlleles.getFileName()
+	      << filegToAlleles.getFileName()
 	      << std::endl;
   }
   else{
-    codes = itGToAlleles->second;
+    codes = itgToAlleles->second;
   }
 
-  std::vector<std::shared_ptr<Allele>> listOfAllPAlleleg;
+  std::vector<std::shared_ptr<Allele>> listOfAllPAlleleG;
   for(auto newCode : codes){
     std::shared_ptr<Allele> pAllele = createAllele(newCode, wantedPrecision, frequency);
-    std::vector<std::shared_ptr<Allele>> listOfPAlleleg = pAllele->translate();
-    listOfAllPAlleleg.insert(listOfAllPAlleleg.end(), listOfPAlleleg.begin(), listOfPAlleleg.end());
+    std::vector<std::shared_ptr<Allele>> listOfPAlleleG = pAllele->translate();
+    listOfAllPAlleleG.insert(listOfAllPAlleleG.end(), listOfPAlleleG.begin(), listOfPAlleleG.end());
   }
 
-  sort(listOfAllPAlleleg.begin(), listOfAllPAlleleg.end(), [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs)
+  sort(listOfAllPAlleleG.begin(), listOfAllPAlleleG.end(), [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs)
        {
 	 return lhs->getCode() < rhs->getCode();
        });
-  listOfAllPAlleleg.erase(std::unique(listOfAllPAlleleg.begin(),
-				      listOfAllPAlleleg.end(),
+  listOfAllPAlleleG.erase(std::unique(listOfAllPAlleleG.begin(),
+				      listOfAllPAlleleG.end(),
 				      [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs)
 				      {
 					return lhs->getCode() == rhs->getCode();
 				      }),
-			  listOfAllPAlleleg.end());
+			  listOfAllPAlleleG.end());
   
-  double factor = 1. / static_cast<double>(listOfAllPAlleleg.size());
-  for(auto itPAllele = listOfAllPAlleleg.begin();
-      itPAllele != listOfAllPAlleleg.end();
+  double factor = 1. / static_cast<double>(listOfAllPAlleleG.size());
+  for(auto itPAllele = listOfAllPAlleleG.begin();
+      itPAllele != listOfAllPAlleleG.end();
       itPAllele ++){
     (*itPAllele)->multiplyFrequency(factor);
   }
 
-  return listOfAllPAlleleg;
+  return listOfAllPAlleleG;
 */
 }
 

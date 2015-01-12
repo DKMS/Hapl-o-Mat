@@ -93,6 +93,7 @@ class Alleleg : public Allele{
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){};  
 
  private:
+  static FilegOrGToAlleles filegToAlleles;
 };
  
 class Allele4d : public Allele{
