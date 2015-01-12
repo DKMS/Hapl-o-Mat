@@ -184,9 +184,18 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     genotypeCombination.reserve(numberAllelesLHS);
     auto alleleLHS = unphasedLocus.at(0).cbegin();
     for(auto element : combination){
-      std::string genotype = *alleleLHS;
-      genotype += "+";
-      genotype += unphasedLocus.at(1).at(element);
+      std::string genotype;
+      std::string alleleRHS = unphasedLocus.at(1).at(element);
+      if(*alleleLHS < alleleRHS){
+	genotype = *alleleLHS;
+	genotype += "+";
+	genotype += alleleRHS;
+      }
+      else{
+	genotype = alleleRHS;
+	genotype += "+";
+	genotype += *alleleLHS;
+      }
       genotypeCombination.push_back(genotype);
       alleleLHS ++;
     }
