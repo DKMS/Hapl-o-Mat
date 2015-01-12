@@ -85,7 +85,7 @@ void FilegOrGToAlleles::readFile(){
 		<< fileName
 		<< "key "
 		<< key
-		<< "already occupied. "
+		<< " already occupied. "
 		<< std::endl;
     }
   }//while
