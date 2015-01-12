@@ -108,17 +108,78 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
 		       const size_t n,
 		       const size_t k){ 
 
+  std::vector<size_t> combination(k, 0);
+  bool done = false;
+  while(!done){
+    //add combo to list
+    bool everyElementIn = true;
+    for(size_t i=0; i<n; i++){
+      size_t numberOfElement = count(combination.cbegin(), combination.cend(), i);
+      if(numberOfElement < 1){
+	everyElementIn = false;
+	break;
+      }
+      else
+        everyElementIn = everyElementIn && true;
+    }
+    if(everyElementIn){
+
+      std::vector<size_t> copiedCombination = combination;
+      bool alreadyIn = false;
+      auto pos = find_if(listOfCombinations.cbegin(),
+                         listOfCombinations.cend(),
+                         [& copiedCombination](const std::vector<size_t> otherCombination)
+                         {
+                           return equal(copiedCombination.cbegin(),
+					copiedCombination.cend(),
+					otherCombination.cbegin());
+                         }
+                         );
+      if(pos != listOfCombinations.cend())
+        alreadyIn = true;
+
+      if(!alreadyIn){
+	listOfCombinations.push_back(copiedCombination);
+      }
+    }
+
+    //compute new combo
+    auto it = combination.end();
+    it--;
+    if(*it < n-1)
+      *it += 1;
+    else{
+      while(*it == n-1){
+	if(it == combination.begin()){
+	  done = true;
+	  break;
+	}
+	it --;
+      }
+      *it += 1;
+      for(it = it+1;
+	  it != combination.end();
+	  it++)
+	*it = 0;
+    }//else
+  }//while
+
+    /*
   std::vector<bool> v(n);
   std::fill(v.begin() + k, v.end(), true);
   do {
-    std::vector<size_t> combination(k);
+    std::vector<size_t> combination;
+    combination.reserve(k);
     for (size_t i = 0; i < n; ++i) {
       if (!v[i]) {
 	combination.push_back(i);
+	std::cout << i << std::endl;
       }
     }
+    std::cout << std::endl;
     listOfCombinations.push_back(combination);
   } while (std::next_permutation(v.begin(), v.end()));
+    */
 }
 
 template<typename T>
