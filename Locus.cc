@@ -101,7 +101,7 @@ void Locus::removeDuplicates(const double factor){
 
 void UnphasedLocus::resolve(){
 
-  if(doH2Filter){
+  if(doH2Filter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
     strVecArr_t codesAtBothLocusPositions;
     auto it_codesAtBothLocusPositions = codesAtBothLocusPositions.begin();
     for(auto locusPosition : unphasedLocus){
@@ -130,10 +130,29 @@ void UnphasedLocus::resolve(){
       *it_codesAtBothLocusPositions = allCodesAtOneLocusPosition;
       it_codesAtBothLocusPositions ++;
     }//for locusPosition
-    unphasedLocus = codesAtBothLocusPositions;
 
+    if(codesAtBothLocusPositions.at(0).size() > 1 && codesAtBothLocusPositions.at(1).size() > 1){
+      unphasedLocus = codesAtBothLocusPositions;
+      strArrVec_t in_phasedLocus;
+      H2Filter(in_phasedLocus);
+      if(!in_phasedLocus.empty()){
+	//H2
+	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
+	phasedLocus.resolve();
+	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
+      }
+      else{
+	//intermediate
+	doResolve();
+      }
+    }//if locus sizes > 1
+    else{
+      //H1
+      doResolve();
+    }
   }//if doH2Filter
   else{
+    //H0
     doResolve();
   }
 }
