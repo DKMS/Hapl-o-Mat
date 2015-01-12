@@ -244,36 +244,54 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     std::cout <<std::endl;
   }
   
-  /*
-  //build genotypes
-  if(unphasedLocus.at(1).size() > unphasedLocus.at(0).size()){
-    std::swap(unphasedLocus.at(1), unphasedLocus.at(0));
-  }
-  strVecVec_t genotypesToHave;
-  for(auto alleleAtLocusPosition0 : unphasedLocus.at(0)){
-    strVec_t genotypes;
-    for(auto alleleAtLocusPosition1 : unphasedLocus.at(1)){
-      std::string genotype;
-      if(alleleAtLocusPosition0 < alleleAtLocusPosition1){
-	genotype = alleleAtLocusPosition0;
-	genotype += "+";
-	genotype += alleleAtLocusPosition1;
-      }
-      else{
-	genotype = alleleAtLocusPosition1;
-	genotype += "+";
-	genotype += alleleAtLocusPosition0;
-      }
-      genotypes.push_back(genotype);
-    }//alleleAtLocusPosition1
-    genotypesToHave.push_back(genotypes);
-  }//alleleAtLocusPosition0
-
-  //search file
-  std::string locus = getLocus(*genotypesToHave.cbegin()->cbegin());
+  //search H2 file
+  //look for agreement between an H2-line and a possible line in possibleGenotypesInH2.
+  //Therefore pick a vector of possibleGenotypesInH2 and find each element/genotype in one of the blocks of the H2-line.
+  //If all elements/genotypes are found, take every last element of the block as result.
+  std::string locus = getLocus(*possibleGenotypesInH2.cbegin()->cbegin());
   FileH2::list_t::const_iterator pos;
   FileH2::list_t::const_iterator lastPos;
   fileH2.findPositionLocus(locus, pos, lastPos);
+
+  std::vector<FileH2::list_t::const_iterator> candidates;
+  while(pos != lastPos){
+    for(auto genotypes : possibleGenotypesInH2){
+      std::vector<bool> allGenotypesIn(minimalNumberOfGenotypes, false);
+      for(auto block : *pos){
+	for(auto element : block){
+	  auto itAllGenotypesIn = allGenotypesIn.begin();
+	  for(auto genotype : genotypes){
+	    if(genotype == element){
+	      *itAllGenotypesIn = true;
+	      break;
+	    }
+	    itAllGenotypesIn ++;
+	  }//for genotype from possibleGenotypesInH2
+  	}//for element
+      }//for block
+      if(std::all_of(allGenotypesIn.cbegin(),
+		     allGenotypesIn.cend(),
+		     [](const bool element){return element;})){
+	candidates.push_back(pos);
+      }
+    }//for possible genotype combination
+
+    pos ++;
+  }//while
+
+  for(auto it : candidates){
+    for(auto it2 : *it){
+      for(auto it3 : it2){
+	std::cout << it3 << " ";
+      }
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << std::endl;
+  }
+    
+
+  /*
 
   size_t oldTotalNumberAgreeing = 0;
   std::vector<std::pair<size_t, std::vector<std::vector<std::string>>>> candidates;
