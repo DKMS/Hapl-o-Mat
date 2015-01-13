@@ -130,8 +130,7 @@ void UnphasedLocus::resolve(){
       *it_codesAtBothLocusPositions = allCodesAtOneLocusPosition;
       it_codesAtBothLocusPositions ++;
     }//for locusPosition
-
-    if(codesAtBothLocusPositions.at(0).size() > 1 && codesAtBothLocusPositions.at(1).size() > 1){
+    if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
       unphasedLocus = codesAtBothLocusPositions;
       strArrVec_t in_phasedLocus;
       H2Filter(in_phasedLocus);
