@@ -237,13 +237,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     possibleGenotypesInH2.push_back(genotypeCombination);
   }
 
-  for(auto it : possibleGenotypesInH2){
-    for(auto it2 : it){
-      std::cout << it2 << std::endl;
-    }
-    std::cout << std::endl;
-  }
-
   //search H2 file
   //look for agreement between an H2-line and a possible line in possibleGenotypesInH2.
   //Therefore pick a vector of possibleGenotypesInH2 and find each element/genotype in one of the blocks of the H2-line.
