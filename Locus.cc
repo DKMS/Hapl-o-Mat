@@ -5,7 +5,7 @@
 #include "Utility.h"
 #include "Allele.h"
 
-FileH2 UnphasedLocus::fileH2("data/H2R4d.txt", 146000);
+FileH2 UnphasedLocus::fileH2("data/H2.txt", 146000); 
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
@@ -137,22 +137,26 @@ void UnphasedLocus::resolve(){
       H2Filter(in_phasedLocus);
       if(!in_phasedLocus.empty()){
 	//H2
+	std::cout << "H2" << std::endl;
 	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
 	phasedLocus.resolve();
 	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
       }
       else{
 	//intermediate
+	std::cout << "I" << std::endl;
 	doResolve();
       }
     }//if locus sizes > 1
     else{
       //H1
+      std::cout << "H1" << std::endl;
       doResolve();
     }
   }//if doH2Filter
   else{
     //H0
+    std::cout << "H0" << std::endl;
     doResolve();
   }
 }
@@ -232,7 +236,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     }
     possibleGenotypesInH2.push_back(genotypeCombination);
   }
-  
+
   //search H2 file
   //look for agreement between an H2-line and a possible line in possibleGenotypesInH2.
   //Therefore pick a vector of possibleGenotypesInH2 and find each element/genotype in one of the blocks of the H2-line.
@@ -246,38 +250,40 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
   while(pos != lastPos){
     for(auto genotypes : possibleGenotypesInH2){
       std::vector<bool> allGenotypesIn(numberAllelesLHS, false);
-      for(auto block : *pos){
-	for(auto element : block){
-	  auto itAllGenotypesIn = allGenotypesIn.begin();
-	  for(auto genotype : genotypes){
-	    if(genotype == element){
-	      *itAllGenotypesIn = true;
-	      break;
-	    }
-	    itAllGenotypesIn ++;
-	  }//for genotype from possibleGenotypesInH2
-  	}//for element
-      }//for block
+      auto it_allGenotypesIn = allGenotypesIn.begin();
+      for(auto genotype : genotypes){
+	for(auto element : *pos){
+	  std::cout << genotype <<"=" <<element << std::endl;
+	  if(genotype == element){
+	    std::cout << "check" << std::endl;
+	    *it_allGenotypesIn = true;
+	    break;
+	  }
+	}//for elements in line
+	if(*it_allGenotypesIn)
+	  it_allGenotypesIn ++;
+	else
+	  break;
+      }//for genotypes    
       if(std::all_of(allGenotypesIn.cbegin(),
 		     allGenotypesIn.cend(),
 		     [](const bool element){return element;})){
 	candidates.push_back(pos);
       }
-    }//for possible genotype combination
+    }//for possibleGenotypesInH2
 
     pos ++;
   }//while
-
+  
   //locus becomes phased if an H2-line was found
   if(!candidates.empty()){
     //remove candidates pointing to same line
     candidates.erase(std::unique(candidates.begin(),
 				 candidates.end()),
 		     candidates.end());
-
     for(auto candidate : candidates){
-      for(auto block : *candidate){
-	std::string genotype = *(block.cend()-1);
+      for(auto element : *candidate){
+	std::string genotype = element;
 	strVec_t splittedGenotype = split(genotype, '+');
 	strArr_t twoCodes;
 	size_t counter = 0;
@@ -286,7 +292,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 	  counter ++;
 	}
 	phasedLocus.push_back(twoCodes);    
-      }//for block
+      }//for element
     }//for candidates
   }//if candidates empty
 }
