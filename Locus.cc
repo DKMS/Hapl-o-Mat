@@ -259,12 +259,16 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
       std::vector<bool> allGenotypesIn(numberAllelesLHS, false);
       auto it_allGenotypesIn = allGenotypesIn.begin();
       for(auto genotype : genotypes){
-	for(auto element : *pos){
-	  if(genotype == element){
-	    *it_allGenotypesIn = true;
+	for(auto block : *pos){
+	  for(auto element : block){
+	    if(genotype == element){
+	      *it_allGenotypesIn = true;
+	      break;
+	    }
+	  }//for elements in block
+	  if(*it_allGenotypesIn)
 	    break;
-	  }
-	}//for elements in line
+	}//for blocks in line
 	if(*it_allGenotypesIn)
 	  it_allGenotypesIn ++;
 	else
@@ -287,8 +291,8 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 				 candidates.end()),
 		     candidates.end());
     for(auto candidate : candidates){
-      for(auto element : *candidate){
-	std::string genotype = element;
+      for(auto block : *candidate){
+	std::string genotype = *(block.cend()-1);
 	strVec_t splittedGenotype = split(genotype, '+');
 	strArr_t twoCodes;
 	size_t counter = 0;
@@ -297,7 +301,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
 	  counter ++;
 	}
 	phasedLocus.push_back(twoCodes);    
-      }//for element
+      }//for blocks
     }//for candidates
   }//if candidates empty
 }
