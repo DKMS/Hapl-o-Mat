@@ -9,8 +9,14 @@
 class Locus{
 
  public:
+  enum reportType{
+    H0,
+    H1,
+    H2,
+    I
+  };
 
-  explicit Locus() : pAllelesAtPhasedLocus(), wantedPrecision(){}
+  explicit Locus() : pAllelesAtPhasedLocus(), wantedPrecision(), type(){}
   virtual ~Locus(){}
   
   virtual void resolve() = 0;
@@ -19,10 +25,12 @@ class Locus{
   void checkCodes();
   void reduce(std::vector<std::pair<strArr_t, double>> & genotypes);
   const std::vector<std::vector<std::shared_ptr<Allele>>>& getPAllelesAtPhasedLocus() const {return pAllelesAtPhasedLocus;}
+  reportType getType() const {return type;}
 
  protected:
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtPhasedLocus;
   Allele::codePrecision wantedPrecision;
+  reportType type;
 };
 
 class PhasedLocus : public Locus{

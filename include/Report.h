@@ -9,6 +9,7 @@
 #include "Typedefs.h"
 #include "Allele.h"
 #include "Phenotype.h"
+#include "Locus.h"
 
 class GlidFile;
 class HaplotypeList;
@@ -23,26 +24,30 @@ class Report{
     id(),
     frequency(),
     numberLoci(in_numberLoci),
-    wantedPrecision(in_wantedPrecision)
+    wantedPrecision(in_wantedPrecision),
+    types()
     {
       genotypeAtLoci.reserve(numberLoci);
     }
   explicit Report(const strArrVec_t & in_genotypeAtLoci,
 		  const double in_frequency, 
 		  const size_t in_numberLoci,
-		  const std::string in_id)
+		  const std::string in_id,
+		  const std::vector<Locus::reportType> & in_types)
     : genotypeAtLoci(in_genotypeAtLoci),
     id(in_id),
     frequency(in_frequency),
     numberLoci(in_numberLoci),
-    wantedPrecision()
+    wantedPrecision(),
+    types(in_types)
       {
 	genotypeAtLoci.reserve(numberLoci);
       }
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,
-					 const std::string in_id) = 0;
+					 const std::string in_id,
+					 const std::vector<Locus::reportType> & in_types) = 0;
   virtual ~Report(){}
 
   std::string buildPhenotypeCode() const;
@@ -52,6 +57,7 @@ class Report{
 			       const HaplotypeCombinations & haplotypeCombinations) const; 
   void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
 			  const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
+  std::string evaluateReportType() const;
   
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}
@@ -63,6 +69,7 @@ class Report{
   double frequency;
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
+  std::vector<Locus::reportType> types;
   static FileAlleles fileWithAllAlleles;
 };
 
@@ -81,17 +88,20 @@ class GLReport : public Report{
   explicit GLReport(const strArrVec_t & in_genotypeAtLoci,
 		    const double in_frequency,
 		    const size_t in_numberLoci, 
-		    const std::string in_id)
-    : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
+		    const std::string in_id,
+		    const std::vector<Locus::reportType> & in_types)
+    : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id, in_types){}
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,
-					 const std::string in_id)
+					 const std::string in_id,
+					 const std::vector<Locus::reportType> & in_types)
     {
       std::shared_ptr<Report> pReport = std::make_shared<GLReport> (in_genotypeAtLoci,
 								    in_frequency, 
 								    in_numberLoci,
-								    in_id);
+								    in_id,
+								    in_types);
       return pReport;
     }
   
@@ -120,17 +130,20 @@ class HReport : public Report{
   explicit HReport(const strArrVec_t & in_genotypeAtLoci,
 		   const double in_frequency,
 		   const size_t in_numberLoci, 
-		   const std::string in_id)
-    : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id){}
+		   const std::string in_id,
+		   const std::vector<Locus::reportType> & in_types)
+    : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id, in_types){}
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,
-					 const std::string in_id)
+					 const std::string in_id,
+					 const std::vector<Locus::reportType> & in_types)
     {
       std::shared_ptr<Report> pReport = std::make_shared<HReport> (in_genotypeAtLoci,
 								   in_frequency, 
 								   in_numberLoci,
-								   in_id);
+								   in_id,
+								   in_types);
       return pReport;
     }
   

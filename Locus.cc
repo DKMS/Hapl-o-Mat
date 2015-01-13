@@ -45,6 +45,7 @@ void PhasedLocus::resolve(){
       (*allele)->sqrtFrequency();
     }
   }
+  type = reportType::H0;
 }
 
 void Locus::removeDuplicates(const double factor){
@@ -135,28 +136,31 @@ void UnphasedLocus::resolve(){
       strArrVec_t in_phasedLocus;
       H2Filter(in_phasedLocus);
       if(!in_phasedLocus.empty()){
-	//H2
-	std::cout << "H2" << std::endl;
+	type = reportType::H2;
 	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
 	phasedLocus.resolve();
 	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
       }
       else{
 	//intermediate
-	std::cout << "I" << std::endl;
 	doResolve();
+	if(pAllelesAtPhasedLocus.size() == 1)
+	  type = reportType::H1;	  
+	else
+	  type = reportType::I;
       }
     }//if locus sizes > 1
     else{
-      //H1
-      std::cout << "H1" << std::endl;
       doResolve();
+      if(pAllelesAtPhasedLocus.size() == 1)
+	type = reportType::H1;	  
+      else
+	type = reportType::I;
     }
   }//if doH2Filter
   else{
-    //H0
-    std::cout << "H0" << std::endl;
     doResolve();
+    type = reportType::H0;
   }
 }
 

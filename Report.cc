@@ -109,8 +109,40 @@ void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfRep
       newGenotypeAtLoci.push_back(locus.first);
       newFrequency *= locus.second;
     }
-    listOfReports.push_back(this->create(newGenotypeAtLoci, newFrequency, numberLoci, id));
+    listOfReports.push_back(this->create(newGenotypeAtLoci, newFrequency, numberLoci, id, types));
   }//reports
+}
+
+std::string Report::evaluateReportType() const{
+  
+  std::string totalType = "";
+  for(auto type : types){
+    switch(type){
+    case Locus::reportType::H0:
+      {
+	totalType += "H0";
+	break;
+      }
+    case Locus::reportType::H1:
+      {
+	totalType += "H1";
+	break;
+      }
+    case Locus::reportType::H2:
+      {
+	totalType += "H2";
+	break;
+      }
+    case Locus::reportType::I:
+      {
+	totalType += "I";
+	break;
+      }
+    default:
+      totalType += "?";
+    }
+  }
+  return totalType;
 }
 
 void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
@@ -165,6 +197,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
 	pLocus->reduce(genotypesAtLocus);
 	genotypesAtLoci.push_back(genotypesAtLocus);
+	types.push_back(pLocus->getType());
       }
     }//else code=0
   }//for inLoci
@@ -298,6 +331,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     
     std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter));
     pLocus->resolve();
+    types.push_back(pLocus->getType());
     std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
     pLocus->reduce(genotypesAtLocus);
     genotypesAtLoci.push_back(genotypesAtLocus);
