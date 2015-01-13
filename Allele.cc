@@ -232,27 +232,26 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTog(){
 }
 
 std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
-  /*
-  strVec_t codes;
-  auto itGToAlleles = fileGToAlleles.getList().find(code);
-  if(itGToAlleles == fileGToAlleles.getList().cend()){
+
+  std::string codeg;
+  auto itGtog = fileGTog.getList().find(code);
+  if(itGtog == fileGTog.getList().cend()){
     std::cout << "Key "
 	      << code
 	      << " not in "
-	      << fileGToAlleles.getFileName()
+	      << fileGTog.getFileName()
 	      << std::endl;
+    codeg = code;
   }
   else{
-    codes = itGToAlleles->second;
+    codeg = itGtog->second;
   }
 
   std::vector<std::shared_ptr<Allele>> listOfAllPAlleleg;
-  for(auto newCode : codes){
-    std::shared_ptr<Allele> pAllele = createAllele(newCode, wantedPrecision, frequency);
-    std::vector<std::shared_ptr<Allele>> listOfPAlleleg = pAllele->translate();
-    listOfAllPAlleleg.insert(listOfAllPAlleleg.end(), listOfPAlleleg.begin(), listOfPAlleleg.end());
-  }
-
+  std::shared_ptr<Allele> pAllele = createAllele(codeg, wantedPrecision, frequency);
+  std::vector<std::shared_ptr<Allele>> listOfPAlleleg = pAllele->translate();
+  listOfAllPAlleleg.insert(listOfAllPAlleleg.end(), listOfPAlleleg.begin(), listOfPAlleleg.end());
+  
   sort(listOfAllPAlleleg.begin(), listOfAllPAlleleg.end(), [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs)
        {
 	 return lhs->getCode() < rhs->getCode();
@@ -273,7 +272,6 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
   }
 
   return listOfAllPAlleleg;
-  */
 }
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTog(){

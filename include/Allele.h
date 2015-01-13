@@ -157,7 +157,6 @@ class AlleleG : public Allele{
 
  private:
   static FileGTog fileGTog;
-
 };
 
 class Allele6d : public Allele{
