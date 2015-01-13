@@ -159,8 +159,13 @@ void FileH2::readFile(){
   auto pos = list.cbegin();
   std::string line;
   while(std::getline(file, line)){
-    std::vector<std::string> elementsInLine = split(line, '\t');
-    list.push_back(elementsInLine);
+    std::stringstream ss(line);
+    std::string genotype;
+    std::vector<std::string> listOfGenotypesPerLine;
+    while(ss >> genotype)
+      listOfGenotypesPerLine.push_back(genotype);
+    
+    list.push_back(listOfGenotypesPerLine);
 
     std::string locus = getLocus(line);
     if(locus.compare(locusOld)){
