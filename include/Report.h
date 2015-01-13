@@ -152,6 +152,8 @@ class HReport : public Report{
 	       const double minimalFrequency,
 	       const bool doH2Filter);
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
+  void expandAlleleWithLetterAtTheEnd(const std::string code,
+				      strVec_t & newCodes) const;
 
  private:
   strArrVec_t inLoci;

@@ -270,42 +270,55 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
       {
 	std::string newCode2 = newCode;
 	newCode2.append(itSplittedCode);
-
-	if(checkLastLetter(newCode2, 'N')){
-	  std::string locus = getLocus(newCode2);
-	  FileAlleles::list_t::const_iterator firstPos;
-	  FileAlleles::list_t::const_iterator lastPos;
-	  fileWithAllAlleles.findPositionLocus(locus, firstPos, lastPos);
-	  
-	  bool is8DigitAllele = false;
-	  for(auto pos = firstPos;
-	      pos != lastPos;
-	      pos ++){
-	    if(newCode2 == *pos){
-	      is8DigitAllele = true;
-	      break;
-	    }
-	  }//for pos
-	  if(!is8DigitAllele){
-	    std::string codeWithoutN = leftOfLastDelim(newCode2, 'N');
-	    for(auto pos = firstPos;
-		pos != lastPos;
-		pos ++){
-	      if(pos->compare(0, codeWithoutN.size(), codeWithoutN) == 0){
-		if(checkLastLetter(*pos, 'N')){
-		  newCodes.push_back(*pos);
-		}
-	      }
-	    }//for pos
-	  }//if !is8DigitAllele
-	  else
-	    newCodes.push_back(newCode2);
-	}//if lastLetter = N
-	else{
-	  newCodes.push_back(newCode2);
-	}
+	expandAlleleWithLetterAtTheEnd(newCode2, newCodes);
       }//for splittedCode
   }//else
+  for(auto it: newCodes)
+    std::cout << it << std::endl;
+}
+
+void HReport::expandAlleleWithLetterAtTheEnd(const std::string code,
+					     strVec_t & newCodes) const{
+
+  bool noLetterAtTheEnd = true;
+  std::array<char, 4> listOfLetters = {'N', 'L', 'S', 'Q'};
+  for(auto letter : listOfLetters){
+
+    if(checkLastLetter(code, letter)){
+      noLetterAtTheEnd = false;
+      std::string locus = getLocus(code);
+      FileAlleles::list_t::const_iterator firstPos;
+      FileAlleles::list_t::const_iterator lastPos;
+      fileWithAllAlleles.findPositionLocus(locus, firstPos, lastPos);
+	  
+      bool is8DigitAllele = false;
+      for(auto pos = firstPos;
+	  pos != lastPos;
+	  pos ++){
+	if(code == *pos){
+	  is8DigitAllele = true;
+	  break;
+	}
+      }//for pos
+      if(!is8DigitAllele){
+	std::string codeWithoutLetter = leftOfLastDelim(code, letter);
+	for(auto pos = firstPos;
+	    pos != lastPos;
+	    pos ++){
+	  if(pos->compare(0, codeWithoutLetter.size(), codeWithoutLetter) == 0){
+	    if(checkLastLetter(*pos, letter)){
+	      newCodes.push_back(*pos);
+	    }
+	  }
+	}//for pos
+      }//if !is8DigitAllele
+      else
+	newCodes.push_back(code);
+    }//if lastLetter = letter
+  }//for letters
+
+  if(noLetterAtTheEnd)
+    newCodes.push_back(code);
 }
 
 void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
