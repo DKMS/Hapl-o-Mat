@@ -83,7 +83,7 @@ void FilegOrGToAlleles::readFile(){
     if(! inserted.second){
       std::cerr << "In file"
 		<< fileName
-		<< "key "
+		<< " key "
 		<< key
 		<< " already occupied. "
 		<< std::endl;
