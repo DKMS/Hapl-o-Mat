@@ -63,6 +63,7 @@ class Report{
   double frequency;
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
+  static FileAlleles fileWithAllAlleles;
 };
 
 class GLReport : public Report{
