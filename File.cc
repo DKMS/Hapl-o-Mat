@@ -81,7 +81,7 @@ void FilegOrGToAlleles::readFile(){
     }
     std::pair<list_t::iterator, bool> inserted = list.emplace(key, translation);
     if(! inserted.second){
-      std::cerr << "In file"
+      std::cerr << "In file "
 		<< fileName
 		<< " key "
 		<< key
@@ -132,7 +132,7 @@ void FileGTog::readFile(){
     ss >> key >> val;
     std::pair<list_t::iterator, bool> inserted = list.emplace(key, val);
     if(! inserted.second){
-      std::cerr << "In file"
+      std::cerr << "In file "
 		<< fileName
 		<< " key "
 		<< key
@@ -159,7 +159,7 @@ void FilegToG::readFile(){
     ss >> val >> key;
     std::pair<list_t::iterator, bool> inserted = list.emplace(key, val);
     if(! inserted.second){
-      std::cerr << "In file"
+      std::cerr << "In file "
 		<< fileName
 		<< " key "
 		<< key
