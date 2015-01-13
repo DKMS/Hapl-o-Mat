@@ -5,7 +5,7 @@
 #include "Utility.h"
 #include "Allele.h"
 
-FileH2 UnphasedLocus::fileH2("data/H2.txt", 146000); 
+FileH2Expanded UnphasedLocus::fileH2("data/H24d.txt", 146000); 
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
@@ -237,25 +237,30 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     possibleGenotypesInH2.push_back(genotypeCombination);
   }
 
+  for(auto it : possibleGenotypesInH2){
+    for(auto it2 : it){
+      std::cout << it2 << std::endl;
+    }
+    std::cout << std::endl;
+  }
+  /*
   //search H2 file
   //look for agreement between an H2-line and a possible line in possibleGenotypesInH2.
   //Therefore pick a vector of possibleGenotypesInH2 and find each element/genotype in one of the blocks of the H2-line.
   //If all elements/genotypes are found, take every last element of the block as result.
   std::string locus = getLocus(*possibleGenotypesInH2.cbegin()->cbegin());
-  FileH2::list_t::const_iterator pos;
-  FileH2::list_t::const_iterator lastPos;
+  FileH2Expanded::list_t::const_iterator pos;
+  FileH2Expanded::list_t::const_iterator lastPos;
   fileH2.findPositionLocus(locus, pos, lastPos);
 
-  std::vector<FileH2::list_t::const_iterator> candidates;
+  std::vector<FileH2Expanded::list_t::const_iterator> candidates;
   while(pos != lastPos){
     for(auto genotypes : possibleGenotypesInH2){
       std::vector<bool> allGenotypesIn(numberAllelesLHS, false);
       auto it_allGenotypesIn = allGenotypesIn.begin();
       for(auto genotype : genotypes){
 	for(auto element : *pos){
-	  std::cout << genotype <<"=" <<element << std::endl;
 	  if(genotype == element){
-	    std::cout << "check" << std::endl;
 	    *it_allGenotypesIn = true;
 	    break;
 	  }
@@ -295,6 +300,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
       }//for element
     }//for candidates
   }//if candidates empty
+  */
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 

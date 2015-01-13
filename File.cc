@@ -128,11 +128,16 @@ void FileH2Expanded::readFile(){
   auto pos = list.cbegin();
   std::string line;
   while(std::getline(file, line)){
-    std::vector<std::string> elementsInLine = split(line, '\t');
+    std::stringstream ss(line);
+    std::string entry;
+    std::vector<std::string> blocks;
+    while(ss >> entry){
+      blocks.push_back(entry);
+    }
     std::vector<std::vector<std::string>> H2line;
-    for(auto elementInLine : elementsInLine){
-      std::vector<std::string> splittedElement = split(elementInLine, ',');
-      H2line.push_back(splittedElement);      
+    for(auto block : blocks){
+      std::vector<std::string> splittedBlock = split(block, ',');
+      H2line.push_back(splittedBlock);      
     }
     list.push_back(H2line);
 

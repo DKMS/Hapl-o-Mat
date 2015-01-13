@@ -76,7 +76,7 @@ class UnphasedLocus : public Locus{
   bool doH2Filter;
   strVecArr_t unphasedLocus;
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtBothLocusPositions;
-  static FileH2 fileH2;
+  static FileH2Expanded fileH2;
 };
 
 #endif
