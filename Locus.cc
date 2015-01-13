@@ -243,7 +243,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
     }
     std::cout << std::endl;
   }
-  /*
+
   //search H2 file
   //look for agreement between an H2-line and a possible line in possibleGenotypesInH2.
   //Therefore pick a vector of possibleGenotypesInH2 and find each element/genotype in one of the blocks of the H2-line.
@@ -300,7 +300,6 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
       }//for element
     }//for candidates
   }//if candidates empty
-  */
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 
