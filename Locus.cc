@@ -132,9 +132,8 @@ void UnphasedLocus::resolve(){
       it_codesAtBothLocusPositions ++;
     }//for locusPosition
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
-      unphasedLocus = codesAtBothLocusPositions;
       strArrVec_t in_phasedLocus;
-      H2Filter(in_phasedLocus);
+      H2Filter(in_phasedLocus, codesAtBothLocusPositions);
       if(!in_phasedLocus.empty()){
 	type = reportType::H2;
 	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
@@ -142,7 +141,6 @@ void UnphasedLocus::resolve(){
 	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
       }
       else{
-	//intermediate
 	doResolve();
 	if(pAllelesAtPhasedLocus.size() == 1)
 	  type = reportType::H1;	  
@@ -197,10 +195,10 @@ void UnphasedLocus::doResolve(){
   removeDuplicates(1./sqrt(2));
 }
 
-void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
+void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBothLocusPositions) const{
 
-  sort(unphasedLocus.begin(),
-       unphasedLocus.end(),
+  sort(codesAtBothLocusPositions.begin(),
+       codesAtBothLocusPositions.end(),
        [](
 	  const strVec_t listOfAlleles1,
 	  const strVec_t listOfAlleles2)
@@ -209,8 +207,8 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
        }
        );
 
-  size_t numberAllelesLHS = unphasedLocus.at(0).size();
-  size_t numberAllelesRHS = unphasedLocus.at(1).size();
+  size_t numberAllelesLHS = codesAtBothLocusPositions.at(0).size();
+  size_t numberAllelesRHS = codesAtBothLocusPositions.at(1).size();
   std::vector<std::vector<size_t>> combinations;
   buildCombinations(combinations,
 		    numberAllelesRHS,
@@ -220,10 +218,10 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus){
   for(auto combination : combinations){
     strVec_t genotypeCombination;
     genotypeCombination.reserve(numberAllelesLHS);
-    auto alleleLHS = unphasedLocus.at(0).cbegin();
+    auto alleleLHS = codesAtBothLocusPositions.at(0).cbegin();
     for(auto element : combination){
       std::string genotype;
-      std::string alleleRHS = unphasedLocus.at(1).at(element);
+      std::string alleleRHS = codesAtBothLocusPositions.at(1).at(element);
       if(*alleleLHS < alleleRHS){
 	genotype = *alleleLHS;
 	genotype += "+";
