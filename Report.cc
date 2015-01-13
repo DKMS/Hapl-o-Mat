@@ -273,8 +273,6 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 	expandAlleleWithLetterAtTheEnd(newCode2, newCodes);
       }//for splittedCode
   }//else
-  for(auto it: newCodes)
-    std::cout << it << std::endl;
 }
 
 void HReport::expandAlleleWithLetterAtTheEnd(const std::string code,
