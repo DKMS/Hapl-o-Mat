@@ -81,6 +81,16 @@ class FileGTog : public File<std::unordered_map<std::string, std::string>>{
   void readFile();
 };
 
+class FilegToG : public File<std::unordered_map<std::string, std::string>>{
+
+ public:
+  explicit FilegToG(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+    readFile();
+  }
+
+ private:
+  void readFile();
+};
 
 class FileAlleles : public File<std::vector<std::string>>{
 

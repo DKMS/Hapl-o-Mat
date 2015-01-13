@@ -6,7 +6,7 @@
 
 FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1G.txt", 200);
-FilegOrGToAlleles Alleleg::filegToAlleles("data/H1g.txt", 200);
+FilegToG Alleleg::filegToG("data/H1_Uebersetzung_GNomenklatur.txt", 200);
 FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt", 200);
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
