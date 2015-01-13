@@ -7,7 +7,7 @@
 FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1G.txt", 200);
 FilegOrGToAlleles Alleleg::filegToAlleles("data/H1g.txt", 200);
-FilegOrGToAlleles AlleleG::fileGToAlleles("data/H1G.txt", 200);
+FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt", 200);
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
@@ -232,7 +232,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTog(){
 }
 
 std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
-
+  /*
   strVec_t codes;
   auto itGToAlleles = fileGToAlleles.getList().find(code);
   if(itGToAlleles == fileGToAlleles.getList().cend()){
@@ -273,6 +273,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
   }
 
   return listOfAllPAlleleg;
+  */
 }
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTog(){

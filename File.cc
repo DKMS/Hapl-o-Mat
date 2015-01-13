@@ -117,6 +117,33 @@ void FileAlleles::readFile(){
   file.close();
 }
 
+void FileGTog::readFile(){
+
+  std::cout << "Read in file " << fileName << std::endl;
+  
+  std::ifstream file;
+  openFileToRead(fileName, file);
+
+  std::string line;
+  while(std::getline(file, line)){
+    std::stringstream ss(line);
+    std::string key;
+    std::string val;
+    ss >> key >> val;
+    std::pair<list_t::iterator, bool> inserted = list.emplace(key, val);
+    if(! inserted.second){
+      std::cerr << "In file"
+		<< fileName
+		<< " key "
+		<< key
+		<< " already occupied. "
+		<< std::endl;
+    }
+  }//while
+  
+  file.close();
+}
+
 void FileH2Expanded::readFile(){
 
   std::cout << "Read in file " << fileName << std::endl;
