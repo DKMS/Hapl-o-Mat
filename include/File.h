@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <map>
 #include <vector>
+#include <iostream>
 
 template <class T>
 class File{
@@ -20,12 +21,18 @@ class File{
   const T & getList(){return list;}
   void findPositionLocus(const std::string & locus, typename T::const_iterator & pos, typename T::const_iterator & lastPos) const{
     auto itPos = locusPosition.find(locus);
-    pos = itPos->second;
-    itPos ++;
-    if(itPos == locusPosition.cend())
+    if(itPos == locusPosition.cend()){
+      pos = list.cend();
       lastPos = list.cend();
-    else
-      lastPos = itPos->second;
+    }
+    else{
+      pos = itPos->second;
+      itPos ++;
+      if(itPos == locusPosition.cend())
+	lastPos = list.cend();
+      else
+	lastPos = itPos->second;
+    }
   }
   std::string getFileName() const {return fileName;}
 
