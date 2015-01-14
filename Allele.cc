@@ -124,6 +124,7 @@ std::string Allele::printCodePrecision(const codePrecision precision){
     }
   case Allele::codePrecision::asItIs:
     {
+      out = "asItIs";
       break;
     }
   }
