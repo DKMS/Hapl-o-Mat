@@ -273,6 +273,17 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 	expandAlleleWithLetterAtTheEnd(newCode2, newCodes);
       }//for splittedCode
   }//else
+  if(newCodes.empty()){
+    std::cerr << "Did not find allele from multi allele code "
+	     << nmdpCode
+	     << " in allAlleles.txt. Please update allAlleles.txt."
+	     <<std::endl;
+    exit(EXIT_FAILURE);
+  }
+  std::cout << "huhu" << std::endl;
+  std::cout << newCodes.size() << std::endl;
+  for(auto it : newCodes)
+    std::cout << it << std::endl;
 }
 
 void HReport::expandAlleleWithLetterAtTheEnd(const std::string code,
