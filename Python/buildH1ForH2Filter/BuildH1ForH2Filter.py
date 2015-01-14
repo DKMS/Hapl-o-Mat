@@ -1,14 +1,8 @@
 #Christian Schaefer
 #Nov 2014
-#Add 2 digit form of 4 digit alleles to line. Reads in H1.txt, looks for 4 digit alleles in line, cuts them to 2 digit and adds the 2 digit variant to the end of the line. Writes to new file H1G.txt
+#Add 2/4/6 digit form of 4/6/8 digit alleles to line. Reads in H1.txt, looks for 4/6/8 digit alleles in line, cuts them to 2/4/6 digit and adds the 2 digit variant to the end of the line. Writes to new file H1ForH2Filter.txt
 
-def isAlleleWith8Digits(allele):
-    if allele.count(':') == 3:
-        return True
-    else:
-        return False
-
-with open('H1G.txt', 'w') as outFile:
+with open('H1ForH2Filter.txt', 'w') as outFile:
     with open('H1.txt') as file:
         for line in file:
             line = line.rstrip('\r\n')
@@ -16,9 +10,15 @@ with open('H1G.txt', 'w') as outFile:
             alleles = line.split()
             listOfShorterAlleles = set()
             for allele in alleles:
-                if isAlleleWith8Digits(allele):
-                    shorterAllele = allele.rsplit(':',1)
-                    listOfShorterAlleles.add(shorterAllele[0])
+                if allele.count(':') == 3:
+                    shorterAllele = allele.rsplit(':', 1)[0]
+                    listOfShorterAlleles.add(shorterAllele)
+                    shorterAllele = shorterAllele.rsplit(':', 1)[0]
+                    listOfShorterAlleles.add(shorterAllele)
+                if allele.count(':') == 2:
+                    shorterAllele = allele.rsplit(':', 1)[0]
+                    listOfShorterAlleles.add(shorterAllele)
+
             outFile.write(line + '\t' + '\t'.join(listOfShorterAlleles) + '\n')
         
 
