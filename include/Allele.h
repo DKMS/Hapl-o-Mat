@@ -15,6 +15,7 @@ class Allele{
     g,
     fourDigit,
     G,
+    GForH2Filter,
     sixDigit,
     eightDigit,
     asItIs
@@ -36,7 +37,7 @@ class Allele{
 
   virtual std::vector<std::shared_ptr<Allele>> translateTog() = 0; 
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo4d() = 0;
-  virtual std::vector<std::shared_ptr<Allele>> translateToG() = 0;
+  virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File) = 0;
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d() = 0;
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d() = 0;
 
@@ -44,7 +45,7 @@ class Allele{
   static Allele::codePrecision identifyCodePrecision(const std::string code);
   std::vector<std::shared_ptr<Allele>> translate();
   std::string allelesTog();
-  std::string allelesToG();
+  std::string allelesToG(const FileAllelesTogOrG & whichH1File);
   std::string fourDigitOrgToG();
   static std::string printCodePrecision(const codePrecision precision);
   double getFrequency() const {return frequency;}
@@ -62,6 +63,7 @@ class Allele{
   double frequency;
   static FileAllelesTogOrG fileAllelesTog;
   static FileAllelesTogOrG fileAllelesToG;
+  static FileAllelesTogOrG fileAllelesToGForH2Filter;
   static FilegToG filegToG;
 };
 
@@ -82,15 +84,15 @@ class Alleleg : public Allele{
 					 const double in_frequency)
     {
       std::shared_ptr<Allele> pAllele = std::make_shared<Alleleg> (in_code,
-								    in_precision,
-								    in_wantedPrecision,
-								    in_frequency);
+								   in_precision,
+								   in_wantedPrecision,
+								   in_frequency);
       return pAllele;
     }
 
   virtual std::vector<std::shared_ptr<Allele>> translateTog();
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo4d(){};
-  virtual std::vector<std::shared_ptr<Allele>> translateToG();
+  virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d(){};
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){};  
 
@@ -119,7 +121,7 @@ class Allele4d : public Allele{
 
   virtual std::vector<std::shared_ptr<Allele>> translateTog();
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo4d();
-  virtual std::vector<std::shared_ptr<Allele>> translateToG();
+  virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d();
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();  
 
@@ -152,7 +154,7 @@ class AlleleG : public Allele{
   
   virtual std::vector<std::shared_ptr<Allele>> translateTog();
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo4d(){};
-  virtual std::vector<std::shared_ptr<Allele>> translateToG();
+  virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d(){};
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){};  
 
@@ -182,7 +184,7 @@ class Allele6d : public Allele{
   
   virtual std::vector<std::shared_ptr<Allele>> translateTog();
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo4d(){};
-  virtual std::vector<std::shared_ptr<Allele>> translateToG();
+  virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d(){};
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){};  
   
@@ -211,7 +213,7 @@ class Allele8d : public Allele{
 
   virtual std::vector<std::shared_ptr<Allele>> translateTog();
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo4d(){};
-  virtual std::vector<std::shared_ptr<Allele>> translateToG();
+  virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo6d(){};
   //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){};  
   
