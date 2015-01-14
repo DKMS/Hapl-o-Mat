@@ -141,19 +141,17 @@ void UnphasedLocus::resolve(){
 	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
       }
       else{
+	type = reportType::I;
 	doResolve();
-	if(pAllelesAtPhasedLocus.size() == 1)
-	  type = reportType::H1;	  
-	else
-	  type = reportType::I;
       }
     }//if locus sizes > 1
     else{
-      doResolve();
-      if(pAllelesAtPhasedLocus.size() == 1)
+      if(codesAtBothLocusPositions.at(0).size() == 1 && codesAtBothLocusPositions.at(1).size() == 1)
 	type = reportType::H1;	  
       else
 	type = reportType::I;
+
+      doResolve();
     }
   }//if doH2Filter
   else{
