@@ -213,6 +213,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBot
 		    numberAllelesLHS);
 
   strVecVec_t possibleGenotypesInH2;
+  possibleGenotypesInH2.reserve(combinations.size());
   for(auto combination : combinations){
     strVec_t genotypeCombination;
     genotypeCombination.reserve(numberAllelesLHS);
