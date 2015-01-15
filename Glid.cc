@@ -10,7 +10,7 @@ FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt", 12000);
 void AllPossibleGenotypes::buildGenotypes(const std::string locus){
 
   std::cout << "Build list of all possible genotypes for locus " << locus << std::endl;
-  
+
   FileAlleles::list_t::const_iterator pos;
   FileAlleles::list_t::const_iterator lastPos;
   allAlleles.findPositionLocus(locus, pos, lastPos);
@@ -21,9 +21,11 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus){
     in_unphasedLocus.at(1).push_back(*pos);
   }
 
-  UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision, false);
-  unphasedLocus.resolve();
-  unphasedLocus.reduce(genotypes);
+  if(!(in_unphasedLocus.at(0).empty() || in_unphasedLocus.at(1).empty())){
+    UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision, false);
+    unphasedLocus.resolve();
+    unphasedLocus.reduce(genotypes);
+  }
 }
 
 void GlidFile::reserveSize(){
