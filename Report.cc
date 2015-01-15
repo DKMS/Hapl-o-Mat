@@ -280,10 +280,6 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 	     <<std::endl;
     exit(EXIT_FAILURE);
   }
-  std::cout << "huhu" << std::endl;
-  std::cout << newCodes.size() << std::endl;
-  for(auto it : newCodes)
-    std::cout << it << std::endl;
 }
 
 void HReport::expandAlleleWithLetterAtTheEnd(const std::string code,
