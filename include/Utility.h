@@ -3,11 +3,16 @@
 
 #include <fstream>
 #include <memory>
+#include <chrono>
 
 #include "Typedefs.h"
 #include "Allele.h"
 
 const double ZERO = 1e-14;
+
+std::chrono::high_resolution_clock::time_point getTime();
+size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1,
+			 const std::chrono::high_resolution_clock::time_point t2);
 
 void openFileToRead(const std::string fileName, std::ifstream & file);
 void openFileToWrite(const std::string fileName, std::ofstream & file);

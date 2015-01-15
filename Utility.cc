@@ -4,6 +4,14 @@
 
 #include "Utility.h"
 
+std::chrono::high_resolution_clock::time_point getTime(){
+  return std::chrono::high_resolution_clock::now();
+}
+
+size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1,
+			 const std::chrono::high_resolution_clock::time_point t2){
+  return std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+}
 
 void openFileToRead(const std::string fileName, std::ifstream & file){
 
