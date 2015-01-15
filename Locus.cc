@@ -117,9 +117,7 @@ void UnphasedLocus::resolve(){
 			       return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
 			     });
 	  if(pos == allPAllelesAtOneLocusPosition.end()){
-	    allPAllelesAtOneLocusPosition.insert(allPAllelesAtOneLocusPosition.end(),
-						 pAllelesAtOneLocusPosition.begin(),
-						 pAllelesAtOneLocusPosition.end());
+	    allPAllelesAtOneLocusPosition.push_back(pAlleleAtOneLocusPosition);
 	  }
 	}
       }//for code
