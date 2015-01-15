@@ -10,7 +10,6 @@ FileH2Expanded UnphasedLocus::fileH2("data/H24d.txt", 146000);
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
   for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
-
     strArr_t genotype;
     double genotypeFrequency = 1.;
     for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++ ){
@@ -169,17 +168,16 @@ void UnphasedLocus::doResolve(){
       std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, alleleFrequency);
       std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
       for(auto pAlleleAtOneLocusPosition : pAllelesAtOneLocusPosition){
-	auto pos = find_if(allPAllelesAtOneLocusPosition.begin(),
-			   allPAllelesAtOneLocusPosition.end(),
-			   [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> allele)
-			   {
-			     return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
-			   });
-	
-	if(pos == allPAllelesAtOneLocusPosition.end()){
-	  allPAllelesAtOneLocusPosition.insert(allPAllelesAtOneLocusPosition.end(),
-					       pAllelesAtOneLocusPosition.begin(),
-					       pAllelesAtOneLocusPosition.end());
+	auto pos =
+	  find_if(allPAllelesAtOneLocusPosition.cbegin(),
+		  allPAllelesAtOneLocusPosition.cend(),
+		  [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> allele)
+		  {
+		    return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
+		  });
+
+	if(pos == allPAllelesAtOneLocusPosition.cend()){
+	  allPAllelesAtOneLocusPosition.push_back(pAlleleAtOneLocusPosition);
 	}
 	else{
 	  (*pos)->addFrequency(pAlleleAtOneLocusPosition->getFrequency());
