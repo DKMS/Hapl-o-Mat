@@ -11,6 +11,8 @@ FileAllelesTogOrG Allele::fileAllelesToGForH2Filter("data/H1ForH2Filter.txt", 20
 FilegToG Allele::filegToG("data/H1_Uebersetzung_GNomenklatur.txt", 200);
 FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt", 200);
 
+FilegOrGToAlleles Allele::fileGToAlleles("data/H1.txt", 200);
+
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
   std::shared_ptr<Allele> pAllele;
@@ -141,7 +143,7 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
     }
   case Allele::codePrecision::fourDigit:
     {
-      //      return this->translateTo4d();
+      return this->translateTo4d();
       break;
     }
   case Allele::codePrecision::G:
@@ -305,6 +307,23 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
   return listOfAllPAlleleg;
 }
 
+strVec_t Allele::GToAlleles(){
+
+  strVec_t newCodes;
+  auto itFileGToAlleles = fileGToAlleles.getList().find(code);
+  if(itFileGToAlleles == fileGToAlleles.getList().cend()){
+    std::cout << "Could not find G-Code "
+              << code
+              << std::endl;
+    exit (EXIT_FAILURE);
+  }
+  else{
+    newCodes = itFileGToAlleles->second;
+  }
+
+  return newCodes;
+}
+
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTog(){
 
   std::string codeInPrecision =  allelesTog();
@@ -389,4 +408,59 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateToG(const FileAllelesTog
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
   listOfPAlleleG.push_back(pAlleleG);
   return listOfPAlleleG;
+}
+
+std::vector<std::shared_ptr<Allele>> Allele4d::translateTo4d(){
+  
+  std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code, frequency);
+  std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
+  listOfPAllele4d.push_back(pAllele4d);
+  return listOfPAllele4d;
+}
+
+std::vector<std::shared_ptr<Allele>> Alleleg::translateTo4d(){
+
+  code = fourDigitOrgToG();
+  strVec_t newCodes = GToAlleles();
+  std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
+  frequency /= static_cast<double>(newCodes.size());
+  for(auto newCode : newCodes){
+    std::string shorterNewCode = cutCode(newCode, 1);
+    std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
+    std::cout << shorterNewCode << "  " << frequency << std::endl;
+    listOfPAllele4d.push_back(pAllele4d);
+  }
+  return listOfPAllele4d;
+}
+
+std::vector<std::shared_ptr<Allele>> AlleleG::translateTo4d(){
+
+  strVec_t newCodes = GToAlleles();
+  std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
+  frequency /= static_cast<double>(newCodes.size());
+  for(auto newCode : newCodes){
+    std::string shorterNewCode = cutCode(newCode, 1);
+    std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
+    std::cout << shorterNewCode << "  " << frequency << std::endl;
+    listOfPAllele4d.push_back(pAllele4d);
+  }
+  return listOfPAllele4d;
+}
+
+std::vector<std::shared_ptr<Allele>> Allele6d::translateTo4d(){
+
+  std::string code4d =  cutCode(code, 1);
+  std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code4d, frequency);
+  std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
+  listOfPAllele4d.push_back(pAllele4d);
+  return listOfPAllele4d;
+}
+
+std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
+
+  std::string code4d =  cutCode(code, 1);
+  std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code4d, frequency);
+  std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
+  listOfPAllele4d.push_back(pAllele4d);
+  return listOfPAllele4d;
 }
