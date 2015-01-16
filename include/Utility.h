@@ -63,6 +63,7 @@ bool checkNMDPCode(const std::string code);
 std::string findNMDPCode(const std::string code);
 inline std::string getLocus(const std::string & code){return leftOfFirstDelim(code, '*');}
 std::string cutCode(const std::string &s, const size_t toNumberColons);
+std::string cutCodeKeepingLastLetter(const std::string &s, const size_t toNumberColons);
 
 void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
 		       const size_t n,

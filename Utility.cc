@@ -112,6 +112,23 @@ std::string cutCode(const std::string &s, const size_t toNumberColons){
   return out;
 }
 
+std::string cutCodeKeepingLastLetter(const std::string &s, const size_t toNumberColons){
+
+  size_t numberColons = std::count(s.begin(), s.end(), ':');
+  std::string out = s;
+
+  if(numberColons > toNumberColons){
+    for(size_t colon = 0; colon < numberColons - toNumberColons; colon++){
+      out = leftOfLastDelim(out, ':');
+    }
+    char lastLetter = s.back();
+    if(isLetter(lastLetter))
+      out += lastLetter;
+  }
+
+  return out;
+}
+
 void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
 		       const size_t n,
 		       const size_t k){ 

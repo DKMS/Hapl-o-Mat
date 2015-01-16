@@ -425,7 +425,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTo4d(){
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
   frequency /= static_cast<double>(newCodes.size());
   for(auto newCode : newCodes){
-    std::string shorterNewCode = cutCode(newCode, 1);
+    std::string shorterNewCode = cutCodeKeepingLastLetter(newCode, 1);
     std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
     std::cout << shorterNewCode << "  " << frequency << std::endl;
     listOfPAllele4d.push_back(pAllele4d);
@@ -439,7 +439,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo4d(){
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
   frequency /= static_cast<double>(newCodes.size());
   for(auto newCode : newCodes){
-    std::string shorterNewCode = cutCode(newCode, 1);
+    std::string shorterNewCode = cutCodeKeepingLastLetter(newCode, 1);
     std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
     std::cout << shorterNewCode << "  " << frequency << std::endl;
     listOfPAllele4d.push_back(pAllele4d);
@@ -449,7 +449,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo4d(){
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTo4d(){
 
-  std::string code4d =  cutCode(code, 1);
+  std::string code4d =  cutCodeKeepingLastLetter(code, 1);
   std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code4d, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
   listOfPAllele4d.push_back(pAllele4d);
@@ -458,7 +458,7 @@ std::vector<std::shared_ptr<Allele>> Allele6d::translateTo4d(){
 
 std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
 
-  std::string code4d =  cutCode(code, 1);
+  std::string code4d =  cutCodeKeepingLastLetter(code, 1);
   std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code4d, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
   listOfPAllele4d.push_back(pAllele4d);
