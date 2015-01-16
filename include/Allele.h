@@ -44,6 +44,7 @@ class Allele{
   static std::shared_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency);
   static Allele::codePrecision identifyCodePrecision(const std::string code);
   std::vector<std::shared_ptr<Allele>> translate();
+  std::vector<std::shared_ptr<Allele>>::iterator ispAlleleInList(std::vector<std::shared_ptr<Allele>> & listOfpAlleles) const;
   std::string allelesTog();
   std::string allelesToG(const FileAllelesTogOrG & whichH1File);
   std::string fourDigitOrgToG();

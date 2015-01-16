@@ -176,6 +176,18 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
   }//switch                                             
 }
 
+std::vector<std::shared_ptr<Allele>>::iterator Allele::ispAlleleInList (std::vector<std::shared_ptr<Allele>> & listOfpAlleles) const{
+    
+  std::string alleleCode = code;
+  std::vector<std::shared_ptr<Allele>>::iterator pos = find_if(listOfpAlleles.begin(),
+							       listOfpAlleles.end(),
+							       [alleleCode](const std::shared_ptr<Allele> allele)
+							       {
+								 return alleleCode == allele->getCode();
+							       });
+  return pos;
+}
+
 std::string Allele::allelesTog(){
 
   std::string codeInPrecision;
@@ -427,7 +439,11 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTo4d(){
   for(auto newCode : newCodes){
     std::string shorterNewCode = cutCodeKeepingLastLetter(newCode, 1);
     std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
-    listOfPAllele4d.push_back(pAllele4d);
+    auto pos = pAllele4d->ispAlleleInList(listOfPAllele4d);
+    if(pos == listOfPAllele4d.cend())
+      listOfPAllele4d.push_back(pAllele4d);
+    else
+      (*pos)->addFrequency(pAllele4d->getFrequency());
   }
   return listOfPAllele4d;
 }
@@ -440,7 +456,11 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo4d(){
   for(auto newCode : newCodes){
     std::string shorterNewCode = cutCodeKeepingLastLetter(newCode, 1);
     std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
-    listOfPAllele4d.push_back(pAllele4d);
+    auto pos = pAllele4d->ispAlleleInList(listOfPAllele4d);
+    if(pos == listOfPAllele4d.cend())
+      listOfPAllele4d.push_back(pAllele4d);
+    else
+      (*pos)->addFrequency(pAllele4d->getFrequency());
   }
   return listOfPAllele4d;
 }
