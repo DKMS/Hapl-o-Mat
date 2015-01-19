@@ -65,41 +65,12 @@ void PhasedLocus::resolve(){
   }
   pAllelesAtPhasedLocus = std::move(newPAllelesAtPhasedLocus);
 
-  for(auto it : pAllelesAtPhasedLocus){
-    for(auto it2 : it){
-      std::cout << it2->getCode() << "  ";
-    }
-    std::cout << std::endl;
-    for(auto it2 : it){
-      std::cout << it2->getFrequency() << "  ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-  std::cout << std::endl;
-  
-  for(auto it : pAllelesAtPhasedLocus){
-    for(auto it2 : it){
-      std::cout << it2->getCode() << "  ";
-    }
-    std::cout << std::endl;
-    for(auto it2 : it){
-      std::cout << it2->getFrequency() << "  ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-  std::cout << std::endl;
-
   type = reportType::H0;
 }
 
 void UnphasedLocus::resolve(){
   
   if(doH2Filter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
-    for(auto it : unphasedLocus)
-      for(auto it2 : it)
-	std::cout << it2 << std::endl;
 
     strVecArr_t codesAtBothLocusPositions;
     auto it_codesAtBothLocusPositions = codesAtBothLocusPositions.begin();
@@ -130,12 +101,6 @@ void UnphasedLocus::resolve(){
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
       strArrVec_t in_phasedLocus;
       H2Filter(in_phasedLocus, codesAtBothLocusPositions);
-      for(auto it : in_phasedLocus){
-	for(auto it2 : it){
-	  std::cout << it2 << std::endl;
-	}
-	std::cout <<std::endl;
-      }
       if(!in_phasedLocus.empty()){
 	type = reportType::H2;
 	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
