@@ -12,7 +12,7 @@
 
 FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt", 271600);
 FileAlleles Report::fileWithAllAlleles("data/allAlleles.txt", 12000);
-std::unordered_map<std::string, std::vector<std::vector<std::pair<strArr_t, double>>>> HReport::lociAlreadyDone;
+std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
 
 std::string Report::buildPhenotypeCode() const{
 
@@ -354,7 +354,6 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
     auto pos = lociAlreadyDone.find(locusCombination);
     if(pos == lociAlreadyDone.cend()){
-      std::cout << locusCombination << std::endl;
       strVecArr_t locusPositions;
       size_t counter = 0;
       for(auto code : locus){
@@ -371,14 +370,18 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       
       std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter));
       pLocus->resolve();
+      lociAlreadyDone.emplace(locusCombination, pLocus);
+
       types.push_back(pLocus->getType());
       std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
       pLocus->reduce(genotypesAtLocus);
       genotypesAtLoci.push_back(genotypesAtLocus);
-      lociAlreadyDone.emplace(locusCombination, genotypesAtLoci);
     }
     else{
-      genotypesAtLoci = pos->second;
+      types.push_back(pos->second->getType());
+      std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+      pos->second->reduce(genotypesAtLocus);
+      genotypesAtLoci.push_back(genotypesAtLocus);
     }
   }//for inLoci
   
