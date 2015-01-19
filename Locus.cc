@@ -12,7 +12,7 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
   for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
     strArr_t genotype;
     double genotypeFrequency = 1.;
-    for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++ ){
+    for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
       genotype.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
       genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
     }
@@ -22,28 +22,58 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
 void PhasedLocus::resolve(){
 
+  double genotypeFrequency = 1. / sqrt(static_cast<double>(phasedLocus.size()));
   for(auto genotype : phasedLocus){
-    double genotypeFrequency = 1. / static_cast<double>(phasedLocus.size());
     std::vector<std::vector<std::shared_ptr<Allele>>> allpAllelesAtBothLocusPositions;
     for(auto code : genotype){
       std::shared_ptr<Allele> pAllele = Allele::createAllele(code, wantedPrecision, genotypeFrequency);
       std::vector<std::shared_ptr<Allele>> pAllelesAtFirstGenotype = pAllele->translate();
       allpAllelesAtBothLocusPositions.push_back(pAllelesAtFirstGenotype);
     }//for LocusPosition
+
     cartesianProduct(pAllelesAtPhasedLocus, allpAllelesAtBothLocusPositions);    
   }//for phasedLocus
 
+  //create a hard copy of pAlleleAtPhasedLocus in order to be able to modify alleles especially frequencies separately
+  std::vector<std::vector<std::shared_ptr<Allele>>> newPAllelesAtPhasedLocus;
+  for(auto genotype : pAllelesAtPhasedLocus){
+    std::vector<std::shared_ptr<Allele>> newGenotype;
+    for(auto allele : genotype){
+      std::shared_ptr<Allele > newAllele = Allele::createAllele(allele->getCode(), allele->getWantedPrecision(), allele->getFrequency());
+      newGenotype.push_back(newAllele);
+    }
+    newPAllelesAtPhasedLocus.push_back(newGenotype);
+  }
+  pAllelesAtPhasedLocus = std::move(newPAllelesAtPhasedLocus);
+
+  for(auto it : pAllelesAtPhasedLocus){
+    for(auto it2 : it){
+      std::cout << it2->getCode() << "  ";
+    }
+    std::cout << std::endl;
+    for(auto it2 : it){
+      std::cout << it2->getFrequency() << "  ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << std::endl;
+  
   removeDuplicates(1.);
 
-  for(auto genotype = pAllelesAtPhasedLocus.begin();
-      genotype != pAllelesAtPhasedLocus.end();
-      genotype ++){
-    for(auto allele = genotype->begin();
-	allele != genotype->end();
-	allele ++){
-      (*allele)->sqrtFrequency();
+  for(auto it : pAllelesAtPhasedLocus){
+    for(auto it2 : it){
+      std::cout << it2->getCode() << "  ";
     }
+    std::cout << std::endl;
+    for(auto it2 : it){
+      std::cout << it2->getFrequency() << "  ";
+    }
+    std::cout << std::endl;
   }
+  std::cout << std::endl;
+  std::cout << std::endl;
+
   type = reportType::H0;
 }
 
@@ -100,8 +130,12 @@ void Locus::removeDuplicates(const double factor){
 }
 
 void UnphasedLocus::resolve(){
-
+  
   if(doH2Filter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
+    for(auto it : unphasedLocus)
+      for(auto it2 : it)
+	std::cout << it2 << std::endl;
+
     strVecArr_t codesAtBothLocusPositions;
     auto it_codesAtBothLocusPositions = codesAtBothLocusPositions.begin();
     for(auto locusPosition : unphasedLocus){
@@ -131,6 +165,12 @@ void UnphasedLocus::resolve(){
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
       strArrVec_t in_phasedLocus;
       H2Filter(in_phasedLocus, codesAtBothLocusPositions);
+      for(auto it : in_phasedLocus){
+	for(auto it2 : it){
+	  std::cout << it2 << std::endl;
+	}
+	std::cout <<std::endl;
+      }
       if(!in_phasedLocus.empty()){
 	type = reportType::H2;
 	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
