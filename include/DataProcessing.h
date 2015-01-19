@@ -74,7 +74,11 @@ class GLDataProcessing : public DataProcessing{
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
     booleanLociToDo(),
-    glid(glidFileName, parameters.getWantedPrecision(), parameters.getLociToDo(), parameters.getDoH2Filter()),
+    glid(glidFileName,
+	 parameters.getWantedPrecision(),
+	 parameters.getLociToDo(),
+	 parameters.getDoH2Filter(),
+	 parameters.getResolveUnknownGenotype()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();

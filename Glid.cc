@@ -59,11 +59,13 @@ void GlidFile::readAndResolveFile(){
     }//!=0
   }//while
 
-  size_t pos = 0;
-  for(auto locus : lociToDo){
-    if(locus != "NONE")
-      possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, wantedPrecision));
-    pos ++;
+  if(resolveUnknownGenotypes){
+    size_t pos = 0;
+    for(auto locus : lociToDo){
+      if(locus != "NONE")
+	possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, wantedPrecision));
+      pos ++;
+    }
   }
 }
 
