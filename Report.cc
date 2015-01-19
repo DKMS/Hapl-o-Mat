@@ -202,6 +202,17 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     }//else code=0
   }//for inLoci
 
+  for(auto locus : genotypesAtLoci){
+    if(locus.empty()){
+      discardReport = true;	    
+      std::cout << "Report "
+		<< id
+		<< " contains empty loci."
+		<< std::endl;
+      break;
+    }
+  }
+  
   if(!discardReport){
     double numberOfReports = 1.;
     for(auto locus : genotypesAtLoci)
