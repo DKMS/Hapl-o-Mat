@@ -12,6 +12,7 @@
 
 FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt", 271600);
 FileAlleles Report::fileWithAllAlleles("data/allAlleles.txt", 12000);
+std::unordered_map<std::string, std::vector<std::vector<std::pair<strArr_t, double>>>> HReport::lociAlreadyDone;
 
 std::string Report::buildPhenotypeCode() const{
 
@@ -344,26 +345,41 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
   for(auto locus : inLoci){
-    strVecArr_t locusPositions;
-    size_t counter = 0;
+    std::string locusCombination = "";
     for(auto code : locus){
-      strVec_t codes;
-      if(checkNMDPCode(code)){
-	resolveNMDPCode(code, codes);
-      }
-      else{
-	codes.push_back(code);
-      }
-      locusPositions.at(counter) = codes;
-      counter ++;
+      locusCombination += code;
+      locusCombination += "+";    
     }
-    
-    std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter));
-    pLocus->resolve();
-    types.push_back(pLocus->getType());
-    std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-    pLocus->reduce(genotypesAtLocus);
-    genotypesAtLoci.push_back(genotypesAtLocus);
+    locusCombination.pop_back();
+
+    auto pos = lociAlreadyDone.find(locusCombination);
+    if(pos == lociAlreadyDone.cend()){
+      std::cout << locusCombination << std::endl;
+      strVecArr_t locusPositions;
+      size_t counter = 0;
+      for(auto code : locus){
+	strVec_t codes;
+	if(checkNMDPCode(code)){
+	  resolveNMDPCode(code, codes);
+	}
+	else{
+	  codes.push_back(code);
+	}
+	locusPositions.at(counter) = codes;
+	counter ++;
+      }
+      
+      std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter));
+      pLocus->resolve();
+      types.push_back(pLocus->getType());
+      std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+      pLocus->reduce(genotypesAtLocus);
+      genotypesAtLoci.push_back(genotypesAtLocus);
+      lociAlreadyDone.emplace(locusCombination, genotypesAtLoci);
+    }
+    else{
+      genotypesAtLoci = pos->second;
+    }
   }//for inLoci
   
   double numberOfReports = 1.;

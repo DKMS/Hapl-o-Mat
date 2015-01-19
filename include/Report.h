@@ -157,6 +157,7 @@ class HReport : public Report{
 
  private:
   strArrVec_t inLoci;
+  static std::unordered_map<std::string, std::vector<std::vector<std::pair<strArr_t, double>>>> lociAlreadyDone;
   static FileNMDPCodes fileNMDPCodes;
 };
 
