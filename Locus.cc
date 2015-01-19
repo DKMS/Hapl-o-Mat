@@ -100,10 +100,11 @@ void UnphasedLocus::resolve(){
     }//for locusPosition
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
       std::vector<FileH2Expanded::list_t::const_iterator> possibleH2Lines;
-      bool h2Possible = H2PreFilter(codesAtBothLocusPositions,
-				    possibleH2Lines);
+      H2PreFilter(codesAtBothLocusPositions,
+		  possibleH2Lines);
       strArrVec_t in_phasedLocus; 
-      if(h2Possible){
+      if(! possibleH2Lines.empty()){
+	std::cout << possibleH2Lines.size() << std::endl;
 	H2Filter(in_phasedLocus,
 		 codesAtBothLocusPositions,
 		 possibleH2Lines);
@@ -165,9 +166,9 @@ void UnphasedLocus::doResolve(){
   buildResolvedPhasedLocus();
 }
 
-bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
+void UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
 				std::vector<FileH2Expanded::list_t::const_iterator> & possibleH2Lines) const{
-
+  
   std::vector<std::pair<std::string, bool>> listOfAllCodes;
   for(auto locusPosition : codesAtBothLocusPositions){
     for(auto code : locusPosition){
@@ -180,7 +181,6 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
   FileH2Expanded::list_t::const_iterator lastPos;
   fileH2.findPositionLocus(locus, pos, lastPos);
 
-  bool possibleH2 = false;
   while(pos < lastPos){
     for(auto block : *pos){
       for(auto element : block){    
@@ -199,7 +199,6 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
 	       {
 		 return element.second;
 	       })){
-      possibleH2 = true;
       possibleH2Lines.push_back(pos);
     }//if
     for(auto code = listOfAllCodes.begin();
@@ -210,8 +209,6 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
 
     pos ++;
   }
-  
-  return possibleH2;
 }
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus,

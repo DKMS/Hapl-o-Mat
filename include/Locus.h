@@ -76,7 +76,7 @@ class UnphasedLocus : public Locus{
   virtual void resolve();
 
   void doResolve();
-  bool H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
+  void H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
 		   std::vector<FileH2Expanded::list_t::const_iterator> & possibleH2Lines) const;
   void H2Filter(strArrVec_t & phasedLocus,
 		strVecArr_t & codesAtBothLocusPositions,
