@@ -99,7 +99,7 @@ void UnphasedLocus::resolve(){
       it_codesAtBothLocusPositions ++;
     }//for locusPosition
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
-      std::vector<strVecVec_t> possibleH2Lines;
+      std::vector<FileH2Expanded::list_t::const_iterator> possibleH2Lines;
       bool h2Possible = H2PreFilter(codesAtBothLocusPositions,
 				    possibleH2Lines);
       strArrVec_t in_phasedLocus; 
@@ -166,7 +166,7 @@ void UnphasedLocus::doResolve(){
 }
 
 bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
-				std::vector<strVecVec_t> & possibleH2Lines) const{
+				std::vector<FileH2Expanded::list_t::const_iterator> & possibleH2Lines) const{
 
   std::vector<std::pair<std::string, bool>> listOfAllCodes;
   for(auto locusPosition : codesAtBothLocusPositions){
@@ -200,7 +200,7 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
 		 return element.second;
 	       })){
       possibleH2 = true;
-      possibleH2Lines.push_back(*pos);
+      possibleH2Lines.push_back(pos);
     }//if
     for(auto code = listOfAllCodes.begin();
 	code != listOfAllCodes.end();
@@ -216,7 +216,7 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus,
 			     strVecArr_t & codesAtBothLocusPositions,
-			     const std::vector<strVecVec_t> & possibleH2Lines) const{
+			     const std::vector<FileH2Expanded::list_t::const_iterator> & possibleH2Lines) const{
 
   sort(codesAtBothLocusPositions.begin(),
        codesAtBothLocusPositions.end(),
@@ -270,7 +270,7 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus,
       std::vector<bool> allGenotypesIn(numberAllelesLHS, false);
       auto it_allGenotypesIn = allGenotypesIn.begin();
       for(auto genotype : genotypes){
-	for(auto block : line){
+	for(auto block : *line){
 	  for(auto element : block){
 	    if(genotype == element){
 	      *it_allGenotypesIn = true;
