@@ -100,6 +100,7 @@ void UnphasedLocus::resolve(){
     }//for locusPosition
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
       strArrVec_t in_phasedLocus;
+      bool h2Possible = H2PreFilter(codesAtBothLocusPositions);
       H2Filter(in_phasedLocus, codesAtBothLocusPositions);
       if(!in_phasedLocus.empty()){
 	type = reportType::H2;
@@ -156,6 +157,54 @@ void UnphasedLocus::doResolve(){
   }
 
   buildResolvedPhasedLocus();
+}
+
+bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions) const{
+
+  std::vector<std::pair<std::string, bool>> listOfAllCodes;
+  for(auto locusPosition : codesAtBothLocusPositions){
+    for(auto code : locusPosition){
+      listOfAllCodes.push_back(std::make_pair(code, false));
+    }
+  }
+  for(auto code : listOfAllCodes)
+    std::cout << code.first << "  " << code.second << std::endl;
+
+  std::string locus = getLocus(listOfAllCodes.cbegin()->first);
+  FileH2Expanded::list_t::const_iterator pos;
+  FileH2Expanded::list_t::const_iterator lastPos;
+  fileH2.findPositionLocus(locus, pos, lastPos);
+
+  bool possibleH2 = false;
+  while(pos < lastPos){
+    for(auto block : *pos){
+      for(auto element : block){    
+	strVec_t splittedGenotype = split(element, '+');
+	for(auto code = listOfAllCodes.begin();
+	    code != listOfAllCodes.end();
+	    code ++){
+	  if(code->first == splittedGenotype.at(0) || code->first == splittedGenotype.at(1))
+	    code->second = true;
+	}
+      }
+    }
+    if (all_of(listOfAllCodes.cbegin(),
+	      listOfAllCodes.cend(),
+	      [](const std::pair<std::string, bool> element)
+	      {
+		return element.second;
+	      })){
+      possibleH2 = true;
+      for(auto block : *pos)
+	for(auto element : block)
+	  std::cout << element << std::endl;
+      break;
+	}
+    else
+      pos ++;
+  }
+
+  return possibleH2;
 }
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBothLocusPositions) const{
