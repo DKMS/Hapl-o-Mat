@@ -99,9 +99,15 @@ void UnphasedLocus::resolve(){
       it_codesAtBothLocusPositions ++;
     }//for locusPosition
     if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
-      strArrVec_t in_phasedLocus;
-      bool h2Possible = H2PreFilter(codesAtBothLocusPositions);
-      H2Filter(in_phasedLocus, codesAtBothLocusPositions);
+      std::vector<strVecVec_t> possibleH2Lines;
+      bool h2Possible = H2PreFilter(codesAtBothLocusPositions,
+				    possibleH2Lines);
+      strArrVec_t in_phasedLocus; 
+      if(h2Possible){
+	H2Filter(in_phasedLocus,
+		 codesAtBothLocusPositions,
+		 possibleH2Lines);
+      }
       if(!in_phasedLocus.empty()){
 	type = reportType::H2;
 	PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
@@ -159,7 +165,8 @@ void UnphasedLocus::doResolve(){
   buildResolvedPhasedLocus();
 }
 
-bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions) const{
+bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
+				std::vector<strVecVec_t> & possibleH2Lines) const{
 
   std::vector<std::pair<std::string, bool>> listOfAllCodes;
   for(auto locusPosition : codesAtBothLocusPositions){
@@ -167,8 +174,6 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions) const{
       listOfAllCodes.push_back(std::make_pair(code, false));
     }
   }
-  for(auto code : listOfAllCodes)
-    std::cout << code.first << "  " << code.second << std::endl;
 
   std::string locus = getLocus(listOfAllCodes.cbegin()->first);
   FileH2Expanded::list_t::const_iterator pos;
@@ -189,25 +194,29 @@ bool UnphasedLocus::H2PreFilter(strVecArr_t & codesAtBothLocusPositions) const{
       }
     }
     if (all_of(listOfAllCodes.cbegin(),
-	      listOfAllCodes.cend(),
-	      [](const std::pair<std::string, bool> element)
-	      {
-		return element.second;
-	      })){
+	       listOfAllCodes.cend(),
+	       [](const std::pair<std::string, bool> element)
+	       {
+		 return element.second;
+	       })){
       possibleH2 = true;
-      for(auto block : *pos)
-	for(auto element : block)
-	  std::cout << element << std::endl;
-      break;
-	}
-    else
-      pos ++;
-  }
+      possibleH2Lines.push_back(*pos);
+    }//if
+    for(auto code = listOfAllCodes.begin();
+	code != listOfAllCodes.end();
+	code ++){
+      code->second = false;
+    }
 
+    pos ++;
+  }
+  
   return possibleH2;
 }
 
-void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBothLocusPositions) const{
+void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus,
+			     strVecArr_t & codesAtBothLocusPositions,
+			     const std::vector<strVecVec_t> & possibleH2Lines) const{
 
   sort(codesAtBothLocusPositions.begin(),
        codesAtBothLocusPositions.end(),
@@ -255,18 +264,13 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBot
   //look for agreement between an H2-line and a possible line in possibleGenotypesInH2.
   //Therefore pick a vector of possibleGenotypesInH2 and find each element/genotype in one of the blocks of the H2-line.
   //If all elements/genotypes are found, take every last element of the block as result.
-  std::string locus = getLocus(*possibleGenotypesInH2.cbegin()->cbegin());
-  FileH2Expanded::list_t::const_iterator pos;
-  FileH2Expanded::list_t::const_iterator lastPos;
-  fileH2.findPositionLocus(locus, pos, lastPos);
-
   std::vector<FileH2Expanded::list_t::const_iterator> candidates;
-  while(pos != lastPos){
+  for(auto line : possibleH2Lines){
     for(auto genotypes : possibleGenotypesInH2){
       std::vector<bool> allGenotypesIn(numberAllelesLHS, false);
       auto it_allGenotypesIn = allGenotypesIn.begin();
       for(auto genotype : genotypes){
-	for(auto block : *pos){
+	for(auto block : line){
 	  for(auto element : block){
 	    if(genotype == element){
 	      *it_allGenotypesIn = true;
@@ -284,12 +288,12 @@ void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBot
       if(std::all_of(allGenotypesIn.cbegin(),
 		     allGenotypesIn.cend(),
 		     [](const bool element){return element;})){
-	candidates.push_back(pos);
+	candidates.push_back(line);
       }
     }//for possibleGenotypesInH2
 
-    pos ++;
-  }//while
+
+  }//for possibleH2lines
   
   //locus becomes phased if an H2-line was found
   if(!candidates.empty()){
