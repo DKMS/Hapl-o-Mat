@@ -21,7 +21,6 @@ class Locus{
   
   virtual void resolve() = 0;
 
-  void removeDuplicates(const double factor);
   void checkCodes();
   void reduce(std::vector<std::pair<strArr_t, double>> & genotypes);
   const std::vector<std::vector<std::shared_ptr<Allele>>>& getPAllelesAtPhasedLocus() const {return pAllelesAtPhasedLocus;}

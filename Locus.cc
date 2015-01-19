@@ -16,7 +16,26 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
       genotype.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
       genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
     }
-    genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
+    auto pos = find_if(genotypes.begin(),
+		       genotypes.end(),
+		       [& genotype](std::pair<strArr_t, double> element)
+		       {
+			 bool equal = true;
+			 auto code1 = genotype.cbegin();
+			 for(auto code2 : element.first){
+			   if(code2 == *code1){
+			     equal = equal && true;
+			   }
+			   else
+			     equal = false;
+			   code1 ++;
+			 }//for
+			 return equal;
+		       });
+    if(pos == genotypes.cend())
+      genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
+    else
+      pos->second += genotypeFrequency;
   }
 }
 
@@ -59,8 +78,6 @@ void PhasedLocus::resolve(){
   std::cout << std::endl;
   std::cout << std::endl;
   
-  removeDuplicates(1.);
-
   for(auto it : pAllelesAtPhasedLocus){
     for(auto it2 : it){
       std::cout << it2->getCode() << "  ";
@@ -75,58 +92,6 @@ void PhasedLocus::resolve(){
   std::cout << std::endl;
 
   type = reportType::H0;
-}
-
-void Locus::removeDuplicates(const double factor){
-
-  //sort genotype
-  for(auto genotype = pAllelesAtPhasedLocus.begin();
-      genotype != pAllelesAtPhasedLocus.end();
-      genotype ++){
-    sort(genotype->begin(), genotype->end(), [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs) 
-	 {
-	   return lhs->getCode() < rhs->getCode();
-	 });
-  }//for pAllelesAtPhasedLocus
-
-  //sort list of genotypes
-  sort(pAllelesAtPhasedLocus.begin(),
-       pAllelesAtPhasedLocus.end(),
-       [](const std::vector<std::shared_ptr<Allele>> genotype1,
-	  const std::vector<std::shared_ptr<Allele>> genotype2)
-	 {
-	   return (*genotype1.cbegin())->getCode() < (*genotype2.cbegin())->getCode();
-	 }
-       );
-
-  //erase equal genotypes and add frequencies
-  pAllelesAtPhasedLocus.erase(std::unique(pAllelesAtPhasedLocus.begin(),
-					  pAllelesAtPhasedLocus.end(),
-					  [&factor](const std::vector<std::shared_ptr<Allele>> genotype1,
-					     const std::vector<std::shared_ptr<Allele>> genotype2)
-					    {
-					      bool equal = true;
-					      auto allele1 = genotype1.begin();
-					      for(auto allele2 : genotype2){
-						if(allele2->getCode() == (*allele1)->getCode()){
-						  equal = equal && true;
-						}
-						else
-						  equal = false;
-						allele1 ++;
-					      }//for
-
-					      if(equal){
-						auto allele1 = genotype1.begin();
-						for(auto allele2 : genotype2){
-						  (*allele1)->addFrequency(allele2->getFrequency());
-						  (*allele1)->multiplyFrequency(factor);
-						  allele1 ++;
-						}
-					      }
-					      return equal;
-					    }),
-			      pAllelesAtPhasedLocus.end());
 }
 
 void UnphasedLocus::resolve(){
@@ -226,7 +191,6 @@ void UnphasedLocus::doResolve(){
   }
 
   buildResolvedPhasedLocus();
-  removeDuplicates(1./sqrt(2));
 }
 
 void UnphasedLocus::H2Filter(strArrVec_t & phasedLocus, strVecArr_t & codesAtBothLocusPositions) const{
