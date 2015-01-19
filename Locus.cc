@@ -104,7 +104,6 @@ void UnphasedLocus::resolve(){
 		  possibleH2Lines);
       strArrVec_t in_phasedLocus; 
       if(! possibleH2Lines.empty()){
-	std::cout << possibleH2Lines.size() << std::endl;
 	H2Filter(in_phasedLocus,
 		 codesAtBothLocusPositions,
 		 possibleH2Lines);
