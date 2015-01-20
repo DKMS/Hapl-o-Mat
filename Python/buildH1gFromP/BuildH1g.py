@@ -32,11 +32,9 @@ with open('H1.txt') as file:
             else:
                 codes.add(code)
 
-        print codes
         for pCode in allPCodes:
             if codes.issubset(pCode[1]) and codes:
                 pCode[1].update(codesN)
-                print pCode[0]
         
 with open('H1g.txt', 'w') as file:
     for pCode in allPCodes:
