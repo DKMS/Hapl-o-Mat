@@ -217,6 +217,7 @@ void H2Filter::filter(){
 
   std::vector<std::pair<std::string, bool>> codesAndInAtLocusPosition1;
   std::vector<std::pair<std::string, bool>> codesAndInAtLocusPosition2;
+
   for(auto code : codesAtBothLocusPositions.at(0))
     codesAndInAtLocusPosition1.push_back(std::make_pair(code, false));
   for(auto code : codesAtBothLocusPositions.at(1))
@@ -227,9 +228,9 @@ void H2Filter::filter(){
     for(auto block : *line){
       for(auto element : block){
 	strVec_t genotypeCodes = split(element, '+');
-	
 	std::string lhs = genotypeCodes.at(0);
 	std::string rhs = genotypeCodes.at(1);
+
 	auto pos1 = find_if(codesAndInAtLocusPosition1.begin(),
 			    codesAndInAtLocusPosition1.end(),
 			    [lhs](const std::pair<std::string, bool> element)
@@ -239,50 +240,46 @@ void H2Filter::filter(){
 			      else
 				return false;
 			    });
-	if(pos1 != codesAndInAtLocusPosition1.end()){
-	  auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
-			      codesAndInAtLocusPosition2.end(),
-			      [rhs](const std::pair<std::string, bool> element)
-			      {
-				if(rhs == element.first)
-				  return true;
-				else
-				  return false;
-			      }
-			      );
-	  if(pos2 != codesAndInAtLocusPosition1.end()){
-	    pos1->second = true;
-	    pos2->second = true;
-	  }
+	auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
+			    codesAndInAtLocusPosition2.end(),
+			    [rhs](const std::pair<std::string, bool> element)
+			    {
+			      if(rhs == element.first)
+				return true;
+			      else
+				return false;
+			    }
+			    );
+	if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
+	  pos1->second = true;
+	  pos2->second = true;
 	}
-	else{
-	  auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
-			      codesAndInAtLocusPosition2.end(),
-			      [lhs](const std::pair<std::string, bool> element)
-			      {
-				if(lhs == element.first)
-				  return true;
-				else
-				  return false;
-			      });
-	  if(pos2 != codesAndInAtLocusPosition2.end()){
-	    auto pos1 = find_if(codesAndInAtLocusPosition1.begin(),
-				codesAndInAtLocusPosition1.end(),
-				[rhs](const std::pair<std::string, bool> element)
-				{
-				  if(rhs == element.first)
-				    return true;
-				  else
-				    return false;
-				});
-	    if(pos1 != codesAndInAtLocusPosition1.end()){
-	      pos1->second = true;
-	      pos2->second = true;
-	    }
-	  }
-	}//else
-      }//for block
-    }//for line
+
+	pos1 = find_if(codesAndInAtLocusPosition1.begin(),
+		       codesAndInAtLocusPosition1.end(),
+		       [rhs](const std::pair<std::string, bool> element)
+		       {
+			 if(rhs == element.first)
+			   return true;
+			 else
+			   return false;
+		       });
+	pos2 = find_if(codesAndInAtLocusPosition2.begin(),
+		       codesAndInAtLocusPosition2.end(),
+		       [lhs](const std::pair<std::string, bool> element)
+		       {
+			 if(lhs == element.first)
+			   return true;
+			 else
+			   return false;
+		       });
+	if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
+	  pos1->second = true;
+	  pos2->second = true;
+	}
+      }//for element
+    }//for block
+
     if(std::all_of(codesAndInAtLocusPosition1.cbegin(),
 		   codesAndInAtLocusPosition1.cend(),
 		   [](const std::pair<std::string, bool> element){return element.second;})
@@ -292,6 +289,14 @@ void H2Filter::filter(){
 		   [](const std::pair<std::string, bool> element){return element.second;})){
       candidates.push_back(line);
     }
+    for(auto codesAndIn = codesAndInAtLocusPosition1.begin();
+	codesAndIn != codesAndInAtLocusPosition1.end();
+	codesAndIn ++)
+      codesAndIn->second = false;
+    for(auto codesAndIn = codesAndInAtLocusPosition2.begin();
+	codesAndIn != codesAndInAtLocusPosition2.end();
+	codesAndIn ++)
+      codesAndIn->second = false;
   }//for possibleH2Lines
 
   //locus becomes phased if an H2-line was found
@@ -397,10 +402,6 @@ void H2Filter::filterVariant(){
   
   //locus becomes phased if an H2-line was found
   if(!candidates.empty()){
-    //remove candidates pointing to same line
-    candidates.erase(std::unique(candidates.begin(),
-				 candidates.end()),
-		     candidates.end());
     for(auto candidate : candidates){
       for(auto block : *candidate){
 	std::string genotype = *(block.cend()-1);
