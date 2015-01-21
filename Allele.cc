@@ -190,17 +190,11 @@ std::vector<std::shared_ptr<Allele>>::iterator Allele::ispAlleleInList (std::vec
 
 std::string Allele::allelesTog(){
 
-  std::cout << code << std::endl;
-
   std::string codeInPrecision;
   std::string locus = getLocus(code);
   FileAllelesTogOrG::list_t::const_iterator pos;
   FileAllelesTogOrG::list_t::const_iterator lastPos;
   fileAllelesTog.findPositionLocus(locus, pos, lastPos);
-
-  std::cout << pos->first << std::endl;
-  std::cout << pos->second.size() << std::endl;
-  std::cout << *pos->second.begin() << std::endl;
   
   bool found = false;
   std::string codeToFind = cutCode(code, 1);
