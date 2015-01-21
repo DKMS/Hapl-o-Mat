@@ -6,6 +6,7 @@
 
 #include "Allele.h"
 
+
 class Locus{
 
  public:
@@ -76,18 +77,41 @@ class UnphasedLocus : public Locus{
   virtual void resolve();
 
   void doResolve();
-  void H2PreFilter(strVecArr_t & codesAtBothLocusPositions,
-		   std::vector<FileH2Expanded::list_t::const_iterator> & possibleH2Lines) const;
-  void H2Filter(strArrVec_t & phasedLocus,
-		strVecArr_t & codesAtBothLocusPositions,
-		const std::vector<FileH2Expanded::list_t::const_iterator> & possibleH2Lines) const;
   void buildResolvedPhasedLocus();
 
  private:
   bool doH2Filter;
   strVecArr_t unphasedLocus;
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtBothLocusPositions;
+};
+
+class H2Filter{
+
+ public:
+  H2Filter(){};
+  explicit H2Filter(const strVecArr_t in_codesAtBothLocusPositions)
+    : isH2(false),
+    codesAtBothLocusPositions(in_codesAtBothLocusPositions),
+    possibleH2Lines(),
+    phasedLocus(){}
+
+  void allFilters();
+  void preFilter();
+  void filter();
+  void filterVariant();
+  
+
+  bool getIsH2() const {return isH2;}
+  const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
+
+ private:
+  bool isH2;
+  strVecArr_t codesAtBothLocusPositions;
+  std::vector<FileH2Expanded::list_t::const_iterator> possibleH2Lines;
+  strArrVec_t phasedLocus;
+
   static FileH2Expanded fileH2;
 };
+
 
 #endif
