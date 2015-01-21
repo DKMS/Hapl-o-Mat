@@ -50,15 +50,7 @@ void FileAllelesTogOrG::readFile(){
     }
     list.push_back(entries);
     std::string locus = getLocus(line);
-    if(locus.compare(locusOld)){
-      auto pos = list.cbegin();
-      for(size_t i=1; i<list.size(); i++)
-	pos ++;
-
-      std::cout << list.capacity() << std::endl;
-      locusPosition.emplace(locus, pos);
-      locusOld = locus;
-    }
+    addIteratorToLocusPositions(locus, locusOld);
   }
     
   file.close();
@@ -103,17 +95,12 @@ void FileAlleles::readFile(){
   openFileToRead(fileName, file);
 
   std::string locusOld = "";
-  auto pos = list.cbegin();
   std::string line;
   while(std::getline(file, line)){
     list.push_back(line);
 
     std::string locus = getLocus(line);
-    if(locus.compare(locusOld)){
-      locusPosition.emplace(locus, pos);
-    }
-    locusOld = locus;
-    pos ++;
+    addIteratorToLocusPositions(locus, locusOld);
   }//while
 
   file.close();
@@ -182,7 +169,6 @@ void FileH2Expanded::readFile(){
   openFileToRead(fileName, file);
   
   std::string locusOld = "";
-  auto pos = list.cbegin();
   std::string line;
   while(std::getline(file, line)){
     std::stringstream ss(line);
@@ -199,11 +185,7 @@ void FileH2Expanded::readFile(){
     list.push_back(H2line);
 
     std::string locus = getLocus(line);
-    if(locus.compare(locusOld)){
-      locusPosition.emplace(locus, pos);
-    }
-    locusOld = locus;
-    pos ++;
+    addIteratorToLocusPositions(locus, locusOld);
   }//while
 
   file.close();
@@ -218,7 +200,6 @@ void FileH2::readFile(){
   openFileToRead(fileName, file);
   
   std::string locusOld = "";
-  auto pos = list.cbegin();
   std::string line;
   while(std::getline(file, line)){
     std::stringstream ss(line);
@@ -230,11 +211,7 @@ void FileH2::readFile(){
     list.push_back(listOfGenotypesPerLine);
 
     std::string locus = getLocus(line);
-    if(locus.compare(locusOld)){
-      locusPosition.emplace(locus, pos);
-    }
-    locusOld = locus;
-    pos ++;
+    addIteratorToLocusPositions(locus, locusOld);
   }//while
 
   file.close();

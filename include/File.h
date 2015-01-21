@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <map>
 #include <vector>
-#include <iostream>
 #include <fstream>
 #include <algorithm>
 
@@ -21,7 +20,6 @@ class File{
     size_t numberLines = std::count(std::istreambuf_iterator<char>(inFile), 
 				    std::istreambuf_iterator<char>(), '\n');
     numberLines ++;
-    std::cout << numberLines << std::endl;
     list.reserve(numberLines);
   }
   virtual ~File(){}
@@ -42,6 +40,15 @@ class File{
 	lastPos = itPos->second;
     }
   }
+  void addIteratorToLocusPositions(const std::string locus, std::string & locusOld){
+    if(locus != locusOld){
+      auto pos = list.cend();
+      pos --;
+      locusPosition.emplace(locus, pos);
+      locusOld = locus;
+    }
+  }
+
   std::string getFileName() const {return fileName;}
 
  protected:
