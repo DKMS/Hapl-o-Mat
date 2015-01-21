@@ -10,8 +10,8 @@
 #include "Haplotype.h"
 #include "DataProcessing.h"
 
-FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt", 271600);
-FileAlleles Report::fileWithAllAlleles("data/allAlleles.txt", 12000);
+FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt");
+FileAlleles Report::fileWithAllAlleles("data/allAlleles.txt");
 std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
 
 std::string Report::buildPhenotypeCode() const{

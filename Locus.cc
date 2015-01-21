@@ -5,7 +5,7 @@
 #include "Utility.h"
 #include "Allele.h"
 
-FileH2Expanded UnphasedLocus::fileH2("data/H24d.txt", 146000); 
+FileH2Expanded UnphasedLocus::fileH2("data/H24d.txt"); 
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 

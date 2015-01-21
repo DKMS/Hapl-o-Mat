@@ -4,14 +4,14 @@
 #include "Allele.h"
 #include "Utility.h"
 
-FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt", 200);
-FileAllelesTogOrG Allele::fileAllelesToG("data/H1.txt", 200);
-FileAllelesTogOrG Allele::fileAllelesToGForH2Filter("data/H1ForH2Filter.txt", 200);
+FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt");
+FileAllelesTogOrG Allele::fileAllelesToG("data/H1.txt");
+FileAllelesTogOrG Allele::fileAllelesToGForH2Filter("data/H1ForH2Filter.txt");
 
-FilegToG Allele::filegToG("data/H1_Uebersetzung_GNomenklatur.txt", 200);
-FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt", 200);
+FilegToG Allele::filegToG("data/H1_Uebersetzung_GNomenklatur.txt");
+FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt");
 
-FilegOrGToAlleles Allele::fileGToAlleles("data/H1.txt", 200);
+FilegOrGToAlleles Allele::fileGToAlleles("data/H1.txt");
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
@@ -190,11 +190,17 @@ std::vector<std::shared_ptr<Allele>>::iterator Allele::ispAlleleInList (std::vec
 
 std::string Allele::allelesTog(){
 
+  std::cout << code << std::endl;
+
   std::string codeInPrecision;
   std::string locus = getLocus(code);
   FileAllelesTogOrG::list_t::const_iterator pos;
   FileAllelesTogOrG::list_t::const_iterator lastPos;
   fileAllelesTog.findPositionLocus(locus, pos, lastPos);
+
+  std::cout << pos->first << std::endl;
+  std::cout << pos->second.size() << std::endl;
+  std::cout << *pos->second.begin() << std::endl;
   
   bool found = false;
   std::string codeToFind = cutCode(code, 1);

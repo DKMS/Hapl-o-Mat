@@ -5,7 +5,7 @@
 #include "Glid.h"
 #include "Utility.h"
 
-FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt", 12000);
+FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt");
 
 void AllPossibleGenotypes::buildGenotypes(const std::string locus){
 

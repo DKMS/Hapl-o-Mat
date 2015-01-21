@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
 
 #include "File.h"
@@ -37,7 +36,6 @@ void FileAllelesTogOrG::readFile(){
   openFileToRead(fileName, file);
 
   std::string locusOld = "";
-  auto pos = list.cbegin();
   std::string line;
   while(std::getline(file, line)){
     std::stringstream ss(line);
@@ -53,12 +51,16 @@ void FileAllelesTogOrG::readFile(){
     list.push_back(entries);
     std::string locus = getLocus(line);
     if(locus.compare(locusOld)){
-      locusPosition.emplace(locus, pos);
-    }
-    locusOld = locus;
-    pos ++;
-  }
+      auto pos = list.cbegin();
+      for(size_t i=1; i<list.size(); i++)
+	pos ++;
 
+      std::cout << list.capacity() << std::endl;
+      locusPosition.emplace(locus, pos);
+      locusOld = locus;
+    }
+  }
+    
   file.close();
 }
 

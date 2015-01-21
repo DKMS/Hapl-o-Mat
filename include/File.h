@@ -6,6 +6,8 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <algorithm>
 
 template <class T>
 class File{
@@ -13,8 +15,14 @@ class File{
  public:
   typedef T list_t;
   
-  explicit File(const std::string in_fileName, const size_t in_sizeReserve) : fileName(in_fileName), list(), locusPosition(){
-    list.reserve(in_sizeReserve);
+  explicit File(const std::string in_fileName) : fileName(in_fileName), list(), locusPosition(){
+
+    std::ifstream inFile(fileName); 
+    size_t numberLines = std::count(std::istreambuf_iterator<char>(inFile), 
+				    std::istreambuf_iterator<char>(), '\n');
+    numberLines ++;
+    std::cout << numberLines << std::endl;
+    list.reserve(numberLines);
   }
   virtual ~File(){}
 
@@ -47,7 +55,7 @@ class File{
 class FileNMDPCodes : public File<std::unordered_map<std::string, std::string>>{
 
  public:
-  explicit FileNMDPCodes(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileNMDPCodes(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -58,7 +66,7 @@ class FileNMDPCodes : public File<std::unordered_map<std::string, std::string>>{
 class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, std::vector<std::string>>>>{
 
  public:
-  explicit FileAllelesTogOrG(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileAllelesTogOrG(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -69,7 +77,7 @@ class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, std::ve
 class FilegOrGToAlleles : public File<std::unordered_map<std::string, std::vector<std::string>>>{
 
  public:
-  explicit FilegOrGToAlleles(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FilegOrGToAlleles(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -80,7 +88,7 @@ class FilegOrGToAlleles : public File<std::unordered_map<std::string, std::vecto
 class FileGTog : public File<std::unordered_map<std::string, std::string>>{
 
  public:
-  explicit FileGTog(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileGTog(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -91,7 +99,7 @@ class FileGTog : public File<std::unordered_map<std::string, std::string>>{
 class FilegToG : public File<std::unordered_map<std::string, std::string>>{
 
  public:
-  explicit FilegToG(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FilegToG(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -102,7 +110,7 @@ class FilegToG : public File<std::unordered_map<std::string, std::string>>{
 class FileAlleles : public File<std::vector<std::string>>{
 
  public:
-  explicit FileAlleles(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileAlleles(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -113,7 +121,7 @@ class FileAlleles : public File<std::vector<std::string>>{
 class FileH2Expanded : public File<std::vector<std::vector<std::vector<std::string>>>>{
 
  public:
-  explicit FileH2Expanded(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileH2Expanded(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -124,7 +132,7 @@ class FileH2Expanded : public File<std::vector<std::vector<std::vector<std::stri
 class FileH2 : public File<std::vector<std::vector<std::string>>>{
 
  public:
-  explicit FileH2(const std::string in_fileName, const size_t in_sizeReserve) : File(in_fileName, in_sizeReserve){
+  explicit FileH2(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
