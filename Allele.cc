@@ -395,6 +395,9 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateToG(const FileAllelesTog
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(const FileAllelesTogOrG & whichH1File){
 
+  std::cerr << "not implemented yet. Results are errorprone." << std::endl;
+  //bullshit: g -> G + weitere Allele!
+  //requires further extension
   strVec_t codesInPrecision  = fourDigitOrgToG();
   if(codesInPrecision.empty()){
     std::cerr << "Missing G-code for "
