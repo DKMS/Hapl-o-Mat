@@ -94,7 +94,7 @@ void UnphasedLocus::resolve(){
 			     if(pAllelesAtOneLocusPosition.size() != possibleAlleles.size())
 			       return false;
 			     else{
-			       bool alreadyIn ;
+			       bool alreadyIn = true;
 			       auto pPossibleAllele = possibleAlleles.cbegin();
 			       for(auto pAllele : pAllelesAtOneLocusPosition){
 				 if(pAllele->getCode() == (*pPossibleAllele)->getCode())
