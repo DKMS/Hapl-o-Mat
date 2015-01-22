@@ -12,5 +12,6 @@ typedef std::vector<std::vector<std::string>> strVecVec_t;
 typedef std::vector<std::array<std::string, 2>> strArrVec_t;
 typedef std::array<std::string, 2> strArr_t;
 typedef std::array<std::vector<std::string>, 2> strVecArr_t;
+typedef std::array<std::vector<std::vector<std::string>>, 2> strVecVecArr_t;
 
 #endif

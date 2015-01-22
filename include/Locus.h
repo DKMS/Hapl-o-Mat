@@ -89,7 +89,7 @@ class H2Filter{
 
  public:
   H2Filter(){};
-  explicit H2Filter(const strVecArr_t in_codesAtBothLocusPositions)
+  explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions)
     : isH2(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
     possibleH2Lines(),
@@ -106,7 +106,7 @@ class H2Filter{
 
  private:
   bool isH2;
-  strVecArr_t codesAtBothLocusPositions;
+  strVecVecArr_t codesAtBothLocusPositions;
   std::vector<FileH2Expanded::list_t::const_iterator> possibleH2Lines;
   strArrVec_t phasedLocus;
 

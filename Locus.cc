@@ -72,35 +72,70 @@ void UnphasedLocus::resolve(){
   
   if(doH2Filter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
 
-    strVecArr_t codesAtBothLocusPositions;
-    auto it_codesAtBothLocusPositions = codesAtBothLocusPositions.begin();
+    strVecVecArr_t possibleCodesAtBothLocusPositions;
+    auto it_possibleCodesAtBothLocusPositions = possibleCodesAtBothLocusPositions.begin();
     for(auto locusPosition : unphasedLocus){
-      std::vector<std::shared_ptr<Allele>> allPAllelesAtOneLocusPosition;
+      std::vector<std::vector<std::shared_ptr<Allele>>> possiblePAllelesAtOneLocusPositions; 
       for(auto code : locusPosition){
 	std::shared_ptr<Allele> pAllele = Allele::createAllele(code, Allele::codePrecision::GForH2Filter, 1.);
 	std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
-	for(auto pAlleleAtOneLocusPosition : pAllelesAtOneLocusPosition){
-	  auto pos = find_if(allPAllelesAtOneLocusPosition.begin(),
-			     allPAllelesAtOneLocusPosition.end(),
-			     [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> allele)
-			     {
-			       return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
-			     });
-	  if(pos == allPAllelesAtOneLocusPosition.end()){
-	    allPAllelesAtOneLocusPosition.push_back(pAlleleAtOneLocusPosition);
-	  }
-	}
+	//check for duplicates
+	sort(pAllelesAtOneLocusPosition.begin(),
+	     pAllelesAtOneLocusPosition.end(),
+	     [](const std::shared_ptr<Allele> lhs,
+		const std::shared_ptr<Allele> rhs)
+	     {
+	       return lhs->getCode() < rhs->getCode();
+	     });
+	auto pos = find_if(possiblePAllelesAtOneLocusPositions.begin(),
+			   possiblePAllelesAtOneLocusPositions.end(),
+			   [& pAllelesAtOneLocusPosition](const std::vector<std::shared_ptr<Allele>> possibleAlleles)
+			   {
+			     if(pAllelesAtOneLocusPosition.size() != possibleAlleles.size())
+			       return false;
+			     else{
+			       bool alreadyIn ;
+			       auto pPossibleAllele = possibleAlleles.cbegin();
+			       for(auto pAllele : pAllelesAtOneLocusPosition){
+				 if(pAllele->getCode() == (*pPossibleAllele)->getCode())
+				   alreadyIn = alreadyIn && true;
+				 else
+				   alreadyIn = false;
+				 pPossibleAllele ++;
+			       }
+			       return alreadyIn;
+			     }
+			   });
+	
+	if(pos == possiblePAllelesAtOneLocusPositions.end())
+	  possiblePAllelesAtOneLocusPositions.push_back(pAllelesAtOneLocusPosition);
       }//for code
-      strVec_t allCodesAtOneLocusPosition;
-      for(auto allele : allPAllelesAtOneLocusPosition){
-	allCodesAtOneLocusPosition.push_back(allele->getCode());
+      strVecVec_t possibleCodesAtOneLocusPosition;
+      for(auto possibleAlleles : possiblePAllelesAtOneLocusPositions){
+	strVec_t codes;
+	for(auto allele : possibleAlleles){
+	  codes.push_back(allele->getCode());
+	}
+	possibleCodesAtOneLocusPosition.push_back(codes);
       }
-      *it_codesAtBothLocusPositions = allCodesAtOneLocusPosition;
-      it_codesAtBothLocusPositions ++;
+      *it_possibleCodesAtBothLocusPositions = possibleCodesAtOneLocusPosition;
+      it_possibleCodesAtBothLocusPositions ++;
     }//for locusPosition
-    if(codesAtBothLocusPositions.at(0).size() > 1 || codesAtBothLocusPositions.at(1).size() > 1){
 
-      H2Filter h2 (codesAtBothLocusPositions);
+    for(auto it : possibleCodesAtBothLocusPositions){
+      for(auto it2 : it){
+	for(auto it3 : it2){
+	std::cout << it3 <<" ";
+	}
+	std::cout << std::endl;
+      }
+      std::cout << std::endl;
+    }
+
+    if(possibleCodesAtBothLocusPositions.at(0).size() > 1 || possibleCodesAtBothLocusPositions.at(1).size() > 1){
+
+      H2Filter h2 (possibleCodesAtBothLocusPositions);
+      /*
       h2.allFilters();
       if(h2.getIsH2()){
 	type = reportType::H2;
@@ -112,10 +147,12 @@ void UnphasedLocus::resolve(){
 	type = reportType::I;
 	doResolve();
       }
+      */
     }//if locus sizes > 1
     else{
-      if(codesAtBothLocusPositions.at(0).size() == 1 && codesAtBothLocusPositions.at(1).size() == 1)
-	type = reportType::H1;	  
+      if(possibleCodesAtBothLocusPositions.at(0).size() == 1 && possibleCodesAtBothLocusPositions.at(1).size() == 1)
+	if(possibleCodesAtBothLocusPositions.at(0).at(0).size() == 1 && possibleCodesAtBothLocusPositions.at(1).at(0).size() == 1)
+	  type = reportType::H1;	  
       else
 	type = reportType::I;
 
@@ -160,7 +197,7 @@ void UnphasedLocus::doResolve(){
 }
 
 void H2Filter::allFilters(){
-
+ 
   preFilter();
   if(! possibleH2Lines.empty()){
     filter();
@@ -170,7 +207,7 @@ void H2Filter::allFilters(){
 }
 
 void H2Filter::preFilter(){
-  
+  /* 
   std::vector<std::pair<std::string, bool>> listOfAllCodes;
   for(auto locusPosition : codesAtBothLocusPositions){
     for(auto code : locusPosition){
@@ -211,10 +248,11 @@ void H2Filter::preFilter(){
 
     pos ++;
   }
+  */
 }
 
 void H2Filter::filter(){
-
+  /*
   std::vector<std::pair<std::string, bool>> codesAndInAtLocusPosition1;
   std::vector<std::pair<std::string, bool>> codesAndInAtLocusPosition2;
 
@@ -319,10 +357,11 @@ void H2Filter::filter(){
       }//for blocks
     }//for candidates
   }//if candidates empty
+  */
 }
 
 void H2Filter::filterVariant(){
-
+  /*
   sort(codesAtBothLocusPositions.begin(),
        codesAtBothLocusPositions.end(),
        [](
@@ -416,6 +455,7 @@ void H2Filter::filterVariant(){
       }//for blocks
     }//for candidates
   }//if candidates empty
+  */
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 
