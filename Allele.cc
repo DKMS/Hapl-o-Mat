@@ -315,12 +315,12 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
   std::string codeg;
   auto itGtog = fileGTog.getList().find(code);
   if(itGtog == fileGTog.getList().cend()){
-    std::cout << "Key "
+    std::cerr << "Missing g-code for "
 	      << code
-	      << " not in "
+	      <<" in "
 	      << fileGTog.getFileName()
 	      << std::endl;
-    codeg = code;
+    exit (EXIT_FAILURE);
   }
   else{
     codeg = itGtog->second;
@@ -401,7 +401,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(const FileAllelesTogO
 	      << code
 	      <<"."
 	      << std::endl;
-    codesInPrecision.push_back(code);
+    exit (EXIT_FAILURE);
   }
 
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
