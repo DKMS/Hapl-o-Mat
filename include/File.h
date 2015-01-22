@@ -103,7 +103,7 @@ class FileGTog : public File<std::unordered_map<std::string, std::string>>{
   void readFile();
 };
 
-class FilegToG : public File<std::unordered_map<std::string, std::string>>{
+class FilegToG : public File<std::unordered_map<std::string, std::vector<std::string>>>{
 
  public:
   explicit FilegToG(const std::string in_fileName) : File(in_fileName){

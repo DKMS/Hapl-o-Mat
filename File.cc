@@ -146,17 +146,14 @@ void FilegToG::readFile(){
     std::string key;
     std::string val;
     ss >> val >> key;
-    std::pair<list_t::iterator, bool> inserted = list.emplace(key, val);
+    std::vector<std::string> vals;
+    vals.push_back(val);
+    std::pair<list_t::iterator, bool> inserted = list.emplace(key, vals);
     if(! inserted.second){
-      std::cerr << "In file "
-		<< fileName
-		<< " key "
-		<< key
-		<< " already occupied. "
-		<< std::endl;
+      inserted.first->second.push_back(val);
     }
   }//while
-  
+ 
   file.close();
 }
 

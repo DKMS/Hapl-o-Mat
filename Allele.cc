@@ -12,6 +12,7 @@ FilegToG Allele::filegToG("data/H1_Uebersetzung_GNomenklatur.txt");
 FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt");
 
 FilegOrGToAlleles Allele::fileGToAlleles("data/H1.txt");
+FilegOrGToAlleles Allele::filegToAlleles("data/H1g.txt");
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
@@ -197,35 +198,6 @@ std::string Allele::allelesTog(){
   fileAllelesTog.findPositionLocus(locus, pos, lastPos);
   
   bool found = false;
-  std::string codeToFind = cutCode(code, 1);
-  while(pos != lastPos && found==false){
-    for(auto entry = pos->second.cbegin();
-	entry != pos->second.cend() && found==false;
-	entry ++){
-      if(codeToFind == *entry){
-	codeInPrecision = pos->first;
-	found = true;
-      }
-    }//for entries line
-    pos ++;
-  }//while lines in fileAllelesTog
-
-  if(found == false){
-    codeInPrecision = codeToFind;
-  }
-
-  return codeInPrecision;
-}
-
-std::string Allele::allelesToG(const FileAllelesTogOrG & whichH1File){
-
-  std::string codeInPrecision;
-  std::string locus = getLocus(code);
-  FileAllelesTogOrG::list_t::const_iterator pos;
-  FileAllelesTogOrG::list_t::const_iterator lastPos;
-  whichH1File.findPositionLocus(locus, pos, lastPos);
-  
-  bool found = false;
   while(pos != lastPos && found==false){
     for(auto entry = pos->second.cbegin();
 	entry != pos->second.cend() && found==false;
@@ -245,26 +217,88 @@ std::string Allele::allelesToG(const FileAllelesTogOrG & whichH1File){
   return codeInPrecision;
 }
 
-std::string Allele::fourDigitOrgToG(){
+strVec_t Allele::allelesToG(const FileAllelesTogOrG & whichH1File){
 
-  std::string codeInPrecision;
+  strVec_t codesInPrecision;
+  std::string locus = getLocus(code);
+  FileAllelesTogOrG::list_t::const_iterator pos;
+  FileAllelesTogOrG::list_t::const_iterator lastPos;
+  whichH1File.findPositionLocus(locus, pos, lastPos);
+  
+  while(pos != lastPos){
+    bool found = false;
+    for(auto entry = pos->second.cbegin();
+	entry != pos->second.cend() && found == false;
+	entry ++){
+      if(code == *entry){
+	codesInPrecision.push_back(pos->first);
+	found = true;
+      }
+    }//for entries line
+    pos ++;
+  }//while lines in fileAllelesTog
+
+  if(codesInPrecision.empty()){
+    codesInPrecision.push_back(code);
+  }
+
+  return codesInPrecision;
+}
+
+strVec_t Allele::fourDigitOrgToG(){
+
+  strVec_t codesInPrecision;
   auto itgToG = filegToG.getList().find(code);
-  if(itgToG == filegToG.getList().cend()){
-    codeInPrecision = code;
+  if(itgToG != filegToG.getList().cend()){
+    for(auto Gcode : itgToG->second)
+      codesInPrecision.push_back(Gcode);
+  }
+
+  return codesInPrecision;
+}
+
+strVec_t Allele::GToAlleles(){
+
+  strVec_t newCodes;
+  auto itFileGToAlleles = fileGToAlleles.getList().find(code);
+  if(itFileGToAlleles == fileGToAlleles.getList().cend()){
+    std::cout << "Could not find G-Code "
+              << code
+              << std::endl;
+    exit (EXIT_FAILURE);
   }
   else{
-    codeInPrecision = itgToG->second;
+    newCodes = itFileGToAlleles->second;
   }
 
-  return codeInPrecision;
+  return newCodes;
 }
+
+strVec_t Allele::gToAlleles(){
+
+  strVec_t codesInPrecision;
+  auto itFilegToAlleles = filegToAlleles.getList().find(code);
+  if(itFilegToAlleles == filegToAlleles.getList().cend()){
+    std::cout << "Could not find g-Code "
+              << code
+              << std::endl;
+    exit (EXIT_FAILURE);
+  }
+  else{
+    codesInPrecision = itFilegToAlleles->second;
+  }
+
+  return codesInPrecision;
+}
+
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTog(){
   
   std::string codeInPrecision =  allelesTog();
-  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleg;
+  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
   listOfPAlleleg.push_back(pAlleleg);
+
   return listOfPAlleleg;
 }
 
@@ -319,80 +353,69 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
   return listOfAllPAlleleg;
 }
 
-strVec_t Allele::GToAlleles(){
-
-  strVec_t newCodes;
-  auto itFileGToAlleles = fileGToAlleles.getList().find(code);
-  if(itFileGToAlleles == fileGToAlleles.getList().cend()){
-    std::cout << "Could not find G-Code "
-              << code
-              << std::endl;
-    exit (EXIT_FAILURE);
-  }
-  else{
-    newCodes = itFileGToAlleles->second;
-  }
-
-  return newCodes;
-}
-
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTog(){
 
   std::string codeInPrecision =  allelesTog();
-  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleg;
+  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
   listOfPAlleleg.push_back(pAlleleg);
+
   return listOfPAlleleg;
 }
 
 std::vector<std::shared_ptr<Allele>> Allele8d::translateTog(){
 
   std::string codeInPrecision =  allelesTog();
-  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleg;
+  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
   listOfPAlleleg.push_back(pAlleleg);
+  
   return listOfPAlleleg;
 }
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateToG(const FileAllelesTogOrG & whichH1File){
   
-  code = fourDigitOrgToG();
-  std::string codeInPrecision =  allelesToG(whichH1File);
-  std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+  strVec_t codesInPrecision  = fourDigitOrgToG();
+  if(codesInPrecision.empty())
+    codesInPrecision = allelesToG(whichH1File);
+
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
-  listOfPAlleleG.push_back(pAlleleG);
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+    auto pos = pAlleleG->ispAlleleInList(listOfPAlleleG);
+    if(pos == listOfPAlleleG.cend())
+      listOfPAlleleG.push_back(pAlleleG);
+    else
+      (*pos)->addFrequency(pAlleleG->getFrequency());
+  }
+
   return listOfPAlleleG;
 }
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(const FileAllelesTogOrG & whichH1File){
 
-  std::string codeG = fourDigitOrgToG();
-
-  std::vector<std::shared_ptr<Allele>> listOfAllPAlleleg;
-  std::shared_ptr<Allele> pAllele = createAllele(codeG, wantedPrecision, frequency);
-  std::vector<std::shared_ptr<Allele>> listOfPAlleleg = pAllele->translate();
-  listOfAllPAlleleg.insert(listOfAllPAlleleg.end(), listOfPAlleleg.begin(), listOfPAlleleg.end());
-  
-  sort(listOfAllPAlleleg.begin(), listOfAllPAlleleg.end(), [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs)
-       {
-	 return lhs->getCode() < rhs->getCode();
-       });
-  listOfAllPAlleleg.erase(std::unique(listOfAllPAlleleg.begin(),
-				      listOfAllPAlleleg.end(),
-				      [](const std::shared_ptr<Allele> lhs, const std::shared_ptr<Allele> rhs)
-				      {
-					return lhs->getCode() == rhs->getCode();
-				      }),
-			  listOfAllPAlleleg.end());
-  
-  double factor = 1. / static_cast<double>(listOfAllPAlleleg.size());
-  for(auto itPAllele = listOfAllPAlleleg.begin();
-      itPAllele != listOfAllPAlleleg.end();
-      itPAllele ++){
-    (*itPAllele)->multiplyFrequency(factor);
+  strVec_t codesInPrecision  = fourDigitOrgToG();
+  if(codesInPrecision.empty()){
+    std::cerr << "Missing G-code for "
+	      << code
+	      <<"."
+	      << std::endl;
+    codesInPrecision.push_back(code);
   }
 
-  return listOfAllPAlleleg;
+  std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+    auto pos = pAlleleG->ispAlleleInList(listOfPAlleleG);
+    if(pos == listOfPAlleleG.cend())
+      listOfPAlleleG.push_back(pAlleleG);
+    else
+      (*pos)->addFrequency(pAlleleG->getFrequency());
+  }
+
+  return listOfPAlleleG;
 }
 
 std::vector<std::shared_ptr<Allele>> AlleleG::translateToG(const FileAllelesTogOrG & whichH1File){
@@ -405,20 +428,35 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateToG(const FileAllelesTogO
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateToG(const FileAllelesTogOrG & whichH1File){
 
-  std::string codeInPrecision =  allelesToG(whichH1File);
-  std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+  strVec_t codesInPrecision =  allelesToG(whichH1File);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
-  listOfPAlleleG.push_back(pAlleleG);
-  return listOfPAlleleG;
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+    auto pos = pAlleleG->ispAlleleInList(listOfPAlleleG);
+    if(pos == listOfPAlleleG.cend())
+      listOfPAlleleG.push_back(pAlleleG);
+    else
+      (*pos)->addFrequency(pAlleleG->getFrequency());
+  }
 
+  return listOfPAlleleG;
 }
 
 std::vector<std::shared_ptr<Allele>> Allele8d::translateToG(const FileAllelesTogOrG & whichH1File){
 
-  std::string codeInPrecision =  allelesToG(whichH1File);
-  std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+  strVec_t codesInPrecision =  allelesToG(whichH1File);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
-  listOfPAlleleG.push_back(pAlleleG);
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (codeInPrecision, frequency);
+    auto pos = pAlleleG->ispAlleleInList(listOfPAlleleG);
+    if(pos == listOfPAlleleG.cend())
+      listOfPAlleleG.push_back(pAlleleG);
+    else
+      (*pos)->addFrequency(pAlleleG->getFrequency());
+  }
+
   return listOfPAlleleG;
 }
 
@@ -432,12 +470,11 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateTo4d(){
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateTo4d(){
 
-  code = fourDigitOrgToG();
-  strVec_t newCodes = GToAlleles();
+  strVec_t codesInPrecision = gToAlleles();
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
-  frequency /= static_cast<double>(newCodes.size());
-  for(auto newCode : newCodes){
-    std::string shorterNewCode = cutCodeKeepingLastLetter(newCode, 1);
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::string shorterNewCode = cutCodeKeepingLastLetter(codeInPrecision, 1);
     std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
     auto pos = pAllele4d->ispAlleleInList(listOfPAllele4d);
     if(pos == listOfPAllele4d.cend())
@@ -445,29 +482,32 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTo4d(){
     else
       (*pos)->addFrequency(pAllele4d->getFrequency());
   }
+
   return listOfPAllele4d;
 }
 
 std::vector<std::shared_ptr<Allele>> AlleleG::translateTo4d(){
 
-  strVec_t newCodes = GToAlleles();
+  strVec_t codesInPrecision = GToAlleles();
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
-  frequency /= static_cast<double>(newCodes.size());
-  for(auto newCode : newCodes){
-    std::string shorterNewCode = cutCodeKeepingLastLetter(newCode, 1);
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::string shorterNewCode = cutCodeKeepingLastLetter(codeInPrecision, 1);
     std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (shorterNewCode, frequency);
     auto pos = pAllele4d->ispAlleleInList(listOfPAllele4d);
+
     if(pos == listOfPAllele4d.cend())
       listOfPAllele4d.push_back(pAllele4d);
     else
       (*pos)->addFrequency(pAllele4d->getFrequency());
   }
+
   return listOfPAllele4d;
 }
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTo4d(){
 
-  std::string code4d =  cutCodeKeepingLastLetter(code, 1);
+  std::string code4d = cutCodeKeepingLastLetter(code, 1);
   std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code4d, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
   listOfPAllele4d.push_back(pAllele4d);

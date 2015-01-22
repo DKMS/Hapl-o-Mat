@@ -46,9 +46,10 @@ class Allele{
   std::vector<std::shared_ptr<Allele>> translate();
   std::vector<std::shared_ptr<Allele>>::iterator ispAlleleInList(std::vector<std::shared_ptr<Allele>> & listOfpAlleles) const;
   std::string allelesTog();
-  std::string allelesToG(const FileAllelesTogOrG & whichH1File);
-  std::string fourDigitOrgToG();
+  strVec_t allelesToG(const FileAllelesTogOrG & whichH1File);
+  strVec_t fourDigitOrgToG();
   strVec_t GToAlleles();
+  strVec_t gToAlleles();
   static std::string printCodePrecision(const codePrecision precision);
   double getFrequency() const {return frequency;}
   void multiplyFrequency(const double factor) {frequency *= factor;}
@@ -68,6 +69,7 @@ class Allele{
   static FileAllelesTogOrG fileAllelesToGForH2Filter;
   static FilegToG filegToG;
   static FilegOrGToAlleles fileGToAlleles;
+  static FilegOrGToAlleles filegToAlleles;
 };
 
 class Alleleg : public Allele{
