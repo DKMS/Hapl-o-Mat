@@ -122,16 +122,6 @@ void UnphasedLocus::resolve(){
       it_possibleCodesAtBothLocusPositions ++;
     }//for locusPosition
 
-    for(auto it : possibleCodesAtBothLocusPositions){
-      for(auto it2 : it){
-	for(auto it3 : it2){
-	std::cout << it3 <<" ";
-	}
-	std::cout << std::endl;
-      }
-      std::cout << std::endl;
-    }
-
     if(possibleCodesAtBothLocusPositions.at(0).size() > 1 || possibleCodesAtBothLocusPositions.at(1).size() > 1){
 
       H2Filter h2 (possibleCodesAtBothLocusPositions);
