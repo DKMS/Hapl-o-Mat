@@ -98,8 +98,6 @@ class H2Filter{
   void allFilters();
   void preFilter();
   void filter();
-  void filterVariant();
-  
 
   bool getIsH2() const {return isH2;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
