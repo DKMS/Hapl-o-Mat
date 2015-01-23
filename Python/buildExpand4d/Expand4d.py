@@ -5,6 +5,7 @@ from collections import defaultdict
 
 fourDigitDict = defaultdict(list)
 sixDigitDict = defaultdict(list)
+eightDigitDict = defaultdict(list)
 
 with open('allAlleles.txt') as file:
     for line in file:
@@ -22,6 +23,12 @@ with open('allAlleles.txt') as file:
                 code = line.rsplit(':',1)[0]
             sixDigitDict[code].append(line)
 
+        if line.count(':') > 2:
+            code = line
+            if code.count(':') == 4:
+                code = line.rsplit(':',1)[0]
+            eightDigitDict[code].append(line)
+
 alleleList = []
 for key in fourDigitDict:
     oneLine = []
@@ -33,6 +40,12 @@ for key in sixDigitDict:
     oneLine.append(key)
     oneLine.append(sixDigitDict[key])
     alleleList.append(oneLine)
+for key in eightDigitDict:
+    oneLine = []
+    oneLine.append(key)
+    oneLine.append(eightDigitDict[key])
+    alleleList.append(oneLine)
+
 
 alleleList.sort()
 
