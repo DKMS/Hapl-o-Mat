@@ -77,7 +77,7 @@ void UnphasedLocus::resolve(){
     for(auto locusPosition : unphasedLocus){
       std::vector<std::vector<std::shared_ptr<Allele>>> possiblePAllelesAtOneLocusPositions; 
       for(auto code : locusPosition){
-	std::shared_ptr<Allele> pAllele = Allele::createAllele(code, Allele::codePrecision::GForH2Filter, 1.);
+	std::shared_ptr<Allele> pAllele = Allele::createAllele(code, Allele::codePrecision::G, 1.);
 	std::vector<std::shared_ptr<Allele>> pAllelesAtOneLocusPosition = pAllele->translate();
 	//check for duplicates
 	sort(pAllelesAtOneLocusPosition.begin(),
