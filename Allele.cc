@@ -593,8 +593,31 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateTo6d(){
 
-}
+  strVec_t codesInPrecision;
+  strVec_t codesIn4d = gToAlleles();
+  for(auto codeIn4d : codesIn4d){
+    code = codeIn4d;
+    strVec_t codesIn8d = fourDigitToEightDigit();
+    codesInPrecision.insert(codesInPrecision.end(),
+			    codesIn8d.cbegin(),
+			    codesIn8d.cend());
+  }
 
+  std::vector<std::shared_ptr<Allele>> listOfPAllele6d;
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::string shorterCode = cutCodeKeepingLastLetter(codeInPrecision, 2);
+    std::shared_ptr<Allele> pAllele6d = std::make_shared<Allele6d> (shorterCode, frequency);
+    auto pos = pAllele6d->ispAlleleInList(listOfPAllele6d);
+    if(pos == listOfPAllele6d.cend())
+      listOfPAllele6d.push_back(pAllele6d);
+    else
+      (*pos)->addFrequency(pAllele6d->getFrequency());
+  }
+  
+  return listOfPAllele6d;
+}
+  
 std::vector<std::shared_ptr<Allele>> AlleleG::translateTo6d(){
 
   strVec_t codesInPrecision = GToAlleles();
