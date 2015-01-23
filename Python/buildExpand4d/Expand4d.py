@@ -4,6 +4,7 @@
 from collections import defaultdict
 
 fourDigitDict = defaultdict(list)
+sixDigitDict = defaultdict(list)
 
 with open('allAlleles.txt') as file:
     for line in file:
@@ -13,20 +14,30 @@ with open('allAlleles.txt') as file:
             code = line.rsplit(':',1)[0]
         if code.count(':') == 3:
             code = line.rsplit(':',2)[0]
-
         fourDigitDict[code].append(line)
+        
+        code = line
+        if code.count(':') == 3:
+            code = line.rsplit(':',1)[0]
+        sixDigitDict[code].append(line)
 
-fourDigitList = []
+alleleList = []
 for key in fourDigitDict:
     oneLine = []
     oneLine.append(key)
     oneLine.append(fourDigitDict[key])
-    fourDigitList.append(oneLine)
+    alleleList.append(oneLine)
+for key in sixDigitDict:
+    oneLine = []
+    oneLine.append(key)
+    oneLine.append(sixDigitDict[key])
+    alleleList.append(oneLine)
 
-fourDigitList.sort()
+alleleList.sort()
 
-with open('Expand4d.txt', 'w') as file:
-    for entry in fourDigitList:
+
+with open('alleleListExpanded.txt', 'w') as file:
+    for entry in alleleList:
         file.write(entry[0] + '\t' + '\t'.join(entry[1]) + '\n')
         
 
