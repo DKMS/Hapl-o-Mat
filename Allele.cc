@@ -313,6 +313,25 @@ strVec_t Allele::gToAlleles(){
 }
 
 
+strVec_t Allele::fourDigitToEightDigit(){
+
+  strVec_t codesInPrecision;
+  auto pos = file4dToAlleles.getList().find(code);
+  if(pos != file4dToAlleles.getList().cend()){
+    codesInPrecision = pos->second;
+  }
+  else{
+    std::cerr << "Missing translation of "
+	      << code 
+	      << " higher precisions"
+	      << std::endl;
+    exit (EXIT_FAILURE);
+  }
+
+  return codesInPrecision;
+}
+
+
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTog(){
   
   std::string codeInPrecision =  allelesTog();
@@ -553,24 +572,6 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
   return listOfPAllele4d;
 }
 
-strVec_t Allele::fourDigitToEightDigit(){
-
-  strVec_t codesInPrecision;
-  auto pos = file4dToAlleles.getList().find(code);
-  if(pos != file4dToAlleles.getList().cend()){
-    codesInPrecision = pos->second;
-  }
-  else{
-    std::cerr << "Missing translation of "
-	      << code 
-	      << " higher precisions"
-	      << std::endl;
-    exit (EXIT_FAILURE);
-  }
-
-  return codesInPrecision;
-}
-
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
 
   strVec_t codesInPrecision = fourDigitToEightDigit();
@@ -589,6 +590,29 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
 
   return listOfPAllele6d;
 }
+
+std::vector<std::shared_ptr<Allele>> Alleleg::translateTo6d(){
+
+}
+
+std::vector<std::shared_ptr<Allele>> AlleleG::translateTo6d(){
+
+  strVec_t codesInPrecision = GToAlleles();
+  std::vector<std::shared_ptr<Allele>> listOfPAllele6d;
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::string shorterNewCode = cutCodeKeepingLastLetter(codeInPrecision, 2);
+    std::shared_ptr<Allele> pAllele6d = std::make_shared<Allele6d> (shorterNewCode, frequency);
+    auto pos = pAllele6d->ispAlleleInList(listOfPAllele6d);
+    if(pos == listOfPAllele6d.cend())
+      listOfPAllele6d.push_back(pAllele6d);
+    else
+      (*pos)->addFrequency(pAllele6d->getFrequency());
+  }
+
+  return listOfPAllele6d;
+}
+
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTo6d(){
   
