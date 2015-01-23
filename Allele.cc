@@ -170,7 +170,7 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
     }
   case Allele::codePrecision::eightDigit:
     {
-      //      return this->translateTo8d();
+      return this->translateTo8d();
       break;
     }
   case Allele::codePrecision::asItIs:
@@ -464,7 +464,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(const FileAllelesTogO
       strVec_t newCodesInPrecision = allelesToG(whichH1File);
       codesInPrecision.insert(codesInPrecision.end(),
 			      newCodesInPrecision.cbegin(),
-			      newCodesInPrecision.cend());
+			      newCodesInPrecision.cend()); 
     }
   }  
 
@@ -492,7 +492,16 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateToG(const FileAllelesTogO
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateToG(const FileAllelesTogOrG & whichH1File){
 
-  strVec_t codesInPrecision =  allelesToG(whichH1File);
+  strVec_t codesInPrecision;
+  strVec_t codesIn8d = fourDigitToEightDigit();
+  for(auto codeIn8d : codesIn8d){
+    code = codeIn8d;
+    strVec_t codesInG = allelesToG(whichH1File);
+    codesInPrecision.insert(codesInPrecision.end(),
+			    codesInG.cbegin(),
+			    codesInG.cend()); 
+  }
+
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
   frequency /= static_cast<double>(codesInPrecision.size());
   for(auto codeInPrecision : codesInPrecision){
