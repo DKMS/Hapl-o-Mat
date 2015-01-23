@@ -13,7 +13,7 @@ FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt");
 
 FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/H1.txt");
 FilegOrGOr4dToAlleles Allele::filegToAlleles("data/H1g.txt");
-FilegOrGOr4dToAlleles Allele::file4dToAlleles("data/Expand4d.txt");
+FilegOrGOr4dToAlleles Allele::file4dToAlleles("data/allAllelesExpanded.txt");
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
@@ -205,14 +205,21 @@ std::string Allele::allelesTog(){
   
   bool found = false;
   while(pos != lastPos && found==false){
-    for(auto entry = pos->second.cbegin();
-	entry != pos->second.cend() && found==false;
-	entry ++){
-      if(code == *entry){
-	codeInPrecision = pos->first;
-	found = true;
-      }
-    }//for entries line
+    std::string gCodeWithoutg = leftOfFirstDelim(pos->first, 'g');
+    if(code == gCodeWithoutg){
+      codeInPrecision = pos->first;
+      found = true;
+    }
+    else{
+      for(auto entry = pos->second.cbegin();
+	  entry != pos->second.cend() && found==false;
+	  entry ++){
+	if(code == *entry){
+	  codeInPrecision = pos->first;
+	  found = true;
+	}
+      }//for entries line
+    }//else
     pos ++;
   }//while lines in fileAllelesTog
 
@@ -245,7 +252,8 @@ strVec_t Allele::allelesToG(const FileAllelesTogOrG & whichH1File){
   }//while lines in fileAllelesTog
 
   if(codesInPrecision.empty()){
-    codesInPrecision.push_back(code);
+    std::string code6d = cutCodeKeepingLastLetter(code, 2);
+    codesInPrecision.push_back(code6d);
   }
 
   return codesInPrecision;
@@ -388,10 +396,15 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTog(){
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateToG(const FileAllelesTogOrG & whichH1File){
   
-  strVec_t codesInPrecision  = fourDigitOrgToG();
-  if(codesInPrecision.empty())
-    codesInPrecision = allelesToG(whichH1File);
-
+  strVec_t codesInPrecision;
+  strVec_t codesIn8d = fourDigitToEightDigit();
+  for(auto codeIn8d : codesIn8d){
+    code = codeIn8d;
+    strVec_t newCodesInPrecision = allelesToG(whichH1File);;
+    codesInPrecision.insert(codesInPrecision.end(),
+			    newCodesInPrecision.cbegin(),
+			    newCodesInPrecision.cend());
+  }
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
   frequency /= static_cast<double>(codesInPrecision.size());
   for(auto codeInPrecision : codesInPrecision){
@@ -408,17 +421,18 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateToG(const FileAllelesTog
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(const FileAllelesTogOrG & whichH1File){
 
-  std::cerr << "not implemented yet. Results are errorprone." << std::endl;
-  //bullshit: g -> G + weitere Allele!
-  //requires further extension
-  strVec_t codesInPrecision  = fourDigitOrgToG();
-  if(codesInPrecision.empty()){
-    std::cerr << "Missing G-code for "
-	      << code
-	      <<"."
-	      << std::endl;
-    exit (EXIT_FAILURE);
-  }
+  strVec_t codesInPrecision;
+  strVec_t codesIn4d = gToAlleles();
+  for(auto codeIn4d : codesIn4d){
+    code = codeIn4d;
+    strVec_t codesIn8d = fourDigitToEightDigit();
+    for(auto codeIn8d : codesIn8d){
+      strVec_t newCodesInPrecision = allelesToG(whichH1File);;
+      codesInPrecision.insert(codesInPrecision.end(),
+			      newCodesInPrecision.cbegin(),
+			      newCodesInPrecision.cend());
+    }
+  }  
 
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
   frequency /= static_cast<double>(codesInPrecision.size());
