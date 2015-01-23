@@ -56,7 +56,7 @@ void FileAllelesTogOrG::readFile(){
   file.close();
 }
 
-void FilegOrGToAlleles::readFile(){
+void FilegOrGOr4dToAlleles::readFile(){
 
   std::cout << "Read in file " << fileName << std::endl;
 

@@ -11,8 +11,8 @@ FileAllelesTogOrG Allele::fileAllelesToGForH2Filter("data/H1ForH2Filter.txt");
 FilegToG Allele::filegToG("data/H1_Uebersetzung_GNomenklatur.txt");
 FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt");
 
-FilegOrGToAlleles Allele::fileGToAlleles("data/H1.txt");
-FilegOrGToAlleles Allele::filegToAlleles("data/H1g.txt");
+FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/H1.txt");
+FilegOrGOr4dToAlleles Allele::filegToAlleles("data/H1g.txt");
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
