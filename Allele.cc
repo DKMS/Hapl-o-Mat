@@ -584,3 +584,12 @@ std::vector<std::shared_ptr<Allele>> Allele6d::translateTo6d(){
   return listOfPAllele6d;
 }
 
+std::vector<std::shared_ptr<Allele>> Allele8d::translateTo6d(){
+
+  std::string code6d = cutCodeKeepingLastLetter(code, 2);
+  std::shared_ptr<Allele> pAllele6d = std::make_shared<Allele6d> (code6d, frequency);
+  std::vector<std::shared_ptr<Allele>> listOfPAllele6d;
+  listOfPAllele6d.push_back(pAllele6d);
+  return listOfPAllele6d;
+}
+
