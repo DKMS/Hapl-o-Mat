@@ -267,57 +267,81 @@ void H2Filter::filter(){
       strVec_t genotypeCodes = split(element, '+');
       std::string lhs = genotypeCodes.at(0);
       std::string rhs = genotypeCodes.at(1);
-      
-      auto pos1 = find_if(codesAndInAtLocusPosition1.begin(),
-			  codesAndInAtLocusPosition1.end(),
-			  [lhs](const std::pair<strVec_t, bool> element)
-			  {
-			    for(auto code : element.first){
-			      if(lhs == code)
-				return true;
+
+      auto currentPos1 = codesAndInAtLocusPosition1.begin();
+      while(currentPos1 != codesAndInAtLocusPosition1.end()){
+	//look for lhs in first locus position
+	auto pos1 = find_if(currentPos1,
+			    codesAndInAtLocusPosition1.end(),
+			    [lhs](const std::pair<strVec_t, bool> element)
+			    {
+			      for(auto code : element.first){
+				if(lhs == code)
+				  return true;
+			      }
+			      return false;
+			    });
+	//look for rhs in second locus position
+	auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
+			    codesAndInAtLocusPosition2.end(),
+			    [rhs](const std::pair<strVec_t, bool> element)
+			    {
+			      for(auto code : element.first){
+				if(rhs == code)
+				  return true;
+			      }
+			      return false;
 			    }
-			    return false;
-			  });
-      auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
-			  codesAndInAtLocusPosition2.end(),
-			  [rhs](const std::pair<strVec_t, bool> element)
-			  {
-			    for(auto code : element.first){
-			      if(rhs == code)
-				return true;
-			    }
-			    return false;
-			  }
-			  );
-      if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
-	pos1->second = true;
-	pos2->second = true;
-      }
-      
-      pos1 = find_if(codesAndInAtLocusPosition1.begin(),
-		     codesAndInAtLocusPosition1.end(),
-		     [rhs](const std::pair<strVec_t, bool> element)
-		     {
-		       for(auto code : element.first){
-			 if(rhs == code)
-			   return true;
-		       }
+			    );
+	
+	//lhs and rhs found
+	if(pos2 == codesAndInAtLocusPosition2.end() || pos1 == codesAndInAtLocusPosition1.end()){
+	  break;
+	}
+	else{
+	  pos1->second = true;
+	  pos2->second = true;
+	  currentPos1 = pos1;
+	  currentPos1 ++;
+	}
+
+      }//while
+
+      currentPos1 = codesAndInAtLocusPosition1.begin();
+      while(currentPos1 != codesAndInAtLocusPosition1.cend()){
+	//look for rhs in first locus position
+	auto pos1 = find_if(currentPos1,
+		       codesAndInAtLocusPosition1.end(),
+		       [rhs](const std::pair<strVec_t, bool> element)
+		       {
+			 for(auto code : element.first){
+			   if(rhs == code)
+			     return true;
+			 }
 			 return false;
-		     });
-      pos2 = find_if(codesAndInAtLocusPosition2.begin(),
-		     codesAndInAtLocusPosition2.end(),
-		     [lhs](const std::pair<strVec_t, bool> element)
-		     {
-		       for(auto code : element.first){
-			 if(lhs == code)
-			   return true;
-		       }
-		       return false;
-		     });
-      if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
-	pos1->second = true;
-	pos2->second = true;
-      }
+		       });
+	
+	//look for lhs in first locus position
+	auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
+		       codesAndInAtLocusPosition2.end(),
+		       [lhs](const std::pair<strVec_t, bool> element)
+		       {
+			 for(auto code : element.first){
+			   if(lhs == code)
+			     return true;
+			 }
+			 return false;
+		       });
+	if(pos2 == codesAndInAtLocusPosition2.end() || pos1 == codesAndInAtLocusPosition1.end()){
+	  break;
+	}
+	else{
+	  pos1->second = true;
+	  pos2->second = true;
+	  currentPos1 = pos1;
+	  currentPos1 ++;
+	}
+      }//while
     }//for element
 
     if(std::all_of(codesAndInAtLocusPosition1.cbegin(),
