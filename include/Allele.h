@@ -39,7 +39,7 @@ class Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo4d() = 0;
   virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File) = 0;
   virtual std::vector<std::shared_ptr<Allele>> translateTo6d() = 0;
-  //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d() = 0;
+  virtual std::vector<std::shared_ptr<Allele>> translateTo8d() = 0;
 
   static std::shared_ptr<Allele> createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency);
   static Allele::codePrecision identifyCodePrecision(const std::string code);
@@ -101,10 +101,8 @@ class Alleleg : public Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo4d();
   virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   virtual std::vector<std::shared_ptr<Allele>> translateTo6d();
-  //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){
-  //  std::vector<std::shared_ptr<Allele>> nix;
-  //  return nix;};  
-
+  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();
+  
  private:
 };
  
@@ -135,7 +133,7 @@ class Allele4d : public Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo4d();
   virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   virtual std::vector<std::shared_ptr<Allele>> translateTo6d();
-  //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();  
+  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();  
 
  private:
 
@@ -168,9 +166,7 @@ class AlleleG : public Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo4d();
   virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   virtual std::vector<std::shared_ptr<Allele>> translateTo6d();
-  //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){
-  //    std::vector<std::shared_ptr<Allele>> nix;
-  //    return nix;};  
+  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();
 
  private:
   static FileGTog fileGTog;
@@ -203,9 +199,7 @@ class Allele6d : public Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo4d();
   virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   virtual std::vector<std::shared_ptr<Allele>> translateTo6d();
-  //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){
-  //    std::vector<std::shared_ptr<Allele>> nix;
-  //  return nix;};  
+  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();
   
  private:
 };
@@ -218,6 +212,9 @@ class Allele8d : public Allele{
 		    const codePrecision in_wantedPrecision,
 		    const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
+  explicit Allele8d(const std::string in_code,
+		    const double in_frequency)
+    : Allele(in_code, codePrecision::eightDigit, codePrecision::eightDigit, in_frequency){}
   virtual std::shared_ptr<Allele> create(const std::string in_code,
 					 const codePrecision in_precision,
 					 const codePrecision in_wantedPrecision,
@@ -234,9 +231,7 @@ class Allele8d : public Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo4d();
   virtual std::vector<std::shared_ptr<Allele>> translateToG(const FileAllelesTogOrG & whichH1File);
   virtual std::vector<std::shared_ptr<Allele>> translateTo6d();
-  //  virtual std::vector<std::shared_ptr<Allele>> translateTo8d(){
-  //  std::vector<std::shared_ptr<Allele>> nix;
-  //  return nix;};  
+  virtual std::vector<std::shared_ptr<Allele>> translateTo8d();
   
  private:
 };
