@@ -93,11 +93,21 @@ class H2Filter{
     : isH2(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
     possibleH2Lines(),
-    phasedLocus(){}
+    phasedLocus(),
+    codesAndInAtLocusPosition1(),
+    codesAndInAtLocusPosition2()
+      {
+	for(auto codes : codesAtBothLocusPositions.at(0))
+	  codesAndInAtLocusPosition1.push_back(std::make_pair(codes, false));
+	for(auto codes : codesAtBothLocusPositions.at(1))
+	  codesAndInAtLocusPosition2.push_back(std::make_pair(codes, false));
+      }
 
   void allFilters();
   void preFilter();
   void filter();
+  void matchCodesToH2Lines(const std::string lhs,
+			   const std::string rhs);
 
   bool getIsH2() const {return isH2;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
@@ -107,6 +117,9 @@ class H2Filter{
   strVecVecArr_t codesAtBothLocusPositions;
   std::vector<FileH2::list_t::const_iterator> possibleH2Lines;
   strArrVec_t phasedLocus;
+  std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition1;
+  std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition2;
+
 
   static FileH2 fileH2;
 };
