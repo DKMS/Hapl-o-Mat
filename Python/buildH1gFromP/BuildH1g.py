@@ -44,13 +44,7 @@ with open('H1g.txt', 'w') as file:
         gCode = pCode[0][:-1]
         sameTwoDigit = True
 
-        shorterCodes = set()
         for code in pCode[1]:
-            shorterCodes.add(code)    
-            if code.count(':') > 1:
-                shorterCode = code.rsplit(':',1)[0]
-                shorterCodes.add(shorterCode)
-
             splittedCode = code.split(':')
             TwoDigitCode = splittedCode[0] + ':' + splittedCode[1]
             if TwoDigitCode == gCode:
@@ -61,5 +55,5 @@ with open('H1g.txt', 'w') as file:
         if not sameTwoDigit:
             gCode += 'g'
             
-        sortedShorterCodes = sorted(shorterCodes)
-        file.write(gCode + '\t' + '\t'.join(sortedShorterCodes) + '\n')
+        sortedCodes = sorted(pCode[1])
+        file.write(gCode + '\t' + '\t'.join(sortedCodes) + '\n')
