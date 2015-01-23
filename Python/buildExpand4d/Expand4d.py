@@ -15,11 +15,12 @@ with open('allAlleles.txt') as file:
         if code.count(':') == 3:
             code = line.rsplit(':',2)[0]
         fourDigitDict[code].append(line)
-        
-        code = line
-        if code.count(':') == 3:
-            code = line.rsplit(':',1)[0]
-        sixDigitDict[code].append(line)
+
+        if line.count(':') > 1:
+            code = line
+            if code.count(':') == 3:
+                code = line.rsplit(':',1)[0]
+            sixDigitDict[code].append(line)
 
 alleleList = []
 for key in fourDigitDict:
@@ -36,7 +37,7 @@ for key in sixDigitDict:
 alleleList.sort()
 
 
-with open('alleleListExpanded.txt', 'w') as file:
+with open('allAllelesExpanded.txt', 'w') as file:
     for entry in alleleList:
         file.write(entry[0] + '\t' + '\t'.join(entry[1]) + '\n')
         
