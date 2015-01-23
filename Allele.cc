@@ -530,3 +530,14 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
   listOfPAllele4d.push_back(pAllele4d);
   return listOfPAllele4d;
 }
+
+strVec_t Allele::fourDigitToSixDigit(){
+
+
+}
+
+std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
+
+  strVec_t codesInPrecision = fourDigitToSixDigit();
+
+}
