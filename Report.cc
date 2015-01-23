@@ -134,6 +134,11 @@ std::string Report::evaluateReportType() const{
 	totalType += "H2";
 	break;
       }
+    case Locus::reportType::H2M:
+      {
+	totalType += "H2M";
+	break;
+      }
     case Locus::reportType::I:
       {
 	totalType += "I";

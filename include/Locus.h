@@ -14,6 +14,7 @@ class Locus{
     H0,
     H1,
     H2,
+    H2M,
     I
   };
 
@@ -91,6 +92,7 @@ class H2Filter{
   H2Filter(){};
   explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions)
     : isH2(false),
+    isMultipleLines(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
     possibleH2Lines(),
     phasedLocus(),
@@ -110,10 +112,12 @@ class H2Filter{
 			   const std::string rhs);
 
   bool getIsH2() const {return isH2;}
+  bool getIsMultipleLines() const {return isMultipleLines;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
 
  private:
   bool isH2;
+  bool isMultipleLines;
   strVecVecArr_t codesAtBothLocusPositions;
   std::vector<FileH2::list_t::const_iterator> possibleH2Lines;
   strArrVec_t phasedLocus;

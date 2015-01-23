@@ -137,7 +137,10 @@ void UnphasedLocus::resolve(){
       H2Filter h2 (possibleCodesAtBothLocusPositions);
       h2.allFilters();
       if(h2.getIsH2()){
-	type = reportType::H2;
+	if(h2.getIsMultipleLines())
+	  type = reportType::H2M;
+	else
+	  type = reportType::H2;
 	PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
 	phasedLocus.resolve();
 	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
@@ -332,6 +335,8 @@ void H2Filter::filter(){
     candidates.erase(std::unique(candidates.begin(),
 				 candidates.end()),
 		     candidates.end());
+    if(candidates.size() > 1)
+      isMultipleLines = true;
     for(auto candidate : candidates){
       for(auto genotype : *candidate){
 	strVec_t splittedGenotype = split(genotype, '+');
