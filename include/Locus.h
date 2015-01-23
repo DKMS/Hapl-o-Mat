@@ -105,10 +105,10 @@ class H2Filter{
  private:
   bool isH2;
   strVecVecArr_t codesAtBothLocusPositions;
-  std::vector<FileH2Expanded::list_t::const_iterator> possibleH2Lines;
+  std::vector<FileH2::list_t::const_iterator> possibleH2Lines;
   strArrVec_t phasedLocus;
 
-  static FileH2Expanded fileH2;
+  static FileH2 fileH2;
 };
 
 

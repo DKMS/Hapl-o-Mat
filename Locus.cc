@@ -5,7 +5,7 @@
 #include "Utility.h"
 #include "Allele.h"
 
-FileH2Expanded H2Filter::fileH2("data/H24d.txt"); 
+FileH2 H2Filter::fileH2("data/H2.txt"); 
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
@@ -124,6 +124,16 @@ void UnphasedLocus::resolve(){
 
     if(possibleCodesAtBothLocusPositions.at(0).size() > 1 || possibleCodesAtBothLocusPositions.at(1).size() > 1){
 
+      for(auto it : possibleCodesAtBothLocusPositions){
+	for(auto it2 : it){
+	  for(auto it3 : it2){
+	    std::cout << it3 << " ";
+	  }
+	  std::cout << std::endl;
+	}
+	std::cout << std::endl;
+      }
+
       H2Filter h2 (possibleCodesAtBothLocusPositions);
       h2.allFilters();
       if(h2.getIsH2()){
@@ -206,21 +216,19 @@ void H2Filter::preFilter(){
   }
 
   std::string locus = getLocus(*listOfAllCodesAndIn.cbegin()->first.cbegin());
-  FileH2Expanded::list_t::const_iterator pos;
-  FileH2Expanded::list_t::const_iterator lastPos;
+  FileH2::list_t::const_iterator pos;
+  FileH2::list_t::const_iterator lastPos;
   fileH2.findPositionLocus(locus, pos, lastPos);
 
   while(pos < lastPos){
-    for(auto block : *pos){
-      for(auto element : block){    
-	strVec_t splittedGenotype = split(element, '+');
-	for(auto codesAndIn = listOfAllCodesAndIn.begin();
-	    codesAndIn != listOfAllCodesAndIn.end();
-	    codesAndIn ++){
-	  for(auto code : codesAndIn->first){
-	    if(code == splittedGenotype.at(0) || code == splittedGenotype.at(1))
-	      codesAndIn->second = true;
-	  }
+    for(auto element : *pos){    
+      strVec_t splittedGenotype = split(element, '+');
+      for(auto codesAndIn = listOfAllCodesAndIn.begin();
+	  codesAndIn != listOfAllCodesAndIn.end();
+	  codesAndIn ++){
+	for(auto code : codesAndIn->first){
+	  if(code == splittedGenotype.at(0) || code == splittedGenotype.at(1))
+	    codesAndIn->second = true;
 	}
       }
     }
@@ -252,66 +260,65 @@ void H2Filter::filter(){
   for(auto codes : codesAtBothLocusPositions.at(1))
     codesAndInAtLocusPosition2.push_back(std::make_pair(codes, false));
 
-  std::vector<FileH2Expanded::list_t::const_iterator> candidates;
+  std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
-    for(auto block : *line){
-      for(auto element : block){
-	strVec_t genotypeCodes = split(element, '+');
-	std::string lhs = genotypeCodes.at(0);
-	std::string rhs = genotypeCodes.at(1);
-
-	auto pos1 = find_if(codesAndInAtLocusPosition1.begin(),
-			    codesAndInAtLocusPosition1.end(),
-			    [lhs](const std::pair<strVec_t, bool> element)
-			    {
-			      for(auto code : element.first){
-				if(lhs == code)
-				  return true;
-			      }
-			      return false;
-			    });
-	auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
-			    codesAndInAtLocusPosition2.end(),
-			    [rhs](const std::pair<strVec_t, bool> element)
-			    {
-			      for(auto code : element.first){
-				if(rhs == code)
-				  return true;
-			      }
-			      return false;
+    for(auto element :  *line){
+      std::cout << element << std::endl;
+      strVec_t genotypeCodes = split(element, '+');
+      std::string lhs = genotypeCodes.at(0);
+      std::string rhs = genotypeCodes.at(1);
+      
+      auto pos1 = find_if(codesAndInAtLocusPosition1.begin(),
+			  codesAndInAtLocusPosition1.end(),
+			  [lhs](const std::pair<strVec_t, bool> element)
+			  {
+			    for(auto code : element.first){
+			      if(lhs == code)
+				return true;
 			    }
-			    );
-	if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
-	  pos1->second = true;
-	  pos2->second = true;
-	}
-
-	pos1 = find_if(codesAndInAtLocusPosition1.begin(),
-		       codesAndInAtLocusPosition1.end(),
-		       [rhs](const std::pair<strVec_t, bool> element)
-		       {
-			 for(auto code : element.first){
-			   if(rhs == code)
-			     return true;
-			 }
+			    return false;
+			  });
+      auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
+			  codesAndInAtLocusPosition2.end(),
+			  [rhs](const std::pair<strVec_t, bool> element)
+			  {
+			    for(auto code : element.first){
+			      if(rhs == code)
+				return true;
+			    }
+			    return false;
+			  }
+			  );
+      if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
+	pos1->second = true;
+	pos2->second = true;
+      }
+      
+      pos1 = find_if(codesAndInAtLocusPosition1.begin(),
+		     codesAndInAtLocusPosition1.end(),
+		     [rhs](const std::pair<strVec_t, bool> element)
+		     {
+		       for(auto code : element.first){
+			 if(rhs == code)
+			   return true;
+		       }
 			 return false;
-		       });
-	pos2 = find_if(codesAndInAtLocusPosition2.begin(),
-		       codesAndInAtLocusPosition2.end(),
-		       [lhs](const std::pair<strVec_t, bool> element)
-		       {
-			 for(auto code : element.first){
-			   if(lhs == code)
-			     return true;
-			 }
-			 return false;
-		       });
-	if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
-	  pos1->second = true;
-	  pos2->second = true;
-	}
-      }//for element
-    }//for block
+		     });
+      pos2 = find_if(codesAndInAtLocusPosition2.begin(),
+		     codesAndInAtLocusPosition2.end(),
+		     [lhs](const std::pair<strVec_t, bool> element)
+		     {
+		       for(auto code : element.first){
+			 if(lhs == code)
+			   return true;
+		       }
+		       return false;
+		     });
+      if(pos2 != codesAndInAtLocusPosition2.end() && pos1 != codesAndInAtLocusPosition1.end()){
+	pos1->second = true;
+	pos2->second = true;
+      }
+    }//for element
 
     if(std::all_of(codesAndInAtLocusPosition1.cbegin(),
 		   codesAndInAtLocusPosition1.cend(),
@@ -339,8 +346,7 @@ void H2Filter::filter(){
 				 candidates.end()),
 		     candidates.end());
     for(auto candidate : candidates){
-      for(auto block : *candidate){
-	std::string genotype = *(block.cend()-1);
+      for(auto genotype : *candidate){
 	strVec_t splittedGenotype = split(genotype, '+');
 	strArr_t twoCodes;
 	size_t counter = 0;
@@ -349,7 +355,7 @@ void H2Filter::filter(){
 	  counter ++;
 	}
 	phasedLocus.push_back(twoCodes);    
-      }//for blocks
+      }//for genotype
     }//for candidates
   }//if candidates empty
 }
