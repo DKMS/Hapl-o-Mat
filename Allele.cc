@@ -271,7 +271,9 @@ strVec_t Allele::fourDigitOrgToG(){
   else{
     std::cerr << "Missing translation from g-Code "
 	      << code 
-	      << " to G-code."
+	      << " to G-code in "
+	      << filegToG.getFileName()
+	      << "."
 	      << std::endl;
     exit (EXIT_FAILURE);
   }
@@ -284,8 +286,11 @@ strVec_t Allele::GToAlleles(){
   strVec_t newCodes;
   auto itFileGToAlleles = fileGToAlleles.getList().find(code);
   if(itFileGToAlleles == fileGToAlleles.getList().cend()){
-    std::cout << "Could not find G-Code "
+    std::cerr << "Could not find G-Code "
               << code
+	      << " in file"
+	      << filegToG.getFileName()
+	      << "."
               << std::endl;
     exit (EXIT_FAILURE);
   }
@@ -301,8 +306,11 @@ strVec_t Allele::gToAlleles(){
   strVec_t codesInPrecision;
   auto itFilegToAlleles = filegToAlleles.getList().find(code);
   if(itFilegToAlleles == filegToAlleles.getList().cend()){
-    std::cout << "Could not find g-Code "
+    std::cerr << "Could not find g-Code "
               << code
+	      << " in file "
+	      << filegToG.getFileName()
+	      << "."
               << std::endl;
     exit (EXIT_FAILURE);
   }
@@ -324,7 +332,9 @@ strVec_t Allele::expandPrecision(){
   else{
     std::cerr << "Missing translation of "
 	      << code 
-	      << " higher precisions"
+	      << " to higher precisions in file "
+	      << filegToG.getFileName()
+	      << "."
 	      << std::endl;
     exit (EXIT_FAILURE);
   }

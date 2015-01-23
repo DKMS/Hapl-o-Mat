@@ -188,7 +188,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     else{
       auto itGlid = glid.getList().find(code);
       if(itGlid == glid.getList().cend()){
-	std::cout << "Key "
+	std::cerr << "Key "
 		  << code
 		  << " not in glid-file" << std::endl;
 	exit(EXIT_FAILURE);
@@ -260,7 +260,7 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
   std::string nmdpCode = findNMDPCode(code);
   auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
   if(itFileNMDPCodes == fileNMDPCodes.getList().end()){
-    std::cout << "Could not find NMDP-Code "
+    std::cerr << "Could not find NMDP-Code "
 	      << nmdpCode
 	      << std::endl;
     exit (EXIT_FAILURE);
