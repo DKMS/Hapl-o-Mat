@@ -314,7 +314,7 @@ strVec_t Allele::gToAlleles(){
 }
 
 
-strVec_t Allele::fourDigitToEightDigit(){
+strVec_t Allele::expandPrecision(){
 
   strVec_t codesInPrecision;
   auto pos = file4dToAlleles.getList().find(code);
@@ -397,7 +397,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTog(){
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTog(){
 
   strVec_t codesInPrecision;
-  strVec_t codesIn8d = fourDigitToEightDigit();
+  strVec_t codesIn8d = expandPrecision();
   for(auto codeIn8d : codesIn8d){
     code = codeIn8d;
     std::string codeIng = allelesTog();
@@ -431,7 +431,7 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTog(){
 std::vector<std::shared_ptr<Allele>> Allele4d::translateToG(const FileAllelesTogOrG & whichH1File){
   
   strVec_t codesInPrecision;
-  strVec_t codesIn8d = fourDigitToEightDigit();
+  strVec_t codesIn8d = expandPrecision();
   for(auto codeIn8d : codesIn8d){
     code = codeIn8d;
     strVec_t newCodesInPrecision = allelesToG(whichH1File);
@@ -459,7 +459,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateToG(const FileAllelesTogO
   strVec_t codesIn4d = gToAlleles();
   for(auto codeIn4d : codesIn4d){
     code = codeIn4d;
-    strVec_t codesIn8d = fourDigitToEightDigit();
+    strVec_t codesIn8d = expandPrecision();
     for(auto codeIn8d : codesIn8d){
       strVec_t newCodesInPrecision = allelesToG(whichH1File);
       codesInPrecision.insert(codesInPrecision.end(),
@@ -493,7 +493,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateToG(const FileAllelesTogO
 std::vector<std::shared_ptr<Allele>> Allele6d::translateToG(const FileAllelesTogOrG & whichH1File){
 
   strVec_t codesInPrecision;
-  strVec_t codesIn8d = fourDigitToEightDigit();
+  strVec_t codesIn8d = expandPrecision();
   for(auto codeIn8d : codesIn8d){
     code = codeIn8d;
     strVec_t codesInG = allelesToG(whichH1File);
@@ -598,7 +598,7 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
 
-  strVec_t codesInPrecision = fourDigitToEightDigit();
+  strVec_t codesInPrecision = expandPrecision();
   std::vector<std::shared_ptr<Allele>> listOfPAllele6d;
   frequency /= static_cast<double>(codesInPrecision.size());
   for(auto codeInPrecision : codesInPrecision){
@@ -621,7 +621,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTo6d(){
   strVec_t codesIn4d = gToAlleles();
   for(auto codeIn4d : codesIn4d){
     code = codeIn4d;
-    strVec_t codesIn8d = fourDigitToEightDigit();
+    strVec_t codesIn8d = expandPrecision();
     codesInPrecision.insert(codesInPrecision.end(),
 			    codesIn8d.cbegin(),
 			    codesIn8d.cend());
@@ -682,7 +682,7 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTo6d(){
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo8d(){
 
-  strVec_t codesInPrecision = fourDigitToEightDigit();
+  strVec_t codesInPrecision = expandPrecision();
   std::vector<std::shared_ptr<Allele>> listOfPAllele8d;
   frequency /= static_cast<double>(codesInPrecision.size());
   for(auto codeInPrecision : codesInPrecision){
@@ -703,7 +703,7 @@ std::vector<std::shared_ptr<Allele>> Alleleg::translateTo8d(){
   strVec_t codesIn4d = gToAlleles();
   for(auto codeIn4d : codesIn4d){
     code = codeIn4d;
-    strVec_t codesIn8d = fourDigitToEightDigit();
+    strVec_t codesIn8d = expandPrecision();
     codesInPrecision.insert(codesInPrecision.end(),
 			    codesIn8d.cbegin(),
 			    codesIn8d.cend());
@@ -729,7 +729,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo8d(){
   strVec_t codesIn6d = GToAlleles();
   for(auto codeIn6d : codesIn6d){
     code = codeIn6d;
-    strVec_t codesIn8d = fourDigitToEightDigit();
+    strVec_t codesIn8d = expandPrecision();
     codesInPrecision.insert(codesInPrecision.end(),
 			    codesIn8d.cbegin(),
 			    codesIn8d.cend());
@@ -751,7 +751,7 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo8d(){
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTo8d(){
 
-  strVec_t codesInPrecision = fourDigitToEightDigit();
+  strVec_t codesInPrecision = expandPrecision();
   std::vector<std::shared_ptr<Allele>> listOfPAllele8d;
   frequency /= static_cast<double>(codesInPrecision.size());
   for(auto codeInPrecision : codesInPrecision){

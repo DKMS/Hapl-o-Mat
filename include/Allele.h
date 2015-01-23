@@ -50,7 +50,7 @@ class Allele{
   strVec_t fourDigitOrgToG();
   strVec_t GToAlleles();
   strVec_t gToAlleles();
-  strVec_t fourDigitToEightDigit();
+  strVec_t expandPrecision();
   static std::string printCodePrecision(const codePrecision precision);
   double getFrequency() const {return frequency;}
   void multiplyFrequency(const double factor) {frequency *= factor;}
