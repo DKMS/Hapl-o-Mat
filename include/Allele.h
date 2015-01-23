@@ -71,6 +71,7 @@ class Allele{
   static FilegToG filegToG;
   static FilegOrGOr4dToAlleles fileGToAlleles;
   static FilegOrGOr4dToAlleles filegToAlleles;
+  static FilegOrGOr4dToAlleles file4dToAlleles;
 };
 
 class Alleleg : public Allele{

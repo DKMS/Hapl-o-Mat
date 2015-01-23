@@ -13,6 +13,7 @@ FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt");
 
 FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/H1.txt");
 FilegOrGOr4dToAlleles Allele::filegToAlleles("data/H1g.txt");
+FilegOrGOr4dToAlleles Allele::file4dToAlleles("data/Expand4d.txt");
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
@@ -257,6 +258,13 @@ strVec_t Allele::fourDigitOrgToG(){
   if(itgToG != filegToG.getList().cend()){
     for(auto Gcode : itgToG->second)
       codesInPrecision.push_back(Gcode);
+  }
+  else{
+    std::cerr << "Missing translation from g-Code "
+	      << code 
+	      << " to G-code."
+	      << std::endl;
+    exit (EXIT_FAILURE);
   }
 
   return codesInPrecision;
@@ -533,7 +541,20 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
 
 strVec_t Allele::fourDigitToSixDigit(){
 
+  strVec_t codesInPrecision;
+  auto pos = file4dToAlleles.getList().find(code);
+  if(pos != file4dToAlleles.getList().cend()){
+    codesInPrecision = pos->second;
+  }
+  else{
+    std::cerr << "Missing translation of "
+	      << code 
+	      << " higher precisions"
+	      << std::endl;
+    exit (EXIT_FAILURE);
+  }
 
+  return codesInPrecision;
 }
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
