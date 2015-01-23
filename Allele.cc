@@ -165,7 +165,7 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
     }
   case Allele::codePrecision::sixDigit:
     {
-      //      return this->translateTo6d();
+      return this->translateTo6d();
       break;
     }
   case Allele::codePrecision::eightDigit:
@@ -532,14 +532,14 @@ std::vector<std::shared_ptr<Allele>> Allele6d::translateTo4d(){
 
 std::vector<std::shared_ptr<Allele>> Allele8d::translateTo4d(){
 
-  std::string code4d =  cutCodeKeepingLastLetter(code, 1);
+  std::string code4d = cutCodeKeepingLastLetter(code, 1);
   std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code4d, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
   listOfPAllele4d.push_back(pAllele4d);
   return listOfPAllele4d;
 }
 
-strVec_t Allele::fourDigitToSixDigit(){
+strVec_t Allele::fourDigitToEightDigit(){
 
   strVec_t codesInPrecision;
   auto pos = file4dToAlleles.getList().find(code);
@@ -559,6 +559,19 @@ strVec_t Allele::fourDigitToSixDigit(){
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo6d(){
 
-  strVec_t codesInPrecision = fourDigitToSixDigit();
+  strVec_t codesInPrecision = fourDigitToEightDigit();
+  std::vector<std::shared_ptr<Allele>> listOfPAllele6d;
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::string shorterNewCode = cutCodeKeepingLastLetter(codeInPrecision, 2);
+    std::shared_ptr<Allele> pAllele6d = std::make_shared<Allele6d> (shorterNewCode, frequency);
+    auto pos = pAllele6d->ispAlleleInList(listOfPAllele6d);
 
+    if(pos == listOfPAllele6d.cend())
+      listOfPAllele6d.push_back(pAllele6d);
+    else
+      (*pos)->addFrequency(pAllele6d->getFrequency());
+  }
+
+  return listOfPAllele6d;
 }

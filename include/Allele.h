@@ -50,7 +50,7 @@ class Allele{
   strVec_t fourDigitOrgToG();
   strVec_t GToAlleles();
   strVec_t gToAlleles();
-  strVec_t fourDigitToSixDigit();
+  strVec_t fourDigitToEightDigit();
   static std::string printCodePrecision(const codePrecision precision);
   double getFrequency() const {return frequency;}
   void multiplyFrequency(const double factor) {frequency *= factor;}
@@ -188,6 +188,9 @@ class Allele6d : public Allele{
 		    const codePrecision in_wantedPrecision,
 		    const double in_frequency)
     : Allele(in_code, in_precision, in_wantedPrecision, in_frequency){}
+  explicit Allele6d(const std::string in_code,
+		    const double in_frequency)
+    : Allele(in_code, codePrecision::sixDigit, codePrecision::sixDigit, in_frequency){}
   virtual std::shared_ptr<Allele> create(const std::string in_code,
 					 const codePrecision in_precision,
 					 const codePrecision in_wantedPrecision,
