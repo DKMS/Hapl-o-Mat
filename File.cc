@@ -97,7 +97,10 @@ void FileAlleles::readFile(){
   std::string locusOld = "";
   std::string line;
   while(std::getline(file, line)){
-    list.push_back(line);
+    std::stringstream ss(line);
+    std::string entry;
+    ss >> entry;    
+    list.push_back(entry);
 
     std::string locus = getLocus(line);
     addIteratorToLocusPositions(locus, locusOld);
