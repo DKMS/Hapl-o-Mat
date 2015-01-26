@@ -6,28 +6,48 @@ from collections import defaultdict
 fourDigitDict = defaultdict(list)
 sixDigitDict = defaultdict(list)
 eightDigitDict = defaultdict(list)
+endingWithoutLetterDict = defaultdict(list)
+endingWithLetterDict = defaultdict(list)
 
+endLetters = ('N', 'L', 'S', 'Q')
 with open('allAlleles.txt') as file:
     for line in file:
         line = line.rstrip('\n')
-        code = line
+        originalCode = line.split()[0]
+        code = originalCode
         if code.count(':') == 2:
             code = line.rsplit(':',1)[0]
         if code.count(':') == 3:
             code = line.rsplit(':',2)[0]
         fourDigitDict[code].append(line)
 
-        if line.count(':') > 1:
-            code = line
-            if code.count(':') == 3:
-                code = line.rsplit(':',1)[0]
-            sixDigitDict[code].append(line)
+        if originalCode.count(':') == 1:
+            if originalCode.endswith(endLetters):
+                codeWithoutLetter = code[:-1]
+                if not codeWithoutLetter in fourDigitDict:
+                    endingWithoutLetterDict[codeWithoutLetter].append(originalCode)
+        else:
+            if originalCode.endswith(endLetters):
+                code = originalCode
+                letter = originalCode[-1]
+                while code.count(':') > 1:
+                    code = code.rsplit(':',1)[0]            
+                    code += letter
+                    endingWithLetterDict[code].append(originalCode)
 
-        if line.count(':') > 2:
-            code = line
+        if originalCode.count(':') > 1:
+            code = originalCode
+            if code.count(':') == 3:
+                code = originalCode.rsplit(':',1)[0]
+            sixDigitDict[code].append(originalCode)
+
+        if originalCode.count(':') > 2:
+            code = originalCode
             if code.count(':') == 4:
-                code = line.rsplit(':',1)[0]
-            eightDigitDict[code].append(line)
+                code = originalCode.rsplit(':',1)[0]
+            eightDigitDict[code].append(originalCode)
+
+            
 
 alleleList = []
 for key in fourDigitDict:
@@ -45,6 +65,17 @@ for key in eightDigitDict:
     oneLine.append(key)
     oneLine.append(eightDigitDict[key])
     alleleList.append(oneLine)
+for key in endingWithoutLetterDict:
+    oneLine = []
+    oneLine.append(key)
+    oneLine.append(endingWithoutLetterDict[key])
+    alleleList.append(oneLine)
+for key in endingWithLetterDict:
+    oneLine = []
+    oneLine.append(key)
+    oneLine.append(endingWithLetterDict[key])
+    alleleList.append(oneLine)
+
 
 
 alleleList.sort()
