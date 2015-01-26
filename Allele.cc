@@ -317,7 +317,7 @@ strVec_t Allele::expandPrecision(){
     std::cerr << "Missing translation of "
 	      << code 
 	      << " to higher precisions in file "
-	      << filegToG.getFileName()
+	      << file4dToAlleles.getFileName()
 	      << "."
 	      << std::endl;
     exit (EXIT_FAILURE);
