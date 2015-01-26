@@ -126,7 +126,13 @@ void UnphasedLocus::resolve(){
 
       H2Filter h2 (possibleCodesAtBothLocusPositions);
       h2.allFilters();
-      if(h2.getIsH2()){
+      if(h2.getIsH1()){
+	type = reportType::H1;
+	PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
+	phasedLocus.resolve();
+	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
+      }
+      else if(h2.getIsH2()){
 	if(h2.getIsMultipleLines())
 	  type = reportType::H2M;
 	else
@@ -140,17 +146,6 @@ void UnphasedLocus::resolve(){
 	doResolve();
       }
     }//if locus sizes > 1
-    else{
-      if(possibleCodesAtBothLocusPositions.at(0).size() == 1 && possibleCodesAtBothLocusPositions.at(1).size() == 1){
-	if(possibleCodesAtBothLocusPositions.at(0).at(0).size() == 1 && possibleCodesAtBothLocusPositions.at(1).at(0).size() == 1){
-	  type = reportType::H1;	  
-	}
-      }
-      else
-	type = reportType::I;
-      
-      doResolve();
-    }
   }//if doH2Filter
   else{
     doResolve();
@@ -190,13 +185,101 @@ void UnphasedLocus::doResolve(){
 }
 
 void H2Filter::allFilters(){
- 
-  preFilter();
-  if(! possibleH2Lines.empty()){
-    filter();
-    if(! phasedLocus.empty())
-      isH2 = true;
+
+  h1Filter();
+  if(! isH1){
+    preFilter();
+    if(! possibleH2Lines.empty()){
+      filter();
+      if(! phasedLocus.empty())
+	isH2 = true;
+    }
   }
+}
+
+void H2Filter::h1Filter(){
+
+  bool locusPosition1IsH1 = true;
+  std::string codeGLocusPosition1;
+  auto codesAndIn = codesAndInAtLocusPosition1.cbegin();
+  while(codesAndIn != codesAndInAtLocusPosition1.cend() && locusPosition1IsH1){
+    for(auto code : codesAndIn->first){
+      if(checkLastLetter(code, 'G')){
+	if(codesAndInAtLocusPosition1.size() == 1){
+	  locusPosition1IsH1 = locusPosition1IsH1 && true;
+	  codeGLocusPosition1 = code;
+	}
+	else{
+	  auto pos = find_if(codesAndIn ++,
+			     codesAndInAtLocusPosition1.cend(),
+			     [code](const std::pair<strVec_t, bool> element)
+			     {
+			       for(auto codeElement : element.first){
+				 if(code == codeElement){
+				   return true;
+				 }
+			       }
+			       return false;
+			     });
+
+	  if(pos != codesAndInAtLocusPosition1.cend()){
+	    locusPosition1IsH1 = locusPosition1IsH1 && true;
+	    codeGLocusPosition1 = code;
+	  }
+	  else
+	    locusPosition1IsH1 = false;
+	}//else
+      }
+    }//for code 
+
+    codesAndIn ++;    
+  }//while codesAndIn
+  
+  bool locusPosition2IsH1 = true;
+  std::string codeGLocusPosition2;
+  codesAndIn = codesAndInAtLocusPosition2.cbegin();
+  while(codesAndIn != codesAndInAtLocusPosition2.cend() && locusPosition2IsH1){
+    for(auto code : codesAndIn->first){
+      if(checkLastLetter(code, 'G')){
+	if(codesAndInAtLocusPosition2.size() == 1){
+	  locusPosition2IsH1 = locusPosition2IsH1 && true;
+	  codeGLocusPosition2 = code;
+	}
+	else{
+	  auto pos = find_if(codesAndIn ++,
+			     codesAndInAtLocusPosition2.cend(),
+			     [code](const std::pair<strVec_t, bool> element)
+			     {
+			       for(auto codeElement : element.first){
+				 if(code == codeElement){
+				   return true;
+				 }
+			       }
+			       return false;
+			     });
+
+	  if(pos != codesAndInAtLocusPosition2.cend()){
+	    locusPosition2IsH1 = locusPosition2IsH1 && true;
+	    codeGLocusPosition2 = code;
+	  }
+	  else
+	    locusPosition2IsH1 = false;
+	}//else
+      }
+    }//for code 
+
+    codesAndIn ++;    
+  }//while codesAndIn
+
+  if(locusPosition1IsH1 && locusPosition2IsH1){
+    isH1 = true;
+    strArr_t twoCodes;
+    twoCodes[0] = codeGLocusPosition1;
+    twoCodes[1] = codeGLocusPosition2;
+    phasedLocus.push_back(twoCodes);    
+  }
+  else
+    isH1 = false;
 }
 
 void H2Filter::preFilter(){
@@ -254,19 +337,22 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 			[lhs](const std::pair<strVec_t, bool> element)
 			{
 			  for(auto code : element.first){
-			    if(lhs == code)
+			    if(lhs == code){
 			      return true;
-			      }
+			    }
+			  }
 			  return false;
 			});
+
     //look for rhs in second locus position
     auto pos2 = find_if(codesAndInAtLocusPosition2.begin(),
 			codesAndInAtLocusPosition2.end(),
 			[rhs](const std::pair<strVec_t, bool> element)
 			{
 			  for(auto code : element.first){
-			    if(rhs == code)
+			    if(rhs == code){
 			      return true;
+			    }
 			  }
 			  return false;
 			}
@@ -294,7 +380,6 @@ void H2Filter::filter(){
       strVec_t genotypeCodes = split(element, '+');
       std::string lhs = genotypeCodes.at(0);
       std::string rhs = genotypeCodes.at(1);
-
       matchCodesToH2Lines(lhs, rhs);
       matchCodesToH2Lines(rhs, lhs);
     }//for element

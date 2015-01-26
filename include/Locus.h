@@ -91,7 +91,8 @@ class H2Filter{
  public:
   H2Filter(){};
   explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions)
-    : isH2(false),
+    : isH1(false),
+    isH2(false),
     isMultipleLines(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
     possibleH2Lines(),
@@ -109,16 +110,19 @@ class H2Filter{
       }
 
   void allFilters();
+  void h1Filter();
   void preFilter();
   void filter();
   void matchCodesToH2Lines(const std::string lhs,
 			   const std::string rhs);
 
+  bool getIsH1() const {return isH1;}
   bool getIsH2() const {return isH2;}
   bool getIsMultipleLines() const {return isMultipleLines;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
 
  private:
+  bool isH1;
   bool isH2;
   bool isMultipleLines;
   strVecVecArr_t codesAtBothLocusPositions;
