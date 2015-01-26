@@ -186,6 +186,19 @@ void UnphasedLocus::doResolve(){
 
 void H2Filter::allFilters(){
 
+  for(auto it : codesAndInAtLocusPosition1){
+    for(auto it2 : it.first){
+      std::cout << it2 << std::endl;
+    }
+  }
+  std::cout <<std::endl;
+  std::cout <<std::endl;
+  for(auto it : codesAndInAtLocusPosition2){
+    for(auto it2 : it.first){
+      std::cout << it2 << std::endl;
+    }
+  }
+
   h1Filter();
   if(! isH1){
     preFilter();
@@ -205,7 +218,7 @@ void H2Filter::h1Filter(){
   while(codesAndIn != codesAndInAtLocusPosition1.cend() && locusPosition1IsH1){
     for(auto code : codesAndIn->first){
       if(checkLastLetter(code, 'G')){
-	if(codesAndInAtLocusPosition1.size() == 1){
+	if(codesAndIn->first.size() == 1){
 	  locusPosition1IsH1 = locusPosition1IsH1 && true;
 	  codeGLocusPosition1 = code;
 	}
@@ -229,6 +242,10 @@ void H2Filter::h1Filter(){
 	  else
 	    locusPosition1IsH1 = false;
 	}//else
+      }// if ends with G
+      else{
+	if(codesAndIn->first.size() == 1)
+	  locusPosition1IsH1 = false;
       }
     }//for code 
 
@@ -241,7 +258,7 @@ void H2Filter::h1Filter(){
   while(codesAndIn != codesAndInAtLocusPosition2.cend() && locusPosition2IsH1){
     for(auto code : codesAndIn->first){
       if(checkLastLetter(code, 'G')){
-	if(codesAndInAtLocusPosition2.size() == 1){
+	if(codesAndIn->first.size() == 1){
 	  locusPosition2IsH1 = locusPosition2IsH1 && true;
 	  codeGLocusPosition2 = code;
 	}
@@ -265,6 +282,10 @@ void H2Filter::h1Filter(){
 	  else
 	    locusPosition2IsH1 = false;
 	}//else
+      }//if ends with G
+      else{
+	if(codesAndIn->first.size() == 1)
+	  locusPosition2IsH1 = false;
       }
     }//for code 
 
