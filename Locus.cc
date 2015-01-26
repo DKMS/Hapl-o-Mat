@@ -124,16 +124,6 @@ void UnphasedLocus::resolve(){
 
     if(possibleCodesAtBothLocusPositions.at(0).size() > 1 || possibleCodesAtBothLocusPositions.at(1).size() > 1){
 
-      for(auto it : possibleCodesAtBothLocusPositions){
-	for(auto it2 : it){
-	  for(auto it3 : it2){
-	    std::cout << it3 << " ";
-	  }
-	  std::cout << std::endl;
-	}
-	std::cout << std::endl;
-      }
-
       H2Filter h2 (possibleCodesAtBothLocusPositions);
       h2.allFilters();
       if(h2.getIsH2()){
@@ -301,7 +291,6 @@ void H2Filter::filter(){
   std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
     for(auto element :  *line){
-      std::cout << element << std::endl;
       strVec_t genotypeCodes = split(element, '+');
       std::string lhs = genotypeCodes.at(0);
       std::string rhs = genotypeCodes.at(1);
