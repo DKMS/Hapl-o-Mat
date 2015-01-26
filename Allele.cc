@@ -7,7 +7,6 @@
 FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt");
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1.txt");
 
-FilegToG Allele::filegToG("data/H1_Uebersetzung_GNomenklatur.txt");
 FileGTog AlleleG::fileGTog("data/H1_Uebersetzung_GNomenklatur.txt");
 
 FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/H1.txt");
@@ -244,27 +243,6 @@ strVec_t Allele::allelesToG(){
   return codesInPrecision;
 }
 
-strVec_t Allele::fourDigitOrgToG(){
-
-  strVec_t codesInPrecision;
-  auto itgToG = filegToG.getList().find(code);
-  if(itgToG != filegToG.getList().cend()){
-    for(auto Gcode : itgToG->second)
-      codesInPrecision.push_back(Gcode);
-  }
-  else{
-    std::cerr << "Missing translation from g-Code "
-	      << code 
-	      << " to G-code in "
-	      << filegToG.getFileName()
-	      << "."
-	      << std::endl;
-    exit (EXIT_FAILURE);
-  }
-
-  return codesInPrecision;
-}
-
 strVec_t Allele::GToAlleles(){
 
   strVec_t newCodes;
@@ -273,7 +251,7 @@ strVec_t Allele::GToAlleles(){
     std::cerr << "Could not find G-Code "
               << code
 	      << " in file"
-	      << filegToG.getFileName()
+	      << fileGToAlleles.getFileName()
 	      << "."
               << std::endl;
     exit (EXIT_FAILURE);
@@ -293,7 +271,7 @@ strVec_t Allele::gToAlleles(){
     std::cerr << "Could not find g-Code "
               << code
 	      << " in file "
-	      << filegToG.getFileName()
+	      << filegToAlleles.getFileName()
 	      << "."
               << std::endl;
     exit (EXIT_FAILURE);

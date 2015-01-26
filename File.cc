@@ -133,31 +133,6 @@ void FileGTog::readFile(){
   file.close();
 }
 
-void FilegToG::readFile(){
-
-  std::cout << "Read in file " << fileName << std::endl;
-  
-  std::ifstream file;
-  openFileToRead(fileName, file);
-
-  std::string line;
-  while(std::getline(file, line)){
-    std::stringstream ss(line);
-    std::string key;
-    std::string val;
-    ss >> val >> key;
-    std::vector<std::string> vals;
-    vals.push_back(val);
-    std::pair<list_t::iterator, bool> inserted = list.emplace(key, vals);
-    if(! inserted.second){
-      inserted.first->second.push_back(val);
-    }
-  }//while
- 
-  file.close();
-}
-
-
 void FileH2Expanded::readFile(){
 
   std::cout << "Read in file " << fileName << std::endl;
