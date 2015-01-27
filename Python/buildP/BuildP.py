@@ -6,11 +6,12 @@ with open('P.txt', 'w') as outFile:
     with open('hla_nom_p.txt') as file:
         for line in file:
             if not line.startswith('#'):
-                line = line.rstrip('\n')
+                line = line.rstrip('\r\n')
                 splittedLine = line.split(';')
-                if splittedLine[2].endswith('P'):
+                codeP = splittedLine[2]
+                if codeP.endswith('P'):
                     locus = splittedLine[0]
-                    pCode = locus + splittedLine[2]
+                    pCode = locus + codeP
                     codes = splittedLine[1].split('/')
                     codesWithLocus = []
                     for code in codes:
