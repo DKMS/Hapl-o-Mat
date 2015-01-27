@@ -189,7 +189,6 @@ void H2Filter::allFilters(){
   h1Filter();
   if(! isH1){
     preFilter();
-    std::cout << possibleH2Lines.size() << std::endl;
     if(! possibleH2Lines.empty()){
       filter();
       if(! phasedLocus.empty())
@@ -313,12 +312,7 @@ void H2Filter::preFilter(){
   for(auto locusPosition : codesAtBothLocusPositions){
     for(auto codes : locusPosition){
       listOfAllCodesAndIn.push_back(std::make_pair(codes, false));
-      for(auto it : codes){
-	std::cout << it << "  ";
-      }
-      std::cout << std::endl;
     }
-    std::cout << std::endl;
   }
 
   std::string locus = getLocus(*listOfAllCodesAndIn.cbegin()->first.cbegin());
@@ -359,22 +353,17 @@ void H2Filter::preFilter(){
 void H2Filter::matchCodesToH2Lines(const std::string lhs,
 				   const std::string rhs){
 
-  std::cout << "new" << std::endl;
   auto currentPos2 = codesAndInAtLocusPosition2.begin();
   while(currentPos2 != codesAndInAtLocusPosition2.end()){
     auto currentPos1 = codesAndInAtLocusPosition1.begin();
     while(currentPos1 != codesAndInAtLocusPosition1.end()){
       //look for lhs in first locus position
-      std::cout << distance(codesAndInAtLocusPosition1.begin(), currentPos1) << std::endl;
-      std::cout << distance(codesAndInAtLocusPosition2.begin(), currentPos2) << std::endl;
       auto pos1 = find_if(currentPos1,
 			  codesAndInAtLocusPosition1.end(),
 			  [lhs](const std::pair<strVec_t, bool> element)
 			  {
 			    for(auto code : element.first){
 			      if(lhs == code){
-				//				std::cout << lhs << "\t" << code << std::endl;
-				//				std::cout << "yes" << std::endl;
 				return true;
 			      }
 			    }
@@ -388,17 +377,13 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 			  {
 			    for(auto code : element.first){
 			      if(rhs == code){
-				//				std::cout << rhs << "\t" << code << std::endl;
-				//				std::cout << "yes" << std::endl;
 				return true;
 			      }
 			    }
 			    return false;
 			  }
 			  );
-      
-      std::cout << std::endl;
-      
+    
       //lhs and rhs found
       if(pos2 == codesAndInAtLocusPosition2.end() || pos1 == codesAndInAtLocusPosition1.end()){
 	//	break;
@@ -418,13 +403,6 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 
 void H2Filter::filter(){
   
-  for(auto line : possibleH2Lines){
-    for(auto element :  *line){
-      std::cout << element << "\t";
-    }
-    std::cout << std::endl;
-  }
-
   std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
     for(auto element :  *line){
@@ -434,13 +412,6 @@ void H2Filter::filter(){
       matchCodesToH2Lines(lhs, rhs);
       matchCodesToH2Lines(rhs, lhs);
     }//for element
-
-    for(auto it : codesAndInAtLocusPosition1)
-      std::cout << it.second << std::endl;
-
-    for(auto it : codesAndInAtLocusPosition2)
-      std::cout << it.second << std::endl;
-
 
     if(std::all_of(codesAndInAtLocusPosition1.cbegin(),
 		   codesAndInAtLocusPosition1.cend(),
