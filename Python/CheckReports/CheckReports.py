@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 def checkLoci(loci):
     for locus in loci:
         if loci.count(locus) != 2:
@@ -18,9 +20,11 @@ def checkLastLetter(code, endLetters):
             reportOkay = False
 
 def checkForLetters(codeWithoutLetterAtTheEnd):
-    if not codeWithoutLetterAtTheEnd.isdigit():
-        print 'Code ' + code + ' in report ' + id + ' contains not valid sign.'
-        reportOkay = False
+    splittedCodes = codeWithoutLetterAtTheEnd.split(':')
+    for splittedCode in splittedCodes:
+        if not splittedCode.isdigit():
+            print 'Code ' + code + ' in report ' + id + ' contains not valid sign.'
+            reportOkay = False
 
    
     
@@ -29,6 +33,7 @@ print 'Check syntax of reports:'
 
 allIds = set()
 syntacticallyCleanedReports = [] 
+firstLine = ''
 
 with open('reports.txt') as file:
     firstLine = file.readline()
@@ -60,13 +65,17 @@ with open('reports.txt') as file:
             reportOkay = False
 
         for code in codesAtLoci:
-            #check number colons
-            if code.count(':') < 1:
-                print 'Code ' + code + ' in report ' + id + ' has too less digits.'
+            #check for NEW and number colons
+            if code == 'NEW':
+                print 'Code ' + code + ' in report ' + id + ' is NEW'
                 reportOkay = False
-            if code.count(':') > 3:
-                print 'Code ' + code + ' in report ' + id + ' has too many digits.'
-                reportOkay = False
+            else:
+                if code.count(':') < 1:
+                    print 'Code ' + code + ' in report ' + id + ' has too less digits.'
+                    reportOkay = False
+                if code.count(':') > 3:
+                    print 'Code ' + code + ' in report ' + id + ' has too many digits.'
+                    reportOkay = False
 
             #check a 4d report
             if code.count(':') == 1:
@@ -93,7 +102,6 @@ with open('reports.txt') as file:
 
                 checkForLetters(codeWithoutLetterAtTheEnd)
 
-
             #check a 8d report
             elif code.count(':') == 3:
                 endLetters = ('N', 'L', 'S', 'Q')
@@ -112,5 +120,50 @@ with open('reports.txt') as file:
 
 print '\nCheck consistency of codes:'
 
-for line in syntacticallyCleanedReports:
-    print line
+code2dna = defaultdict(list)
+with open('data/code2dna.txt') as file:
+    for line in file:
+        line.rstrip('\r\n')
+        splittedLine = line.split()
+        key = splittedLine[0]
+        codes = splittedLine[1]
+        splittedCodes = codes.split('/')
+        code2dna[key] = codes
+    
+expandedAlleles = defaultdict(list)
+with open('data/allAllelesExpanded.txt') as file:
+    for line in file:
+        line.rstrip('\r\n')
+        splittedLine = line.split()
+        key = splittedLine[0]
+        codes = splittedLine[1]
+        splittedCodes = codes.split()
+        expandedAlleles[key] = codes
+
+H1 = defaultdict(list)
+with open('data/H1.txt') as file:
+    for line in file:
+        line.rstrip('\r\n')
+        splittedLine = line.split()
+        key = splittedLine[0]
+        codes = splittedLine[1]
+        splittedCodes = codes.split()
+        H1[key] = codesH1 = defaultdict(list)
+
+H1g = defaultdict(list)
+with open('data/H1g.txt') as file:
+    for line in file:
+        line.rstrip('\r\n')
+        splittedLine = line.split()
+        key = splittedLine[0]
+        codes = splittedLine[1]
+        splittedCodes = codes.split()
+        H1g[key] = codes
+
+completelyCleanedReport = []
+for report in syntacticallyCleanedReports:
+    codes = report.split()
+    codes.pop(0)
+    for code in codes:
+        print code
+
