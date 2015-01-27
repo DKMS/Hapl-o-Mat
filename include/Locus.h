@@ -104,9 +104,6 @@ class H2Filter{
 	  codesAndInAtLocusPosition1.push_back(std::make_pair(codes, false));
 	for(auto codes : codesAtBothLocusPositions.at(1))
 	  codesAndInAtLocusPosition2.push_back(std::make_pair(codes, false));
-	if(codesAndInAtLocusPosition2.size() > codesAndInAtLocusPosition1.size()){
-	  std::swap(codesAndInAtLocusPosition1, codesAndInAtLocusPosition2);
-	}
       }
 
   void allFilters();
