@@ -266,7 +266,7 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 
   std::string nmdpCode = findNMDPCode(code);
   auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
-  if(itFileNMDPCodes == fileNMDPCodes.getList().end()){
+  if(itFileNMDPCodes == fileNMDPCodes.getList().cend()){
     std::cerr << "Could not find NMDP-Code "
 	      << nmdpCode
 	      << std::endl;
@@ -274,7 +274,8 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
   }
   else{
     std::string newCode = code;
-    size_t positionNMDPCodeInCode = code.find(nmdpCode);
+    size_t positionAsterik = code.find('*') + 1;
+    size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
     newCode.erase(positionNMDPCodeInCode);
     if(itFileNMDPCodes->second.find(':') != std::string::npos){
       std::size_t posLastColon = newCode.find_last_of(':');
@@ -284,6 +285,7 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 	posLastColon = newCode.find_last_of('*');
       newCode.erase(posLastColon+1);
     }
+
     strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
     for(auto itSplittedCode : splittedCode)
       {
@@ -292,6 +294,7 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 	expandAlleleWithLetterAtTheEnd(newCode2, newCodes);
       }//for splittedCode
   }//else
+
   if(newCodes.empty()){
     std::cerr << "Did not find allele from multi allele code "
 	     << nmdpCode
