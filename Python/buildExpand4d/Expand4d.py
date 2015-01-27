@@ -12,7 +12,7 @@ endingWithLetterDict = defaultdict(list)
 endLetters = ('N', 'L', 'S', 'Q')
 with open('allAlleles.txt') as file:
     for line in file:
-        line = line.rstrip('\n')
+        line = line.rstrip('\r\n')
         originalCode = line.split()[0]
         code = originalCode
         if code.count(':') == 2:
