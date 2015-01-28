@@ -116,7 +116,6 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
 
     buildHaploDiploPhenoTypes(pList, hList, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
-  std::cout << std::endl;
 
   inputFile.close();
   hList.setNumberLoci(numberLoci);
@@ -149,7 +148,6 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 
     buildHaploDiploPhenoTypes(pList, hList, listOfpReports, phenotypesFile, haplotypesFile);
   }//while
-  std::cout << std::endl;
     
   inputFile.close();
   haplotypesFile.close();
