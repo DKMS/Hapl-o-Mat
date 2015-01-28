@@ -69,7 +69,7 @@ void PhasedLocus::resolve(){
 }
 
 void UnphasedLocus::resolve(){
-  
+
   if(doH2Filter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
 
     strVecVecArr_t possibleCodesAtBothLocusPositions;
@@ -146,6 +146,10 @@ void UnphasedLocus::resolve(){
 	doResolve();
       }
     }//if locus sizes > 1
+    else{
+      doResolve();
+      type = reportType::H0;
+    }
   }//if doH2Filter
   else{
     doResolve();
