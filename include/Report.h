@@ -70,7 +70,6 @@ class Report{
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
   std::vector<Locus::reportType> types;
-  static FileAlleles fileWithAllAlleles;
 };
 
 class GLReport : public Report{
