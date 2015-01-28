@@ -173,8 +173,6 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const double minimalFrequency,
 		       const bool resolveUnknownGenotype){
 
-  std::cout << id << ", "; 
-
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   bool discardReport = false;
 
@@ -307,8 +305,6 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		      const double minimalFrequency,
 		      const bool doH2Filter){
-
-  std::cout << id << ", "; 
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
