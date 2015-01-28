@@ -213,10 +213,11 @@ void H2Filter::h1Filter(){
     locusPosition1IsH1 = locusPosition1IsH1 && codesAndInContainsG;
   }
 
-  bool locusPosition2IsH1 = false;
+  bool locusPosition2IsH1 = true;
   for(auto codesAndIn : codesAndInAtLocusPosition2){
     bool codesAndInContainsG = false;
     for(auto code : codesAndIn.first){
+
       if(checkLastLetter(code, 'G')){      
 	codesAndInContainsG = true;
 	break;
@@ -232,8 +233,11 @@ void H2Filter::h1Filter(){
       for(auto code : codesAndIn->first){
 	if(checkLastLetter(code, 'G')){
 	  if(codesAndInAtLocusPosition1.size() > 1){
-	    auto pos = find_if(codesAndIn + 1,
-			       codesAndInAtLocusPosition1.cend(),
+	    std::vector<std::pair<strVec_t, bool>> copyOfCodesAndInAtLocusPosition1 = codesAndInAtLocusPosition1;
+	    auto currentPos = copyOfCodesAndInAtLocusPosition1.begin() + distance(codesAndInAtLocusPosition1.cbegin(), codesAndIn);
+	    copyOfCodesAndInAtLocusPosition1.erase(currentPos);
+	    auto pos = find_if(copyOfCodesAndInAtLocusPosition1.cbegin(),
+			       copyOfCodesAndInAtLocusPosition1.cend(),
 			       [code](const std::pair<strVec_t, bool> element)
 			       {
 				 for(auto codeElement : element.first){
@@ -243,7 +247,7 @@ void H2Filter::h1Filter(){
 				 }
 				 return false;
 			       });
-	    if(pos != codesAndInAtLocusPosition1.cend()){
+	    if(pos != copyOfCodesAndInAtLocusPosition1.cend()){
 	      locusPosition1IsH1 = locusPosition1IsH1 && true;
 	      codeGLocusPosition1 = code;
 	    }
@@ -254,7 +258,7 @@ void H2Filter::h1Filter(){
 	  else{
 	    if(*codesAndIn->first.cbegin() == code){
 	      locusPosition1IsH1 = locusPosition1IsH1 && true;      
-	      codeGLocusPosition1 = code;
+	      codeGLocusPosition1= code;
 	    }
 	    else
 	      locusPosition1IsH1 = false;
@@ -270,8 +274,11 @@ void H2Filter::h1Filter(){
       for(auto code : codesAndIn->first){
 	if(checkLastLetter(code, 'G')){
 	  if(codesAndInAtLocusPosition2.size() > 1){
-	    auto pos = find_if(codesAndIn + 1,
-			       codesAndInAtLocusPosition2.cend(),
+	    std::vector<std::pair<strVec_t, bool>> copyOfCodesAndInAtLocusPosition2 = codesAndInAtLocusPosition2;
+	    auto currentPos = copyOfCodesAndInAtLocusPosition2.begin() + distance(codesAndInAtLocusPosition2.cbegin(), codesAndIn);
+	    copyOfCodesAndInAtLocusPosition2.erase(currentPos);
+	    auto pos = find_if(copyOfCodesAndInAtLocusPosition2.cbegin(),
+			       copyOfCodesAndInAtLocusPosition2.cend(),
 			       [code](const std::pair<strVec_t, bool> element)
 			       {
 				 for(auto codeElement : element.first){
@@ -281,7 +288,7 @@ void H2Filter::h1Filter(){
 				 }
 				 return false;
 			       });
-	    if(pos != codesAndInAtLocusPosition2.cend()){
+	    if(pos != copyOfCodesAndInAtLocusPosition2.cend()){
 	      locusPosition2IsH1 = locusPosition2IsH1 && true;
 	      codeGLocusPosition2 = code;
 	    }
@@ -301,7 +308,7 @@ void H2Filter::h1Filter(){
       }//for code
       codesAndIn ++;
     }//while
-    
+   
     if(locusPosition1IsH1 && locusPosition2IsH1){
       isH1 = true;
       strArr_t twoCodes;
