@@ -67,12 +67,10 @@ with open(fileName) as file:
             if len(codesAtLoci) / 2. > numberLoci:
                 print 'Too many codes in report ' + id
                 reportOkay = False
-                numberSyntacticErrors += 1
 
             if len(codesAtLoci) / 2. < numberLoci:
                 print 'Too less codes in report ' + id
                 reportOkay = False
-                numberSyntacticErrors += 1
 
             for code in codesAtLoci:
                 #check for NEW and number colons
