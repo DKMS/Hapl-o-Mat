@@ -36,6 +36,8 @@ allIds = set()
 syntacticallyCleanedReports = [] 
 firstLine = ''
 loci = []
+numberSyntacticErrors = 0
+numberCodeErrors = 0
 
 with open(fileName) as file:
     firstLine = file.readline()
@@ -122,6 +124,8 @@ with open(fileName) as file:
 
         if reportOkay:
             syntacticallyCleanedReports.append(line)
+        else:
+            numberSyntacticErrors += 1
 
 print '\nCheck consistency of codes:'
 
@@ -214,10 +218,14 @@ for report in syntacticallyCleanedReports:
         counter += 1
     if reportOkay:
         completelyCleanedReports.append(report)
-
+    else:
+        numberCodeErrors += 1
         
 cleanedFileName = 'cleaned' + fileName
 with open(cleanedFileName, 'w') as file:
     file.write(firstLine)
     for report in completelyCleanedReports:
         file.write(report)
+
+print 'Found ' + str(numberSyntacticErrors) + ' syntactical errors.'
+print 'Found ' + str(numberCodeErrors) + ' code errors.'
