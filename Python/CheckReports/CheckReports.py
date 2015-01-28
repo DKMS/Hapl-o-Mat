@@ -271,8 +271,8 @@ with open(cleanedFileName, 'w') as file:
         file.write(report)
 
 print '\n Summary:'
-print 'Found ' + str(numberSyntacticErrors) + ' syntactical errors.'
-print 'Found ' + str(numberCodeErrors) + ' code errors.'
+print 'Found ' + str(numberSyntacticErrors) + ' broken reports due to syntactical errors.'
+print 'Found ' + str(numberCodeErrors) + ' broken reports due to code errors.'
 print 'Number duplicates: ' + str(numberDuplicates)
 print 'Number XXX: ' + str(numberXXX)
 print 'Number NMDP: ' + str(numberNMDP)
