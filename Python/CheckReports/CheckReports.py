@@ -1,6 +1,6 @@
 #Jan 2015
 #Christian Schaefer
-#Read in report file and check consistency. Requires folder data with files allAllelesExpanded.txt, code2dna.txt, H1g.txt, H1.txt, H1_Uebersetzung_GNomenklatur.txt, H2.txt. Saves cleaned reports to new file cleaned + inputfilename.
+#Read in report file and check consistency. Requires folder data with files allAllelesExpanded.txt, code2dna.txt, H1g.txt, H1.txt, H2.txt. Saves cleaned reports to new file cleaned + inputfilename.
 
 from collections import defaultdict
 
@@ -188,16 +188,6 @@ with open('data/H1g.txt') as file:
         splittedCodes = codes.split()
         H1g[key] = codes
 
-GTog = defaultdict(list)
-with open('data/H1_Uebersetzung_GNomenklatur.txt') as file:
-    for line in file:
-        line.rstrip('\r\n')
-        splittedLine = line.split()
-        key = splittedLine[0]
-        code = splittedLine[1]
-        GTog[key] = code
-
-
 completelyCleanedReports = []
 for report in syntacticallyCleanedReports:
     reportOkay = True
@@ -233,10 +223,6 @@ for report in syntacticallyCleanedReports:
             codeWithLocus = loci[counter] + code
             if not codeWithLocus in H1:
                 print 'Code ' + codeWithLocus + ' is not in H1.txt.'
-                reportOkay = False
-            #translation G -> g
-            elif not codeWithLocus in GTog:
-                print 'Code ' + codeWithLocus + ' misses a translation from G to g in H1_Uebersetzung_GNomenklatur.txt.'
                 reportOkay = False
             else:
                 numberG += 1
