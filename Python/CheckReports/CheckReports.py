@@ -169,6 +169,16 @@ with open('data/H1g.txt') as file:
         splittedCodes = codes.split()
         H1g[key] = codes
 
+GTog = defaultdict(list)
+with open('data/H1_Uebersetzung_GNomenklatur.txt') as file:
+    for line in file:
+        line.rstrip('\r\n')
+        splittedLine = line.split()
+        key = splittedLine[0]
+        code = splittedLine[1]
+        GTog[key] = code
+
+
 completelyCleanedReports = []
 for report in syntacticallyCleanedReports:
     reportOkay = True
@@ -202,6 +212,11 @@ for report in syntacticallyCleanedReports:
             if not codeWithLocus in H1:
                 print 'Code ' + codeWithLocus + ' is not in H1.txt.'
                 reportOkay = False
+            #translation G -> g
+            else:
+                if not codeWithLocus in GTog:
+                        print 'Code ' + codeWithLocus + ' misses a translation from G to g in H1_Uebersetzung_GNomenklatur.txt.'
+                        reportOkay = False
         #g
         elif code.endswith('g'):
             codeWithLocus = loci[counter] + code
