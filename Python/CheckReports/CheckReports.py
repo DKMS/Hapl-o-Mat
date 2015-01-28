@@ -1,3 +1,7 @@
+#Jan 2015
+#Christian Schaefer
+#Read in report file and check consistency. Requires folder data with files allAllelesExpanded.txt, code2dna.txt, H1g.txt, H1.txt, H1_Uebersetzung_GNomenklatur.txt, H2.txt. Saves cleaned reports to new file cleaned + inputfilename.
+
 from collections import defaultdict
 
 def checkLoci(loci):
