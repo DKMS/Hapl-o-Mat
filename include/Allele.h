@@ -166,7 +166,6 @@ class AlleleG : public Allele{
   virtual std::vector<std::shared_ptr<Allele>> translateTo8d();
 
  private:
-  static FileGTog fileGTog;
 };
 
 class Allele6d : public Allele{
