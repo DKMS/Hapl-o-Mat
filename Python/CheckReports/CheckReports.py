@@ -37,7 +37,7 @@ syntacticallyCleanedReports = []
 firstLine = ''
 loci = []
 numberSyntacticErrors = 0
-numberCodeErrors = 0
+numberNew = 0
 
 with open(fileName) as file:
     firstLine = file.readline()
@@ -72,6 +72,7 @@ with open(fileName) as file:
             if code == 'NEW':
                 print 'Code ' + code + ' in report ' + id + ' is NEW'
                 reportOkay = False
+                numberNew += 1
             else:
                 if code.count(':') < 1:
                     print 'Code ' + code + ' in report ' + id + ' has too less digits.'
@@ -128,6 +129,15 @@ with open(fileName) as file:
             numberSyntacticErrors += 1
 
 print '\nCheck consistency of codes:'
+
+numberCodeErrors = 0
+numberg = 0
+number4d = 0
+numberG = 0
+number6d = 0
+number8d = 0
+numberNMDP = 0
+numberXXX = 0
 
 code2dna = defaultdict(list)
 with open('data/code2dna.txt') as file:
@@ -191,6 +201,7 @@ for report in syntacticallyCleanedReports:
             if code.split(':')[1] == 'XXX':
                 print 'Code ' + code + ' is XXX'
                 reportOkay = False
+                numberXXX += 1
             elif code.split(':')[1] == 'XX':
                 print 'Code ' + code + ' is XX'
                 reportOkay = False
@@ -206,6 +217,8 @@ for report in syntacticallyCleanedReports:
                     if not resolvedCode in expandedAlleles:
                         print 'Code ' + resolvedCode + ' from NMPD-code ' + code + ' is not in allAllelesExpanded.txt.'
                         reportOkay = False
+                    else:
+                        numberNMDP += 1
         #G
         elif code.endswith('G'):
             codeWithLocus = loci[counter] + code
@@ -213,23 +226,33 @@ for report in syntacticallyCleanedReports:
                 print 'Code ' + codeWithLocus + ' is not in H1.txt.'
                 reportOkay = False
             #translation G -> g
+            elif not codeWithLocus in GTog:
+                print 'Code ' + codeWithLocus + ' misses a translation from G to g in H1_Uebersetzung_GNomenklatur.txt.'
+                reportOkay = False
             else:
-                if not codeWithLocus in GTog:
-                        print 'Code ' + codeWithLocus + ' misses a translation from G to g in H1_Uebersetzung_GNomenklatur.txt.'
-                        reportOkay = False
+                numberG += 1
         #g
         elif code.endswith('g'):
             codeWithLocus = loci[counter] + code
             if not codeWithLocus in H1g:
                 print 'Code ' + codeWithLocus + ' is not in H1g.txt.'
                 reportOkay = False
+            else:
+                numberg += 1
         #allAllelesExpanded
         else:
             codeWithLocus = loci[counter] + code
             if not codeWithLocus in expandedAlleles:
                 print 'Code ' + codeWithLocus + ' is not in allAllelesExpanded.txt.'
                 reportOkay = False
-    
+            else:
+                if code.count(':') == 1:
+                    number4d += 1
+                elif code.count(':') == 2:
+                    number6d += 1
+                else:
+                    number8d += 1    
+
         counter += 1
     if reportOkay:
         completelyCleanedReports.append(report)
@@ -243,4 +266,14 @@ with open(cleanedFileName, 'w') as file:
         file.write(report)
 
 print 'Found ' + str(numberSyntacticErrors) + ' syntactical errors.'
-print 'Found ' + str(numberCodeErrors) + ' code errors.'
+print 'Found ' + str(numberCodeErrors) + ' code errors.\n'
+
+print 'Number XXX: ' + str(numberXXX)
+print 'Number NMDP: ' + str(numberNMDP)
+print 'Number g: ' + str(numberg)
+print 'Number 4d: ' + str(number4d)
+print 'Number G: ' + str(numberG)
+print 'Number 6d: ' + str(number6d)
+print 'Number 8d: ' + str(number8d)
+
+
