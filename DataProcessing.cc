@@ -104,7 +104,6 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
 
   haplotypeCombinations.findCombinations(numberLoci);
 
-  std::cout << "IDs: " << std::endl;
   std::string line;
   while(std::getline(inputFile, line)){
 
@@ -139,7 +138,6 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 
   haplotypeCombinations.findCombinations(numberLoci);
 
-  std::cout << "IDs: " << std::endl;
   while(std::getline(inputFile, line)){
 
     if(line.length() == 1 || line.length() == 0)
