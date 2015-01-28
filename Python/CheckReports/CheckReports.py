@@ -38,6 +38,7 @@ firstLine = ''
 loci = []
 numberSyntacticErrors = 0
 numberNew = 0
+numberDuplicates = 0
 
 with open(fileName) as file:
     firstLine = file.readline()
@@ -57,6 +58,7 @@ with open(fileName) as file:
             if id in allIds:
                 print 'Found duplicate of report ' + id
                 reportOkay = False
+                numberDuplicates += 1
             else:
                 allIds.add(id)
         
@@ -65,9 +67,12 @@ with open(fileName) as file:
             if len(codesAtLoci) / 2. > numberLoci:
                 print 'Too many codes in report ' + id
                 reportOkay = False
+                numberSyntacticErrors += 1
+
             if len(codesAtLoci) / 2. < numberLoci:
                 print 'Too less codes in report ' + id
                 reportOkay = False
+                numberSyntacticErrors += 1
 
             for code in codesAtLoci:
                 #check for NEW and number colons
@@ -115,9 +120,9 @@ with open(fileName) as file:
                 #check a 8d report
                 elif code.count(':') == 3:
                     endLetters = ('N', 'L', 'S', 'Q')
-                    reportOkay = checkLastLetter(code, endLetters)
+                    reportOkay = reportOkay and checkLastLetter(code, endLetters)
 
-                    reportOkay = checkLastLetter(code, endLetters)
+                    reportOkay = reportOkay and checkLastLetter(code, endLetters)
                     if code[-1].isalpha() and not code[-2].isalpha():
                         codeWithoutLetterAtTheEnd = code[:-1]
                     else:
@@ -267,9 +272,10 @@ with open(cleanedFileName, 'w') as file:
     for report in completelyCleanedReports:
         file.write(report)
 
+print '\n Summary:'
 print 'Found ' + str(numberSyntacticErrors) + ' syntactical errors.'
-print 'Found ' + str(numberCodeErrors) + ' code errors.\n'
-
+print 'Found ' + str(numberCodeErrors) + ' code errors.'
+print 'Number duplicates: ' + str(numberDuplicates)
 print 'Number XXX: ' + str(numberXXX)
 print 'Number NMDP: ' + str(numberNMDP)
 print 'Number g: ' + str(numberg)
