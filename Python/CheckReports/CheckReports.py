@@ -47,86 +47,88 @@ with open(fileName) as file:
     numberLoci = len(loci)/2
 
     for line in file:
-        reportOkay = True
+        if not line in ['\n', '\r\n']:
 
-        codesAtLoci = line.split()
-        #check if id already in
-        id = codesAtLoci[0]
-        if id in allIds:
-            print 'Found duplicate of report ' + id
-            reportOkay = False
-        else:
-            allIds.add(id)
-        
-        codesAtLoci.pop(0)
-        #check number codes
-        if len(codesAtLoci) / 2. > numberLoci:
-            print 'Too many codes in report ' + id
-            reportOkay = False
-        if len(codesAtLoci) / 2. < numberLoci:
-            print 'Too less codes in report ' + id
-            reportOkay = False
+            reportOkay = True
 
-        for code in codesAtLoci:
-            #check for NEW and number colons
-            if code == 'NEW':
-                print 'Code ' + code + ' in report ' + id + ' is NEW'
+            codesAtLoci = line.split()
+            #check if id already in
+            id = codesAtLoci[0]
+            if id in allIds:
+                print 'Found duplicate of report ' + id
                 reportOkay = False
-                numberNew += 1
             else:
-                if code.count(':') < 1:
-                    print 'Code ' + code + ' in report ' + id + ' has too less digits.'
+                allIds.add(id)
+        
+            codesAtLoci.pop(0)
+            #check number codes
+            if len(codesAtLoci) / 2. > numberLoci:
+                print 'Too many codes in report ' + id
+                reportOkay = False
+            if len(codesAtLoci) / 2. < numberLoci:
+                print 'Too less codes in report ' + id
+                reportOkay = False
+
+            for code in codesAtLoci:
+                #check for NEW and number colons
+                if code == 'NEW':
+                    print 'Code ' + code + ' in report ' + id + ' is NEW'
                     reportOkay = False
-                if code.count(':') > 3:
-                    print 'Code ' + code + ' in report ' + id + ' has too many digits.'
-                    reportOkay = False
-
-            #check a 4d report
-            if code.count(':') == 1:
-                endLetters = ('N', 'L', 'S', 'Q', 'g')
-                reportOkay = checkLastLetter(code, endLetters)
-
-                codeFirstDigit = code.split(':')[0]
-                reportOkay = checkForLetters(codeFirstDigit)
-
-                codeSecondDigit = code.split(':')[1]
-                if code[-1].isalpha() and not code[-2].isalpha():
-                    codeWithoutLetterAtTheEnd = codeSecondDigit[:-1]
+                    numberNew += 1
                 else:
-                    codeWithoutLetterAtTheEnd = codeSecondDigit
-                if not codeWithoutLetterAtTheEnd.isdigit():
-                    if not codeWithoutLetterAtTheEnd.isalpha():
-                        print 'Code ' + code + ' in report ' + id + ' contains not valid sign.'                        
+                    if code.count(':') < 1:
+                        print 'Code ' + code + ' in report ' + id + ' has too less digits.'
+                        reportOkay = False
+                    if code.count(':') > 3:
+                        print 'Code ' + code + ' in report ' + id + ' has too many digits.'
                         reportOkay = False
 
-            #check a 6d report
-            elif code.count(':') == 2:
-                endLetters = ('N', 'L', 'S', 'Q', 'G')
-                reportOkay = checkLastLetter(code, endLetters)
-                if code[-1].isalpha() and not code[-2].isalpha():
-                    codeWithoutLetterAtTheEnd = code[:-1]
-                else:
-                    codeWithoutLetterAtTheEnd = code
+                #check a 4d report
+                if code.count(':') == 1:
+                    endLetters = ('N', 'L', 'S', 'Q', 'g')
+                    reportOkay = reportOkay and checkLastLetter(code, endLetters)
 
-                reportOkay = checkForLetters(codeWithoutLetterAtTheEnd)
+                    codeFirstDigit = code.split(':')[0]
+                    reportOkay = reportOkay and checkForLetters(codeFirstDigit)
 
-            #check a 8d report
-            elif code.count(':') == 3:
-                endLetters = ('N', 'L', 'S', 'Q')
-                reportOkay = checkLastLetter(code, endLetters)
+                    codeSecondDigit = code.split(':')[1]
+                    if code[-1].isalpha() and not code[-2].isalpha():
+                        codeWithoutLetterAtTheEnd = codeSecondDigit[:-1]
+                    else:
+                        codeWithoutLetterAtTheEnd = codeSecondDigit
+                    if not codeWithoutLetterAtTheEnd.isdigit():
+                        if not codeWithoutLetterAtTheEnd.isalpha():
+                            print 'Code ' + code + ' in report ' + id + ' contains not valid sign.'                        
+                            reportOkay = False
 
-                reportOkay = checkLastLetter(code, endLetters)
-                if code[-1].isalpha() and not code[-2].isalpha():
-                    codeWithoutLetterAtTheEnd = code[:-1]
-                else:
-                    codeWithoutLetterAtTheEnd = code
+                #check a 6d report
+                elif code.count(':') == 2:
+                    endLetters = ('N', 'L', 'S', 'Q', 'G')
+                    reportOkay = reportOkay and checkLastLetter(code, endLetters)
+                    if code[-1].isalpha() and not code[-2].isalpha():
+                        codeWithoutLetterAtTheEnd = code[:-1]
+                    else:
+                        codeWithoutLetterAtTheEnd = code
 
-                reportOkay = checkForLetters(codeWithoutLetterAtTheEnd)
+                    reportOkay = reportOkay and checkForLetters(codeWithoutLetterAtTheEnd)
 
-        if reportOkay:
-            syntacticallyCleanedReports.append(line)
-        else:
-            numberSyntacticErrors += 1
+                #check a 8d report
+                elif code.count(':') == 3:
+                    endLetters = ('N', 'L', 'S', 'Q')
+                    reportOkay = checkLastLetter(code, endLetters)
+
+                    reportOkay = checkLastLetter(code, endLetters)
+                    if code[-1].isalpha() and not code[-2].isalpha():
+                        codeWithoutLetterAtTheEnd = code[:-1]
+                    else:
+                        codeWithoutLetterAtTheEnd = code
+
+                    reportOkay = reportOkay and checkForLetters(codeWithoutLetterAtTheEnd)
+                    
+            if reportOkay:
+                syntacticallyCleanedReports.append(line)
+            else:
+                numberSyntacticErrors += 1
 
 print '\nCheck consistency of codes:'
 
