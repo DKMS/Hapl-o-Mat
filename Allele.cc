@@ -304,11 +304,25 @@ strVec_t Allele::expandPrecision(){
 
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTog(){
-  
-  std::string codeInPrecision =  allelesTog();
+
+  strVec_t codesInPrecision;
+  strVec_t codesIn8d = expandPrecision();
+  for(auto codeIn8d : codesIn8d){
+    code = codeIn8d;
+    std::string codeIng = allelesTog();
+    codesInPrecision.push_back(codeIng);
+  }
+
   std::vector<std::shared_ptr<Allele>> listOfPAlleleg;
-  std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
-  listOfPAlleleg.push_back(pAlleleg);
+  frequency /= static_cast<double>(codesInPrecision.size());
+  for(auto codeInPrecision : codesInPrecision){
+    std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (codeInPrecision, frequency);
+    auto pos = pAlleleg->ispAlleleInList(listOfPAlleleg);
+    if(pos == listOfPAlleleg.cend())
+      listOfPAlleleg.push_back(pAlleleg);
+    else
+      (*pos)->addFrequency(pAlleleg->getFrequency());
+  }
 
   return listOfPAlleleg;
 }
