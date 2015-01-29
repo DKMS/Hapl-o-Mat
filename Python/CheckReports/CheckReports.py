@@ -260,7 +260,7 @@ with open(cleanedFileName, 'w') as file:
     for report in completelyCleanedReports:
         file.write(report)
 
-print '\n Summary:'
+print '\nSummary:'
 print 'Found ' + str(numberSyntacticErrors) + ' broken reports due to syntactical errors.'
 print 'Found ' + str(numberCodeErrors) + ' broken reports due to code errors.'
 print 'Number duplicates: ' + str(numberDuplicates)
