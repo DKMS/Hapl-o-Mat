@@ -319,7 +319,7 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
     
       //lhs and rhs found
       if(pos2 == codesAndInAtLocusPosition2.end() || pos1 == codesAndInAtLocusPosition1.end()){
-	//	break;
+	break;
       }
       else{
 	pos1->second = true;
