@@ -122,33 +122,26 @@ void UnphasedLocus::resolve(){
       it_possibleCodesAtBothLocusPositions ++;
     }//for locusPosition
 
-    if(possibleCodesAtBothLocusPositions.at(0).size() > 1 || possibleCodesAtBothLocusPositions.at(1).size() > 1){
-
-      H2Filter h2 (possibleCodesAtBothLocusPositions);
-      h2.allFilters();
-      if(h2.getIsH1()){
-	type = reportType::H1;
-	PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
-	phasedLocus.resolve();
-	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
-      }
-      else if(h2.getIsH2()){
-	if(h2.getIsMultipleLines())
-	  type = reportType::H2M;
-	else
-	  type = reportType::H2;
-	PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
-	phasedLocus.resolve();
-	pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
-      }
-      else{
-	type = reportType::I;
-	doResolve();
-      }
-    }//if locus sizes > 1
+    H2Filter h2 (possibleCodesAtBothLocusPositions);
+    h2.allFilters();
+    if(h2.getIsH1()){
+      type = reportType::H1;
+      PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
+      phasedLocus.resolve();
+      pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
+    }
+    else if(h2.getIsH2()){
+      if(h2.getIsMultipleLines())
+	type = reportType::H2M;
+      else
+	type = reportType::H2;
+      PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
+      phasedLocus.resolve();
+      pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
+    }
     else{
+      type = reportType::I;
       doResolve();
-      type = reportType::H0;
     }
   }//if doH2Filter
   else{
@@ -237,6 +230,12 @@ void H2Filter::h1Filter(){
   checkIfH1Possible(codesAndInAtLocusPosition1);
   if(isH1){
     checkIfH1Possible(codesAndInAtLocusPosition2);
+    if(isH1){
+      strArr_t genotype;
+      genotype.at(0) = *codesAndInAtLocusPosition1.cbegin()->first.cbegin();
+      genotype.at(1) = *codesAndInAtLocusPosition2.cbegin()->first.cbegin();
+      phasedLocus.push_back(genotype);
+    }
   }
 }
 
