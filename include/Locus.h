@@ -93,7 +93,6 @@ class UnphasedLocus : public Locus{
 class H2Filter{
 
  public:
-  H2Filter(){};
   explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions,
 		    const bool in_expandH2Lines)
     : expandH2Lines(in_expandH2Lines),
