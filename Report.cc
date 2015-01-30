@@ -303,7 +303,8 @@ void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const
 
 void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		      const double minimalFrequency,
-		      const bool doH2Filter){
+		      const bool doH2Filter,
+		      const bool expandH2Lines){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
@@ -331,7 +332,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	counter ++;
       }
       
-      std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter));
+      std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter, expandH2Lines));
       pLocus->resolve();
       lociAlreadyDone.emplace(locusCombination, pLocus);
 

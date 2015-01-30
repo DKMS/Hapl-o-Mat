@@ -78,6 +78,7 @@ class GLDataProcessing : public DataProcessing{
 	 parameters.getWantedPrecision(),
 	 parameters.getLociToDo(),
 	 parameters.getDoH2Filter(),
+	 parameters.getExpandH2Lines(),
 	 parameters.getResolveUnknownGenotype()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype())
     {
@@ -113,6 +114,7 @@ class DKMSDataProcessing : public DataProcessing{
   explicit DKMSDataProcessing(const ParametersDKMS & parameters)
     : DataProcessing(),
     doH2Filter(parameters.getDoH2Filter()),
+    expandH2Lines(parameters.getExpandH2Lines()),
     lociNames()
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
@@ -128,6 +130,7 @@ class DKMSDataProcessing : public DataProcessing{
 
  private:
   bool doH2Filter;
+  bool expandH2Lines;
   strVec_t lociNames;
 };
 
