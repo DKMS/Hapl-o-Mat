@@ -108,6 +108,7 @@ class H2Filter{
 
   void allFilters();
   void h1Filter();
+  void checkIfH1Possible(const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition);
   void preFilter();
   void filter();
   void matchCodesToH2Lines(const std::string lhs,
