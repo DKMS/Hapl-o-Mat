@@ -190,21 +190,6 @@ void UnphasedLocus::doResolve(){
 
 void H2Filter::allFilters(){
 
-  for(auto codesAndIn : codesAndInAtLocusPosition1){
-    for(auto code : codesAndIn.first){
-      std::cout << code << " ";
-    }
-    std::cout << std::endl;
-  }
-  for(auto codesAndIn : codesAndInAtLocusPosition2){
-    for(auto code : codesAndIn.first){
-      std::cout << code << " ";
-    }
-    std::cout << std::endl;
-  }
-
-
-
   h1Filter();
   if(! isH1){
     preFilter();
