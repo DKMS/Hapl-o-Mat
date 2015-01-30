@@ -336,6 +336,20 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 
 void H2Filter::filter(){
   
+  for(auto it : codesAndInAtLocusPosition1){
+    for(auto it2 : it.first){
+      std::cout << it2 << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  for(auto it : codesAndInAtLocusPosition2){
+    for(auto it2 : it.first){
+      std::cout << it2 << " ";
+    }
+    std::cout << std::endl;
+  }
+
   std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
     for(auto element :  *line){
@@ -376,16 +390,53 @@ void H2Filter::filter(){
     for(auto candidate : candidates){
       for(auto genotype : *candidate){
 	strVec_t splittedGenotype = split(genotype, '+');
-	strArr_t twoCodes;
-	size_t counter = 0;
-	for(auto code : splittedGenotype){
-	  twoCodes.at(counter) = code;
-	  counter ++;
+	bool addCandidateCode = true;
+	if(! expandH2Lines){
+	  addCandidateCode = false;
+	  if(isH2ElementInCodesAndIn(splittedGenotype[0], codesAndInAtLocusPosition1)){
+	    if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition2))
+	      addCandidateCode = true;
+	  }
+	  if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition1)){
+	    if(isH2ElementInCodesAndIn(splittedGenotype[0], codesAndInAtLocusPosition2))
+	      addCandidateCode = false;
+	  }
 	}
-	phasedLocus.push_back(twoCodes);    
+	
+	if(addCandidateCode){
+	  strArr_t twoCodes;
+	  size_t counter = 0;
+	  for(auto code : splittedGenotype){
+	    twoCodes.at(counter) = code;
+	    counter ++;
+	  }
+	  phasedLocus.push_back(twoCodes);    
+	}
       }//for genotype
     }//for candidates
   }//if candidates empty
+}
+
+bool H2Filter::isH2ElementInCodesAndIn(const std::string code,
+				       const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition){
+
+  auto pos1 = find_if(codesAndInAtLocusPosition.cbegin(),
+		      codesAndInAtLocusPosition.cend(),
+		      [code](const std::pair<strVec_t, bool> element)
+		      {
+			auto pos = find(element.first.cbegin(),
+					element.first.cend(),
+					code);
+			if(pos == element.first.cend())
+			  return false;
+			else
+			  return true;
+		      });
+
+  if(pos1 == codesAndInAtLocusPosition.cend())
+    return false;
+  else
+    return true;
 }
 
 void UnphasedLocus::buildResolvedPhasedLocus(){ 

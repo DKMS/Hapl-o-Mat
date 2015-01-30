@@ -118,6 +118,8 @@ class H2Filter{
   void filter();
   void matchCodesToH2Lines(const std::string lhs,
 			   const std::string rhs);
+  bool isH2ElementInCodesAndIn(const std::string code,
+			       const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition);
 
   bool getIsH1() const {return isH1;}
   bool getIsH2() const {return isH2;}
