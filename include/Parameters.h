@@ -29,6 +29,7 @@ class Parameters{
   Allele::codePrecision getWantedPrecision() const {return precision;}
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoH2Filter() const {return doH2Filter;}
+  bool getExpandH2Lines() const {return expandH2Lines;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}
   double getEpsilon() const {return epsilon;}
   size_t getSeed() const {return seed;}
@@ -53,6 +54,7 @@ class Parameters{
   Allele::codePrecision precision;
   double minimalFrequency;
   bool doH2Filter;
+  bool expandH2Lines;
   initialisationHaplotypeFrequencies initType;
   double epsilon;
   size_t seed;
