@@ -122,7 +122,7 @@ void UnphasedLocus::resolve(){
       it_possibleCodesAtBothLocusPositions ++;
     }//for locusPosition
 
-    H2Filter h2 (possibleCodesAtBothLocusPositions);
+    H2Filter h2 (possibleCodesAtBothLocusPositions, expandH2Lines);
     h2.allFilters();
     if(h2.getIsH1()){
       type = reportType::H1;

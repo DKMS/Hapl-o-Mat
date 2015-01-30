@@ -94,8 +94,10 @@ class H2Filter{
 
  public:
   H2Filter(){};
-  explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions)
-    : isH1(false),
+  explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions,
+		    const bool in_expandH2Lines)
+    : expandH2Lines(in_expandH2Lines),
+    isH1(false),
     isH2(false),
     isMultipleLines(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
@@ -124,6 +126,7 @@ class H2Filter{
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
 
  private:
+  bool expandH2Lines;
   bool isH1;
   bool isH2;
   bool isMultipleLines;
