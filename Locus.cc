@@ -336,20 +336,6 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 
 void H2Filter::filter(){
   
-  for(auto it : codesAndInAtLocusPosition1){
-    for(auto it2 : it.first){
-      std::cout << it2 << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-  for(auto it : codesAndInAtLocusPosition2){
-    for(auto it2 : it.first){
-      std::cout << it2 << " ";
-    }
-    std::cout << std::endl;
-  }
-
   std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
     for(auto element :  *line){
