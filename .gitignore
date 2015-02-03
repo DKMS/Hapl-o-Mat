@@ -6,3 +6,4 @@ main
 *.glid
 *.pull
 data/
+rawdata/
