@@ -1,5 +1,7 @@
-
-
+#Christian Schaefer
+#Feb 2015
+#input: OneElementG.txt (Python script), H2.txt (Perl script)
+#Read in list of G-groups with only one element from OneElementG.txt. These codes do not end with G in H2.txt. Thus open H2.txt and add the Gs. Write the new H2-file to H2WithAddedG.txt
 
 GAndNoG = dict()
 with open('OneElementG.txt') as file:
