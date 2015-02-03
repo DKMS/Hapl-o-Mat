@@ -383,9 +383,11 @@ void H2Filter::filter(){
 	    if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition2))
 	      addCandidateCode = true;
 	  }
-	  if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition1)){
-	    if(isH2ElementInCodesAndIn(splittedGenotype[0], codesAndInAtLocusPosition2))
-	      addCandidateCode = false;
+	  if(addCandidateCode == false){
+	    if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition1)){
+	      if(isH2ElementInCodesAndIn(splittedGenotype[0], codesAndInAtLocusPosition2))
+		addCandidateCode = false;
+	    }
 	  }
 	}
 	
