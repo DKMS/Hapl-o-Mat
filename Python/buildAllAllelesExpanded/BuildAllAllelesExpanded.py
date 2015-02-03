@@ -1,5 +1,7 @@
 #Jan 2015
 #Christian Schaefer
+#input: allAlleles.txt (http://hla.alleles.org/nomenclature/index.html)
+#Read in all possible alleles from allAlleles.txt. Create a translation for alleles from lower to 8 digit precision. Left column gives the allele and the right columns all extensions to higher precisions. To get a full list we also include translation from 8d to 8d. The list is written to allAllelesExpanded.txt.
 
 from collections import defaultdict
 

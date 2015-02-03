@@ -1,5 +1,6 @@
 #Jan 2015
 #Christian Schaefer
+#input: hla_nom_p.txt (http://hla.alleles.org/alleles/p_groups.html)
 #Builds list of P-groups from hla_nom_p.txt and saves it to P.txt
 
 with open('P.txt', 'w') as outFile:

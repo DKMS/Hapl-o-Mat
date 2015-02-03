@@ -1,5 +1,6 @@
 #Jan 2015
 #Christian Schaefer
+#input: P.txt, H1.txt (both from other Pyton scripts)
 #Create list of g-codes by combining lists of G and P codes. If all codes in a P-line can be found in a G-line, add codes ending with a letter to the P-line. Write results to H1g.txt
 
 #save each line of P.txt as P-code plus a set of the corresponding codes

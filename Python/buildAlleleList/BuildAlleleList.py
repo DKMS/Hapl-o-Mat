@@ -2,7 +2,7 @@
 
 #Christian Schaefer                                                                                                                                      
 #Nov 2014   
-#input: one .glid-file
+#input: .glid-file (data)
 #Extract all unique alleles from an input file in GL-string format as in *.glid.
 
 fileInName = raw_input("Enter input file name:\n")
