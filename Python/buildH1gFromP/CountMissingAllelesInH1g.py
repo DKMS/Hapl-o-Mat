@@ -1,3 +1,7 @@
+#Christian Schaefer
+#Jan 2015
+#input H1g.txt (Python script), allAllelesExpanded.txt (Python script)
+#Count difference of number of alleles ending with N, Q, S and L in H1g.txt and allAllelesExpanded.txt. Write common alleles and numbers to common.txt.
 
 endingLetters = ('N', 'Q', 'S', 'L' )
 
