@@ -1,6 +1,6 @@
 *.o
 *~
-main
+haplomat
 *.txt
 *.dat
 *.glid
