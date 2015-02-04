@@ -74,7 +74,7 @@ with open(fileName) as file:
                 reportOkay = False
 
             if len(codesAtLoci) / 2. < numberLoci:
-                print 'Too less codes in report ' + id
+                print 'Too few codes in report ' + id
                 reportOkay = False
 
             for code in codesAtLoci:
@@ -85,7 +85,7 @@ with open(fileName) as file:
                     numberNew += 1
                 else:
                     if code.count(':') < 1:
-                        print 'Code ' + code + ' in report ' + id + ' has too less digits.'
+                        print 'Code ' + code + ' in report ' + id + ' has too few digits.'
                         reportOkay = False
                     if code.count(':') > 3:
                         print 'Code ' + code + ' in report ' + id + ' has too many digits.'
@@ -272,5 +272,4 @@ print 'Number 4d: ' + str(number4d)
 print 'Number G: ' + str(numberG)
 print 'Number 6d: ' + str(number6d)
 print 'Number 8d: ' + str(number8d)
-
 
