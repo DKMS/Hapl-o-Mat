@@ -47,6 +47,7 @@ numberDuplicates = 0
 
 with open(fileName) as file:
     firstLine = file.readline()
+    firstLine = firstLine.rstrip('\r\n')
     loci = firstLine.split()
     loci.pop(0)
     checkLoci(loci)
@@ -74,8 +75,23 @@ with open(fileName) as file:
                 reportOkay = False
 
             if len(codesAtLoci) / 2. < numberLoci:
-                print 'Too few codes in report ' + id
                 reportOkay = False
+                strippedLine = line.rstrip('\r\n')
+                splittedLine = strippedLine.split('\t')
+                for index, item in enumerate(splittedLine):
+                    if item == '':
+                        if index % 2 == 0:
+                            splittedLine[index] = splittedLine[index-1]
+                        else:
+                            splittedLine[index] = splittedLine[index+1]
+
+                if not '' in splittedLine:
+                    reportOkay = True
+                    print 'Completed homozygous loci in report ' + id
+                    splittedLine.pop(0)
+                    codesAtLoci = splittedLine
+                else:
+                    print 'Too few codes in report ' + id
 
             for code in codesAtLoci:
                 #check for NEW and number colons
@@ -134,7 +150,8 @@ with open(fileName) as file:
                     reportOkay = reportOkay and checkForLetters(codeWithoutLetterAtTheEnd)
                     
             if reportOkay:
-                syntacticallyCleanedReports.append(line)
+                newLine = id + '\t' + '\t'.join(codesAtLoci) + '\n'
+                syntacticallyCleanedReports.append(newLine)
             else:
                 numberSyntacticErrors += 1
 
@@ -257,7 +274,7 @@ for report in syntacticallyCleanedReports:
         
 cleanedFileName = 'cleaned' + fileName
 with open(cleanedFileName, 'w') as file:
-    file.write(firstLine)
+    file.write(firstLine + '\n')
     for report in completelyCleanedReports:
         file.write(report)
 
