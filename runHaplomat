@@ -1,0 +1,4 @@
+#!/bin/sh
+#make executable chmod +x runHaplomat
+
+./haplomat DKMS > Log.dat 2> Err.dat
