@@ -11,6 +11,7 @@
 class PhenotypeList;
 class HaplotypeList;
 class Report;
+class BasicReport;
 
 class HaplotypeCombinations{
 
@@ -46,7 +47,7 @@ class Data{
     
   void buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				 HaplotypeList & hList,
-				 const std::shared_ptr<Report> listOfpReports,
+				 const std::shared_ptr<BasicReport> listOfpReports,
 				 const size_t numberReports,
 				 std::ofstream & phenotypesFile,
 				 std::ofstream & haplotypesFile);

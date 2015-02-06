@@ -67,18 +67,21 @@ void HaplotypeCombinations::writeCombinations() const {
 
 void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				     HaplotypeList & hList,
-				     const std::shared_ptr<Report> pReport,
+				     const std::shared_ptr<BasicReport> pReport,
 				     const size_t numberReports,
 				     std::ofstream & phenotypesFile,
 				     std::ofstream & haplotypesFile){
-         
-  std::string totalType = pReport->evaluateReportType(numberReports);
+
   std::string phenotypeCode = pReport->buildPhenotypeCode();
+  /*         
+  std::string totalType = pReport->evaluateReportType(numberReports);
+
   phenotypesFile << pReport->getId() << "\t"
 		 << totalType << "\t"
 		 << pReport->getFrequency() << "\t"
 		 << phenotypeCode
 		 << std::endl;
+  */
   std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
   inserted.first->second.addToNumInDonors(pReport->getFrequency());
   if(inserted.second)
