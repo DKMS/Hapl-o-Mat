@@ -18,7 +18,7 @@ double Report::numberH2Reports = 0.;
 double Report::numberH2MReports = 0.;
 double Report::numberIReports = 0.;
 
-std::string Report::buildPhenotypeCode() const{
+std::string BasicReport::buildPhenotypeCode() const{
 
   std::string phenotypeCode = "";
   for(auto genotypeAtLocus : genotypeAtLoci){
@@ -32,7 +32,7 @@ std::string Report::buildPhenotypeCode() const{
   return phenotypeCode;
 }
 
-void Report::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
+void BasicReport::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
 				     HaplotypeList & haplotypeList,
 				     std::ofstream & haplotypesFile,
 				     const HaplotypeCombinations & haplotypeCombinations) const{

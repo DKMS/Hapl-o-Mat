@@ -24,23 +24,29 @@ class BasicReport{
     frequency(),
     numberLoci(in_numberLoci){}
 
+  std::string buildPhenotypeCode() const;
+  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
+			       HaplotypeList & haplotypeList,
+			       std::ofstream & haplotypesFile,
+			       const HaplotypeCombinations & haplotypeCombinations) const; 
+
+  std::string getId() const {return id;}
+  double getFrequency() const {return frequency;}
+  const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
+
  protected:
   strArrVec_t genotypeAtLoci;
   std::string id;
   double frequency;
   size_t numberLoci;
-
 };
 
-class Report{
+class Report : public BasicReport{
 
  public:
  explicit Report(const Allele::codePrecision in_wantedPrecision,
 		 const size_t in_numberLoci)
-   : genotypeAtLoci(),
-    id(),
-    frequency(),
-    numberLoci(in_numberLoci),
+   : BasicReport(in_numberLoci),
     wantedPrecision(in_wantedPrecision),
     types()
     {
@@ -51,14 +57,13 @@ class Report{
 		  const size_t in_numberLoci,
 		  const std::string in_id,
 		  const std::vector<Locus::reportType> & in_types)
-    : genotypeAtLoci(in_genotypeAtLoci),
-    id(in_id),
-    frequency(in_frequency),
-    numberLoci(in_numberLoci),
+    : BasicReport(in_numberLoci),
     wantedPrecision(),
     types(in_types)
       {
-	genotypeAtLoci.reserve(numberLoci);
+	genotypeAtLoci = in_genotypeAtLoci;
+	id = in_id;
+	frequency = in_frequency;
       }
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
@@ -67,18 +72,10 @@ class Report{
 					 const std::vector<Locus::reportType> & in_types) = 0;
   virtual ~Report(){}
 
-  std::string buildPhenotypeCode() const;
-  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
-			       HaplotypeList & haplotypeList,
-			       std::ofstream & haplotypesFile,
-			       const HaplotypeCombinations & haplotypeCombinations) const; 
   void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
 			  const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
   std::string evaluateReportType(const size_t numberReports) const;
-  
-  std::string getId() const {return id;}
-  double getFrequency() const {return frequency;}
-  const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
+
   static double getNumberH0Reports() {return numberH0Reports;}
   static double getNumberH1Reports() {return numberH1Reports;}
   static double getNumberH2Reports() {return numberH2Reports;}
@@ -86,10 +83,6 @@ class Report{
   static double getNumberIReports() {return numberIReports;}
 
  protected:
-  strArrVec_t genotypeAtLoci;
-  std::string id;
-  double frequency;
-  size_t numberLoci;
   Allele::codePrecision wantedPrecision;
   std::vector<Locus::reportType> types;
   static double numberH0Reports;
