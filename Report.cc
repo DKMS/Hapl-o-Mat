@@ -12,11 +12,11 @@
 
 FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt");
 std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
-double Report::numberH0Reports = 0;
-double Report::numberH1Reports = 0;
-double Report::numberH2Reports = 0;
-double Report::numberH2MReports = 0;
-double Report::numberIReports = 0;
+double Report::numberH0Reports = 0.;
+double Report::numberH1Reports = 0.;
+double Report::numberH2Reports = 0.;
+double Report::numberH2MReports = 0.;
+double Report::numberIReports = 0.;
 
 std::string Report::buildPhenotypeCode() const{
 
