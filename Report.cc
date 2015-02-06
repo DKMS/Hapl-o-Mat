@@ -111,7 +111,6 @@ void ReadinReport::translateLine(const std::string line){
   strVec_t genotypes = split(code, '^');
   for(auto genotype : genotypes){
     strVec_t alleles = split(genotype, '+');
-    sort(alleles.begin(), alleles.end());
     strArr_t genotypeAtLocus;
     genotypeAtLocus.at(0) = alleles.at(0);
     genotypeAtLocus.at(1) = alleles.at(1);
