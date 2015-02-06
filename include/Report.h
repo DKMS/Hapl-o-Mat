@@ -62,6 +62,11 @@ class Report{
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}
   const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
+  static size_t getNumberH0Loci() {return numberH0Loci;}
+  static size_t getNumberH1Loci() {return numberH1Loci;}
+  static size_t getNumberH2Loci() {return numberH2Loci;}
+  static size_t getNumberH2MLoci() {return numberH2MLoci;}
+  static size_t getNumberILoci() {return numberILoci;}
 
  protected:
   strArrVec_t genotypeAtLoci;
@@ -70,6 +75,11 @@ class Report{
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
   std::vector<Locus::reportType> types;
+  static size_t numberH0Loci;
+  static size_t numberH1Loci;
+  static size_t numberH2Loci;
+  static size_t numberH2MLoci;
+  static size_t numberILoci;
 };
 
 class GLReport : public Report{

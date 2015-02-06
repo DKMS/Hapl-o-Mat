@@ -11,6 +11,7 @@
 #include "Haplotype.h"
 #include "Parameters.h"
 #include "Utility.h"
+#include "Report.h"
 
 int main(int argc, char *argv[]){
 
@@ -54,6 +55,11 @@ int main(int argc, char *argv[]){
   std::cout << "\t Number loci: " << pDataProcessing->getNumberLoci() << std::endl;
   std::cout << "\t Removed reports: " << pDataProcessing->getNumberRemovedDonors() << std::endl;
   std::cout << "\t Leftover Reports: " << pDataProcessing->getNumberDonors() << std::endl;
+  std::cout << "\t H0 loci: " <<  Report::getNumberH0Loci() << std::endl;
+  std::cout << "\t H1 loci: " <<  Report::getNumberH1Loci() << std::endl;
+  std::cout << "\t H2 loci: " <<  Report::getNumberH2Loci() << std::endl;
+  std::cout << "\t H2M loci: " <<  Report::getNumberH2MLoci() << std::endl;
+  std::cout << "\t I loci: " <<  Report::getNumberILoci() << std::endl;
   std::cout << "\t Phenotypes: " << pList.getSize() << std::endl;
   std::cout << "\t Haplotypes: " << hList.getSize() << std::endl;
   std::cout << std::endl;
