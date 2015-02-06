@@ -117,7 +117,6 @@ void ReadinReport::translateLine(const std::string line){
     genotypeAtLocus.at(1) = alleles.at(1);
     genotypeAtLoci.push_back(genotypeAtLocus);
   }
-
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,

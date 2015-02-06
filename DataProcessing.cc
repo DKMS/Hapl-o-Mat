@@ -217,15 +217,17 @@ void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   inputFile.seekg(0, inputFile.beg);
 
   haplotypeCombinations.findCombinations(numberLoci);
- 
+
+  std::string oldId = "";
   while(std::getline(inputFile, line)){
 
     if(line.length() == 1 || line.length() == 0)
       continue;
 
     std::shared_ptr<BasicReport> pReport = std::make_shared<ReadinReport> (line, numberLoci);
+    if(pReport->getId() != oldId)
+      numberDonors ++;
     buildHaploDiploPhenoTypes(pList, hList, pReport, haplotypesFile);
-
   }//while
     
   inputFile.close();
