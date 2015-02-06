@@ -27,23 +27,19 @@ class HaplotypeCombinations{
   list_t list;
 };
 
-class DataProcessing{
+class Data{
 
  public:
-  explicit DataProcessing()
+  explicit Data()
     : inputFileName(),
     haplotypesFileName(),
     phenotypesFileName(),
     numberLoci(0),
-    wantedPrecision(),
-    minimalFrequency(),
     numberDonors(0),
     numberRemovedDonors(0),
     haplotypeCombinations(){}
-  virtual ~DataProcessing(){}
-
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
-
+  virtual ~Data(){}
+    
   void buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				 HaplotypeList & hList,
 				 std::vector<std::shared_ptr<Report>> & listOfpReports,
@@ -54,16 +50,32 @@ class DataProcessing{
   size_t getNumberDonors() const {return numberDonors;}
   size_t getNumberRemovedDonors() const {return numberRemovedDonors;}
 
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+
  protected:
   std::string inputFileName;
   std::string haplotypesFileName;
   std::string phenotypesFileName;
   size_t numberLoci;
-  Allele::codePrecision wantedPrecision;
-  double minimalFrequency;
   size_t numberDonors;
   size_t numberRemovedDonors;
   HaplotypeCombinations haplotypeCombinations;
+};
+
+class DataProcessing : public Data{
+
+ public:
+  explicit DataProcessing()
+    : wantedPrecision(),
+    minimalFrequency(){}
+
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+
+
+
+ protected:
+  Allele::codePrecision wantedPrecision;
+  double minimalFrequency;
 };
 
 class GLDataProcessing : public DataProcessing{

@@ -65,7 +65,7 @@ void HaplotypeCombinations::writeCombinations() const {
     }
 }
 
-void DataProcessing::buildHaploDiploPhenoTypes(PhenotypeList & pList,
+void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 					       HaplotypeList & hList,
 					       std::vector<std::shared_ptr<Report>> & listOfpReports,
 					       std::ofstream & phenotypesFile,

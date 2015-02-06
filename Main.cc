@@ -29,18 +29,18 @@ int main(int argc, char *argv[]){
   double timeDataPreProcessing = 0.;
   double timeEMAlgorithm = 0.;
   std::unique_ptr<Parameters> pParameters;
-  std::unique_ptr<DataProcessing> pDataProcessing;
+  std::unique_ptr<Data> pData;
   if(format == "DKMS"){
     std::unique_ptr<ParametersDKMS> pParametersTmp(new ParametersDKMS());
-    std::unique_ptr<DataProcessing> pDataProcessingTmp(new DKMSDataProcessing(*pParametersTmp));
+    std::unique_ptr<Data> pDataProcessingTmp(new DKMSDataProcessing(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
-    pDataProcessing = std::move(pDataProcessingTmp);
+    pData = std::move(pDataProcessingTmp);
   }
   else if(format == "GL"){
     std::unique_ptr<ParametersGL>pParametersTmp(new ParametersGL());
-    std::unique_ptr<DataProcessing> pDataProcessingTmp(new GLDataProcessing(*pParametersTmp));
+    std::unique_ptr<Data> pDataProcessingTmp(new GLDataProcessing(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
-    pDataProcessing = std::move(pDataProcessingTmp);
+    pData = std::move(pDataProcessingTmp);
   }
   else{
     std::cerr << "Specify one of the file formats (DKMS, GL)" << std::endl;
@@ -51,10 +51,10 @@ int main(int argc, char *argv[]){
   t1 = getTime();
   PhenotypeList pList;
   HaplotypeList hList(*pParameters);
-  pDataProcessing->dataProcessing(pList, hList);
-  std::cout << "\t Number loci: " << pDataProcessing->getNumberLoci() << std::endl;
-  std::cout << "\t Removed reports: " << pDataProcessing->getNumberRemovedDonors() << std::endl;
-  std::cout << "\t Leftover Reports: " << pDataProcessing->getNumberDonors() << std::endl;
+  pData->dataProcessing(pList, hList);
+  std::cout << "\t Number loci: " << pData->getNumberLoci() << std::endl;
+  std::cout << "\t Removed reports: " << pData->getNumberRemovedDonors() << std::endl;
+  std::cout << "\t Leftover Reports: " << pData->getNumberDonors() << std::endl;
   std::cout << "\t H0 reports: " << Report::getNumberH0Reports() << std::endl;
   std::cout << "\t H1 reports: " << Report::getNumberH1Reports() << std::endl;
   std::cout << "\t H2 reports: " << Report::getNumberH2Reports() << std::endl;
