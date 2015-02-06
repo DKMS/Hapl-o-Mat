@@ -101,6 +101,25 @@ void BasicReport::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
     }//haplotypeCombinations  
 }
 
+void ReadinReport::translateLine(const std::string line){
+
+  std::stringstream ss(line);
+  std::string type;
+  std::string code;
+  if(ss >> id >> type >> frequency >> code){}
+
+  strVec_t genotypes = split(code, '^');
+  for(auto genotype : genotypes){
+    strVec_t alleles = split(genotype, '+');
+    sort(alleles.begin(), alleles.end());
+    strArr_t genotypeAtLocus;
+    genotypeAtLocus.at(0) = alleles.at(0);
+    genotypeAtLocus.at(1) = alleles.at(1);
+    genotypeAtLoci.push_back(genotypeAtLocus);
+  }
+
+}
+
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
 				const std::vector<std::vector<std::pair<strArr_t,double>>> & genotypesAtLoci){
 
@@ -390,3 +409,4 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   else
     buildListOfReports(listOfReports, genotypesAtLoci);
 }
+

@@ -41,6 +41,20 @@ class BasicReport{
   size_t numberLoci;
 };
 
+class ReadinReport : public BasicReport{
+
+ public:
+  ReadinReport(const std::string line,
+	       const size_t in_numberLoci)
+    : BasicReport(in_numberLoci)
+  {
+    translateLine(line);
+  }
+
+ private:
+  void translateLine(const std::string line);
+};
+
 class Report : public BasicReport{
 
  public:

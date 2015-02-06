@@ -209,8 +209,6 @@ void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   openFileToRead(inputFileName, inputFile);
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
-  std::ofstream phenotypesFile;
-  openFileToWrite(phenotypesFileName, phenotypesFile);
 
   std::string line;
   if(std::getline(inputFile, line))
@@ -225,13 +223,13 @@ void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    std::cout << line << std::endl;
+    std::shared_ptr<BasicReport> pReport = std::make_shared<ReadinReport> (line, numberLoci);
+    buildHaploDiploPhenoTypes(pList, hList, pReport, haplotypesFile);
 
   }//while
     
   inputFile.close();
   haplotypesFile.close();
-  phenotypesFile.close();
 
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
