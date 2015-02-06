@@ -25,7 +25,7 @@ std::string Report::buildPhenotypeCode() const{
     phenotypeCode += genotypeAtLocus.at(0);
     phenotypeCode += "+";
     phenotypeCode += genotypeAtLocus.at(1);
-    phenotypeCode += "~";
+    phenotypeCode += "^";
   }
   phenotypeCode.pop_back();
 
