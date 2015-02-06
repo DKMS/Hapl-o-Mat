@@ -1,0 +1,10 @@
+#file names
+FILENAME_INPUT=reports.txt
+FILENAME_HAPLOTYPES=results/haplotypes.dat
+FILENAME_PHENOTYPES=results/phenotypes.dat
+FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
+FILENAME_EPSILON=results/epsilonVsSteps.dat
+#EM-algorithm
+INITIALISATION_HAPLOTYPE_FREQUENCIES=numberOccurence
+EPSILON=1e-6
+SEED=0

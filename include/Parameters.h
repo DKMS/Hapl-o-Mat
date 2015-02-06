@@ -104,8 +104,25 @@ class ParametersDKMS : public Parameters{
 
  private:
   std::string inputFileName;
-
 };
 
+class ParametersReadin : public Parameters{
+
+ public:
+  explicit ParametersReadin(){
+    parametersFileName = "parametersREADIN";
+    init();
+    print();
+  }
+
+  virtual void init();
+  virtual void print() const;
+
+  std::string getInputFileName() const {return inputFileName;}
+
+ private:
+  std::string inputFileName;
+
+};
 
 #endif

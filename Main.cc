@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
   if (argc == 2)
     format = argv[1];
   else{
-    std::cerr << "Specify a file format (DKMS, GL)" << std::endl;
+    std::cerr << "Specify a file format (DKMS, GL, READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 
@@ -39,6 +39,12 @@ int main(int argc, char *argv[]){
   else if(format == "GL"){
     std::unique_ptr<ParametersGL>pParametersTmp(new ParametersGL());
     std::unique_ptr<Data> pDataProcessingTmp(new GLDataProcessing(*pParametersTmp));
+    pParameters = std::move(pParametersTmp);
+    pData = std::move(pDataProcessingTmp);
+  }
+  else if(format == "READ"){
+    std::unique_ptr<ParametersReadin>pParametersTmp(new ParametersReadin());
+    std::unique_ptr<Data> pDataProcessingTmp(new DataReadin(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }

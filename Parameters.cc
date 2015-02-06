@@ -209,7 +209,9 @@ void ParametersDKMS::init(){
     else{
       std::cerr << "Could not match "
 		<< line
-		<< " of parametersDKMS file."
+		<< " of "
+		<< parametersFileName
+		<< " file."
 		<< std::endl;
     }
   }//while
@@ -240,6 +242,53 @@ void ParametersDKMS::print() const {
   }
   else
     std::cout << "no" << std::endl;
+  std::cout << "#########Parameters EM-algorithm" << std::endl;
+  std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Epsilon= " << epsilon << std::endl;
+  std::cout << "\t Zero= " << ZERO << std::endl;
+  std::cout << "\t PrintPrecision= " << printPrecision << std::endl;
+  std::cout << "\t Seed= " << seed << std::endl;
+  std::cout << std::endl;
+}
+
+void ParametersReadin::init(){
+
+  std::ifstream file;
+  openFileToRead(parametersFileName, file);
+
+  std::string line;
+  while(std::getline(file, line)){
+    if(line.find("#") != std::string::npos) continue;
+    else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+    else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
+    else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
+    else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
+    else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
+    else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
+    else if(line.find("SEED") != std::string::npos) val_assign(seed, line);
+    else{
+      std::cerr << "Could not match "
+		<< line
+		<< " of "
+		<< parametersFileName
+		<< " file."
+		<< std::endl;
+    }
+  }//while
+  computePrintPrecision();
+  file.close();
+}
+
+void ParametersReadin::print() const {
+
+  std::cout << "Readin format" << std::endl;
+  std::cout << "#########Parameters I/O" << std::endl;
+  std::cout << "\t Read data from: " << inputFileName << std::endl;
+  std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;
+  std::cout << "\t Write phenotypes to: " << phenotypesFileName << std::endl;
+  std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
+  std::cout << "\t Write epsilon vs steps to: " << epsilonFileName << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;

@@ -66,12 +66,11 @@ class DataProcessing : public Data{
 
  public:
   explicit DataProcessing()
-    : wantedPrecision(),
+    : Data(),
+    wantedPrecision(),
     minimalFrequency(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
-
-
 
  protected:
   Allele::codePrecision wantedPrecision;
@@ -144,6 +143,15 @@ class DKMSDataProcessing : public DataProcessing{
   bool doH2Filter;
   bool expandH2Lines;
   strVec_t lociNames;
+};
+
+class DataReadin : public Data{
+
+ public:
+  explicit DataReadin(const ParametersReadin & parameters)
+    : Data(){}
+
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 };
 
 #endif

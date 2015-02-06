@@ -170,3 +170,7 @@ void DKMSDataProcessing::readLociNames(const std::string line){
   numberLoci ++;
   numberLoci /= 2;
 }
+
+void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+
+}
