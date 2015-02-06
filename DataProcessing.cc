@@ -225,8 +225,10 @@ void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
       continue;
 
     std::shared_ptr<BasicReport> pReport = std::make_shared<ReadinReport> (line, numberLoci);
-    if(pReport->getId() != oldId)
+    if(pReport->getId() != oldId){
       numberDonors ++;
+      oldId = pReport->getId();
+    }
     buildHaploDiploPhenoTypes(pList, hList, pReport, haplotypesFile);
   }//while
     
