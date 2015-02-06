@@ -42,7 +42,8 @@ class Data{
     
   void buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				 HaplotypeList & hList,
-				 std::vector<std::shared_ptr<Report>> & listOfpReports,
+				 const std::shared_ptr<Report> listOfpReports,
+				 const size_t numberReports,
 				 std::ofstream & phenotypesFile,
 				 std::ofstream & haplotypesFile);
 

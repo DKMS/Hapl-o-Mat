@@ -67,30 +67,22 @@ void HaplotypeCombinations::writeCombinations() const {
 
 void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				     HaplotypeList & hList,
-				     std::vector<std::shared_ptr<Report>> & listOfpReports,
+				     const std::shared_ptr<Report> pReport,
+				     const size_t numberReports,
 				     std::ofstream & phenotypesFile,
 				     std::ofstream & haplotypesFile){
-
-  if(listOfpReports.empty())
-    numberRemovedDonors ++;
-  else{
-    numberDonors ++;
-    
-    for(auto oneReport : listOfpReports){
-      
-      std::string totalType = oneReport->evaluateReportType(listOfpReports.size());
-      std::string phenotypeCode = oneReport->buildPhenotypeCode();
-      phenotypesFile << oneReport->getId() << "\t"
-		     << totalType << "\t"
-		     << oneReport->getFrequency() << "\t"
-		     << phenotypeCode
-		     << std::endl;
-      std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
-      inserted.first->second.addToNumInDonors(oneReport->getFrequency());
-      if(inserted.second)
-	oneReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
-    }//for listOfReports
-  }//else
+         
+  std::string totalType = pReport->evaluateReportType(numberReports);
+  std::string phenotypeCode = pReport->buildPhenotypeCode();
+  phenotypesFile << pReport->getId() << "\t"
+		 << totalType << "\t"
+		 << pReport->getFrequency() << "\t"
+		 << phenotypeCode
+		 << std::endl;
+  std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
+  inserted.first->second.addToNumInDonors(pReport->getFrequency());
+  if(inserted.second)
+    pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
 }
 
 void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
@@ -114,7 +106,14 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
-    buildHaploDiploPhenoTypes(pList, hList, listOfpReports, phenotypesFile, haplotypesFile);
+    if(listOfpReports.empty())
+      numberRemovedDonors ++;
+    else{
+      numberDonors ++;
+      for(auto oneReport : listOfpReports){
+	buildHaploDiploPhenoTypes(pList, hList, oneReport, listOfpReports.size(), phenotypesFile, haplotypesFile);
+      }
+    }
   }//while
 
   inputFile.close();
@@ -146,7 +145,14 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, minimalFrequency, doH2Filter, expandH2Lines);
 
-    buildHaploDiploPhenoTypes(pList, hList, listOfpReports, phenotypesFile, haplotypesFile);
+    if(listOfpReports.empty())
+      numberRemovedDonors ++;
+    else{
+      numberDonors ++;
+      for(auto oneReport : listOfpReports){
+	buildHaploDiploPhenoTypes(pList, hList, oneReport, listOfpReports.size(), phenotypesFile, haplotypesFile);
+      }
+    }
   }//while
     
   inputFile.close();
