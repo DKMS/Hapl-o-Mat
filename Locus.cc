@@ -145,8 +145,11 @@ void UnphasedLocus::resolve(){
     }
   }//if doH2Filter
   else{
+    if(unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)
+      type = reportType::I;
+    else
+      type = reportType::H0;      
     doResolve();
-    type = reportType::H0;
   }
 }
 
@@ -335,7 +338,7 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 
 
 void H2Filter::filter(){
-  
+
   std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
     for(auto element :  *line){
