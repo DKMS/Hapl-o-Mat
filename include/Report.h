@@ -15,6 +15,23 @@ class GlidFile;
 class HaplotypeList;
 class HaplotypeCombinations;
 
+class BasicReport{
+
+ public:
+  explicit BasicReport(const size_t in_numberLoci)
+    : genotypeAtLoci(),
+    id(),
+    frequency(),
+    numberLoci(in_numberLoci){}
+
+ protected:
+  strArrVec_t genotypeAtLoci;
+  std::string id;
+  double frequency;
+  size_t numberLoci;
+
+};
+
 class Report{
 
  public:
