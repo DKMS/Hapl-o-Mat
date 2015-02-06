@@ -149,8 +149,14 @@ class DataReadin : public Data{
 
  public:
   explicit DataReadin(const ParametersReadin & parameters)
-    : Data(){}
+    : Data()
+    {
+      haplotypesFileName = parameters.getHaplotypesFileName();
+      phenotypesFileName = parameters.getPhenotypesFileName();
+      inputFileName = parameters.getInputFileName();
+    }
 
+  void countNumberLoci(const std::string inputFile);
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 };
 

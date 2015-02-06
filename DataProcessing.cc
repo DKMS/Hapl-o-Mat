@@ -66,10 +66,10 @@ void HaplotypeCombinations::writeCombinations() const {
 }
 
 void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
-					       HaplotypeList & hList,
-					       std::vector<std::shared_ptr<Report>> & listOfpReports,
-					       std::ofstream & phenotypesFile,
-					       std::ofstream & haplotypesFile){
+				     HaplotypeList & hList,
+				     std::vector<std::shared_ptr<Report>> & listOfpReports,
+				     std::ofstream & phenotypesFile,
+				     std::ofstream & haplotypesFile){
 
   if(listOfpReports.empty())
     numberRemovedDonors ++;
@@ -173,4 +173,44 @@ void DKMSDataProcessing::readLociNames(const std::string line){
 
 void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
+  std::ifstream inputFile;
+  openFileToRead(inputFileName, inputFile);
+  std::ofstream haplotypesFile;
+  openFileToWrite(haplotypesFileName, haplotypesFile);
+  std::ofstream phenotypesFile;
+  openFileToWrite(phenotypesFileName, phenotypesFile);
+
+  std::string line;
+  if(std::getline(inputFile, line))
+    countNumberLoci(line);
+  inputFile.clear();
+  inputFile.seekg(0, inputFile.beg);
+
+  haplotypeCombinations.findCombinations(numberLoci);
+ 
+  while(std::getline(inputFile, line)){
+
+    if(line.length() == 1 || line.length() == 0)
+      continue;
+
+    std::cout << line << std::endl;
+
+  }//while
+    
+  inputFile.close();
+  haplotypesFile.close();
+  phenotypesFile.close();
+
+  hList.setNumberLoci(numberLoci);
+  hList.setNumberDonors(numberDonors);
+}
+
+void DataReadin::countNumberLoci(const std::string line){
+
+  strVec_t entries = split(line, '\t');
+  std::string phenotype = entries[3];
+  double numberAsteriks = std::count(phenotype.cbegin(),
+			      phenotype.cend(),
+			      '*');
+  numberLoci = static_cast<size_t>((numberAsteriks + 1.) / 2);
 }

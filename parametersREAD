@@ -1,5 +1,5 @@
 #file names
-FILENAME_INPUT=reports.txt
+FILENAME_INPUT=phenotypes.dat
 FILENAME_HAPLOTYPES=results/haplotypes.dat
 FILENAME_PHENOTYPES=results/phenotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat

@@ -110,7 +110,7 @@ class ParametersReadin : public Parameters{
 
  public:
   explicit ParametersReadin(){
-    parametersFileName = "parametersREADIN";
+    parametersFileName = "parametersREAD";
     init();
     print();
   }
