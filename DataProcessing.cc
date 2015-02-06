@@ -78,7 +78,7 @@ void DataProcessing::buildHaploDiploPhenoTypes(PhenotypeList & pList,
     
     for(auto oneReport : listOfpReports){
       
-      std::string totalType = oneReport->evaluateReportType();
+      std::string totalType = oneReport->evaluateReportType(listOfpReports.size());
       std::string phenotypeCode = oneReport->buildPhenotypeCode();
       phenotypesFile << oneReport->getId() << "\t"
 		     << totalType << "\t"

@@ -12,16 +12,11 @@
 
 FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt");
 std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
-size_t Report::numberH0Loci = 0;
-size_t Report::numberH1Loci = 0;
-size_t Report::numberH2Loci = 0;
-size_t Report::numberH2MLoci = 0;
-size_t Report::numberILoci = 0;
-size_t Report::numberH0Reports = 0;
-size_t Report::numberH1Reports = 0;
-size_t Report::numberH2Reports = 0;
-size_t Report::numberH2MReports = 0;
-size_t Report::numberIReports = 0;
+double Report::numberH0Reports = 0;
+double Report::numberH1Reports = 0;
+double Report::numberH2Reports = 0;
+double Report::numberH2MReports = 0;
+double Report::numberIReports = 0;
 
 std::string Report::buildPhenotypeCode() const{
 
@@ -123,28 +118,28 @@ void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfRep
   }//reports
 }
 
-std::string Report::evaluateReportType() const{
+std::string Report::evaluateReportType(const size_t numberReports) const{
   
   if(find(types.cbegin(),
 	  types.cend(),
 	  Locus::reportType::I) != types.cend())
-    numberIReports ++;
+    numberIReports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
 	       Locus::reportType::H2M) != types.cend())
-    numberH2MReports ++;
+    numberH2MReports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
 	       Locus::reportType::H2) != types.cend())
-    numberH2Reports ++;
+    numberH2Reports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
 	       Locus::reportType::H1) != types.cend())
-    numberH1Reports ++;
+    numberH1Reports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
 	       Locus::reportType::H0) != types.cend())
-    numberH0Reports ++;
+    numberH0Reports += 1./static_cast<double>(numberReports);
 
   std::string totalType = "";
   for(auto type : types){
@@ -152,31 +147,26 @@ std::string Report::evaluateReportType() const{
     case Locus::reportType::H0:
       {
 	totalType += "H0";
-	numberH0Loci ++;
 	break;
       }
     case Locus::reportType::H1:
       {
 	totalType += "H1";
-	numberH1Loci ++;
 	break;
       }
     case Locus::reportType::H2:
       {
 	totalType += "H2";
-	numberH2Loci ++;
 	break;
       }
     case Locus::reportType::H2M:
       {
 	totalType += "H2M";
-	numberH2MLoci ++;
 	break;
       }
     case Locus::reportType::I:
       {
 	totalType += "I";
-	numberILoci ++;
 	break;
       }
     default:

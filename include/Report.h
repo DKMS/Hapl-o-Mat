@@ -57,21 +57,16 @@ class Report{
 			       const HaplotypeCombinations & haplotypeCombinations) const; 
   void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
 			  const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
-  std::string evaluateReportType() const;
+  std::string evaluateReportType(const size_t numberReports) const;
   
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}
   const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
-  static size_t getNumberH0Loci() {return numberH0Loci;}
-  static size_t getNumberH1Loci() {return numberH1Loci;}
-  static size_t getNumberH2Loci() {return numberH2Loci;}
-  static size_t getNumberH2MLoci() {return numberH2MLoci;}
-  static size_t getNumberILoci() {return numberILoci;}
-  static size_t getNumberH0Reports() {return numberH0Reports;}
-  static size_t getNumberH1Reports() {return numberH1Reports;}
-  static size_t getNumberH2Reports() {return numberH2Reports;}
-  static size_t getNumberH2MReports() {return numberH2MReports;}
-  static size_t getNumberIReports() {return numberIReports;}
+  static double getNumberH0Reports() {return numberH0Reports;}
+  static double getNumberH1Reports() {return numberH1Reports;}
+  static double getNumberH2Reports() {return numberH2Reports;}
+  static double getNumberH2MReports() {return numberH2MReports;}
+  static double getNumberIReports() {return numberIReports;}
 
  protected:
   strArrVec_t genotypeAtLoci;
@@ -80,16 +75,11 @@ class Report{
   size_t numberLoci;
   Allele::codePrecision wantedPrecision;
   std::vector<Locus::reportType> types;
-  static size_t numberH0Loci;
-  static size_t numberH1Loci;
-  static size_t numberH2Loci;
-  static size_t numberH2MLoci;
-  static size_t numberILoci;
-  static size_t numberH0Reports;
-  static size_t numberH1Reports;
-  static size_t numberH2Reports;
-  static size_t numberH2MReports;
-  static size_t numberIReports;
+  static double numberH0Reports;
+  static double numberH1Reports;
+  static double numberH2Reports;
+  static double numberH2MReports;
+  static double numberIReports;
 };
 
 class GLReport : public Report{
