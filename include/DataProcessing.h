@@ -48,8 +48,6 @@ class Data{
   void buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				 HaplotypeList & hList,
 				 const std::shared_ptr<BasicReport> listOfpReports,
-				 const size_t numberReports,
-				 std::ofstream & phenotypesFile,
 				 std::ofstream & haplotypesFile);
 
   size_t getNumberLoci() const {return numberLoci;}
@@ -77,6 +75,10 @@ class DataProcessing : public Data{
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
   virtual void printStatistics();
+
+  void printPhenotypes(const std::shared_ptr<Report> pReport,
+		       const size_t numberReports,
+		       std::ofstream & phenotypesFile);
 
   size_t getNumberRemovedDonors() const {return numberRemovedDonors;}
 

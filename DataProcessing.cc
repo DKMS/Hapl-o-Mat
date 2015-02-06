@@ -68,24 +68,26 @@ void HaplotypeCombinations::writeCombinations() const {
 void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				     HaplotypeList & hList,
 				     const std::shared_ptr<BasicReport> pReport,
-				     const size_t numberReports,
-				     std::ofstream & phenotypesFile,
 				     std::ofstream & haplotypesFile){
 
   std::string phenotypeCode = pReport->buildPhenotypeCode();
-  /*         
-  std::string totalType = pReport->evaluateReportType(numberReports);
+  std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
+  inserted.first->second.addToNumInDonors(pReport->getFrequency());
+  if(inserted.second)
+    pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
+}
 
+void DataProcessing::printPhenotypes(const std::shared_ptr<Report> pReport,
+				     const size_t numberReports,
+				     std::ofstream & phenotypesFile){         
+ 
+  std::string totalType = pReport->evaluateReportType(numberReports);
+  std::string phenotypeCode = pReport->buildPhenotypeCode();
   phenotypesFile << pReport->getId() << "\t"
 		 << totalType << "\t"
 		 << pReport->getFrequency() << "\t"
 		 << phenotypeCode
 		 << std::endl;
-  */
-  std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
-  inserted.first->second.addToNumInDonors(pReport->getFrequency());
-  if(inserted.second)
-    pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
 }
 
 void DataProcessing::printStatistics(){
@@ -129,7 +131,8 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
     else{
       numberDonors ++;
       for(auto oneReport : listOfpReports){
-	buildHaploDiploPhenoTypes(pList, hList, oneReport, listOfpReports.size(), phenotypesFile, haplotypesFile);
+	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
+	buildHaploDiploPhenoTypes(pList, hList, oneReport, haplotypesFile);
       }
     }
   }//while
@@ -170,7 +173,8 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
     else{
       numberDonors ++;
       for(auto oneReport : listOfpReports){
-	buildHaploDiploPhenoTypes(pList, hList, oneReport, listOfpReports.size(), phenotypesFile, haplotypesFile);
+	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
+	buildHaploDiploPhenoTypes(pList, hList, oneReport, haplotypesFile);
       }
     }
   }//while
