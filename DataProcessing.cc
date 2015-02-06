@@ -85,6 +85,21 @@ void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
     pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
 }
 
+void DataProcessing::printStatistics(){
+
+  std::cout << "\t Number loci: " << numberLoci << std::endl;
+  std::cout << "\t Removed reports: " << numberRemovedDonors << std::endl;
+  std::cout << "\t Leftover Reports: " << numberDonors << std::endl;
+  std::cout << "\t H0 reports: " << Report::getNumberH0Reports() << std::endl;
+  std::cout << "\t H1 reports: " << Report::getNumberH1Reports() << std::endl;
+  std::cout << "\t H2 reports: " << Report::getNumberH2Reports() << std::endl;
+  std::cout << "\t H2M reports: " << Report::getNumberH2MReports() << std::endl;
+  std::cout << "\t I reports: " << Report::getNumberIReports() <<std::endl;
+  std::cout << "\t Phenotypes: " << numberPhenotypes << std::endl;
+  std::cout << "\t Haplotypes: " << numberHaplotypes << std::endl;
+  std::cout << std::endl;
+}
+
 void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   
   std::ifstream inputFile;
@@ -119,6 +134,8 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
   inputFile.close();
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
+  numberHaplotypes = hList.getSize();
+  numberPhenotypes = pList.getSize();
 }
 
 void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
@@ -161,6 +178,8 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
 
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
+  numberHaplotypes = hList.getSize();
+  numberPhenotypes = pList.getSize();
 }
 
 void DKMSDataProcessing::readLociNames(const std::string line){
@@ -209,6 +228,17 @@ void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
+  numberHaplotypes = hList.getSize();
+  numberPhenotypes = pList.getSize();
+}
+
+void DataReadin::printStatistics(){
+
+  std::cout << "\t Number loci: " << numberLoci << std::endl;
+  std::cout << "\t Number Reports: " << numberDonors << std::endl;
+  std::cout << "\t Phenotypes: " << numberPhenotypes << std::endl;
+  std::cout << "\t Haplotypes: " << numberHaplotypes << std::endl;
+  std::cout << std::endl;
 }
 
 void DataReadin::countNumberLoci(const std::string line){
@@ -220,3 +250,4 @@ void DataReadin::countNumberLoci(const std::string line){
 			      '*');
   numberLoci = static_cast<size_t>((numberAsteriks + 1.) / 2);
 }
+

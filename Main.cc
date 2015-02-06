@@ -58,17 +58,7 @@ int main(int argc, char *argv[]){
   PhenotypeList pList;
   HaplotypeList hList(*pParameters);
   pData->dataProcessing(pList, hList);
-  std::cout << "\t Number loci: " << pData->getNumberLoci() << std::endl;
-  std::cout << "\t Removed reports: " << pData->getNumberRemovedDonors() << std::endl;
-  std::cout << "\t Leftover Reports: " << pData->getNumberDonors() << std::endl;
-  std::cout << "\t H0 reports: " << Report::getNumberH0Reports() << std::endl;
-  std::cout << "\t H1 reports: " << Report::getNumberH1Reports() << std::endl;
-  std::cout << "\t H2 reports: " << Report::getNumberH2Reports() << std::endl;
-  std::cout << "\t H2M reports: " << Report::getNumberH2MReports() << std::endl;
-  std::cout << "\t I reports: " << Report::getNumberIReports() <<std::endl;
-  std::cout << "\t Phenotypes: " << pList.getSize() << std::endl;
-  std::cout << "\t Haplotypes: " << hList.getSize() << std::endl;
-  std::cout << std::endl;
+  pData->printStatistics();
   t2 = getTime();
   timeDataPreProcessing = getTimeDifference(t1, t2);
 

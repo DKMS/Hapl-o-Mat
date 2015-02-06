@@ -36,9 +36,13 @@ class Data{
     phenotypesFileName(),
     numberLoci(0),
     numberDonors(0),
-    numberRemovedDonors(0),
+    numberHaplotypes(0),
+    numberPhenotypes(0),  
     haplotypeCombinations(){}
   virtual ~Data(){}
+
+  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+  virtual void printStatistics() = 0;
     
   void buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				 HaplotypeList & hList,
@@ -49,9 +53,6 @@ class Data{
 
   size_t getNumberLoci() const {return numberLoci;}
   size_t getNumberDonors() const {return numberDonors;}
-  size_t getNumberRemovedDonors() const {return numberRemovedDonors;}
-
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
 
  protected:
   std::string inputFileName;
@@ -59,7 +60,8 @@ class Data{
   std::string phenotypesFileName;
   size_t numberLoci;
   size_t numberDonors;
-  size_t numberRemovedDonors;
+  size_t numberHaplotypes;
+  size_t numberPhenotypes;
   HaplotypeCombinations haplotypeCombinations;
 };
 
@@ -68,12 +70,17 @@ class DataProcessing : public Data{
  public:
   explicit DataProcessing()
     : Data(),
+    numberRemovedDonors(0),
     wantedPrecision(),
     minimalFrequency(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+  virtual void printStatistics();
+
+  size_t getNumberRemovedDonors() const {return numberRemovedDonors;}
 
  protected:
+  size_t numberRemovedDonors;
   Allele::codePrecision wantedPrecision;
   double minimalFrequency;
 };
@@ -157,8 +164,11 @@ class DataReadin : public Data{
       inputFileName = parameters.getInputFileName();
     }
 
-  void countNumberLoci(const std::string inputFile);
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
+  virtual void printStatistics();
+
+  void countNumberLoci(const std::string inputFile);
+
 };
 
 #endif
