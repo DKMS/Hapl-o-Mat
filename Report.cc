@@ -17,6 +17,11 @@ size_t Report::numberH1Loci = 0;
 size_t Report::numberH2Loci = 0;
 size_t Report::numberH2MLoci = 0;
 size_t Report::numberILoci = 0;
+size_t Report::numberH0Reports = 0;
+size_t Report::numberH1Reports = 0;
+size_t Report::numberH2Reports = 0;
+size_t Report::numberH2MReports = 0;
+size_t Report::numberIReports = 0;
 
 std::string Report::buildPhenotypeCode() const{
 
@@ -120,6 +125,27 @@ void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfRep
 
 std::string Report::evaluateReportType() const{
   
+  if(find(types.cbegin(),
+	  types.cend(),
+	  Locus::reportType::I) != types.cend())
+    numberIReports ++;
+  else if(find(types.cbegin(),
+	       types.cend(),
+	       Locus::reportType::H2M) != types.cend())
+    numberH2MReports ++;
+  else if(find(types.cbegin(),
+	       types.cend(),
+	       Locus::reportType::H2) != types.cend())
+    numberH2Reports ++;
+  else if(find(types.cbegin(),
+	       types.cend(),
+	       Locus::reportType::H1) != types.cend())
+    numberH1Reports ++;
+  else if(find(types.cbegin(),
+	       types.cend(),
+	       Locus::reportType::H0) != types.cend())
+    numberH0Reports ++;
+
   std::string totalType = "";
   for(auto type : types){
     switch(type){

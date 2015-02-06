@@ -67,6 +67,11 @@ class Report{
   static size_t getNumberH2Loci() {return numberH2Loci;}
   static size_t getNumberH2MLoci() {return numberH2MLoci;}
   static size_t getNumberILoci() {return numberILoci;}
+  static size_t getNumberH0Reports() {return numberH0Reports;}
+  static size_t getNumberH1Reports() {return numberH1Reports;}
+  static size_t getNumberH2Reports() {return numberH2Reports;}
+  static size_t getNumberH2MReports() {return numberH2MReports;}
+  static size_t getNumberIReports() {return numberIReports;}
 
  protected:
   strArrVec_t genotypeAtLoci;
@@ -80,6 +85,11 @@ class Report{
   static size_t numberH2Loci;
   static size_t numberH2MLoci;
   static size_t numberILoci;
+  static size_t numberH0Reports;
+  static size_t numberH1Reports;
+  static size_t numberH2Reports;
+  static size_t numberH2MReports;
+  static size_t numberIReports;
 };
 
 class GLReport : public Report{
