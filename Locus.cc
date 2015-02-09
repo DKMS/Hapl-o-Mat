@@ -154,7 +154,7 @@ void UnphasedLocus::resolve(){
 }
 
 void UnphasedLocus::doResolve(){
-
+  
   for(auto locusPosition : unphasedLocus){
     std::vector<std::shared_ptr<Allele>> allPAllelesAtOneLocusPosition;
     for(auto code : locusPosition){
@@ -169,7 +169,7 @@ void UnphasedLocus::doResolve(){
 		  {
 		    return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
 		  });
-
+      
 	if(pos == allPAllelesAtOneLocusPosition.cend()){
 	  allPAllelesAtOneLocusPosition.push_back(pAlleleAtOneLocusPosition);
 	}
@@ -177,10 +177,10 @@ void UnphasedLocus::doResolve(){
 	  (*pos)->addFrequency(pAlleleAtOneLocusPosition->getFrequency());
 	}
       }//for pAllelesAtOneLocusPosition
-    }//for locusPosition
+    }// for code
     pAllelesAtBothLocusPositions.push_back(allPAllelesAtOneLocusPosition); 
-  }
-
+  }//for locusPosition
+  
   buildResolvedPhasedLocus();
 }
 
