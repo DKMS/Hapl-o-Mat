@@ -30,6 +30,12 @@ class Hash{
     auto inserted = hashList.emplace(hashValue, object);
     return inserted;
   }
+  std::size_t computeSizeInBytes(){
+    size_t sum = 0;
+    for(auto element : hashList)
+      sum += sizeof(element);
+    return sum + sizeof(hashList);
+  }
 
  protected:
   std::hash<std::string> string_hash;
