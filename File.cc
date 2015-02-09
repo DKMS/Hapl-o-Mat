@@ -148,13 +148,13 @@ void FileH2Expanded::readFile(){
   while(std::getline(file, line)){
     std::stringstream ss(line);
     std::string entry;
-    std::vector<std::string> blocks;
+    strVec_t blocks;
     while(ss >> entry){
       blocks.push_back(entry);
     }
-    std::vector<std::vector<std::string>> H2line;
+    strVecVec_t H2line;
     for(auto block : blocks){
-      std::vector<std::string> splittedBlock = split(block, ',');
+      strVec_t splittedBlock = split(block, ',');
       H2line.push_back(splittedBlock);      
     }
     list.push_back(H2line);
@@ -179,9 +179,9 @@ void FileH2::readFile(){
   while(std::getline(file, line)){
     std::stringstream ss(line);
     std::string genotype;
-    std::vector<std::vector<std::string>> listOfSplittedGenotypesPerLine;
+    strVecVec_t listOfSplittedGenotypesPerLine;
     while(ss >> genotype){
-      std::vector<std::string> splittedGenotype = split(genotype, '+');
+      strVec_t splittedGenotype = split(genotype, '+');
       listOfSplittedGenotypesPerLine.push_back(splittedGenotype);
     }
     list.push_back(listOfSplittedGenotypesPerLine);

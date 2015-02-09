@@ -8,6 +8,8 @@
 #include <fstream>
 #include <algorithm>
 
+#include "Typedefs.h"
+
 template <class T>
 class File{
   
@@ -69,7 +71,7 @@ class FileNMDPCodes : public File<std::unordered_map<std::string, std::string>>{
   void readFile();
 };
 
-class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, std::vector<std::string>>>>{
+class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, strVec_t>>>{
 
  public:
   explicit FileAllelesTogOrG(const std::string in_fileName) : File(in_fileName){
@@ -80,7 +82,7 @@ class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, std::ve
   void readFile();
 };
 
-class FilegOrGOr4dToAlleles : public File<std::unordered_map<std::string, std::vector<std::string>>>{
+class FilegOrGOr4dToAlleles : public File<std::unordered_map<std::string, strVec_t>>{
 
  public:
   explicit FilegOrGOr4dToAlleles(const std::string in_fileName) : File(in_fileName){
@@ -102,7 +104,7 @@ class FileGTog : public File<std::unordered_map<std::string, std::string>>{
   void readFile();
 };
 
-class FileAlleles : public File<std::vector<std::string>>{
+class FileAlleles : public File<strVec_t>{
 
  public:
   explicit FileAlleles(const std::string in_fileName) : File(in_fileName){
@@ -113,7 +115,7 @@ class FileAlleles : public File<std::vector<std::string>>{
   void readFile();
 };
 
-class FileH2Expanded : public File<std::vector<std::vector<std::vector<std::string>>>>{
+class FileH2Expanded : public File<strVecVecVec_t>{
 
  public:
   explicit FileH2Expanded(const std::string in_fileName) : File(in_fileName){
@@ -124,7 +126,7 @@ class FileH2Expanded : public File<std::vector<std::vector<std::vector<std::stri
   void readFile();
 };
 
-class FileH2 : public File<std::vector<std::vector<std::vector<std::string>>>>{
+class FileH2 : public File<strVecVecVec_t>{
 
  public:
   explicit FileH2(const std::string in_fileName) : File(in_fileName){
