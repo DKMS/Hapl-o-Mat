@@ -244,22 +244,23 @@ void H2Filter::h1Filter(){
 
 void H2Filter::preFilter(){
    
-  std::vector<std::pair<strVec_t, bool>> listOfAllCodesAndIn;
-  for(auto locusPosition : codesAtBothLocusPositions){
-    for(auto codes : locusPosition){
-      listOfAllCodesAndIn.push_back(std::make_pair(codes, false));
-    }
-  }
-
-  std::string locus = getLocus(*listOfAllCodesAndIn.cbegin()->first.cbegin());
+  std::string locus = getLocus(*codesAndInAtLocusPosition1.cbegin()->first.cbegin());
   FileH2::list_t::const_iterator pos;
   FileH2::list_t::const_iterator lastPos;
   fileH2.findPositionLocus(locus, pos, lastPos);
 
   while(pos < lastPos){
     for(auto element : *pos){    
-      for(auto codesAndIn = listOfAllCodesAndIn.begin();
-	  codesAndIn != listOfAllCodesAndIn.end();
+      for(auto codesAndIn = codesAndInAtLocusPosition1.begin();
+	  codesAndIn != codesAndInAtLocusPosition1.end();
+	  codesAndIn ++){
+	for(auto code : codesAndIn->first){
+	  if(code == element.at(0) || code == element.at(1))
+	    codesAndIn->second = true;
+	}
+      }
+      for(auto codesAndIn = codesAndInAtLocusPosition2.begin();
+	  codesAndIn != codesAndInAtLocusPosition2.end();
 	  codesAndIn ++){
 	for(auto code : codesAndIn->first){
 	  if(code == element.at(0) || code == element.at(1))
@@ -267,20 +268,31 @@ void H2Filter::preFilter(){
 	}
       }
     }
-    if (all_of(listOfAllCodesAndIn.cbegin(),
-	       listOfAllCodesAndIn.cend(),
+    if (all_of(codesAndInAtLocusPosition1.cbegin(),
+	       codesAndInAtLocusPosition1.cend(),
 	       [](const std::pair<strVec_t, bool> element)
 	       {
 		 return element.second;
-	       })){
+	       })
+	&& all_of(codesAndInAtLocusPosition2.cbegin(),
+		  codesAndInAtLocusPosition2.cend(),
+		  [](const std::pair<strVec_t, bool> element)
+		  {
+		    return element.second;
+		  })){
       possibleH2Lines.push_back(pos);
     }//if
-    for(auto code = listOfAllCodesAndIn.begin();
-	code != listOfAllCodesAndIn.end();
-	code ++){
-      code->second = false;
+    for(auto codesAndIn = codesAndInAtLocusPosition1.begin();
+	codesAndIn != codesAndInAtLocusPosition1.end();
+	codesAndIn ++){
+      codesAndIn->second = false;
     }
-    
+    for(auto codesAndIn = codesAndInAtLocusPosition2.begin();
+	codesAndIn != codesAndInAtLocusPosition2.end();
+	codesAndIn ++){
+      codesAndIn->second = false;
+    }
+ 
     pos ++;
   }//while
 }
