@@ -179,11 +179,12 @@ void FileH2::readFile(){
   while(std::getline(file, line)){
     std::stringstream ss(line);
     std::string genotype;
-    std::vector<std::string> listOfGenotypesPerLine;
-    while(ss >> genotype)
-      listOfGenotypesPerLine.push_back(genotype);
-    
-    list.push_back(listOfGenotypesPerLine);
+    std::vector<std::vector<std::string>> listOfSplittedGenotypesPerLine;
+    while(ss >> genotype){
+      std::vector<std::string> splittedGenotype = split(genotype, '+');
+      listOfSplittedGenotypesPerLine.push_back(splittedGenotype);
+    }
+    list.push_back(listOfSplittedGenotypesPerLine);
 
     std::string locus = getLocus(line);
     addIteratorToLocusPositions(locus, locusOld);

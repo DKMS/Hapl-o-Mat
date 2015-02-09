@@ -124,7 +124,7 @@ class FileH2Expanded : public File<std::vector<std::vector<std::vector<std::stri
   void readFile();
 };
 
-class FileH2 : public File<std::vector<std::vector<std::string>>>{
+class FileH2 : public File<std::vector<std::vector<std::vector<std::string>>>>{
 
  public:
   explicit FileH2(const std::string in_fileName) : File(in_fileName){

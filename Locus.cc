@@ -258,12 +258,11 @@ void H2Filter::preFilter(){
 
   while(pos < lastPos){
     for(auto element : *pos){    
-      strVec_t splittedGenotype = split(element, '+');
       for(auto codesAndIn = listOfAllCodesAndIn.begin();
 	  codesAndIn != listOfAllCodesAndIn.end();
 	  codesAndIn ++){
 	for(auto code : codesAndIn->first){
-	  if(code == splittedGenotype.at(0) || code == splittedGenotype.at(1))
+	  if(code == element.at(0) || code == element.at(1))
 	    codesAndIn->second = true;
 	}
       }
@@ -342,9 +341,8 @@ void H2Filter::filter(){
   std::vector<FileH2::list_t::const_iterator> candidates;
   for(auto line : possibleH2Lines){
     for(auto element :  *line){
-      strVec_t genotypeCodes = split(element, '+');
-      std::string lhs = genotypeCodes.at(0);
-      std::string rhs = genotypeCodes.at(1);
+      std::string lhs = element.at(0);
+      std::string rhs = element.at(1);
       matchCodesToH2Lines(lhs, rhs);
       matchCodesToH2Lines(rhs, lhs);
     }//for element
@@ -378,17 +376,16 @@ void H2Filter::filter(){
       isMultipleLines = true;
     for(auto candidate : candidates){
       for(auto genotype : *candidate){
-	strVec_t splittedGenotype = split(genotype, '+');
 	bool addCandidateCode = true;
 	if(! expandH2Lines){
 	  addCandidateCode = false;
-	  if(isH2ElementInCodesAndIn(splittedGenotype[0], codesAndInAtLocusPosition1)){
-	    if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition2))
+	  if(isH2ElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition1)){
+	    if(isH2ElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition2))
 	      addCandidateCode = true;
 	  }
 	  if(addCandidateCode == false){
-	    if(isH2ElementInCodesAndIn(splittedGenotype[1], codesAndInAtLocusPosition1)){
-	      if(isH2ElementInCodesAndIn(splittedGenotype[0], codesAndInAtLocusPosition2))
+	    if(isH2ElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition1)){
+	      if(isH2ElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition2))
 		addCandidateCode = false;
 	    }
 	  }
@@ -397,7 +394,7 @@ void H2Filter::filter(){
 	if(addCandidateCode){
 	  strArr_t twoCodes;
 	  size_t counter = 0;
-	  for(auto code : splittedGenotype){
+	  for(auto code : genotype){
 	    twoCodes.at(counter) = code;
 	    counter ++;
 	  }
