@@ -11,18 +11,15 @@ class PhenotypeList;
 class Haplotype{
 
  public:
-  explicit Haplotype() : frequency(0.), number(1.) {};
+  explicit Haplotype() : frequency(0.) {};
 
   double getFrequency() const {return frequency;}
   void setFrequency(const double in){frequency = in;}
   void addFrequency(const double in){frequency += in;}
   void multiplyFrequency(const double in){frequency *= in;}
-  double getNumber() const {return number;}
-  void incrementNumber(){number ++;}
 
  private:
   double frequency;
-  double number;
 };
 
 class HaplotypeList : public Hash<Haplotype>{

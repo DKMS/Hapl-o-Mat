@@ -75,14 +75,8 @@ void BasicReport::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
       if(inserted1.second){
 	haplotypesFile << codeHaplotype1 << std::endl;
       }
-      else{
-	inserted1.first->second.incrementNumber();
-      }
       if(inserted2.second){
 	haplotypesFile << codeHaplotype2 << std::endl;
-      }
-      else{
-	inserted2.first->second.incrementNumber();
       }
       
       //build diplotype                                                                                                                          
