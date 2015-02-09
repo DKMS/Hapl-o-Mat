@@ -12,7 +12,6 @@ struct Diplotype{
   size_t id1;
   size_t id2;
   double frequency;
-  bool sameHaplotype;
 };
 
 class Phenotype{

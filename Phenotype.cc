@@ -22,7 +22,7 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList){
       itDiplo != itDiploEnd;
       itDiplo ++)
     {
-      if(itDiplo->sameHaplotype){
+      if(itDiplo->id1 == itDiplo->id2){
         itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
 	itDiplo->frequency *= itDiplo->frequency;
       }

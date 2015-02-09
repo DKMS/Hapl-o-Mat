@@ -86,10 +86,6 @@ void BasicReport::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
       Diplotype diplotype;
       diplotype.id1 = id1;
       diplotype.id2 = id2;
-      if(diplotype.id1 == diplotype.id2)
-	diplotype.sameHaplotype = true;
-      else
-	diplotype.sameHaplotype = false;
       
       itPhenotype->second.addDiplotype(diplotype);
     }//haplotypeCombinations  
