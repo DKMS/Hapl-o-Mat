@@ -22,7 +22,6 @@ class File{
     numberLines ++;
     list.reserve(numberLines);
   }
-  virtual ~File(){}
 
   const T & getList(){return list;}
   void findPositionLocus(const std::string & locus, typename T::const_iterator & pos, typename T::const_iterator & lastPos) const{
