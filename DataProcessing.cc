@@ -113,6 +113,7 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
   openFileToWrite(phenotypesFileName, phenotypesFile);
+  phenotypesFile.precision(14);
 
   haplotypeCombinations.findCombinations(numberLoci);
 
@@ -152,6 +153,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
   openFileToWrite(phenotypesFileName, phenotypesFile);
+  phenotypesFile.precision(14);
 
   std::string line;
   if(std::getline(inputFile, line))

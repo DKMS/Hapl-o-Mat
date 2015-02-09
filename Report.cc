@@ -106,8 +106,10 @@ void ReadinReport::translateLine(const std::string line){
   std::stringstream ss(line);
   std::string type;
   std::string code;
-  if(ss >> id >> type >> frequency >> code){}
+  std::string frequencyAsText;
+  if(ss >> id >> type >> frequencyAsText >> code){}
 
+  frequency = std::stod(frequencyAsText);
   strVec_t genotypes = split(code, '^');
   for(auto genotype : genotypes){
     strVec_t alleles = split(genotype, '+');
