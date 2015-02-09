@@ -19,10 +19,10 @@ class BasicReport{
 
  public:
   explicit BasicReport(const size_t in_numberLoci)
-    : genotypeAtLoci(),
-    id(),
+    :id(),
     frequency(),
-    numberLoci(in_numberLoci){}
+    numberLoci(in_numberLoci),
+    genotypeAtLoci(){}
 
   std::string buildPhenotypeCode() const;
   void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
@@ -35,10 +35,10 @@ class BasicReport{
   const strArrVec_t & getGenotypeAtLoci() const {return genotypeAtLoci;}
 
  protected:
-  strArrVec_t genotypeAtLoci;
   std::string id;
   double frequency;
   size_t numberLoci;
+  strArrVec_t genotypeAtLoci;
 };
 
 class ReadinReport : public BasicReport{

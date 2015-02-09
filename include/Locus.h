@@ -136,8 +136,6 @@ class H2Filter{
   strArrVec_t phasedLocus;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition1;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition2;
-
-
   static FileH2 fileH2;
 };
 

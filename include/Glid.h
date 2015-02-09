@@ -38,8 +38,8 @@ class GlidFile{
 		    const bool in_doH2Filter,
 		    const bool in_expandH2Lines,
 		    const bool in_resolveUnknownGenotypes) 
-    : fileName(in_fileName),
-    wantedPrecision(in_wantedPrecision),
+    : wantedPrecision(in_wantedPrecision),
+    fileName(in_fileName),
     lociToDo(in_lociToDo),
     doH2Filter(in_doH2Filter),
     expandH2Lines(in_expandH2Lines),
@@ -58,8 +58,9 @@ class GlidFile{
   void readAndResolveFile();
   std::shared_ptr<Locus> resolve(const std::string line) const;
   
-  std::string fileName;
+
   const Allele::codePrecision wantedPrecision;
+  std::string fileName;
   strVec_t lociToDo;
   bool doH2Filter;
   bool expandH2Lines;
