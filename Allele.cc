@@ -161,6 +161,11 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
       return listOfPAlleleg;
       break;
     }
+  default:
+    {
+      std::cerr << "Can not assign wanted precision to known precision." << std::endl;
+      exit (EXIT_FAILURE);
+    }
   }//switch                                             
 }
 
