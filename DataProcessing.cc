@@ -144,9 +144,6 @@ strVec_t GLDataProcessing::updateLociToDoViaPullFile() const{
     }
   }
 
-  for(auto it : lociToDo)
-    std::cout << it << std::endl;
-
   strVec_t lociToDoOut;
   lociToDoOut = lociToDo;
   auto it_lociToDo = lociToDoOut.begin();
@@ -157,9 +154,6 @@ strVec_t GLDataProcessing::updateLociToDoViaPullFile() const{
       *it_lociToDo = "NONE";
     it_lociToDo ++;
   }
-
-  for(auto it : lociToDoOut)
-    std::cout << it << std::endl;
 
   return lociToDoOut;
 }
