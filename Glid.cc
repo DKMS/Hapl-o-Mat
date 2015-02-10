@@ -15,16 +15,28 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus){
   FileAlleles::list_t::const_iterator lastPos;
   allAlleles.findPositionLocus(locus, pos, lastPos);
 
-  strVecArr_t in_unphasedLocus;
+  size_t numberAlleles = distance(pos, lastPos);
+  strVec_t allelesPerLocus;
+  allelesPerLocus.reserve(numberAlleles);
   for(;pos < lastPos; pos++){
-    in_unphasedLocus.at(0).push_back(*pos);
-    in_unphasedLocus.at(1).push_back(*pos);
+    allelesPerLocus.push_back(*pos);
   }
-
-  if(!(in_unphasedLocus.at(0).empty() || in_unphasedLocus.at(1).empty())){
-    UnphasedLocus unphasedLocus(in_unphasedLocus, wantedPrecision, false, false);
-    unphasedLocus.resolve();
-    unphasedLocus.reduce(genotypes);
+  strArrVec_t in_phasedLocus;
+  size_t numberGenotypes = ((numberAlleles*numberAlleles + 1)/2 + numberAlleles);
+  in_phasedLocus.reserve(numberGenotypes);
+  for(auto allele1 : allelesPerLocus){
+    for(auto allele2 : allelesPerLocus){
+      strArr_t genotype;
+      genotype.at(0) = allele1;
+      genotype.at(1) = allele2;
+      in_phasedLocus.push_back(genotype);
+    }
+  }
+  
+  if(!(in_phasedLocus.empty())){
+    PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
+    phasedLocus.resolve();
+    phasedLocus.reduce(genotypes);
   }
 }
 
