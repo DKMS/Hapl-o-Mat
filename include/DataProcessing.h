@@ -109,18 +109,13 @@ class GLDataProcessing : public DataProcessing{
       wantedPrecision = parameters.getWantedPrecision();
       minimalFrequency = parameters.getMinimalFrequency();
       inputFileName = parameters.getPullFileName();      
-      for(auto locus : lociToDo){
-	if(locus == "NONE"){
-	  booleanLociToDo.push_back(false);
-	}
-	else{
-	  booleanLociToDo.push_back(true);
-	  numberLoci ++;
-	}
-      }
+
+      buildBooleanLociToDo();
     }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
+
+  void buildBooleanLociToDo();
 
  private:
   std::string glidFileName;

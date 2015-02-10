@@ -105,6 +105,19 @@ void DataProcessing::printStatistics(){
   std::cout << std::endl;
 }
 
+void GLDataProcessing::buildBooleanLociToDo(){
+  
+  for(auto locus : lociToDo){
+    if(locus == "NONE"){
+      booleanLociToDo.push_back(false);
+    }
+    else{
+      booleanLociToDo.push_back(true);
+      numberLoci ++;
+    }
+  }
+}
+
 void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   
   std::ifstream inputFile;
