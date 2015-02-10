@@ -31,8 +31,8 @@ class HaplotypeCombinations{
 class Data{
 
  public:
-  explicit Data()
-    : inputFileName(),
+  explicit Data(const std::string in_inputFileName)
+    : inputFileName(in_inputFileName),
     haplotypesFileName(),
     phenotypesFileName(),
     numberLoci(0),
@@ -67,8 +67,8 @@ class Data{
 class DataProcessing : public Data{
 
  public:
-  explicit DataProcessing()
-    : Data(),
+  explicit DataProcessing(const std::string in_inputFileName)
+    : Data(in_inputFileName),
     numberRemovedDonors(0),
     wantedPrecision(),
     minimalFrequency(){}
@@ -92,30 +92,28 @@ class GLDataProcessing : public DataProcessing{
 
  public:
   explicit GLDataProcessing(const ParametersGL & parameters)
-    : DataProcessing(),
+    : DataProcessing(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
-    booleanLociToDo(),
+    booleanLociToDo(buildBooleanLociToDo()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
 	 parameters.getWantedPrecision(),
-	 parameters.getLociToDo(),
+	 updateLociToDoViaPullFile(),
 	 parameters.getDoH2Filter(),
 	 parameters.getExpandH2Lines(),
 	 parameters.getResolveUnknownGenotype())
-    {
-      haplotypesFileName = parameters.getHaplotypesFileName();
-      phenotypesFileName = parameters.getPhenotypesFileName();
-      wantedPrecision = parameters.getWantedPrecision();
-      minimalFrequency = parameters.getMinimalFrequency();
-      inputFileName = parameters.getPullFileName();      
-
-      buildBooleanLociToDo();
-    }
-
+      {
+	haplotypesFileName = parameters.getHaplotypesFileName();
+	phenotypesFileName = parameters.getPhenotypesFileName();
+	wantedPrecision = parameters.getWantedPrecision();
+	minimalFrequency = parameters.getMinimalFrequency();
+      }
+  
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
 
-  void buildBooleanLociToDo();
+  std::vector<bool> buildBooleanLociToDo();
+  strVec_t updateLociToDoViaPullFile() const;
 
  private:
   std::string glidFileName;
@@ -129,7 +127,7 @@ class DKMSDataProcessing : public DataProcessing{
 
  public:
   explicit DKMSDataProcessing(const ParametersDKMS & parameters)
-    : DataProcessing(),
+    : DataProcessing(parameters.getInputFileName()),
     doH2Filter(parameters.getDoH2Filter()),
     expandH2Lines(parameters.getExpandH2Lines()),
     lociNames()
@@ -138,7 +136,6 @@ class DKMSDataProcessing : public DataProcessing{
       phenotypesFileName = parameters.getPhenotypesFileName();
       wantedPrecision = parameters.getWantedPrecision();
       minimalFrequency = parameters.getMinimalFrequency();
-      inputFileName = parameters.getInputFileName();
     }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
@@ -155,11 +152,10 @@ class DataReadin : public Data{
 
  public:
   explicit DataReadin(const ParametersReadin & parameters)
-    : Data()
+    : Data(parameters.getInputFileName())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
-      inputFileName = parameters.getInputFileName();
     }
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
