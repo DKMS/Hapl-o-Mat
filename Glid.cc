@@ -52,6 +52,15 @@ void GlidFile::reserveSize(){
 
 void GlidFile::readAndResolveFile(){
 
+  if(resolveUnknownGenotypes){
+    size_t pos = 0;
+    for(auto locus : lociToDo){
+      if(locus != "NONE")
+	possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, wantedPrecision));
+      pos ++;
+    }
+  }
+
   std::cout << "Resolve Glids" << std::endl;
 
   std::ifstream file;
@@ -70,15 +79,6 @@ void GlidFile::readAndResolveFile(){
       }
     }//!=0
   }//while
-
-  if(resolveUnknownGenotypes){
-    size_t pos = 0;
-    for(auto locus : lociToDo){
-      if(locus != "NONE")
-	possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, wantedPrecision));
-      pos ++;
-    }
-  }
 }
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
