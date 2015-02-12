@@ -343,6 +343,8 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
 
+  double numberOfReports = 1.;
+  bool discardReport = false;
   for(auto locus : inLoci){
     std::string locusCombination = "";
     for(auto code : locus){
@@ -374,29 +376,39 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       types.push_back(pLocus->getType());
       std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
       pLocus->reduce(genotypesAtLocus);
-      genotypesAtLoci.push_back(genotypesAtLocus);
+      numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+      if(1./numberOfReports - minimalFrequency < ZERO){
+	std::cout << "Report "
+		  << id
+		  << " comes below allowed frequency. Report discarded."
+		  << std::endl;
+	discardReport = true;
+	break;
+      }
+      else{
+	genotypesAtLoci.push_back(genotypesAtLocus);
+      }
     }
     else{
       types.push_back(pos->second->getType());
       std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
       pos->second->reduce(genotypesAtLocus);
-      genotypesAtLoci.push_back(genotypesAtLocus);
+      numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+      if(1./numberOfReports - minimalFrequency < ZERO){
+	std::cout << "Report "
+		  << id
+		  << " comes below allowed frequency. Report discarded."
+		  << std::endl;
+	discardReport = true;
+	break;
+      }
+      else{
+	genotypesAtLoci.push_back(genotypesAtLocus);
+      }
     }
   }//for inLoci
   
-  double numberOfReports = 1.;
-  for(auto locus : genotypesAtLoci)
-    numberOfReports *= static_cast<double>(locus.size());
-
-  if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "Report "
-              << id
-              << " with "
-              << numberOfReports
-              << " phenotypes comes below allowed frequency. Report discarded."
-              << std::endl;
-  }
-  else
+  if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
