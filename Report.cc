@@ -353,6 +353,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     }
     locusCombination.pop_back();
 
+    std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
     auto pos = lociAlreadyDone.find(locusCombination);
     if(pos == lociAlreadyDone.cend()){
       strVecArr_t locusPositions;
@@ -374,37 +375,25 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       lociAlreadyDone.emplace(locusCombination, pLocus);
 
       types.push_back(pLocus->getType());
-      std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
       pLocus->reduce(genotypesAtLocus);
-      numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-      if(1./numberOfReports - minimalFrequency < ZERO){
-	std::cout << "Report "
-		  << id
-		  << " comes below allowed frequency. Report discarded."
-		  << std::endl;
-	discardReport = true;
-	break;
-      }
-      else{
-	genotypesAtLoci.push_back(genotypesAtLocus);
-      }
+
     }
     else{
       types.push_back(pos->second->getType());
-      std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
       pos->second->reduce(genotypesAtLocus);
-      numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-      if(1./numberOfReports - minimalFrequency < ZERO){
-	std::cout << "Report "
-		  << id
-		  << " comes below allowed frequency. Report discarded."
-		  << std::endl;
-	discardReport = true;
-	break;
-      }
-      else{
-	genotypesAtLoci.push_back(genotypesAtLocus);
-      }
+    }
+  
+    numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+    if(1./numberOfReports - minimalFrequency < ZERO){
+      std::cout << "Report "
+		<< id
+		<< " comes below allowed frequency. Report discarded."
+		<< std::endl;
+      discardReport = true;
+      break;
+    }
+    else{
+      genotypesAtLoci.push_back(genotypesAtLocus);
     }
   }//for inLoci
   
