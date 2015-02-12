@@ -210,6 +210,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   bool discardReport = false;
 
+  double numberOfReports = 1.;
   for(auto code : inLoci){
     if(code == 0){
       if(resolveUnknownGenotype){
@@ -240,10 +241,19 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	types.push_back(pLocus->getType());
       }
     }//else code=0
-  }//for inLoci
 
-  for(auto locus : genotypesAtLoci){
-    if(locus.empty()){
+    numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
+    if(1./numberOfReports - minimalFrequency < ZERO){
+      discardReport = true;
+      std::cout << "Report "
+		<< id
+		<< " with "
+		<< numberOfReports
+		<< " phenotypes comes below allowed frequency. Report discarded."
+		<< std::endl;
+      break;
+    }
+    if(numberOfReports < ZERO){
       discardReport = true;	    
       std::cout << "Report "
 		<< id
@@ -251,24 +261,10 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		<< std::endl;
       break;
     }
-  }
-  
-  if(!discardReport){
-    double numberOfReports = 1.;
-    for(auto locus : genotypesAtLoci)
-      numberOfReports *= static_cast<double>(locus.size());
-    
-    if(1./numberOfReports - minimalFrequency < ZERO){
-      std::cout << "Report "
-		<< id
-		<< " with "
-		<< numberOfReports
-		<< " phenotypes comes below allowed frequency. Report discarded."
-		<< std::endl;
-    }
-    else
-      buildListOfReports(listOfReports, genotypesAtLoci);
-  }
+  }//for inLoci
+
+  if(!discardReport)
+    buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
 void HReport::translateLine(const std::string line, const strVec_t lociNames){
