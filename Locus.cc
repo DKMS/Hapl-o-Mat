@@ -11,11 +11,13 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
   strArr_t genotype;
   for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
+    std::cout << genotypes.size() << std::endl;
     double genotypeFrequency = 1.;
     for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
       genotype.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
       genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
     }
+    sort(genotype.begin(), genotype.end());
     auto pos = find_if(genotypes.begin(),
 		       genotypes.end(),
 		       [& genotype](const std::pair<strArr_t, double> & element)
