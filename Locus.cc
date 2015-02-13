@@ -82,14 +82,14 @@ void UnphasedLocus::resolve(){
 	//check for duplicates
 	sort(pAllelesAtOneLocusPosition.begin(),
 	     pAllelesAtOneLocusPosition.end(),
-	     [](const std::shared_ptr<Allele> lhs,
-		const std::shared_ptr<Allele> rhs)
+	     [](const std::shared_ptr<Allele> & lhs,
+		const std::shared_ptr<Allele> & rhs)
 	     {
 	       return lhs->getCode() < rhs->getCode();
 	     });
 	auto pos = find_if(possiblePAllelesAtOneLocusPositions.begin(),
 			   possiblePAllelesAtOneLocusPositions.end(),
-			   [& pAllelesAtOneLocusPosition](const std::vector<std::shared_ptr<Allele>> possibleAlleles)
+			   [& pAllelesAtOneLocusPosition](const std::vector<std::shared_ptr<Allele>> & possibleAlleles)
 			   {
 			     if(pAllelesAtOneLocusPosition.size() != possibleAlleles.size())
 			       return false;
@@ -165,7 +165,7 @@ void UnphasedLocus::doResolve(){
 	auto pos =
 	  find_if(allPAllelesAtOneLocusPosition.cbegin(),
 		  allPAllelesAtOneLocusPosition.cend(),
-		  [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> allele)
+		  [& pAlleleAtOneLocusPosition](const std::shared_ptr<Allele> & allele)
 		  {
 		    return pAlleleAtOneLocusPosition->getCode() == allele->getCode();
 		  });
@@ -270,13 +270,13 @@ void H2Filter::preFilter(){
     }
     if (all_of(codesAndInAtLocusPosition1.cbegin(),
 	       codesAndInAtLocusPosition1.cend(),
-	       [](const std::pair<strVec_t, bool> element)
+	       [](const std::pair<strVec_t, bool> & element)
 	       {
 		 return element.second;
 	       })
 	&& all_of(codesAndInAtLocusPosition2.cbegin(),
 		  codesAndInAtLocusPosition2.cend(),
-		  [](const std::pair<strVec_t, bool> element)
+		  [](const std::pair<strVec_t, bool> & element)
 		  {
 		    return element.second;
 		  })){
@@ -361,11 +361,11 @@ void H2Filter::filter(){
 
     if(std::all_of(codesAndInAtLocusPosition1.cbegin(),
 		   codesAndInAtLocusPosition1.cend(),
-		   [](const std::pair<strVec_t, bool> element){return element.second;})
+		   [](const std::pair<strVec_t, bool> & element){return element.second;})
        &&
        std::all_of(codesAndInAtLocusPosition2.cbegin(),
 		   codesAndInAtLocusPosition2.cend(),
-		   [](const std::pair<strVec_t, bool> element){return element.second;})){
+		   [](const std::pair<strVec_t, bool> & element){return element.second;})){
       candidates.push_back(line);
     }
     for(auto codesAndIn = codesAndInAtLocusPosition1.begin();

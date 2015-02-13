@@ -174,7 +174,7 @@ std::vector<std::shared_ptr<Allele>>::iterator Allele::ispAlleleInList (std::vec
   std::string alleleCode = code;
   std::vector<std::shared_ptr<Allele>>::iterator pos = find_if(listOfpAlleles.begin(),
 							       listOfpAlleles.end(),
-							       [alleleCode](const std::shared_ptr<Allele> allele)
+							       [alleleCode](const std::shared_ptr<Allele> & allele)
 							       {
 								 return alleleCode == allele->getCode();
 							       });

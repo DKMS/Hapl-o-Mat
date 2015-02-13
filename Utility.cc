@@ -151,7 +151,7 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
       bool alreadyIn = false;
       auto pos = find_if(listOfCombinations.cbegin(),
                          listOfCombinations.cend(),
-                         [& combination](const std::vector<size_t> otherCombination)
+                         [& combination](const std::vector<size_t> & otherCombination)
                          {
                            return equal(combination.cbegin(),
 					combination.cend(),
