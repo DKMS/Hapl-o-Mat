@@ -247,9 +247,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       discardReport = true;
       std::cout << "Report "
 		<< id
-		<< " with "
-		<< numberOfReports
-		<< " phenotypes comes below allowed frequency. Report discarded."
+		<< " comes below allowed frequency. Report discarded."
 		<< std::endl;
       break;
     }
