@@ -30,23 +30,24 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 		return (*locusPosition1.cbegin())->getCode() < (*locusPosition2.cbegin())->getCode();
 	       });
 
-	    strVec_t oldCodes(2, "");
-	    for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
-	      if(pAlleleAtPhasedLocus.at(0)->getCode() == oldCodes.at(0) &&
-		 pAlleleAtPhasedLocus.at(1)->getCode() == oldCodes.at(1)){
-		genotypes.rbegin()->second += pAlleleAtPhasedLocus.at(0)->getFrequency() * pAlleleAtPhasedLocus.at(1)->getFrequency(); 		
-	      }//if
-	      else{
-		strArr_t genotype;
-		double genotypeFrequency = 1.;
-		for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
-		  oldCodes.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
-		  genotype.at(pos) = oldCodes.at(pos);
-		  genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
-		}
-		genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
-	      }//else
-	    }
+  //Summarise identical genotypes
+  strVec_t oldCodes(2, "");
+  for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
+    if(pAlleleAtPhasedLocus.at(0)->getCode() == oldCodes.at(0) &&
+       pAlleleAtPhasedLocus.at(1)->getCode() == oldCodes.at(1)){
+      genotypes.rbegin()->second += pAlleleAtPhasedLocus.at(0)->getFrequency() * pAlleleAtPhasedLocus.at(1)->getFrequency(); 		
+    }//if
+    else{
+      strArr_t genotype;
+      double genotypeFrequency = 1.;
+      for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
+	oldCodes.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
+	genotype.at(pos) = oldCodes.at(pos);
+	genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
+      }
+      genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
+    }//else
+  }
 }    
 
 void PhasedLocus::resolve(){
