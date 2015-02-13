@@ -9,37 +9,45 @@ FileH2 H2Filter::fileH2("data/H2.txt");
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
-  strArr_t genotype;
-  for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
-    std::cout << genotypes.size() << std::endl;
-    double genotypeFrequency = 1.;
-    for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
-      genotype.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
-      genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
-    }
-    sort(genotype.begin(), genotype.end());
-    auto pos = find_if(genotypes.begin(),
-		       genotypes.end(),
-		       [& genotype](const std::pair<strArr_t, double> & element)
-		       {
-			 bool equal = true;
-			 auto code1 = genotype.cbegin();
-			 for(auto code2 : element.first){
-			   if(code2 == *code1){
-			     equal = equal && true;
-			   }
-			   else
-			     equal = false;
-			   code1 ++;
-			 }//for
-			 return equal;
-		       });
-    if(pos == genotypes.cend())
-      genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
-    else
-      pos->second += genotypeFrequency;
+  //sort genotypes
+  for(auto pAlleleAtPhasedLocus = pAllelesAtPhasedLocus.begin();
+      pAlleleAtPhasedLocus != pAllelesAtPhasedLocus.end();
+      pAlleleAtPhasedLocus ++){
+    std::sort(pAlleleAtPhasedLocus->begin(),
+	      pAlleleAtPhasedLocus->end(),
+	      [](const std::shared_ptr<Allele> allele1,
+		 const std::shared_ptr<Allele> allele2)
+	      {
+		return allele1->getCode() < allele2->getCode();
+	      });
   }
-}
+  //sort list of genotypes
+  std::sort(pAllelesAtPhasedLocus.begin(),
+	    pAllelesAtPhasedLocus.end(),
+	    [](const std::vector<std::shared_ptr<Allele>> & locusPosition1,
+	       const std::vector<std::shared_ptr<Allele>> & locusPosition2)
+	      {
+		return (*locusPosition1.cbegin())->getCode() < (*locusPosition2.cbegin())->getCode();
+	       });
+
+	    strVec_t oldCodes(2, "");
+	    for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
+	      if(pAlleleAtPhasedLocus.at(0)->getCode() == oldCodes.at(0) &&
+		 pAlleleAtPhasedLocus.at(1)->getCode() == oldCodes.at(1)){
+		genotypes.rbegin()->second += pAlleleAtPhasedLocus.at(0)->getFrequency() * pAlleleAtPhasedLocus.at(1)->getFrequency(); 		
+	      }//if
+	      else{
+		strArr_t genotype;
+		double genotypeFrequency = 1.;
+		for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
+		  oldCodes.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
+		  genotype.at(pos) = oldCodes.at(pos);
+		  genotypeFrequency *= pAlleleAtPhasedLocus.at(pos)->getFrequency();
+		}
+		genotypes.push_back(std::make_pair(genotype, genotypeFrequency));
+	      }//else
+	    }
+}    
 
 void PhasedLocus::resolve(){
 
@@ -84,8 +92,8 @@ void UnphasedLocus::resolve(){
 	//check for duplicates
 	sort(pAllelesAtOneLocusPosition.begin(),
 	     pAllelesAtOneLocusPosition.end(),
-	     [](const std::shared_ptr<Allele> & lhs,
-		const std::shared_ptr<Allele> & rhs)
+	     [](const std::shared_ptr<Allele> lhs,
+		const std::shared_ptr<Allele> rhs)
 	     {
 	       return lhs->getCode() < rhs->getCode();
 	     });
