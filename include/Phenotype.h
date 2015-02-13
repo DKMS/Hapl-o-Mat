@@ -45,6 +45,8 @@ class PhenotypeList : public Hash<Phenotype>{
 
  public:
  explicit PhenotypeList() {}
+
+ virtual size_t computeSizeInBytes();
  
  void expectationStep(const HaplotypeList & haplotypeList);
 

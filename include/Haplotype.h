@@ -35,6 +35,8 @@ class HaplotypeList : public Hash<Haplotype>{
     epsilon(parameters.getEpsilon()),
     rng(parameters.getSeed()){}
 
+  virtual std::size_t computeSizeInBytes();
+
   double getFrequency(const size_t id) const{
     auto pos = hashList.find(id);
     if(pos == hashList.end()){

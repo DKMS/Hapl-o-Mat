@@ -8,6 +8,18 @@
 #include "Phenotype.h"
 #include "Utility.h"
 
+std::size_t HaplotypeList::computeSizeInBytes(){
+
+  size_t sizeInBytes = 0;
+  for(auto haplo : hashList){
+    sizeInBytes += sizeof(haplo.first);
+    sizeInBytes += sizeof(haplo.second);
+  }
+  sizeInBytes += sizeof(hashList);
+  
+  return sizeInBytes;
+}
+
 void HaplotypeList::EMAlgorithm(PhenotypeList & phenotypes){
  
   std::ofstream epsilonFile;
