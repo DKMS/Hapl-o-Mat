@@ -9,8 +9,8 @@ FileH2 H2Filter::fileH2("data/H2.txt");
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
+  strArr_t genotype;
   for(auto pAlleleAtPhasedLocus : pAllelesAtPhasedLocus){
-    strArr_t genotype;
     double genotypeFrequency = 1.;
     for(size_t pos=0; pos < pAlleleAtPhasedLocus.size(); pos++){
       genotype.at(pos) = pAlleleAtPhasedLocus.at(pos)->getCode();
