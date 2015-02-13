@@ -18,7 +18,7 @@ void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
     }
     auto pos = find_if(genotypes.begin(),
 		       genotypes.end(),
-		       [& genotype](std::pair<strArr_t, double> element)
+		       [& genotype](const std::pair<strArr_t, double> & element)
 		       {
 			 bool equal = true;
 			 auto code1 = genotype.cbegin();
