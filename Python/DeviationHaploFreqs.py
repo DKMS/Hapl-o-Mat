@@ -2,13 +2,13 @@
 
 #Christian Schaefer
 #Nov 2014
-#Compute the deviation of the other columns from column 2. Write them to Dev.dat including the haplotype
+#Compute the deviation of the other columns from column 2. Write them sorted to Dev.dat including the haplotype
 
 import numpy as np
 from operator import itemgetter
 
 sortedDev = []
-with open('comparedHaploFreqs.dat') as file:
+with open('All.dat') as file:
     for line in file:
         line = line.rstrip('\r\n')
         entries = line.split()
@@ -27,7 +27,6 @@ with open('comparedHaploFreqs.dat') as file:
 sortedDev.sort(key=itemgetter(1), reverse=True)
 
 with open ('Dev.dat', 'w') as file:
-#    file.write("#Haplotype/NotIn/Removed/Resolved\n") 
     for lines in sortedDev:
         for elems in lines:
             file.write(str(elems) + "\t")

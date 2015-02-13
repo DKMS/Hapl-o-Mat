@@ -1,34 +1,27 @@
 #!/usr/local/bin/python
 
 #Christian Schaefer
-#Dec 2014
+#Nov 2014
 #
 
 from operator import itemgetter
 
-dkms = dict()
+new = dict()
 with open('results/estimatedHaplotypeFrequencies.dat') as file:
     for line in file:
         line = line.rstrip('\r\n')
         (key, val) = line.split()
-        key = key.translate(None, 'g')
-        key = key.translate(None, 'N')
-        if float(val) < 1e-8:
-            val = '0'
-        dkms[key] = val
+        new[key] = val
 
-other = dict()
-with open('other.dat') as file:
+old = dict()
+with open('resultsSave/estimatedHaplotypeFrequencies.dat') as file:
     for line in file:
         line = line.rstrip('\r\n')
-        (key, val) = line.split(',')
-        key = key.translate(None, 'g')
-        key = key.translate(None, 'N')
-        if float(val) < 1e-8:
-            val = '0'
-        other[key] = val
+        (key, val) = line.split()
+        old[key] = val
 
-haploFreqs = (dkms, other)
+haploFreqs = (new, old)
+
 all = dict()
 
 for haploFreq in haploFreqs:
@@ -50,6 +43,6 @@ for key in all:
 
 sortedAll.sort(key=itemgetter(1), reverse=True)
 
-file = open('comparedHaploFreqs.dat', 'w')
+file = open('All.dat', 'w')
 for elems in sortedAll:
     file.write("\t".join(elems) + "\n")
