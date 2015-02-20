@@ -142,21 +142,12 @@ void HaplotypeList::writeFrequenciesToFile() const{
     auto pos = hashList.find(hashValue);
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
-
-      //      if(parameters.getMonteCarlo()){
-      //	fileOut << code
-      //		<< "\t";
-      //	fileOut << freq
-      //		<< "\n";
-      //}//if Monte Carlo
-    //      else{
       if(freq > epsilon){
 	outFile << code
 		<< "\t";
 	outFile << freq
 		<< "\n";
       }
-      //      }//else Montecarlo
     }
   }
   inFile.close();
