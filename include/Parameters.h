@@ -13,7 +13,8 @@ class Parameters{
   enum initialisationHaplotypeFrequencies{
     random,
     perturbation,
-    numberOccurence
+    numberOccurence,
+    equal
   };
 
   explicit Parameters(){}

@@ -47,6 +47,8 @@ void Parameters::initType_assign(const std::string line){
     initType = perturbation;
   else if(value.compare("numberOccurence") == 0)
     initType = numberOccurence;
+  else if(value.compare("equal") == 0)
+    initType = equal;
   else{
     std::cerr << "No initialisation routine for haplotype frequencies specified. Set routine to random" << std::endl;
     initType = random;
@@ -85,6 +87,11 @@ std::string Parameters::printInitialisationHaplotypeFrequencies() const{
 
   std::string out;
   switch(initType){
+  case equal:
+    {
+      out = "equal";
+      break;
+    }
   case random:
     {
       out = "random";

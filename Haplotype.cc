@@ -78,6 +78,15 @@ void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
       }
       break;
     }
+  case Parameters::equal:
+    { 
+      double factor = 1. / static_cast<double>(hashList.size());
+      for(auto haplo = listBegin();
+	  haplo != listEnd();
+	  haplo ++){
+	haplo->second.setFrequency(factor);
+      }
+    }
   }//switch
 }
 
