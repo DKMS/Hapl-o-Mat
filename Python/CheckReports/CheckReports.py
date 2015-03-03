@@ -8,10 +8,10 @@ from collections import defaultdict
 def checkLoci(loci):
     for locus in loci:
         if loci.count(locus) != 2:
-            print 'Locus ' + locus + ' does nor occur two times.'
+            print ('Locus ' + locus + ' does nor occur two times.')
             return False
         if not locus.endswith('*'):
-            print 'Locus ' + locus + ' misses *.'
+            print ('Locus ' + locus + ' misses *.')
             return False
     return True
 
@@ -20,7 +20,7 @@ def checkLastLetter(code, endLetters):
     preLastLetter = code[-2:-1]
     if lastLetter.isalpha() and not preLastLetter.isalpha():
         if not lastLetter in endLetters:
-            print 'Code ' + code + ' in report ' + id + ' ends with not allowed letter.'
+            print ('Code ' + code + ' in report ' + id + ' ends with not allowed letter.')
             return False
     return True
 
@@ -28,14 +28,14 @@ def checkForLetters(codeWithoutLetterAtTheEnd):
     splittedCodes = codeWithoutLetterAtTheEnd.split(':')
     for splittedCode in splittedCodes:
         if not splittedCode.isdigit():
-            print 'Code ' + code + ' in report ' + id + ' contains not valid sign.'
+            print ('Code ' + code + ' in report ' + id + ' contains not valid sign.')
             return False
     return True
    
     
-fileName = raw_input('Enter file name:\n')
+fileName = input('Enter file name:\n')
 
-print 'Check syntax of reports:'
+print ('Check syntax of reports:')
 
 allIds = set()
 syntacticallyCleanedReports = [] 
@@ -62,7 +62,7 @@ with open(fileName) as file:
             #check if id already in
             id = codesAtLoci[0]
             if id in allIds:
-                print 'Found duplicate of report ' + id
+                print ('Found duplicate of report ' + id)
                 reportOkay = False
                 numberDuplicates += 1
             else:
@@ -71,7 +71,7 @@ with open(fileName) as file:
             codesAtLoci.pop(0)
             #check number codes
             if len(codesAtLoci) / 2. > numberLoci:
-                print 'Too many codes in report ' + id
+                print ('Too many codes in report ' + id)
                 reportOkay = False
 
             if len(codesAtLoci) / 2. < numberLoci:
@@ -87,24 +87,24 @@ with open(fileName) as file:
 
                 if not '' in splittedLine:
                     reportOkay = True
-                    print 'Completed homozygous loci in report ' + id
+                    print ('Completed homozygous loci in report ' + id)
                     splittedLine.pop(0)
                     codesAtLoci = splittedLine
                 else:
-                    print 'Too few codes in report ' + id
+                    print ('Too few codes in report ' + id)
 
             for code in codesAtLoci:
                 #check for NEW and number colons
                 if code == 'NEW':
-                    print 'Code ' + code + ' in report ' + id + ' is NEW'
+                    print ('Code ' + code + ' in report ' + id + ' is NEW')
                     reportOkay = False
                     numberNew += 1
                 else:
                     if code.count(':') < 1:
-                        print 'Code ' + code + ' in report ' + id + ' has too few digits.'
+                        print ('Code ' + code + ' in report ' + id + ' has too few digits.')
                         reportOkay = False
                     if code.count(':') > 3:
-                        print 'Code ' + code + ' in report ' + id + ' has too many digits.'
+                        print ('Code ' + code + ' in report ' + id + ' has too many digits.')
                         reportOkay = False
 
                 #check a 4d report
@@ -122,7 +122,7 @@ with open(fileName) as file:
                         codeWithoutLetterAtTheEnd = codeSecondDigit
                     if not codeWithoutLetterAtTheEnd.isdigit():
                         if not codeWithoutLetterAtTheEnd.isalpha():
-                            print 'Code ' + code + ' in report ' + id + ' contains not valid sign.'                        
+                            print ('Code ' + code + ' in report ' + id + ' contains not valid sign.'                        )
                             reportOkay = False
 
                 #check a 6d report
@@ -155,7 +155,7 @@ with open(fileName) as file:
             else:
                 numberSyntacticErrors += 1
 
-print '\nCheck consistency of codes:'
+print ('\nCheck consistency of codes:')
 
 numberCodeErrors = 0
 numberg = 0
@@ -216,14 +216,14 @@ for report in syntacticallyCleanedReports:
         #nmdp
         if code.count(':') == 1 and code.split(':')[1].isalpha():
             if code.split(':')[1] == 'XXX':
-                print 'Code ' + code + ' is XXX'
+                print ('Code ' + code + ' is XXX')
                 reportOkay = False
                 numberXXX += 1
             elif code.split(':')[1] == 'XX':
-                print 'Code ' + code + ' is XX'
+                print ('Code ' + code + ' is XX')
                 reportOkay = False
             elif not code.split(':')[1] in code2dna:
-                print 'Code ' + code + ' is not in code2dna.txt.'
+                print ('Code ' + code + ' is not in code2dna.txt.')
                 reportOkay = False
             else:
                 for combination in code2dna[code.split(':')[1]]:
@@ -232,7 +232,7 @@ for report in syntacticallyCleanedReports:
                     else:
                         resolvedCode = loci[counter] + code.split(':')[0] + ':' + combination
                     if not resolvedCode in expandedAlleles:
-                        print 'Code ' + resolvedCode + ' from NMPD-code ' + code + ' is not in allAllelesExpanded.txt.'
+                        print ('Code ' + resolvedCode + ' from NMPD-code ' + code + ' is not in allAllelesExpanded.txt.')
                         reportOkay = False
                     else:
                         numberNMDP += 1
@@ -240,7 +240,7 @@ for report in syntacticallyCleanedReports:
         elif code.endswith('G'):
             codeWithLocus = loci[counter] + code
             if not codeWithLocus in H1:
-                print 'Code ' + codeWithLocus + ' is not in H1.txt.'
+                print ('Code ' + codeWithLocus + ' is not in H1.txt.')
                 reportOkay = False
             else:
                 numberG += 1
@@ -248,7 +248,7 @@ for report in syntacticallyCleanedReports:
         elif code.endswith('g'):
             codeWithLocus = loci[counter] + code
             if not codeWithLocus in H1g:
-                print 'Code ' + codeWithLocus + ' is not in H1g.txt.'
+                print ('Code ' + codeWithLocus + ' is not in H1g.txt.')
                 reportOkay = False
             else:
                 numberg += 1
@@ -256,7 +256,7 @@ for report in syntacticallyCleanedReports:
         else:
             codeWithLocus = loci[counter] + code
             if not codeWithLocus in expandedAlleles:
-                print 'Code ' + codeWithLocus + ' is not in allAllelesExpanded.txt.'
+                print ('Code ' + codeWithLocus + ' is not in allAllelesExpanded.txt.')
                 reportOkay = False
             else:
                 if code.count(':') == 1:
@@ -278,15 +278,15 @@ with open(cleanedFileName, 'w') as file:
     for report in completelyCleanedReports:
         file.write(report)
 
-print '\nSummary:'
-print 'Found ' + str(numberSyntacticErrors) + ' broken reports due to syntactical errors.'
-print 'Found ' + str(numberCodeErrors) + ' broken reports due to code errors.'
-print 'Number duplicates: ' + str(numberDuplicates)
-print 'Number XXX: ' + str(numberXXX)
-print 'Number NMDP: ' + str(numberNMDP)
-print 'Number g: ' + str(numberg)
-print 'Number 4d: ' + str(number4d)
-print 'Number G: ' + str(numberG)
-print 'Number 6d: ' + str(number6d)
-print 'Number 8d: ' + str(number8d)
+print ('\nSummary:')
+print ('Found ' + str(numberSyntacticErrors) + ' broken reports due to syntactical errors.')
+print ('Found ' + str(numberCodeErrors) + ' broken reports due to code errors.')
+print ('Number duplicates: ' + str(numberDuplicates))
+print ('Number XXX: ' + str(numberXXX))
+print ('Number NMDP: ' + str(numberNMDP))
+print ('Number g: ' + str(numberg))
+print ('Number 4d: ' + str(number4d))
+print ('Number G: ' + str(numberG))
+print ('Number 6d: ' + str(number6d))
+print ('Number 8d: ' + str(number8d))
 
