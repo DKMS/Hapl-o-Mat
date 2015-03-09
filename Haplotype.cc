@@ -194,7 +194,7 @@ void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & 
 	it != hashList.end();
 	it++){
       if(it->second.getFrequency() < ZERO){
-	hashList.erase(it);
+	it = hashList.erase(it);
       }
     }
 }
