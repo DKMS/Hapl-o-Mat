@@ -190,11 +190,13 @@ void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & 
       }
     }
 
-    for(auto it = hashList.begin();
-	it != hashList.end();
-	it++){
+    auto it = hashList.begin();
+    while(it != hashList.end()){
       if(it->second.getFrequency() < ZERO){
 	it = hashList.erase(it);
+      }
+      else{
+	it ++;
       }
     }
 }
