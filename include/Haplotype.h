@@ -45,6 +45,7 @@ class HaplotypeList : public Hash<Haplotype>{
     else
       return pos->second.getFrequency();
   }
+  double getNumberDonors() const {return numberDonors;}
   void setNumberLoci(const size_t in) {numberLoci = in;}
   void setNumberDonors(const size_t in) {numberDonors = in;}
   void initialiseFrequencies(const PhenotypeList & phenotypes);
