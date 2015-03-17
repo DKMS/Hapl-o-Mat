@@ -35,6 +35,9 @@ class Phenotype{
 
   double computeSummedFrequencyDiplotypes () const;
   void expectation(const HaplotypeList & haplotypeList);
+  void expectation(const HaplotypeList & haplotypeList,
+		   const size_t haplotypeId,
+		   const double h);
 
  private:
   double numInDonors;

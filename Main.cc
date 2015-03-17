@@ -12,6 +12,7 @@
 #include "Parameters.h"
 #include "Utility.h"
 #include "Report.h"
+#include "FisherInformation.h"
 
 int main(int argc, char *argv[]){
 
@@ -68,6 +69,9 @@ int main(int argc, char *argv[]){
   t1 = getTime();
   hList.initialiseFrequencies(pList);
   hList.EMAlgorithm(pList);
+
+  fisherInformation(hList, pList, 0.01);
+
   hList.writeFrequenciesToFile();
   t2 = getTime();
   timeEMAlgorithm = getTimeDifference(t1, t2);

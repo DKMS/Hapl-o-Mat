@@ -1,6 +1,7 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 #include <algorithm>
+#include <iostream>
 
 double Phenotype::computeSummedFrequencyDiplotypes () const{
 
@@ -15,6 +16,7 @@ double Phenotype::computeSummedFrequencyDiplotypes () const{
 
   return summedFrequencyDiplotypes;
 }
+
 void Phenotype::expectation(const HaplotypeList & haplotypeList){
 
   auto itDiploEnd = diplotypeList.end();
@@ -33,6 +35,37 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList){
       }
     }
 }
+
+void Phenotype::expectation(const HaplotypeList & haplotypeList,
+			    const size_t haplotypeId,
+			    const double h){
+
+  auto itDiploEnd = diplotypeList.end();
+  for(auto itDiplo = diplotypeList.begin();
+      itDiplo != itDiploEnd;
+      itDiplo ++)
+    {
+      if(itDiplo->id1 == itDiplo->id2){
+        itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
+	if(itDiplo->id1 == haplotypeId){
+	  itDiplo->frequency += h;  
+	}
+	itDiplo->frequency *= itDiplo->frequency;
+      }
+      else{
+	double haploFreq1 = haplotypeList.getFrequency(itDiplo->id1);
+	double haploFreq2 = haplotypeList.getFrequency(itDiplo->id2);
+	if(itDiplo->id1 == haplotypeId){
+	  haploFreq1 += h;
+	}
+	if(itDiplo->id2 == haplotypeId){
+	  haploFreq2 += h;
+	}
+        itDiplo->frequency = 2. * haploFreq1 * haploFreq2;
+      }
+    }//diplotypes
+}
+
 
 size_t PhenotypeList::computeSizeInBytes(){
 
