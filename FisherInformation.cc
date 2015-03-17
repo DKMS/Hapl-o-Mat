@@ -1,6 +1,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "Eigen/Dense"
+#include "Eigen/LU"
 #include "FisherInformation.h"
 
 void diagonalFisherInformation(const HaplotypeList & hList,
@@ -33,12 +35,13 @@ void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList,
 		       const double h){
 
-  std::vector<std::vector<double>> informationMatrix;
+  Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
 
+  size_t k = 0;
   for(auto haplotype_k = hList.c_listBegin();
       haplotype_k != hList.c_listEnd();
       haplotype_k ++){
-    std::vector<double> informationMatrix_k;
+    size_t l = 0;
     for(auto haplotype_l = hList.c_listBegin();
 	haplotype_l != hList.c_listEnd();
 	haplotype_l ++){
@@ -62,18 +65,19 @@ void fisherInformation(const HaplotypeList & hList,
 	score_k += perturbedPhenotype.getNumInDonors() * log(perturbedPhenotypeFrequency_k/phenotypeFrequency);
 	score_l += perturbedPhenotype.getNumInDonors() * log(perturbedPhenotypeFrequency_l/phenotypeFrequency);
       }//phenotypes
-      double information = static_cast<double>(pList.getSize())/h/h * score_k * score_l;
-      informationMatrix_k.push_back(information);
+      double information = 1./static_cast<double>(pList.getSize())/h/h * score_k * score_l;
+      informationMatrix(k,l) = information;
+      l ++;
     }//haplotypes_l
-    informationMatrix.push_back(informationMatrix_k);
+    k ++;
   }//haplotypes_k
 
   std::cout.precision(16);
-  for(auto k : informationMatrix){
-    for(auto l : k){
-      std::cout << l << ",";
-    }
-    std::cout << std::endl;
-  }
+  std::cout << informationMatrix << std::endl;
+  std::cout << std::endl;
+
+  Eigen::MatrixXd  covarianceMatrix = informationMatrix.inverse();
+  std::cout.precision(16);
+  std::cout << covarianceMatrix << std::endl;
 
 }
