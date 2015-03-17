@@ -63,8 +63,7 @@ void fisherInformation(const HaplotypeList & hList,
 
 	sum += (perturbedPhenotypeFrequency_k - phenotypeFrequency) * (perturbedPhenotypeFrequency_l - phenotypeFrequency) / phenotypeFrequency;
       }//phenotypes
-      double information = static_cast<double>(hList.getNumberDonors())/h/h * sum;
-      informationMatrix(k,l) = information;
+      informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors())/h/h * sum;
       l ++;
     }//haplotypes_l
     k ++;
