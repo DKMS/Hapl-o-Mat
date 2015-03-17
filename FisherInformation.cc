@@ -38,12 +38,14 @@ void fisherInformation(const HaplotypeList & hList,
   Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
 
   size_t k = 0;
-  for(auto haplotype_k = hList.c_listBegin();
-      haplotype_k != hList.c_listEnd();
+  auto hListBegin = hList.c_listBegin();
+  auto hListEnd = hList.c_listEnd();
+  for(auto haplotype_k = hListBegin;
+      haplotype_k != hListEnd;
       haplotype_k ++){
     size_t l = 0;
-    for(auto haplotype_l = hList.c_listBegin();
-	haplotype_l != hList.c_listEnd();
+    for(auto haplotype_l = hListBegin;
+	haplotype_l != hListEnd;
 	haplotype_l ++){
       
       double sum = 0.;
@@ -82,5 +84,4 @@ void fisherInformation(const HaplotypeList & hList,
   else{
     std::cout << "Not invertible" << std::endl;
   }
-
 }
