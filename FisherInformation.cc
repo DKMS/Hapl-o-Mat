@@ -46,8 +46,7 @@ void fisherInformation(const HaplotypeList & hList,
 	haplotype_l != hList.c_listEnd();
 	haplotype_l ++){
       
-      double score_k = 0.;
-      double score_l = 0.;
+      double sum = 0.;
       for(auto phenotype = pList.c_listBegin();
 	  phenotype != pList.c_listEnd();
 	  phenotype ++){
@@ -62,10 +61,9 @@ void fisherInformation(const HaplotypeList & hList,
 
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
 
-	score_k += perturbedPhenotype.getNumInDonors() * log(perturbedPhenotypeFrequency_k/phenotypeFrequency);
-	score_l += perturbedPhenotype.getNumInDonors() * log(perturbedPhenotypeFrequency_l/phenotypeFrequency);
+	sum += (perturbedPhenotypeFrequency_k - phenotypeFrequency) * (perturbedPhenotypeFrequency_l - phenotypeFrequency) / phenotypeFrequency;
       }//phenotypes
-      double information = 1./static_cast<double>(pList.getSize())/h/h * score_k * score_l;
+      double information = static_cast<double>(hList.getNumberDonors())/h/h * sum;
       informationMatrix(k,l) = information;
       l ++;
     }//haplotypes_l
@@ -76,8 +74,14 @@ void fisherInformation(const HaplotypeList & hList,
   std::cout << informationMatrix << std::endl;
   std::cout << std::endl;
 
-  Eigen::MatrixXd  covarianceMatrix = informationMatrix.inverse();
-  std::cout.precision(16);
-  std::cout << covarianceMatrix << std::endl;
+  Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
+  if(lu.isInvertible()){
+    Eigen::MatrixXd  varianceMatrix = lu.inverse();
+    std::cout.precision(16);
+    std::cout << varianceMatrix << std::endl;
+  }
+  else{
+    std::cout << "Not invertible" << std::endl;
+  }
 
 }
