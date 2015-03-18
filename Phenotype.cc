@@ -45,23 +45,17 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList,
       itDiplo != itDiploEnd;
       itDiplo ++)
     {
-      if(itDiplo->id1 == itDiplo->id2){
-        itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
-	if(itDiplo->id1 == haplotypeId){
-	  itDiplo->frequency += h;  
-	}
-	itDiplo->frequency *= itDiplo->frequency;
+      double haploFreq1 = haplotypeList.getFrequency(itDiplo->id1);
+      double haploFreq2 = haplotypeList.getFrequency(itDiplo->id2);
+      if(itDiplo->id1 == haplotypeId){
+	haploFreq1 += h;
       }
-      else{
-	double haploFreq1 = haplotypeList.getFrequency(itDiplo->id1);
-	double haploFreq2 = haplotypeList.getFrequency(itDiplo->id2);
-	if(itDiplo->id1 == haplotypeId){
-	  haploFreq1 += h;
-	}
-	if(itDiplo->id2 == haplotypeId){
-	  haploFreq2 += h;
-	}
-        itDiplo->frequency = 2. * haploFreq1 * haploFreq2;
+      if(itDiplo->id2 == haplotypeId){
+	haploFreq2 += h;
+      }
+      itDiplo->frequency = haploFreq1 * haploFreq2;
+      if(itDiplo->id1 != itDiplo->id2){
+	itDiplo->frequency *= 2.;
       }
     }//diplotypes
 }
