@@ -205,11 +205,11 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
     */
 }
 
-double derivative(const double fxh,
-		  const double fx,
+double derivative(const double f1,
+		  const double f2,
 		  const double h){
 
-  return (fxh - fx) / h;
+  return (f1 - f2) / h;
 }
 
 template<typename T>

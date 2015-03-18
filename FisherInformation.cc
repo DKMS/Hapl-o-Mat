@@ -32,6 +32,8 @@ void diagonalFisherInformation(const HaplotypeList & hList,
   }//haplotypes
 }
 
+//optimise: compute shifted phenotype frequencies only once
+//matrix is symmetric, compute only one half
 void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList,
 		       const double h){
@@ -55,24 +57,30 @@ void fisherInformation(const HaplotypeList & hList,
 	  phenotype ++){
 
 	Phenotype perturbedPhenotype = phenotype->second;
-	perturbedPhenotype.expectation(hList, haplotype_k->first, h);
-	double perturbedPhenotypeFrequency_k = perturbedPhenotype.computeSummedFrequencyDiplotypes();
+	perturbedPhenotype.expectation(hList, haplotype_k->first, .5*h);
+	double perturbedPhenotypeFrequency_pluskh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
+	perturbedPhenotype = phenotype->second;
+	perturbedPhenotype.expectation(hList, haplotype_k->first, -.5*h);
+	double perturbedPhenotypeFrequency_minuskh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
 
 	perturbedPhenotype = phenotype->second;
-	perturbedPhenotype.expectation(hList, haplotype_l->first, h);
-	double perturbedPhenotypeFrequency_l = perturbedPhenotype.computeSummedFrequencyDiplotypes();
+	perturbedPhenotype.expectation(hList, haplotype_l->first, .5*h);
+	double perturbedPhenotypeFrequency_pluslh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
+	perturbedPhenotype = phenotype->second;
+	perturbedPhenotype.expectation(hList, haplotype_l->first, -.5*h);
+	double perturbedPhenotypeFrequency_minuslh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
 
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
 
-	sum += derivative(perturbedPhenotypeFrequency_k, phenotypeFrequency, h)
-	  * derivative(perturbedPhenotypeFrequency_l, phenotypeFrequency, h)
+	sum += derivative(perturbedPhenotypeFrequency_pluskh, perturbedPhenotypeFrequency_minuskh, h)
+	  * derivative(perturbedPhenotypeFrequency_pluslh, perturbedPhenotypeFrequency_minuslh, h)
 	  / phenotypeFrequency;
 
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
-      if(informationMatrix(k,l) < ZERO){
-	informationMatrix(k,l) = 0.;
-      }
+      //      if(informationMatrix(k,l) < ZERO){
+      //	informationMatrix(k,l) = 0.;
+      //      }
       l ++;
     }//haplotypes_l
     k ++;
