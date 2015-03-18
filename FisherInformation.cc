@@ -29,11 +29,11 @@ void fisherInformation(const HaplotypeList & hList,
 	  phenotype != pList.c_listEnd();
 	  phenotype ++){
 
-	double score_k = phenotype->second.derivative(hList, haplotype_k->first);
-	double score_l = phenotype->second.derivative(hList, haplotype_l->first);
+	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first);
+	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first);
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
 	
-	sum += score_k * score_l / phenotypeFrequency;
+	sum += derivative_k * derivative_l / phenotypeFrequency;
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
 
