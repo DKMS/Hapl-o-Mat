@@ -6,37 +6,10 @@
 #include "FisherInformation.h"
 #include "Utility.h"
 
-void diagonalFisherInformation(const HaplotypeList & hList,
-			       const PhenotypeList & pList,
-			       const double h){
-
-  for(auto haplotype = hList.c_listBegin();
-      haplotype != hList.c_listEnd();
-      haplotype ++){
-    double score = 0.;
-    for(auto phenotype = pList.c_listBegin();
-	phenotype != pList.c_listEnd();
-	phenotype ++){
-
-      Phenotype perturbedPhenotype = phenotype->second;
-      perturbedPhenotype.expectation(hList, haplotype->first, h);
-      double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
-      double perturbedPhenotypeFrequency = perturbedPhenotype.computeSummedFrequencyDiplotypes();
-      score += static_cast<double>(phenotype->second.getNumInDonors()) * log(perturbedPhenotypeFrequency/phenotypeFrequency);
-    }//phenotypes
-    score *= static_cast<double>(pList.getSize())/h/h * score;
-
-    std::cout.precision(16);
-    std::cout << haplotype->first << "\t" << score << std::endl;
-
-  }//haplotypes
-}
-
 //optimise: compute shifted phenotype frequencies only once
 //matrix is symmetric, compute only one half
 void fisherInformation(const HaplotypeList & hList,
-		       const PhenotypeList & pList,
-		       const double h){
+		       const PhenotypeList & pList){
 
   Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
 
@@ -52,33 +25,18 @@ void fisherInformation(const HaplotypeList & hList,
 	haplotype_l ++){
       
       double sum = 0.;
-
       for(auto phenotype = pList.c_listBegin();
 	  phenotype != pList.c_listEnd();
 	  phenotype ++){
 
-	Phenotype perturbedPhenotype = phenotype->second;
-	perturbedPhenotype.expectation(hList, haplotype_k->first, .5*h);
-	double perturbedPhenotypeFrequency_pluskh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
-	perturbedPhenotype = phenotype->second;
-	perturbedPhenotype.expectation(hList, haplotype_k->first, -.5*h);
-	double perturbedPhenotypeFrequency_minuskh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
-
-	perturbedPhenotype = phenotype->second;
-	perturbedPhenotype.expectation(hList, haplotype_l->first, .5*h);
-	double perturbedPhenotypeFrequency_pluslh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
-	perturbedPhenotype = phenotype->second;
-	perturbedPhenotype.expectation(hList, haplotype_l->first, -.5*h);
-	double perturbedPhenotypeFrequency_minuslh = perturbedPhenotype.computeSummedFrequencyDiplotypes();
-
+	double score_k = phenotype->second.derivative(hList, haplotype_k->first);
+	double score_l = phenotype->second.derivative(hList, haplotype_l->first);
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
-
-	sum += derivative(perturbedPhenotypeFrequency_pluskh, perturbedPhenotypeFrequency_minuskh, h)
-	  * derivative(perturbedPhenotypeFrequency_pluslh, perturbedPhenotypeFrequency_minuslh, h)
-	  / phenotypeFrequency;
-
+	
+	sum += score_k * score_l / phenotypeFrequency;
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
+
       l ++;
     }//haplotypes_l
     k ++;

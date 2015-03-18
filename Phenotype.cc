@@ -36,30 +36,29 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList){
     }
 }
 
-void Phenotype::expectation(const HaplotypeList & haplotypeList,
-			    const size_t haplotypeId,
-			    const double h){
+double Phenotype::derivative(const HaplotypeList & haplotypeList,
+			     const size_t haplotypeId) const{
 
+  double result = 0.;
   auto itDiploEnd = diplotypeList.end();
   for(auto itDiplo = diplotypeList.begin();
       itDiplo != itDiploEnd;
       itDiplo ++)
     {
-      double haploFreq1 = haplotypeList.getFrequency(itDiplo->id1);
-      double haploFreq2 = haplotypeList.getFrequency(itDiplo->id2);
-      if(itDiplo->id1 == haplotypeId){
-	haploFreq1 += h;
-      }
-      if(itDiplo->id2 == haplotypeId){
-	haploFreq2 += h;
-      }
-      itDiplo->frequency = haploFreq1 * haploFreq2;
-      if(itDiplo->id1 != itDiplo->id2){
-	itDiplo->frequency *= 2.;
+      if(itDiplo->id1 == haplotypeId && itDiplo->id2 == haplotypeId){
+	result += 2.*haplotypeList.getFrequency(haplotypeId);
+      }  
+      else{
+	if(itDiplo->id1 == haplotypeId){
+	  result += 2.*haplotypeList.getFrequency(itDiplo->id2);
+	}
+	if(itDiplo->id2 == haplotypeId){
+	  result += 2.*haplotypeList.getFrequency(itDiplo->id1);
+	}
       }
     }//diplotypes
+  return result;
 }
-
 
 size_t PhenotypeList::computeSizeInBytes(){
 

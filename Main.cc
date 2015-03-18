@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
   hList.initialiseFrequencies(pList);
   hList.EMAlgorithm(pList);
 
-  fisherInformation(hList, pList, 0.01);
+  fisherInformation(hList, pList);
 
   hList.writeFrequenciesToFile();
   t2 = getTime();
