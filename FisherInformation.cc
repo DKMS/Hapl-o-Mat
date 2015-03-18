@@ -4,6 +4,7 @@
 #include "Eigen/Dense"
 #include "Eigen/LU"
 #include "FisherInformation.h"
+#include "Utility.h"
 
 void diagonalFisherInformation(const HaplotypeList & hList,
 			       const PhenotypeList & pList,
@@ -63,9 +64,15 @@ void fisherInformation(const HaplotypeList & hList,
 
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
 
-	sum += (perturbedPhenotypeFrequency_k - phenotypeFrequency) * (perturbedPhenotypeFrequency_l - phenotypeFrequency) / phenotypeFrequency;
+	sum += derivative(perturbedPhenotypeFrequency_k, phenotypeFrequency, h)
+	  * derivative(perturbedPhenotypeFrequency_l, phenotypeFrequency, h)
+	  / phenotypeFrequency;
+
       }//phenotypes
-      informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors())/h/h * sum;
+      informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
+      if(informationMatrix(k,l) < ZERO){
+	informationMatrix(k,l) = 0.;
+      }
       l ++;
     }//haplotypes_l
     k ++;
