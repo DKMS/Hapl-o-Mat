@@ -52,6 +52,7 @@ void fisherInformation(const HaplotypeList & hList,
 	haplotype_l ++){
       
       double sum = 0.;
+
       for(auto phenotype = pList.c_listBegin();
 	  phenotype != pList.c_listEnd();
 	  phenotype ++){
@@ -78,9 +79,6 @@ void fisherInformation(const HaplotypeList & hList,
 
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
-      //      if(informationMatrix(k,l) < ZERO){
-      //	informationMatrix(k,l) = 0.;
-      //      }
       l ++;
     }//haplotypes_l
     k ++;
@@ -88,7 +86,6 @@ void fisherInformation(const HaplotypeList & hList,
 
   std::cout.precision(16);
   std::cout << informationMatrix << std::endl;
-  std::cout << std::endl;
 
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
