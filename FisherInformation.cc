@@ -13,6 +13,8 @@ void fisherInformation(const HaplotypeList & hList,
 
   Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
 
+  size_t negativeHaplotype = hList.c_listBegin()->first;
+
   size_t k = 0;
   auto hListBegin = hList.c_listBegin();
   auto hListEnd = hList.c_listEnd();
@@ -29,10 +31,12 @@ void fisherInformation(const HaplotypeList & hList,
 	  phenotype != pList.c_listEnd();
 	  phenotype ++){
 
-	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first);
-	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first);
-	double derivative_kl = phenotype->second.secondDerivative(hList, haplotype_k->first, haplotype_l->first);
+	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
+	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first, negativeHaplotype);
+	double derivative_kl = phenotype->second.secondDerivative(hList, haplotype_k->first, haplotype_l->first, negativeHaplotype);
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
+
+	std::cout << derivative_k << "\t" << derivative_l << "\t" << derivative_kl << std::endl;
 
 	sum += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
       }//phenotypes

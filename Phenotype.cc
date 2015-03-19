@@ -37,32 +37,52 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList){
 }
 
 double Phenotype::derivative(const HaplotypeList & haplotypeList,
-			     const size_t haplotype_k) const{
-
+			     const size_t haplotype_k,
+			     const size_t lastHaplotype) const{
+  
   double result = 0.;
   auto itDiploEnd = diplotypeList.end();
   for(auto itDiplo = diplotypeList.begin();
       itDiplo != itDiploEnd;
       itDiplo ++)
     {
-      if(itDiplo->id1 == haplotype_k && itDiplo->id2 == haplotype_k){
-	result += 2.*haplotypeList.getFrequency(haplotype_k);
-      }  
-      else{
-	if(itDiplo->id1 == haplotype_k){
-	  result += 2.*haplotypeList.getFrequency(itDiplo->id2);
-	}
-	if(itDiplo->id2 == haplotype_k){
-	  result += 2.*haplotypeList.getFrequency(itDiplo->id1);
-	}
+      double sum = 0;
+      sum += derivativeHaplotypeFrequency(itDiplo->id1, haplotype_k, lastHaplotype) * haplotypeList.getFrequency(itDiplo->id2);
+      sum += derivativeHaplotypeFrequency(itDiplo->id2, haplotype_k, lastHaplotype) * haplotypeList.getFrequency(itDiplo->id1);
+
+      if(itDiplo->id1 != itDiplo->id2){
+	sum *= 2.;
       }
+      result += sum;      
+
     }//diplotypes
+  
+  return result;
+}
+
+int Phenotype::derivativeHaplotypeFrequency(const size_t haplotype,
+					       const size_t haplotype_k,
+					       const size_t lastHaplotype) const{
+  
+  int result = 0;
+  if(haplotype != lastHaplotype){
+    if(haplotype == haplotype_k){
+      result = 1;
+    }
+  }
+  else{
+    if(haplotype_k != lastHaplotype){
+      result = -1;
+    }
+  }
+  
   return result;
 }
 
 double Phenotype::secondDerivative(const HaplotypeList & haplotypeList,
 				   const size_t haplotype_k,
-				   const size_t haplotype_l) const{
+				   const size_t haplotype_l,
+				   const size_t lastHaplotype) const{
 
   double result = 0.;
   auto itDiploEnd = diplotypeList.end();
@@ -71,16 +91,15 @@ double Phenotype::secondDerivative(const HaplotypeList & haplotypeList,
       itDiplo ++)
     {
       double sum = 0;
-      if(itDiplo->id1 == haplotype_k && itDiplo->id2 == haplotype_l){
-	sum += 1.;
-      }
-      if(itDiplo->id1 == haplotype_l && itDiplo->id2 == haplotype_k){
-	sum += 1.;
-      }
+      sum += derivativeHaplotypeFrequency(itDiplo->id1, haplotype_k, lastHaplotype) 
+	* derivativeHaplotypeFrequency(itDiplo->id2, haplotype_l, lastHaplotype);
+      sum += derivativeHaplotypeFrequency(itDiplo->id1, haplotype_l, lastHaplotype)
+	* derivativeHaplotypeFrequency(itDiplo->id2, haplotype_k, lastHaplotype);
+
       if(itDiplo->id1 != itDiplo->id2){
 	sum *= 2.;
       }
-      result += sum;
+      result += sum;      
     }
 
   return result;
