@@ -11,12 +11,13 @@
 void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList){
 
-  Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
+  Eigen::MatrixXd informationMatrix(hList.getSize()-1, hList.getSize()-1);
 
   size_t negativeHaplotype = hList.c_listBegin()->first;
 
   size_t k = 0;
   auto hListBegin = hList.c_listBegin();
+  advance(hListBegin, 1);
   auto hListEnd = hList.c_listEnd();
   for(auto haplotype_k = hListBegin;
       haplotype_k != hListEnd;
@@ -55,8 +56,8 @@ void fisherInformation(const HaplotypeList & hList,
     Eigen::MatrixXd  varianceMatrix = lu.inverse();
     //    std::cout.precision(9);
     std::cout << varianceMatrix << std::endl;
-    for(size_t k = 0; k < hList.getSize(); k++){
-      for(size_t l = 0; l < hList.getSize(); l++){
+    for(size_t k = 0; k < hList.getSize()-1; k++){
+      for(size_t l = 0; l < hList.getSize()-1; l++){
 	if(k==l)
 	  std::cout << varianceMatrix(k,l) << std::endl;
       }
