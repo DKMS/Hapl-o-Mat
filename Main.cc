@@ -70,6 +70,11 @@ int main(int argc, char *argv[]){
   hList.initialiseFrequencies(pList);
   hList.EMAlgorithm(pList);
 
+  for(auto phenotype = pList.listBegin();
+      phenotype != pList.listEnd();
+      phenotype ++){
+    phenotype->second.expectation(hList);
+  }
   fisherInformation(hList, pList);
 
   hList.writeFrequenciesToFile();
