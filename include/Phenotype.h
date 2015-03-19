@@ -37,6 +37,9 @@ class Phenotype{
   void expectation(const HaplotypeList & haplotypeList);
   double derivative(const HaplotypeList & haplotypeList,
 		    const size_t haplotypeId) const;
+  double secondDerivative(const HaplotypeList & haplotypeList,
+			  const size_t haplotype_k,
+			  const size_t haplotype_l) const;
 
  private:
   double numInDonors;

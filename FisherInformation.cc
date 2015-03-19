@@ -31,9 +31,10 @@ void fisherInformation(const HaplotypeList & hList,
 
 	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first);
 	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first);
+	double derivative_kl = phenotype->second.secondDerivative(hList, haplotype_k->first, haplotype_l->first);
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
-	
-	sum += derivative_k * derivative_l / phenotypeFrequency;
+
+	sum += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
 
@@ -42,16 +43,24 @@ void fisherInformation(const HaplotypeList & hList,
     k ++;
   }//haplotypes_k
 
-  std::cout.precision(16);
+  //  std::cout.precision(9);
   std::cout << informationMatrix << std::endl;
 
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
     Eigen::MatrixXd  varianceMatrix = lu.inverse();
-    std::cout.precision(16);
+    //    std::cout.precision(9);
     std::cout << varianceMatrix << std::endl;
+    for(size_t k = 0; k < hList.getSize(); k++){
+      for(size_t l = 0; l < hList.getSize(); l++){
+	if(k==l)
+	  std::cout << varianceMatrix(k,l) << std::endl;
+      }
+    }
   }
   else{
     std::cout << "Not invertible" << std::endl;
   }
+
+
 }
