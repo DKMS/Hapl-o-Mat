@@ -34,7 +34,6 @@ void score(const HaplotypeList & hList,
 }
 
 //optimise: compute shifted phenotype frequencies only once
-//matrix is symmetric, compute only one half
 void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList){
 
@@ -48,8 +47,8 @@ void fisherInformation(const HaplotypeList & hList,
   for(auto haplotype_k = hListBegin;
       haplotype_k != hListEnd;
       haplotype_k ++){
-    size_t l = 0;
-    for(auto haplotype_l = hListBegin;
+    size_t l = k;
+    for(auto haplotype_l = haplotype_k;
 	haplotype_l != hListEnd;
 	haplotype_l ++){
       
@@ -66,11 +65,14 @@ void fisherInformation(const HaplotypeList & hList,
 	sum += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
+      informationMatrix(l,k) = informationMatrix(k,l);
 
       l ++;
     }//haplotypes_l
     k ++;
   }//haplotypes_k
+
+  std::cout << "Finished computing Fisher information matrix" << std::endl;
 
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
@@ -79,6 +81,7 @@ void fisherInformation(const HaplotypeList & hList,
     errors.push_back(0.);
     for(size_t k=0; k< hList.getSize()-1; k++)
       errors.push_back(varianceMatrix(k, k));
+    std::cout << "Finished inverting Fisher information matrix" << std::endl;
     hList.writeFrequenciesAndErrorsToFile(errors);
   }
   else{
