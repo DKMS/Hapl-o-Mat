@@ -29,6 +29,7 @@ int main(int argc, char *argv[]){
   timePoint t2;
   double timeDataPreProcessing = 0.;
   double timeEMAlgorithm = 0.;
+  double timeVariance = 0.;
   std::unique_ptr<Parameters> pParameters;
   std::unique_ptr<Data> pData;
   if(format == "DKMS"){
@@ -69,20 +70,27 @@ int main(int argc, char *argv[]){
   t1 = getTime();
   hList.initialiseFrequencies(pList);
   hList.EMAlgorithm(pList);
-
-  for(auto phenotype = pList.listBegin();
-      phenotype != pList.listEnd();
-      phenotype ++){
-    phenotype->second.expectation(hList);
-  }
-  score(hList, pList);
-  fisherInformation(hList, pList);
-
-  //  hList.writeFrequenciesToFile();
   t2 = getTime();
   timeEMAlgorithm = getTimeDifference(t1, t2);
+
+  t1 = getTime();
+  if(pParameters->getDoVariance()){
+    std::cout << "#########Variance" << std::endl;
+    for(auto phenotype = pList.listBegin();
+	phenotype != pList.listEnd();
+	phenotype ++){
+      phenotype->second.expectation(hList);
+    }
+    fisherInformation(hList, pList);
+  }
+  else{
+    hList.writeFrequenciesToFile();
+  }
+  t2 = getTime();
+  timeVariance = getTimeDifference(t1, t2);
 
   std::cout << "#########Time" << std::endl;
   std::cout << "\t Data pre-processing time: " << timeDataPreProcessing << " mus" << std::endl;
   std::cout << "\t EM-algorithm time: " << timeEMAlgorithm << " mus" << std::endl;
+  std::cout << "\t Variance time: " << timeVariance << " mus" << std::endl;
 }
