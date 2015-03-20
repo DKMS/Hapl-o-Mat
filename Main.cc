@@ -1,7 +1,6 @@
 #include <string>
 #include <iostream>
 #include <memory>
-#include <chrono>
 
 #include "DataProcessing.h"
 #include "Allele.h"
