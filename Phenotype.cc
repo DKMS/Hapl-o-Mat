@@ -78,8 +78,7 @@ double Phenotype::derivative(const HaplotypeList & haplotypeList,
   return result;
 }
 
-double Phenotype::secondDerivative(const HaplotypeList & haplotypeList,
-				   const size_t haplotype_k,
+double Phenotype::secondDerivative(const size_t haplotype_k,
 				   const size_t haplotype_l,
 				   const size_t lastHaplotype) const{
 

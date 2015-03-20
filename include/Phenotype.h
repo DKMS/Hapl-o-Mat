@@ -41,8 +41,7 @@ class Phenotype{
   double derivative(const HaplotypeList & haplotypeList,
 		    const size_t haplotypeId,
 		    const size_t negativeHaplotype) const;
-  double secondDerivative(const HaplotypeList & haplotypeList,
-			  const size_t haplotype_k,
+  double secondDerivative(const size_t haplotype_k,
 			  const size_t haplotype_l,
 			  const size_t negativeHaplotype) const;
 
