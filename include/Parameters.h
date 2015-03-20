@@ -31,6 +31,7 @@ class Parameters{
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoH2Filter() const {return doH2Filter;}
   bool getExpandH2Lines() const {return expandH2Lines;}
+  bool getDoVariance() const {return doVariance;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}
   double getEpsilon() const {return epsilon;}
   size_t getSeed() const {return seed;}
@@ -56,6 +57,7 @@ class Parameters{
   double minimalFrequency;
   bool doH2Filter;
   bool expandH2Lines;
+  bool doVariance;
   initialisationHaplotypeFrequencies initType;
   double epsilon;
   size_t seed;
