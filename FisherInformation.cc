@@ -9,7 +9,10 @@
 void score(const HaplotypeList & hList,
 	   const PhenotypeList & pList){
 
+  size_t negativeHaplotype = hList.c_listBegin()->first;
+
   auto hListBegin = hList.c_listBegin();
+  advance(hListBegin, 1);
   auto hListEnd = hList.c_listEnd();
   for(auto haplotype_k = hListBegin;
       haplotype_k != hListEnd;
@@ -20,13 +23,14 @@ void score(const HaplotypeList & hList,
 	phenotype != pList.c_listEnd();
 	phenotype ++){
 
+      double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
+      double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
+      sum += static_cast<double>(phenotype->second.getNumInDonors()) / phenotypeFrequency * derivative_k;
+
     }
     std::cout << sum << std::endl;
   }
-
 }
-
-
 
 //optimise: compute shifted phenotype frequencies only once
 //matrix is symmetric, compute only one half
