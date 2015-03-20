@@ -163,6 +163,33 @@ void HaplotypeList::writeFrequenciesToFile() const{
   outFile.close();
 }
 
+void HaplotypeList::writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const{
+
+  std::ifstream inFile;
+  openFileToRead(haplotypesFileName ,inFile);
+  std::ofstream outFile;
+  openFileToWrite(haplotypeFrequenciesFileName ,outFile);
+  outFile.precision(14);
+  outFile << std::fixed;
+
+  std::string code;
+  while(inFile >> code){
+    size_t hashValue = string_hash(code);
+    auto pos = hashList.find(hashValue);
+    if(pos != hashList.end()){
+      double freq = pos->second.getFrequency();
+      size_t positionError = distance(hashList.cbegin(), pos);
+      double error = errors.at(positionError);
+      if(freq > epsilon){
+	outFile << code	<< "\t" << freq << "\t" << error << "\n";
+      }
+    }
+  }
+  inFile.close();
+  outFile.close();
+}
+
+
 void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon){
 
     //save old frequencies, initialize haplotype frequencies to zero

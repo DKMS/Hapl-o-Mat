@@ -6,6 +6,28 @@
 #include "FisherInformation.h"
 #include "Utility.h"
 
+void score(const HaplotypeList & hList,
+	   const PhenotypeList & pList){
+
+  auto hListBegin = hList.c_listBegin();
+  auto hListEnd = hList.c_listEnd();
+  for(auto haplotype_k = hListBegin;
+      haplotype_k != hListEnd;
+      haplotype_k ++){
+
+    double sum = 0.;
+    for(auto phenotype = pList.c_listBegin();
+	phenotype != pList.c_listEnd();
+	phenotype ++){
+
+    }
+    std::cout << sum << std::endl;
+  }
+
+}
+
+
+
 //optimise: compute shifted phenotype frequencies only once
 //matrix is symmetric, compute only one half
 void fisherInformation(const HaplotypeList & hList,
@@ -37,8 +59,6 @@ void fisherInformation(const HaplotypeList & hList,
 	double derivative_kl = phenotype->second.secondDerivative(hList, haplotype_k->first, haplotype_l->first, negativeHaplotype);
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
 
-	std::cout << derivative_k << "\t" << derivative_l << "\t" << derivative_kl << std::endl;
-
 	sum += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
       }//phenotypes
       informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
@@ -48,20 +68,19 @@ void fisherInformation(const HaplotypeList & hList,
     k ++;
   }//haplotypes_k
 
-  //  std::cout.precision(9);
+  std::cout.precision(9);
   std::cout << informationMatrix << std::endl;
 
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
-    Eigen::MatrixXd  varianceMatrix = lu.inverse();
-    //    std::cout.precision(9);
+    Eigen::MatrixXd varianceMatrix = lu.inverse();
     std::cout << varianceMatrix << std::endl;
-    for(size_t k = 0; k < hList.getSize()-1; k++){
-      for(size_t l = 0; l < hList.getSize()-1; l++){
-	if(k==l)
-	  std::cout << varianceMatrix(k,l) << std::endl;
-      }
-    }
+    std::vector<double> errors;
+    errors.push_back(0.);
+    for(size_t k=0; k< hList.getSize()-1; k++)
+      errors.push_back(varianceMatrix(k, k));
+    hList.writeFrequenciesAndErrorsToFile(errors);
+
   }
   else{
     std::cout << "Not invertible" << std::endl;

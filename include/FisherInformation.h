@@ -6,5 +6,7 @@
 
 void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList);
+void score(const HaplotypeList & hList,
+           const PhenotypeList & pList);
 
 #endif

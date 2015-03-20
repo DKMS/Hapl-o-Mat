@@ -55,6 +55,7 @@ class HaplotypeList : public Hash<Haplotype>{
   void maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon);
   void maximization(const PhenotypeList & phenotypes);
   void writeFrequenciesToFile() const;
+  void writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const;
 
  private:
   HaplotypeList(const HaplotypeList &);

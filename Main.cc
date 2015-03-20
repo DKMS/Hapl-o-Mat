@@ -75,9 +75,10 @@ int main(int argc, char *argv[]){
       phenotype ++){
     phenotype->second.expectation(hList);
   }
+  score(hList, pList);
   fisherInformation(hList, pList);
 
-  hList.writeFrequenciesToFile();
+  //  hList.writeFrequenciesToFile();
   t2 = getTime();
   timeEMAlgorithm = getTimeDifference(t1, t2);
 
