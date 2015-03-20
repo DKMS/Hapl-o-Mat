@@ -36,6 +36,25 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList){
     }
 }
 
+int Phenotype::derivativeHaplotypeFrequency(const size_t haplotype,
+					    const size_t haplotype_k,
+					    const size_t lastHaplotype) const{
+  
+  int result = 0;
+  if(haplotype != lastHaplotype){
+    if(haplotype == haplotype_k){
+      result = 1;
+    }
+  }
+  else{
+    if(haplotype_k != lastHaplotype){
+      result = -1;
+    }
+  }
+  
+  return result;
+}
+
 double Phenotype::derivative(const HaplotypeList & haplotypeList,
 			     const size_t haplotype_k,
 			     const size_t lastHaplotype) const{
@@ -54,27 +73,7 @@ double Phenotype::derivative(const HaplotypeList & haplotypeList,
 	sum *= 2.;
       }
       result += sum;      
-
     }//diplotypes
-  
-  return result;
-}
-
-int Phenotype::derivativeHaplotypeFrequency(const size_t haplotype,
-					       const size_t haplotype_k,
-					       const size_t lastHaplotype) const{
-  
-  int result = 0;
-  if(haplotype != lastHaplotype){
-    if(haplotype == haplotype_k){
-      result = 1;
-    }
-  }
-  else{
-    if(haplotype_k != lastHaplotype){
-      result = -1;
-    }
-  }
   
   return result;
 }

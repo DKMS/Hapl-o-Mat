@@ -12,7 +12,6 @@ void score(const HaplotypeList & hList,
   size_t negativeHaplotype = hList.c_listBegin()->first;
 
   auto hListBegin = hList.c_listBegin();
-  advance(hListBegin, 1);
   auto hListEnd = hList.c_listEnd();
   for(auto haplotype_k = hListBegin;
       haplotype_k != hListEnd;
@@ -27,6 +26,7 @@ void score(const HaplotypeList & hList,
       double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
       sum += static_cast<double>(phenotype->second.getNumInDonors()) / phenotypeFrequency * derivative_k;
 
+
     }
     std::cout << sum << std::endl;
     std::cout <<  std::endl;
@@ -40,9 +40,8 @@ void fisherInformation(const HaplotypeList & hList,
 
   Eigen::MatrixXd informationMatrix(hList.getSize()-1, hList.getSize()-1);
 
-  size_t negativeHaplotype = hList.c_listBegin()->first;
-
   size_t k = 0;
+  size_t negativeHaplotype = hList.c_listBegin()->first;
   auto hListBegin = hList.c_listBegin();
   advance(hListBegin, 1);
   auto hListEnd = hList.c_listEnd();
@@ -73,23 +72,16 @@ void fisherInformation(const HaplotypeList & hList,
     k ++;
   }//haplotypes_k
 
-  std::cout.precision(9);
-  std::cout << informationMatrix << std::endl;
-
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
     Eigen::MatrixXd varianceMatrix = lu.inverse();
-    std::cout << varianceMatrix << std::endl;
     std::vector<double> errors;
     errors.push_back(0.);
     for(size_t k=0; k< hList.getSize()-1; k++)
       errors.push_back(varianceMatrix(k, k));
     hList.writeFrequenciesAndErrorsToFile(errors);
-
   }
   else{
     std::cout << "Not invertible" << std::endl;
   }
-
-
 }
