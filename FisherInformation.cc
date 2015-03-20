@@ -59,7 +59,7 @@ void fisherInformation(const HaplotypeList & hList,
 
 	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
 	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first, negativeHaplotype);
-	double derivative_kl = phenotype->second.secondDerivative(hList, haplotype_k->first, haplotype_l->first, negativeHaplotype);
+	double derivative_kl = phenotype->second.secondDerivative(haplotype_k->first, haplotype_l->first, negativeHaplotype);
 	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
 
 	sum += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
