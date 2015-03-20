@@ -29,6 +29,7 @@ void score(const HaplotypeList & hList,
 
     }
     std::cout << sum << std::endl;
+    std::cout <<  std::endl;
   }
 }
 
