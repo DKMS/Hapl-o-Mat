@@ -35,61 +35,6 @@ void score(const HaplotypeList & hList,
 }
 
 void fisherInformation(const HaplotypeList & hList,
-		       const PhenotypeList & pList){
-
-  Eigen::MatrixXd informationMatrix(hList.getSize()-1, hList.getSize()-1);
-
-  size_t k = 0;
-  size_t negativeHaplotype = hList.c_listBegin()->first;
-  auto hListBegin = hList.c_listBegin();
-  advance(hListBegin, 1);
-  auto hListEnd = hList.c_listEnd();
-  for(auto haplotype_k = hListBegin;
-      haplotype_k != hListEnd;
-      haplotype_k ++){
-    size_t l = k;
-    for(auto haplotype_l = haplotype_k;
-	haplotype_l != hListEnd;
-	haplotype_l ++){
-      
-      double sum = 0.;
-      for(auto phenotype = pList.c_listBegin();
-	  phenotype != pList.c_listEnd();
-	  phenotype ++){
-
-	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
-	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first, negativeHaplotype);
-	double derivative_kl = phenotype->second.secondDerivative(haplotype_k->first, haplotype_l->first, negativeHaplotype);
-	double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
-
-	sum += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
-      }//phenotypes
-      informationMatrix(k,l) = static_cast<double>(hList.getNumberDonors()) * sum;
-      informationMatrix(l,k) = informationMatrix(k,l);
-
-      l ++;
-    }//haplotypes_l
-    k ++;
-  }//haplotypes_k
-
-  std::cout << "Finished computing Fisher information matrix" << std::endl;
-
-  Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
-  if(lu.isInvertible()){
-    Eigen::MatrixXd varianceMatrix = lu.inverse();
-    std::vector<double> errors;
-    errors.push_back(0.);
-    for(size_t k=0; k< hList.getSize()-1; k++)
-      errors.push_back(varianceMatrix(k, k));
-    std::cout << "Finished inverting Fisher information matrix" << std::endl;
-    hList.writeFrequenciesAndErrorsToFile(errors);
-  }
-  else{
-    std::cout << "Not invertible" << std::endl;
-  }
-}
-
-void fisherInformationParallel(const HaplotypeList & hList,
 			       const PhenotypeList & pList){
 
   Eigen::MatrixXd informationMatrix(hList.getSize()-1, hList.getSize()-1);

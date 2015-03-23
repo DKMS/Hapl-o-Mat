@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
   if(pParameters->getDoVariance()){
     std::cout << "#########Variance" << std::endl;
     pList.expectationAndRemoveStep(hList);
-    fisherInformationParallel(hList, pList);
+    fisherInformation(hList, pList);
   }
   else{
     hList.writeFrequenciesToFile();
