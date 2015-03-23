@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <omp.h>
 
 #include "Eigen/Dense"
 #include "Eigen/LU"
@@ -98,34 +99,36 @@ void fisherInformationParallel(const HaplotypeList & hList,
   auto hListBegin = hList.c_listBegin();
   auto hListEnd = hList.c_listEnd();
   advance(hListBegin, 1);
-  
-  for(auto phenotype = pList.c_listBegin();
-      phenotype != pList.c_listEnd();
-      phenotype ++){
-    
-    double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
-    
-    size_t k = 0;
-    for(auto haplotype_k = hListBegin;
-	haplotype_k != hListEnd;
-	haplotype_k ++){
+
+#pragma omp parallel
+  {
+#pragma omp for
+    for(size_t bucketNumber = 0; bucketNumber < pList.listBucketCount(); bucketNumber ++){
+      for_each (pList.c_listBegin(bucketNumber), pList.c_listEnd(bucketNumber), [&](const std::pair<const size_t, Phenotype> & phenotype){
+
+	  double phenotypeFrequency = phenotype.second.computeSummedFrequencyDiplotypes();
+	  size_t k = 0;
+	  for(auto haplotype_k = hListBegin;
+	      haplotype_k != hListEnd;
+	      haplotype_k ++){
       
-      double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
-      
-      size_t l = k;
-      for(auto haplotype_l = haplotype_k;
-	  haplotype_l != hListEnd;
-	  haplotype_l ++){
+	    double derivative_k = phenotype.second.derivative(hList, haplotype_k->first, negativeHaplotype);
+	    size_t l = k;
+	    for(auto haplotype_l = haplotype_k;
+		haplotype_l != hListEnd;
+		haplotype_l ++){
 	
-	double derivative_l = phenotype->second.derivative(hList, haplotype_l->first, negativeHaplotype);
-	double derivative_kl = phenotype->second.secondDerivative(haplotype_k->first, haplotype_l->first, negativeHaplotype);
-	informationMatrix(k,l) += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
-		
-	l ++;
-      }//haplotypes_l 
-      k ++;
-    }//haplotypes_k
-  }//phenotypes
+	      double derivative_l = phenotype.second.derivative(hList, haplotype_l->first, negativeHaplotype);
+	      double derivative_kl = phenotype.second.secondDerivative(haplotype_k->first, haplotype_l->first, negativeHaplotype);
+	      informationMatrix(k,l) += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
+	
+	      l ++;
+	    }//haplotypes_l 
+	    k ++;
+	  }//haplotypes_k
+	});
+    }//phenotypes
+  }//omp
   
   for(size_t k = 0; k< hList.getSize()-1; k++){
     for(size_t l = k; l< hList.getSize()-1; l++){
@@ -135,8 +138,6 @@ void fisherInformationParallel(const HaplotypeList & hList,
   }
 	
   std::cout << "Finished computing Fisher information matrix" << std::endl;
-
-  std::cout << informationMatrix << std::endl;
 
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
