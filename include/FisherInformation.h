@@ -1,6 +1,8 @@
 #ifndef FisherInformation_header
 #define FisherInformation_header
 
+#include "../Eigen/Dense"
+#include "../Eigen/LU"
 #include "Phenotype.h"
 #include "Haplotype.h"
 
