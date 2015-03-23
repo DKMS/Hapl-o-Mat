@@ -42,7 +42,7 @@ void HaplotypeList::EMAlgorithm(PhenotypeList & phenotypes){
     }
     epsilonFile << largestEpsilon << std::endl;
   } while(!stop);
-  std::cout << "Used " << counter <<" steps" << std::endl;
+  std::cout << "\t Used " << counter <<" steps" << std::endl;
   epsilonFile.close();
 }
 
