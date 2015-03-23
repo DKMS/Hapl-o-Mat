@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <chrono>
 
 #include "Parameters.h"
 #include "Utility.h"
@@ -76,6 +77,16 @@ void Parameters::precision_assign(const std::string line){
   }
 }
 
+void Parameters::seed_assign(size_t & out, const std::string line){
+  size_t pos = line.find("=");
+  std::string value = line.substr(pos + 1);
+  out = std::stoi(value);
+  if(out == 0){
+    out = std::chrono::system_clock::now().time_since_epoch().count();
+  }
+
+}
+
 void Parameters::computePrintPrecision(){
   if(epsilon < 1)
     printPrecision = size_t (- log10(epsilon));
@@ -133,7 +144,7 @@ void ParametersGL::init(){
     else if(line.find("LOCI") != std::string::npos) loci_assign(line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
-    else if(line.find("SEED") != std::string::npos) val_assign(seed, line);
+    else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
@@ -220,7 +231,7 @@ void ParametersDKMS::init(){
     else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
-    else if(line.find("SEED") != std::string::npos) val_assign(seed, line);
+    else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
@@ -289,7 +300,7 @@ void ParametersReadin::init(){
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
-    else if(line.find("SEED") != std::string::npos) val_assign(seed, line);
+    else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "

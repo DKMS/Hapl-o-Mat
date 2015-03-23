@@ -43,6 +43,7 @@ class Parameters{
   void bool_assign(bool & out, const std::string line);
   void initType_assign(const std::string line);
   void precision_assign(const std::string line);
+  void seed_assign(size_t & out, const std::string line);
   void computePrintPrecision();
 
   std::string printInitialisationHaplotypeFrequencies() const;
