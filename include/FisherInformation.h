@@ -6,6 +6,9 @@
 
 void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList);
+void fisherInformationParallel(const HaplotypeList & hList,
+			       const PhenotypeList & pList);
+
 void score(const HaplotypeList & hList,
            const PhenotypeList & pList);
 
