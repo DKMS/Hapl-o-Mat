@@ -48,6 +48,7 @@ class HaplotypeList : public Hash<Haplotype>{
   double getNumberDonors() const {return numberDonors;}
   void setNumberLoci(const size_t in) {numberLoci = in;}
   void setNumberDonors(const size_t in) {numberDonors = in;}
+  double getEpsilon() const {return epsilon;}
   void initialiseFrequencies(const PhenotypeList & phenotypes);
   void initialiseNumberOccurence(const PhenotypeList & phenotypes);
   void initialisePerturbation();

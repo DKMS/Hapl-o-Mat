@@ -75,11 +75,9 @@ int main(int argc, char *argv[]){
   t1 = getTime();
   if(pParameters->getDoVariance()){
     std::cout << "#########Variance" << std::endl;
-    for(auto phenotype = pList.listBegin();
-	phenotype != pList.listEnd();
-	phenotype ++){
-      phenotype->second.expectation(hList);
-    }
+    std::cout << pList.getSize() << std::endl;
+    pList.expectationAndRemoveStep(hList);
+    std::cout << pList.getSize() << std::endl;
     fisherInformation(hList, pList);
   }
   else{
