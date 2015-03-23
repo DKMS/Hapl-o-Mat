@@ -60,8 +60,8 @@ int main(int argc, char *argv[]){
   HaplotypeList hList(*pParameters);
   pData->dataProcessing(pList, hList);
   pData->printStatistics();
-  std::cout << "Memory requirement haplotypes: " << hList.computeSizeInBytes() << " bytes" << std::endl;
-  std::cout << "Memory requirement phenoypes: " << pList.computeSizeInBytes() << " bytes" << std::endl;
+  std::cout << "\t Memory requirement haplotypes: " << hList.computeSizeInBytes() << " bytes" << std::endl;
+  std::cout << "\t Memory requirement phenoypes: " << pList.computeSizeInBytes() << " bytes" << std::endl;
   t2 = getTime();
   timeDataPreProcessing = getTimeDifference(t1, t2);
 
