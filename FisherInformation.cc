@@ -151,5 +151,6 @@ void fisherInformationParallel(const HaplotypeList & hList,
   }
   else{
     std::cout << "Not invertible" << std::endl;
+    hList.writeFrequenciesToFile();
   }
 }
