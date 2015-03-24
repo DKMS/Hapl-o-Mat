@@ -122,7 +122,7 @@ void HaplotypeList::initialisePerturbation(){
       it != listEnd();
       it ++){
     double oldFreq = it->second.getFrequency();
-    double newFreq = oldFreq + dis(rng) * oldFreq;
+    double newFreq = oldFreq + dis(rng) * oldFreq / 10.;
 
     it->second.addFrequency(newFreq);
     sum += newFreq;
