@@ -9,6 +9,7 @@
 #include "Allele.h"
 
 const double ZERO = 1e-14;
+const double MAX_MEMORY = 200000.;
 
 std::chrono::high_resolution_clock::time_point getTime();
 size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1,

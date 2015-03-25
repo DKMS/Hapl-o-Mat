@@ -75,8 +75,14 @@ int main(int argc, char *argv[]){
   t1 = getTime();
   if(pParameters->getDoVariance()){
     std::cout << "#########Variance" << std::endl;
-    pList.expectationAndRemoveStep(hList);
-    fisherInformation(hList, pList);
+    double memory = hList.getSize() * hList.getSize() * 8. / 1024. / 1024.;
+    if(memory >= MAX_MEMORY){
+      std::cout << "\t Size of information matrix exceeds memory." << std::endl;
+    }
+    else{
+      pList.expectationAndRemoveStep(hList);
+      fisherInformation(hList, pList);
+    }
   }
   else{
     hList.writeFrequenciesToFile();
