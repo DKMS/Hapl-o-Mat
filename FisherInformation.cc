@@ -52,41 +52,38 @@ void fisherInformation(const HaplotypeList & hList,
 					    {
 					      return haplotype1.second.getFrequency() < haplotype2.second.getFrequency();
 					    });
+
   size_t positionSmallestHaplotype = distance(hListBegin, smallestHaplotype);
   size_t idSmallestHaplotype = smallestHaplotype->first;
-  
-#pragma omp parallel
-  {
-#pragma omp for
-    for(size_t bucketNumber = 0; bucketNumber < pList.listBucketCount(); bucketNumber ++){
-      for_each (pList.c_listBegin(bucketNumber), pList.c_listEnd(bucketNumber), [&](const std::pair<const size_t, Phenotype> & phenotype){
 
-	  double phenotypeFrequency = phenotype.second.computeSummedFrequencyDiplotypes();
-	  size_t k = 0;
-	  for(auto haplotype_k = hListBegin;
-	      haplotype_k != hListEnd;
-	      haplotype_k ++){
+  for(auto phenotype = pList.c_listBegin();
+      phenotype != pList.c_listEnd();
+      phenotype ++){
+
+    double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
+    size_t k = 0;
+    for(auto haplotype_k = hListBegin;
+	haplotype_k != hListEnd;
+	haplotype_k ++){
       
-	    if(haplotype_k != smallestHaplotype){
-	      double derivative_k = phenotype.second.derivative(hList, haplotype_k->first, idSmallestHaplotype);
-	      size_t l = k;
-	      for(auto haplotype_l = haplotype_k;
-		  haplotype_l != hListEnd;
-		  haplotype_l ++){
-
-		if(haplotype_l != smallestHaplotype){	
-		  double derivative_l = phenotype.second.derivative(hList, haplotype_l->first, idSmallestHaplotype);
-		  double derivative_kl = phenotype.second.secondDerivative(haplotype_k->first, haplotype_l->first, idSmallestHaplotype);
-		  informationMatrix(k,l) += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
-		}//if l neq idSmallestHaplotype
-		l ++;
-	      }//haplotypes_l 
-	    }//if k neq idSmallestHaplotype
-	    k ++;
-	  }//haplotypes_k
-	});
-    }//phenotypes
-  }//omp
+      if(haplotype_k != smallestHaplotype){
+	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, idSmallestHaplotype);
+	size_t l = k;
+	for(auto haplotype_l = haplotype_k;
+	    haplotype_l != hListEnd;
+	    haplotype_l ++){
+	  
+	  if(haplotype_l != smallestHaplotype){	
+	    double derivative_l = phenotype->second.derivative(hList, haplotype_l->first, idSmallestHaplotype);
+	    double derivative_kl = phenotype->second.secondDerivative(haplotype_k->first, haplotype_l->first, idSmallestHaplotype);
+	    informationMatrix(k,l) += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
+	  }//if l neq idSmallestHaplotype
+	  l ++;
+	}//haplotypes_l 
+      }//if k neq idSmallestHaplotype
+      k ++;
+    }//haplotypes_k
+  }//phenotypes
   
   for(size_t k = 0; k< hList.getSize(); k++){
     for(size_t l = k; l< hList.getSize(); l++){
@@ -99,6 +96,8 @@ void fisherInformation(const HaplotypeList & hList,
   removeColumn(informationMatrix, positionSmallestHaplotype);
 
   std::cout << "\t Finished computing Fisher information matrix" << std::endl;
+
+  std::cout << informationMatrix << std::endl;
 
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
