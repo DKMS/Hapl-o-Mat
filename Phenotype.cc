@@ -58,7 +58,7 @@ bool Phenotype::expectationAndRemove(const HaplotypeList & haplotypeList){
     totalFrequency += itDiplo->frequency;
   }
   
-  if(totalFrequency - haplotypeList.getEpsilon() <= ZERO){
+  if(totalFrequency <= ZERO){
     return true;
   }
   else{
