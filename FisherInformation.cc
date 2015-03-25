@@ -97,8 +97,6 @@ void fisherInformation(const HaplotypeList & hList,
 
   std::cout << "\t Finished computing Fisher information matrix" << std::endl;
 
-  std::cout << informationMatrix << std::endl;
-
   Eigen::FullPivLU<Eigen::MatrixXd> lu(informationMatrix);
   if(lu.isInvertible()){
     Eigen::MatrixXd varianceMatrix = lu.inverse();
