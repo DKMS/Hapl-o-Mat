@@ -6,6 +6,6 @@ FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
 FILENAME_EPSILON=results/epsilonVsSteps.dat
 #EM-algorithm
 INITIALISATION_HAPLOTYPE_FREQUENCIES=numberOccurence
-EPSILON=1e-6
+EPSILON=7e-5
 SEED=0
-DO_VARIANCE=true
+DO_VARIANCE=false
