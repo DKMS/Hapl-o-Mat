@@ -87,13 +87,6 @@ void Parameters::seed_assign(size_t & out, const std::string line){
 
 }
 
-void Parameters::computePrintPrecision(){
-  if(epsilon < 1)
-    printPrecision = size_t (- log10(epsilon));
-  else
-    printPrecision = 0;
-}
-
 std::string Parameters::printInitialisationHaplotypeFrequencies() const{
 
   std::string out;
@@ -153,7 +146,6 @@ void ParametersGL::init(){
 		<< std::endl;
     }
   }//while
-  computePrintPrecision();
   file.close();
 }
 
@@ -200,7 +192,6 @@ void ParametersGL::print() const {
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t PrintPrecision= " << printPrecision << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << "\t Compute variance: ";
   if(doVariance){
@@ -242,7 +233,6 @@ void ParametersDKMS::init(){
 		<< std::endl;
     }
   }//while
-  computePrintPrecision();
   file.close();
 }
 
@@ -273,7 +263,6 @@ void ParametersDKMS::print() const {
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t PrintPrecision= " << printPrecision << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << "\t Compute variance: ";
   if(doVariance){
@@ -311,7 +300,6 @@ void ParametersReadin::init(){
 		<< std::endl;
     }
   }//while
-  computePrintPrecision();
   file.close();
 }
 
@@ -328,7 +316,6 @@ void ParametersReadin::print() const {
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t PrintPrecision= " << printPrecision << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << "\t Compute variance: ";
   if(doVariance){

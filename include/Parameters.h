@@ -44,7 +44,6 @@ class Parameters{
   void initType_assign(const std::string line);
   void precision_assign(const std::string line);
   void seed_assign(size_t & out, const std::string line);
-  void computePrintPrecision();
 
   std::string printInitialisationHaplotypeFrequencies() const;
 
@@ -62,8 +61,6 @@ class Parameters{
   initialisationHaplotypeFrequencies initType;
   double epsilon;
   size_t seed;
-
-  size_t printPrecision;
 };
 
 class ParametersGL : public Parameters{
