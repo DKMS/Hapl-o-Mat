@@ -15,64 +15,64 @@
 
 int main(int argc, char *argv[]){
 
-  std::string format;
+  std::string inputFileFormat;
   if (argc == 2)
-    format = argv[1];
+    inputFileFormat = argv[1];
   else{
-    std::cerr << "Specify a file format (DKMS, GL, READ)" << std::endl;
+    std::cerr << "Specify a input file format (DKMS, GL, READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 
   std::cout << "#########Initialisation" << std::endl;
-  timePoint t1;
-  timePoint t2;
-  double timeDataPreProcessing = 0.;
-  double timeEMAlgorithm = 0.;
-  double timeVariance = 0.;
+  timePoint startTime;
+  timePoint endTime;
+  double timeTakenForDataPreProcessing = 0.;
+  double timeTakenForEMAlgorithm = 0.;
+  double timeTakenForVariance = 0.;
   std::unique_ptr<Parameters> pParameters;
   std::unique_ptr<Data> pData;
-  if(format == "DKMS"){
+  if(inputFileFormat == "DKMS"){
     std::unique_ptr<ParametersDKMS> pParametersTmp(new ParametersDKMS());
     std::unique_ptr<Data> pDataProcessingTmp(new DKMSDataProcessing(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }
-  else if(format == "GL"){
+  else if(inputFileFormat == "GL"){
     std::unique_ptr<ParametersGL>pParametersTmp(new ParametersGL());
     std::unique_ptr<Data> pDataProcessingTmp(new GLDataProcessing(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }
-  else if(format == "READ"){
+  else if(inputFileFormat == "READ"){
     std::unique_ptr<ParametersReadin>pParametersTmp(new ParametersReadin());
     std::unique_ptr<Data> pDataProcessingTmp(new DataReadin(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }
   else{
-    std::cerr << "Specify one of the file formats (DKMS, GL)" << std::endl;
+    std::cerr << "Specify one of the input file formats (DKMS, GL, READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 
   std::cout << "#########Data-preprocessing" << std::endl;
-  t1 = getTime();
+  startTime = getTime();
   PhenotypeList pList;
   HaplotypeList hList(*pParameters);
   pData->dataProcessing(pList, hList);
   pData->printStatistics();
   std::cout << "\t Memory requirement haplotypes: " << hList.computeSizeInBytes() << " bytes" << std::endl;
   std::cout << "\t Memory requirement phenoypes: " << pList.computeSizeInBytes() << " bytes" << std::endl;
-  t2 = getTime();
-  timeDataPreProcessing = getTimeDifference(t1, t2);
+  endTime = getTime();
+  timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime);
 
   std::cout << "#########EM-algorithm" << std::endl;
-  t1 = getTime();
+  startTime = getTime();
   hList.initialiseFrequencies(pList);
   hList.EMAlgorithm(pList);
-  t2 = getTime();
-  timeEMAlgorithm = getTimeDifference(t1, t2);
+  endTime = getTime();
+  timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime);
 
-  t1 = getTime();
+  startTime = getTime();
   if(pParameters->getDoVariance()){
     std::cout << "#########Variance" << std::endl;
     double memory = hList.getSize() * hList.getSize() * 8. / 1024. / 1024.;
@@ -87,11 +87,11 @@ int main(int argc, char *argv[]){
   else{
     hList.writeFrequenciesToFile();
   }
-  t2 = getTime();
-  timeVariance = getTimeDifference(t1, t2);
+  endTime = getTime();
+  timeTakenForVariance = getTimeDifference(startTime, endTime);
 
   std::cout << "#########Time" << std::endl;
-  std::cout << "\t Data pre-processing time: " << timeDataPreProcessing << " mus" << std::endl;
-  std::cout << "\t EM-algorithm time: " << timeEMAlgorithm << " mus" << std::endl;
-  std::cout << "\t Variance time: " << timeVariance << " mus" << std::endl;
+  std::cout << "\t Data pre-processing time: " << timeTakenForDataPreProcessing << " mus" << std::endl;
+  std::cout << "\t EM-algorithm time: " << timeTakenForEMAlgorithm << " mus" << std::endl;
+  std::cout << "\t Variance time: " << timeTakenForVariance << " mus" << std::endl;
 }
