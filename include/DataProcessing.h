@@ -28,10 +28,10 @@ class HaplotypeCombinations{
   list_t list;
 };
 
-class Data{
+class InputFile{
 
  public:
-  explicit Data(const std::string in_inputFileName)
+  explicit InputFile(const std::string in_inputFileName)
     : inputFileName(in_inputFileName),
     haplotypesFileName(),
     phenotypesFileName(),
@@ -40,7 +40,7 @@ class Data{
     numberHaplotypes(0),
     numberPhenotypes(0),  
     haplotypeCombinations(){}
-  virtual ~Data(){}
+  virtual ~InputFile(){}
 
   virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
   virtual void printStatistics() = 0;
@@ -64,11 +64,11 @@ class Data{
   HaplotypeCombinations haplotypeCombinations;
 };
 
-class DataProcessing : public Data{
+class InputFileToEdit : public InputFile{
 
  public:
-  explicit DataProcessing(const std::string in_inputFileName)
-    : Data(in_inputFileName),
+  explicit InputFileToEdit(const std::string in_inputFileName)
+    : InputFile(in_inputFileName),
     numberRemovedDonors(0),
     wantedPrecision(),
     minimalFrequency(){}
@@ -88,11 +88,11 @@ class DataProcessing : public Data{
   double minimalFrequency;
 };
 
-class GLDataProcessing : public DataProcessing{
+class GL : public InputFileToEdit{
 
  public:
-  explicit GLDataProcessing(const ParametersGL & parameters)
-    : DataProcessing(parameters.getPullFileName()),
+  explicit GL(const ParametersGL & parameters)
+    : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
     lociToDo(parameters.getLociToDo()),
     booleanLociToDo(buildBooleanLociToDo()),
@@ -123,11 +123,11 @@ class GLDataProcessing : public DataProcessing{
   GlidFile glid;
 };
 
-class DKMSDataProcessing : public DataProcessing{
+class DKMS : public InputFileToEdit{
 
  public:
-  explicit DKMSDataProcessing(const ParametersDKMS & parameters)
-    : DataProcessing(parameters.getInputFileName()),
+  explicit DKMS(const ParametersDKMS & parameters)
+    : InputFileToEdit(parameters.getInputFileName()),
     doH2Filter(parameters.getDoH2Filter()),
     expandH2Lines(parameters.getExpandH2Lines()),
     lociNames()
@@ -148,11 +148,11 @@ class DKMSDataProcessing : public DataProcessing{
   strVec_t lociNames;
 };
 
-class DataReadin : public Data{
+class InputFileToRead : public InputFile{
 
  public:
-  explicit DataReadin(const ParametersReadin & parameters)
-    : Data(parameters.getInputFileName())
+  explicit InputFileToRead(const ParametersReadin & parameters)
+    : InputFile(parameters.getInputFileName())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();

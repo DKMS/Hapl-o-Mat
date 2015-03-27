@@ -65,7 +65,7 @@ void HaplotypeCombinations::writeCombinations() const {
     }
 }
 
-void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
+void InputFile::buildHaploDiploPhenoTypes(PhenotypeList & pList,
 				     HaplotypeList & hList,
 				     const std::shared_ptr<BasicReport> pReport,
 				     std::ofstream & haplotypesFile){
@@ -77,7 +77,7 @@ void Data::buildHaploDiploPhenoTypes(PhenotypeList & pList,
     pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
 }
 
-void DataProcessing::printPhenotypes(const std::shared_ptr<Report> pReport,
+void InputFileToEdit::printPhenotypes(const std::shared_ptr<Report> pReport,
 				     const size_t numberReports,
 				     std::ofstream & phenotypesFile){         
  
@@ -90,7 +90,7 @@ void DataProcessing::printPhenotypes(const std::shared_ptr<Report> pReport,
 		 << std::endl;
 }
 
-void DataProcessing::printStatistics(){
+void InputFileToEdit::printStatistics(){
 
   std::cout << "\t Number loci: " << numberLoci << std::endl;
   std::cout << "\t Removed reports: " << numberRemovedDonors << std::endl;
@@ -105,7 +105,7 @@ void DataProcessing::printStatistics(){
   std::cout << std::endl;
 }
 
-std::vector<bool> GLDataProcessing::buildBooleanLociToDo(){
+std::vector<bool> GL::buildBooleanLociToDo(){
   
   std::vector<bool> booleanLociToDoOut;
   for(auto locus : lociToDo){
@@ -120,7 +120,7 @@ std::vector<bool> GLDataProcessing::buildBooleanLociToDo(){
   return booleanLociToDoOut;
 }
 
-strVec_t GLDataProcessing::updateLociToDoViaPullFile() const{
+strVec_t GL::updateLociToDoViaPullFile() const{
 
   std::vector<bool> buildAllGenotypesForLocus(lociToDo.size(), false);
 
@@ -158,7 +158,7 @@ strVec_t GLDataProcessing::updateLociToDoViaPullFile() const{
   return lociToDoOut;
 }
 
-void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void GL::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -198,7 +198,7 @@ void GLDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hLi
   numberPhenotypes = pList.getSize();
 }
 
-void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void DKMS::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -244,7 +244,7 @@ void DKMSDataProcessing::dataProcessing(PhenotypeList & pList, HaplotypeList & h
   numberPhenotypes = pList.getSize();
 }
 
-void DKMSDataProcessing::readLociNames(const std::string line){
+void DKMS::readLociNames(const std::string line){
 
   std::stringstream ss(line);
   std::string name;
@@ -258,7 +258,7 @@ void DKMSDataProcessing::readLociNames(const std::string line){
   numberLoci /= 2;
 }
 
-void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void InputFileToRead::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -295,7 +295,7 @@ void DataReadin::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   numberPhenotypes = pList.getSize();
 }
 
-void DataReadin::printStatistics(){
+void InputFileToRead::printStatistics(){
 
   std::cout << "\t Number loci: " << numberLoci << std::endl;
   std::cout << "\t Number Reports: " << numberDonors << std::endl;
@@ -304,7 +304,7 @@ void DataReadin::printStatistics(){
   std::cout << std::endl;
 }
 
-void DataReadin::countNumberLoci(const std::string line){
+void InputFileToRead::countNumberLoci(const std::string line){
 
   strVec_t entries = split(line, '\t');
   std::string phenotype = entries[3];

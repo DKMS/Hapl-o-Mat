@@ -30,22 +30,22 @@ int main(int argc, char *argv[]){
   double timeTakenForEMAlgorithm = 0.;
   double timeTakenForVariance = 0.;
   std::unique_ptr<Parameters> pParameters;
-  std::unique_ptr<Data> pData;
+  std::unique_ptr<InputFile> pData;
   if(inputFileFormat == "DKMS"){
     std::unique_ptr<ParametersDKMS> pParametersTmp(new ParametersDKMS());
-    std::unique_ptr<Data> pDataProcessingTmp(new DKMSDataProcessing(*pParametersTmp));
+    std::unique_ptr<InputFile> pDataProcessingTmp(new DKMS(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }
   else if(inputFileFormat == "GL"){
     std::unique_ptr<ParametersGL>pParametersTmp(new ParametersGL());
-    std::unique_ptr<Data> pDataProcessingTmp(new GLDataProcessing(*pParametersTmp));
+    std::unique_ptr<InputFile> pDataProcessingTmp(new GL(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }
   else if(inputFileFormat == "READ"){
     std::unique_ptr<ParametersReadin>pParametersTmp(new ParametersReadin());
-    std::unique_ptr<Data> pDataProcessingTmp(new DataReadin(*pParametersTmp));
+    std::unique_ptr<InputFile> pDataProcessingTmp(new InputFileToRead(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pData = std::move(pDataProcessingTmp);
   }
