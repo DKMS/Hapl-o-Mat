@@ -19,7 +19,7 @@ double Phenotype::computeSummedFrequencyDiplotypes () const{
   return summedFrequencyDiplotypes;
 }
 
-void Phenotype::expectation(const HaplotypeList & haplotypeList){
+void Phenotype::expectation(const Haplotypes & haplotypes){
 
   auto itDiploEnd = diplotypeList.end();
   for(auto itDiplo = diplotypeList.begin();
@@ -27,18 +27,18 @@ void Phenotype::expectation(const HaplotypeList & haplotypeList){
       itDiplo ++)
     {
       if(itDiplo->id1 == itDiplo->id2){
-        itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
+        itDiplo->frequency = haplotypes.getFrequency(itDiplo->id1);
 	itDiplo->frequency *= itDiplo->frequency;
       }
       else{
-        itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
-        itDiplo->frequency *= haplotypeList.getFrequency(itDiplo->id2);
+        itDiplo->frequency = haplotypes.getFrequency(itDiplo->id1);
+        itDiplo->frequency *= haplotypes.getFrequency(itDiplo->id2);
         itDiplo->frequency *= 2.;
       }
     }
 }
 
-bool Phenotype::expectationAndRemove(const HaplotypeList & haplotypeList){
+bool Phenotype::expectationAndRemove(const Haplotypes & haplotypes){
 
   double totalFrequency = 0.;
   auto itDiploEnd = diplotypeList.end();
@@ -47,12 +47,12 @@ bool Phenotype::expectationAndRemove(const HaplotypeList & haplotypeList){
       itDiplo ++){
 
     if(itDiplo->id1 == itDiplo->id2){
-      itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
+      itDiplo->frequency = haplotypes.getFrequency(itDiplo->id1);
       itDiplo->frequency *= itDiplo->frequency;
     }
     else{
-      itDiplo->frequency = haplotypeList.getFrequency(itDiplo->id1);
-      itDiplo->frequency *= haplotypeList.getFrequency(itDiplo->id2);
+      itDiplo->frequency = haplotypes.getFrequency(itDiplo->id1);
+      itDiplo->frequency *= haplotypes.getFrequency(itDiplo->id2);
       itDiplo->frequency *= 2.;
     }
     totalFrequency += itDiplo->frequency;
@@ -86,7 +86,7 @@ int Phenotype::derivativeHaplotypeFrequency(const size_t haplotype,
   return result;
 }
 
-double Phenotype::derivative(const HaplotypeList & haplotypeList,
+double Phenotype::derivative(const Haplotypes & haplotypes,
 			     const size_t haplotype_k,
 			     const size_t lastHaplotype) const{
   
@@ -97,8 +97,8 @@ double Phenotype::derivative(const HaplotypeList & haplotypeList,
       itDiplo ++)
     {
       double sum = 0;
-      sum += derivativeHaplotypeFrequency(itDiplo->id1, haplotype_k, lastHaplotype) * haplotypeList.getFrequency(itDiplo->id2);
-      sum += derivativeHaplotypeFrequency(itDiplo->id2, haplotype_k, lastHaplotype) * haplotypeList.getFrequency(itDiplo->id1);
+      sum += derivativeHaplotypeFrequency(itDiplo->id1, haplotype_k, lastHaplotype) * haplotypes.getFrequency(itDiplo->id2);
+      sum += derivativeHaplotypeFrequency(itDiplo->id2, haplotype_k, lastHaplotype) * haplotypes.getFrequency(itDiplo->id1);
 
       if(itDiplo->id1 != itDiplo->id2){
 	sum *= 2.;
@@ -152,21 +152,21 @@ size_t Phenotypes::computeSizeInBytes(){
   return sizeInBytes;
 }
 
-void Phenotypes::expectationStep(const HaplotypeList & haplotypeList){
+void Phenotypes::expectationStep(const Haplotypes & haplotypes){
 
   for(auto phenotype = hashList.begin();
       phenotype != hashList.end();
       phenotype ++){
-    phenotype->second.expectation(haplotypeList);
+    phenotype->second.expectation(haplotypes);
   }
 }
 
-void Phenotypes::expectationAndRemoveStep(const HaplotypeList & haplotypeList){
+void Phenotypes::expectationAndRemoveStep(const Haplotypes & haplotypes){
 
   auto phenotype = hashList.begin();
   while(phenotype != hashList.end()){
     bool remove;
-    remove = phenotype->second.expectationAndRemove(haplotypeList);
+    remove = phenotype->second.expectationAndRemove(haplotypes);
     if(remove){
       phenotype = hashList.erase(phenotype);
     }

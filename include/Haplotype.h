@@ -22,10 +22,10 @@ class Haplotype{
   double frequency;
 };
 
-class HaplotypeList : public Hash<Haplotype>{
+class Haplotypes : public Hash<Haplotype>{
 
  public:
-  explicit HaplotypeList(const Parameters & parameters)
+  explicit Haplotypes(const Parameters & parameters)
     : haplotypesFileName(parameters.getHaplotypesFileName()),
     haplotypeFrequenciesFileName(parameters.getHaplotypeFrequenciesFileName()),
     epsilonFileName(parameters.getEpsilonFileName()),
@@ -59,8 +59,8 @@ class HaplotypeList : public Hash<Haplotype>{
   void writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const;
 
  private:
-  HaplotypeList(const HaplotypeList &);
-  HaplotypeList& operator=(const HaplotypeList &);
+  Haplotypes(const Haplotypes &);
+  Haplotypes& operator=(const Haplotypes &);
 
   std::string haplotypesFileName;
   std::string haplotypeFrequenciesFileName;

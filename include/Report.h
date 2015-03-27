@@ -12,7 +12,7 @@
 #include "Locus.h"
 
 class GlidFile;
-class HaplotypeList;
+class Haplotypes;
 class HaplotypeCombinations;
 
 class BasicReport{
@@ -26,7 +26,7 @@ class BasicReport{
 
   std::string buildPhenotypeCode() const;
   void buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
-			       HaplotypeList & haplotypeList,
+			       Haplotypes & haplotypes,
 			       std::ofstream & haplotypesFile,
 			       const HaplotypeCombinations & haplotypeCombinations) const; 
 

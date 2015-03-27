@@ -33,7 +33,7 @@ std::string BasicReport::buildPhenotypeCode() const{
 }
 
 void BasicReport::buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
-				     HaplotypeList & haplotypeList,
+				     Haplotypes & haplotypes,
 				     std::ofstream & haplotypesFile,
 				     const HaplotypeCombinations & haplotypeCombinations) const{
 
@@ -69,8 +69,8 @@ void BasicReport::buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
       codeHaplotype2.pop_back();
       
       //add haplotypes to list                                                                                                                     
-      std::pair<HaplotypeList::iterator, bool> inserted1 = haplotypeList.add(codeHaplotype1);
-      std::pair<HaplotypeList::iterator, bool> inserted2 = haplotypeList.add(codeHaplotype2);
+      std::pair<Haplotypes::iterator, bool> inserted1 = haplotypes.add(codeHaplotype1);
+      std::pair<Haplotypes::iterator, bool> inserted2 = haplotypes.add(codeHaplotype2);
       
       if(inserted1.second){
 	haplotypesFile << codeHaplotype1 << std::endl;

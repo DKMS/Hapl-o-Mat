@@ -6,7 +6,7 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 
-void fisherInformation(const HaplotypeList & hList,
+void fisherInformation(const Haplotypes & haplotypes,
 		       const Phenotypes & phenotypes);
 
 void removeColumn(Eigen::MatrixXd & matrix, const size_t colToRemove);

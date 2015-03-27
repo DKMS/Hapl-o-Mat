@@ -66,7 +66,7 @@ void HaplotypeCombinations::writeCombinations() const {
 }
 
 void InputFile::buildHaploDiploPhenoTypes(Phenotypes & phenotypes,
-				     HaplotypeList & hList,
+				     Haplotypes & haplotypes,
 				     const std::shared_ptr<BasicReport> pReport,
 				     std::ofstream & haplotypesFile){
 
@@ -74,7 +74,7 @@ void InputFile::buildHaploDiploPhenoTypes(Phenotypes & phenotypes,
   std::pair<Phenotypes::iterator, bool> inserted = phenotypes.add(phenotypeCode);
   inserted.first->second.addToNumInDonors(pReport->getFrequency());
   if(inserted.second)
-    pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
+    pReport->buildHaploAndDiplotypes(inserted.first, haplotypes, haplotypesFile, haplotypeCombinations);
 }
 
 void InputFileToEdit::printPhenotypes(const std::shared_ptr<Report> pReport,
@@ -158,7 +158,7 @@ strVec_t GL::updateLociToDoViaPullFile() const{
   return lociToDoOut;
 }
 
-void GL::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
+void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -186,19 +186,19 @@ void GL::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
       numberDonors ++;
       for(auto oneReport : listOfpReports){
 	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-	buildHaploDiploPhenoTypes(phenotypes, hList, oneReport, haplotypesFile);
+	buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
       }
     }
   }//while
 
   inputFile.close();
-  hList.setNumberLoci(numberLoci);
-  hList.setNumberDonors(numberDonors);
-  numberHaplotypes = hList.getSize();
+  haplotypes.setNumberLoci(numberLoci);
+  haplotypes.setNumberDonors(numberDonors);
+  numberHaplotypes = haplotypes.getSize();
   numberPhenotypes = phenotypes.getSize();
 }
 
-void DKMS::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
+void DKMS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -229,7 +229,7 @@ void DKMS::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
       numberDonors ++;
       for(auto oneReport : listOfpReports){
 	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-	buildHaploDiploPhenoTypes(phenotypes, hList, oneReport, haplotypesFile);
+	buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
       }
     }
   }//while
@@ -238,9 +238,9 @@ void DKMS::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
   haplotypesFile.close();
   phenotypesFile.close();
 
-  hList.setNumberLoci(numberLoci);
-  hList.setNumberDonors(numberDonors);
-  numberHaplotypes = hList.getSize();
+  haplotypes.setNumberLoci(numberLoci);
+  haplotypes.setNumberDonors(numberDonors);
+  numberHaplotypes = haplotypes.getSize();
   numberPhenotypes = phenotypes.getSize();
 }
 
@@ -258,7 +258,7 @@ void DKMS::readLociNames(const std::string line){
   numberLoci /= 2;
 }
 
-void InputFileToRead::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
+void InputFileToRead::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -282,16 +282,16 @@ void InputFileToRead::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hL
     std::shared_ptr<BasicReport> pReport = std::make_shared<ReadinReport> (line, numberLoci);
     decimalNumberDonors += pReport->getFrequency();
 
-    buildHaploDiploPhenoTypes(phenotypes, hList, pReport, haplotypesFile);
+    buildHaploDiploPhenoTypes(phenotypes, haplotypes, pReport, haplotypesFile);
   }//while
     
   inputFile.close();
   haplotypesFile.close();
 
   numberDonors = static_cast<size_t>(round(decimalNumberDonors));
-  hList.setNumberLoci(numberLoci);
-  hList.setNumberDonors(numberDonors);
-  numberHaplotypes = hList.getSize();
+  haplotypes.setNumberLoci(numberLoci);
+  haplotypes.setNumberDonors(numberDonors);
+  numberHaplotypes = haplotypes.getSize();
   numberPhenotypes = phenotypes.getSize();
 }
 

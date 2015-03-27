@@ -6,27 +6,27 @@
 #include "FisherInformation.h"
 #include "Utility.h"
 
-void fisherInformation(const HaplotypeList & hList,
+void fisherInformation(const Haplotypes & haplotypes,
 		       const Phenotypes & phenotypes){
 
-  std::cout << "\t Haplotypes: " << hList.getSize() << std::endl;
+  std::cout << "\t Haplotypes: " << haplotypes.getSize() << std::endl;
   std::cout << "\t Phenotypes: " << phenotypes.getSize() << std::endl;
 
-  Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
-  informationMatrix = Eigen::MatrixXd::Zero(hList.getSize(), hList.getSize());
+  Eigen::MatrixXd informationMatrix(haplotypes.getSize(), haplotypes.getSize());
+  informationMatrix = Eigen::MatrixXd::Zero(haplotypes.getSize(), haplotypes.getSize());
 
-  auto hListBegin = hList.c_listBegin();
-  auto hListEnd = hList.c_listEnd();
+  auto haplotypesBegin = haplotypes.c_listBegin();
+  auto haplotypesEnd = haplotypes.c_listEnd();
 
-  auto smallestHaplotype = std::min_element(hListBegin, 
-					    hListEnd,
+  auto smallestHaplotype = std::min_element(haplotypesBegin, 
+					    haplotypesEnd,
 					    [](const std::pair<const size_t, Haplotype> & haplotype1,
 					       const std::pair<const size_t, Haplotype> & haplotype2)
 					    {
 					      return haplotype1.second.getFrequency() < haplotype2.second.getFrequency();
 					    });
 
-  size_t positionSmallestHaplotype = distance(hListBegin, smallestHaplotype);
+  size_t positionSmallestHaplotype = distance(haplotypesBegin, smallestHaplotype);
   size_t idSmallestHaplotype = smallestHaplotype->first;
 
   for(auto phenotype = phenotypes.c_listBegin();
@@ -35,19 +35,19 @@ void fisherInformation(const HaplotypeList & hList,
 
     double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
     size_t k = 0;
-    for(auto haplotype_k = hListBegin;
-	haplotype_k != hListEnd;
+    for(auto haplotype_k = haplotypesBegin;
+	haplotype_k != haplotypesEnd;
 	haplotype_k ++){
       
       if(haplotype_k != smallestHaplotype){
-	double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, idSmallestHaplotype);
+	double derivative_k = phenotype->second.derivative(haplotypes, haplotype_k->first, idSmallestHaplotype);
 	size_t l = k;
 	for(auto haplotype_l = haplotype_k;
-	    haplotype_l != hListEnd;
+	    haplotype_l != haplotypesEnd;
 	    haplotype_l ++){
 	  
 	  if(haplotype_l != smallestHaplotype){	
-	    double derivative_l = phenotype->second.derivative(hList, haplotype_l->first, idSmallestHaplotype);
+	    double derivative_l = phenotype->second.derivative(haplotypes, haplotype_l->first, idSmallestHaplotype);
 	    double derivative_kl = phenotype->second.secondDerivative(haplotype_k->first, haplotype_l->first, idSmallestHaplotype);
 	    informationMatrix(k,l) += derivative_k * derivative_l / phenotypeFrequency - derivative_kl;
 	  }//if l neq idSmallestHaplotype
@@ -58,9 +58,9 @@ void fisherInformation(const HaplotypeList & hList,
     }//haplotypes_k
   }//phenotypes
   
-  for(size_t k = 0; k< hList.getSize(); k++){
-    for(size_t l = k; l< hList.getSize(); l++){
-      informationMatrix(k,l) *= static_cast<double>(hList.getNumberDonors());
+  for(size_t k = 0; k< haplotypes.getSize(); k++){
+    for(size_t l = k; l< haplotypes.getSize(); l++){
+      informationMatrix(k,l) *= static_cast<double>(haplotypes.getNumberDonors());
       informationMatrix(l,k) = informationMatrix(k,l);
     }
   }
@@ -75,14 +75,14 @@ void fisherInformation(const HaplotypeList & hList,
     Eigen::MatrixXd varianceMatrix = lu.inverse();
     std::vector<double> errors;
     errors.push_back(0.);
-    for(size_t k=0; k< hList.getSize()-1; k++)
+    for(size_t k=0; k< haplotypes.getSize()-1; k++)
       errors.push_back(varianceMatrix(k, k));
     std::cout << "\t Finished inverting Fisher information matrix" << std::endl;
-    hList.writeFrequenciesAndErrorsToFile(errors);
+    haplotypes.writeFrequenciesAndErrorsToFile(errors);
   }
   else{
     std::cout << "\t Not invertible" << std::endl;
-    hList.writeFrequenciesToFile();
+    haplotypes.writeFrequenciesToFile();
   }
 }
 

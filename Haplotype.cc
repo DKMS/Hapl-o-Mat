@@ -8,7 +8,7 @@
 #include "Phenotype.h"
 #include "Utility.h"
 
-std::size_t HaplotypeList::computeSizeInBytes(){
+std::size_t Haplotypes::computeSizeInBytes(){
 
   size_t sizeInBytes = 0;
   for(auto haplo : hashList){
@@ -20,7 +20,7 @@ std::size_t HaplotypeList::computeSizeInBytes(){
   return sizeInBytes;
 }
 
-void HaplotypeList::EMAlgorithm(Phenotypes & phenotypes){
+void Haplotypes::EMAlgorithm(Phenotypes & phenotypes){
  
   std::ofstream epsilonFile;
   openFileToWrite(epsilonFileName, epsilonFile);
@@ -46,7 +46,7 @@ void HaplotypeList::EMAlgorithm(Phenotypes & phenotypes){
   epsilonFile.close();
 }
 
-void HaplotypeList::initialiseFrequencies(const Phenotypes & phenotypes){
+void Haplotypes::initialiseFrequencies(const Phenotypes & phenotypes){
   
   switch(initType){
   case Parameters::initialisationHaplotypeFrequencies::numberOccurence:
@@ -90,7 +90,7 @@ void HaplotypeList::initialiseFrequencies(const Phenotypes & phenotypes){
   }//switch
 }
 
-void HaplotypeList::initialiseNumberOccurence(const Phenotypes & phenotypes){
+void Haplotypes::initialiseNumberOccurence(const Phenotypes & phenotypes){
 
   double factor = static_cast<double>(pow(2, numberLoci));
   factor *= static_cast<double>(numberDonors);
@@ -114,7 +114,7 @@ void HaplotypeList::initialiseNumberOccurence(const Phenotypes & phenotypes){
     }
 }
 
-void HaplotypeList::initialisePerturbation(){
+void Haplotypes::initialisePerturbation(){
 
   std::uniform_real_distribution<> dis(0, 1);
   double sum = 0.;
@@ -136,7 +136,7 @@ void HaplotypeList::initialisePerturbation(){
   }
 }
 
-void HaplotypeList::writeFrequenciesToFile() const{
+void Haplotypes::writeFrequenciesToFile() const{
 
   std::ifstream inFile;
   openFileToRead(haplotypesFileName ,inFile);
@@ -163,7 +163,7 @@ void HaplotypeList::writeFrequenciesToFile() const{
   outFile.close();
 }
 
-void HaplotypeList::writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const{
+void Haplotypes::writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const{
 
   std::ifstream inFile;
   openFileToRead(haplotypesFileName ,inFile);
@@ -190,7 +190,7 @@ void HaplotypeList::writeFrequenciesAndErrorsToFile(const std::vector<double> er
 }
 
 
-void HaplotypeList::maximizationStep(const Phenotypes & phenotypes, double & largestEpsilon){
+void Haplotypes::maximizationStep(const Phenotypes & phenotypes, double & largestEpsilon){
 
     //save old frequencies, initialize haplotype frequencies to zero
     std::vector<double> oldFrequencies;
@@ -228,7 +228,7 @@ void HaplotypeList::maximizationStep(const Phenotypes & phenotypes, double & lar
     }
 }
 
-void HaplotypeList::maximization(const Phenotypes & phenotypes){
+void Haplotypes::maximization(const Phenotypes & phenotypes){
 
   auto itPhenoEnd = phenotypes.c_listEnd();
   for(auto itPheno = phenotypes.c_listBegin();
