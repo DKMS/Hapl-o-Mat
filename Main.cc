@@ -75,8 +75,8 @@ int main(int argc, char *argv[]){
   startTime = getTime();
   if(pParameters->getDoVariance()){
     std::cout << "#########Variance" << std::endl;
-    double memory = haplotypes.getSize() * haplotypes.getSize() * 8. / 1024. / 1024.;
-    if(memory >= MAX_MEMORY){
+    double requiredMemoryForInformationMatrix = haplotypes.getSize() * haplotypes.getSize() * 8. / 1024. / 1024.;
+    if(requiredMemoryForInformationMatrix >= MAX_MEMORY){
       std::cout << "\t Size of information matrix exceeds memory." << std::endl;
     }
     else{
