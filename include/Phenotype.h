@@ -51,10 +51,10 @@ class Phenotype{
   diplotypeList_t diplotypeList;
 };
 
-class PhenotypeList : public Hash<Phenotype>{
+class Phenotypes : public Hash<Phenotype>{
 
  public:
- explicit PhenotypeList() {}
+ explicit Phenotypes() {}
 
  virtual size_t computeSizeInBytes();
  
@@ -62,8 +62,8 @@ class PhenotypeList : public Hash<Phenotype>{
  void expectationAndRemoveStep(const HaplotypeList & haplotypeList);
 
  private:
-  PhenotypeList(const PhenotypeList &);
-  PhenotypeList& operator=(const PhenotypeList &);
+  Phenotypes(const Phenotypes &);
+  Phenotypes & operator=(const Phenotypes &);
 };
 
 

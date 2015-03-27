@@ -25,7 +25,7 @@ class BasicReport{
     genotypeAtLoci(){}
 
   std::string buildPhenotypeCode() const;
-  void buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
+  void buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
 			       HaplotypeList & haplotypeList,
 			       std::ofstream & haplotypesFile,
 			       const HaplotypeCombinations & haplotypeCombinations) const; 

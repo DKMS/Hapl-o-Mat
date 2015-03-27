@@ -8,7 +8,7 @@
 #include "Allele.h"
 #include "Parameters.h"
 
-class PhenotypeList;
+class Phenotypes;
 class HaplotypeList;
 class Report;
 class BasicReport;
@@ -42,10 +42,10 @@ class InputFile{
     haplotypeCombinations(){}
   virtual ~InputFile(){}
 
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+  virtual void dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList) = 0;
   virtual void printStatistics() = 0;
     
-  void buildHaploDiploPhenoTypes(PhenotypeList & pList,
+  void buildHaploDiploPhenoTypes(Phenotypes & phenotypes,
 				 HaplotypeList & hList,
 				 const std::shared_ptr<BasicReport> listOfpReports,
 				 std::ofstream & haplotypesFile);
@@ -73,7 +73,7 @@ class InputFileToEdit : public InputFile{
     wantedPrecision(),
     minimalFrequency(){}
 
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList) = 0;
+  virtual void dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList) = 0;
   virtual void printStatistics();
 
   void printPhenotypes(const std::shared_ptr<Report> pReport,
@@ -110,7 +110,7 @@ class GL : public InputFileToEdit{
 	minimalFrequency = parameters.getMinimalFrequency();
       }
   
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList);
 
   std::vector<bool> buildBooleanLociToDo();
   strVec_t updateLociToDoViaPullFile() const;
@@ -138,7 +138,7 @@ class DKMS : public InputFileToEdit{
       minimalFrequency = parameters.getMinimalFrequency();
     }
 
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList);
 
   void readLociNames(const std::string line);
 
@@ -158,7 +158,7 @@ class InputFileToRead : public InputFile{
       phenotypesFileName = parameters.getPhenotypesFileName();
     }
 
-  virtual void dataProcessing(PhenotypeList & pList, HaplotypeList & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList);
   virtual void printStatistics();
 
   void countNumberLoci(const std::string inputFile);

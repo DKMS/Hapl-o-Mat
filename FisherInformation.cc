@@ -7,10 +7,10 @@
 #include "Utility.h"
 
 void fisherInformation(const HaplotypeList & hList,
-		       const PhenotypeList & pList){
+		       const Phenotypes & phenotypes){
 
   std::cout << "\t Haplotypes: " << hList.getSize() << std::endl;
-  std::cout << "\t Phenotypes: " << pList.getSize() << std::endl;
+  std::cout << "\t Phenotypes: " << phenotypes.getSize() << std::endl;
 
   Eigen::MatrixXd informationMatrix(hList.getSize(), hList.getSize());
   informationMatrix = Eigen::MatrixXd::Zero(hList.getSize(), hList.getSize());
@@ -29,8 +29,8 @@ void fisherInformation(const HaplotypeList & hList,
   size_t positionSmallestHaplotype = distance(hListBegin, smallestHaplotype);
   size_t idSmallestHaplotype = smallestHaplotype->first;
 
-  for(auto phenotype = pList.c_listBegin();
-      phenotype != pList.c_listEnd();
+  for(auto phenotype = phenotypes.c_listBegin();
+      phenotype != phenotypes.c_listEnd();
       phenotype ++){
 
     double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();

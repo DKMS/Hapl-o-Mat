@@ -20,7 +20,7 @@ std::size_t HaplotypeList::computeSizeInBytes(){
   return sizeInBytes;
 }
 
-void HaplotypeList::EMAlgorithm(PhenotypeList & phenotypes){
+void HaplotypeList::EMAlgorithm(Phenotypes & phenotypes){
  
   std::ofstream epsilonFile;
   openFileToWrite(epsilonFileName, epsilonFile);
@@ -46,7 +46,7 @@ void HaplotypeList::EMAlgorithm(PhenotypeList & phenotypes){
   epsilonFile.close();
 }
 
-void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
+void HaplotypeList::initialiseFrequencies(const Phenotypes & phenotypes){
   
   switch(initType){
   case Parameters::initialisationHaplotypeFrequencies::numberOccurence:
@@ -90,7 +90,7 @@ void HaplotypeList::initialiseFrequencies(const PhenotypeList & phenotypes){
   }//switch
 }
 
-void HaplotypeList::initialiseNumberOccurence(const PhenotypeList & phenotypes){
+void HaplotypeList::initialiseNumberOccurence(const Phenotypes & phenotypes){
 
   double factor = static_cast<double>(pow(2, numberLoci));
   factor *= static_cast<double>(numberDonors);
@@ -190,7 +190,7 @@ void HaplotypeList::writeFrequenciesAndErrorsToFile(const std::vector<double> er
 }
 
 
-void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon){
+void HaplotypeList::maximizationStep(const Phenotypes & phenotypes, double & largestEpsilon){
 
     //save old frequencies, initialize haplotype frequencies to zero
     std::vector<double> oldFrequencies;
@@ -228,7 +228,7 @@ void HaplotypeList::maximizationStep(const PhenotypeList & phenotypes, double & 
     }
 }
 
-void HaplotypeList::maximization(const PhenotypeList & phenotypes){
+void HaplotypeList::maximization(const Phenotypes & phenotypes){
 
   auto itPhenoEnd = phenotypes.c_listEnd();
   for(auto itPheno = phenotypes.c_listBegin();

@@ -65,13 +65,13 @@ void HaplotypeCombinations::writeCombinations() const {
     }
 }
 
-void InputFile::buildHaploDiploPhenoTypes(PhenotypeList & pList,
+void InputFile::buildHaploDiploPhenoTypes(Phenotypes & phenotypes,
 				     HaplotypeList & hList,
 				     const std::shared_ptr<BasicReport> pReport,
 				     std::ofstream & haplotypesFile){
 
   std::string phenotypeCode = pReport->buildPhenotypeCode();
-  std::pair<PhenotypeList::iterator, bool> inserted = pList.add(phenotypeCode);
+  std::pair<Phenotypes::iterator, bool> inserted = phenotypes.add(phenotypeCode);
   inserted.first->second.addToNumInDonors(pReport->getFrequency());
   if(inserted.second)
     pReport->buildHaploAndDiplotypes(inserted.first, hList, haplotypesFile, haplotypeCombinations);
@@ -158,7 +158,7 @@ strVec_t GL::updateLociToDoViaPullFile() const{
   return lociToDoOut;
 }
 
-void GL::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void GL::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
   
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -186,7 +186,7 @@ void GL::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
       numberDonors ++;
       for(auto oneReport : listOfpReports){
 	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-	buildHaploDiploPhenoTypes(pList, hList, oneReport, haplotypesFile);
+	buildHaploDiploPhenoTypes(phenotypes, hList, oneReport, haplotypesFile);
       }
     }
   }//while
@@ -195,10 +195,10 @@ void GL::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
   numberHaplotypes = hList.getSize();
-  numberPhenotypes = pList.getSize();
+  numberPhenotypes = phenotypes.getSize();
 }
 
-void DKMS::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void DKMS::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -229,7 +229,7 @@ void DKMS::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
       numberDonors ++;
       for(auto oneReport : listOfpReports){
 	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-	buildHaploDiploPhenoTypes(pList, hList, oneReport, haplotypesFile);
+	buildHaploDiploPhenoTypes(phenotypes, hList, oneReport, haplotypesFile);
       }
     }
   }//while
@@ -241,7 +241,7 @@ void DKMS::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
   numberHaplotypes = hList.getSize();
-  numberPhenotypes = pList.getSize();
+  numberPhenotypes = phenotypes.getSize();
 }
 
 void DKMS::readLociNames(const std::string line){
@@ -258,7 +258,7 @@ void DKMS::readLociNames(const std::string line){
   numberLoci /= 2;
 }
 
-void InputFileToRead::dataProcessing(PhenotypeList & pList, HaplotypeList & hList){
+void InputFileToRead::dataProcessing(Phenotypes & phenotypes, HaplotypeList & hList){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -282,7 +282,7 @@ void InputFileToRead::dataProcessing(PhenotypeList & pList, HaplotypeList & hLis
     std::shared_ptr<BasicReport> pReport = std::make_shared<ReadinReport> (line, numberLoci);
     decimalNumberDonors += pReport->getFrequency();
 
-    buildHaploDiploPhenoTypes(pList, hList, pReport, haplotypesFile);
+    buildHaploDiploPhenoTypes(phenotypes, hList, pReport, haplotypesFile);
   }//while
     
   inputFile.close();
@@ -292,7 +292,7 @@ void InputFileToRead::dataProcessing(PhenotypeList & pList, HaplotypeList & hLis
   hList.setNumberLoci(numberLoci);
   hList.setNumberDonors(numberDonors);
   numberHaplotypes = hList.getSize();
-  numberPhenotypes = pList.getSize();
+  numberPhenotypes = phenotypes.getSize();
 }
 
 void InputFileToRead::printStatistics(){

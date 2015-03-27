@@ -32,7 +32,7 @@ std::string BasicReport::buildPhenotypeCode() const{
   return phenotypeCode;
 }
 
-void BasicReport::buildHaploAndDiplotypes(PhenotypeList::iterator itPhenotype,
+void BasicReport::buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
 				     HaplotypeList & haplotypeList,
 				     std::ofstream & haplotypesFile,
 				     const HaplotypeCombinations & haplotypeCombinations) const{

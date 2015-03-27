@@ -6,7 +6,7 @@
 #include "Hash.h"
 #include "Parameters.h"
 
-class PhenotypeList;
+class Phenotypes;
 
 class Haplotype{
 
@@ -49,12 +49,12 @@ class HaplotypeList : public Hash<Haplotype>{
   void setNumberLoci(const size_t in) {numberLoci = in;}
   void setNumberDonors(const size_t in) {numberDonors = in;}
   double getEpsilon() const {return epsilon;}
-  void initialiseFrequencies(const PhenotypeList & phenotypes);
-  void initialiseNumberOccurence(const PhenotypeList & phenotypes);
+  void initialiseFrequencies(const Phenotypes & phenotypes);
+  void initialiseNumberOccurence(const Phenotypes & phenotypes);
   void initialisePerturbation();
-  void EMAlgorithm(PhenotypeList & phenotypes);
-  void maximizationStep(const PhenotypeList & phenotypes, double & largestEpsilon);
-  void maximization(const PhenotypeList & phenotypes);
+  void EMAlgorithm(Phenotypes & phenotypes);
+  void maximizationStep(const Phenotypes & phenotypes, double & largestEpsilon);
+  void maximization(const Phenotypes & phenotypes);
   void writeFrequenciesToFile() const;
   void writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const;
 

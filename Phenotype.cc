@@ -134,7 +134,7 @@ double Phenotype::secondDerivative(const size_t haplotype_k,
   return result;
 }
 
-size_t PhenotypeList::computeSizeInBytes(){
+size_t Phenotypes::computeSizeInBytes(){
 
   size_t sizeInBytes = 0;
   for(auto pheno : hashList){
@@ -152,7 +152,7 @@ size_t PhenotypeList::computeSizeInBytes(){
   return sizeInBytes;
 }
 
-void PhenotypeList::expectationStep(const HaplotypeList & haplotypeList){
+void Phenotypes::expectationStep(const HaplotypeList & haplotypeList){
 
   for(auto phenotype = hashList.begin();
       phenotype != hashList.end();
@@ -161,7 +161,7 @@ void PhenotypeList::expectationStep(const HaplotypeList & haplotypeList){
   }
 }
 
-void PhenotypeList::expectationAndRemoveStep(const HaplotypeList & haplotypeList){
+void Phenotypes::expectationAndRemoveStep(const HaplotypeList & haplotypeList){
 
   auto phenotype = hashList.begin();
   while(phenotype != hashList.end()){

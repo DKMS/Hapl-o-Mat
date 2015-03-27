@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
 
   std::cout << "#########Data-preprocessing" << std::endl;
   startTime = getTime();
-  PhenotypeList phenotypes;
+  Phenotypes phenotypes;
   HaplotypeList haplotypes(*pParameters);
   pInputFile->dataProcessing(phenotypes, haplotypes);
   pInputFile->printStatistics();
