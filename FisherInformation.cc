@@ -6,33 +6,6 @@
 #include "FisherInformation.h"
 #include "Utility.h"
 
-void score(const HaplotypeList & hList,
-	   const PhenotypeList & pList){
-
-  size_t negativeHaplotype = hList.c_listBegin()->first;
-
-  auto hListBegin = hList.c_listBegin();
-  auto hListEnd = hList.c_listEnd();
-  for(auto haplotype_k = hListBegin;
-      haplotype_k != hListEnd;
-      haplotype_k ++){
-
-    double sum = 0.;
-    for(auto phenotype = pList.c_listBegin();
-	phenotype != pList.c_listEnd();
-	phenotype ++){
-
-      double phenotypeFrequency = phenotype->second.computeSummedFrequencyDiplotypes();
-      double derivative_k = phenotype->second.derivative(hList, haplotype_k->first, negativeHaplotype);
-      sum += static_cast<double>(phenotype->second.getNumInDonors()) / phenotypeFrequency * derivative_k;
-
-
-    }
-    std::cout << sum << std::endl;
-    std::cout <<  std::endl;
-  }
-}
-
 void fisherInformation(const HaplotypeList & hList,
 		       const PhenotypeList & pList){
 
