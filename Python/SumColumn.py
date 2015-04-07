@@ -6,15 +6,15 @@
 
 import numpy
 
-fileInName = raw_input("Enter filename:\n")
-column = input("Enter column number:\n")
+fileInName = input("Enter filename:\n")
+column = int(input("Enter column number:\n"))
 
 sum = 0.
 for line in open(fileInName):
     parts = line.split()
     sum += float(parts[column-1])
 
-print sum
+print(sum)
 
 
 
