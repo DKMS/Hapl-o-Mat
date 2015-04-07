@@ -259,3 +259,14 @@ void Haplotypes::maximization(const Phenotypes & phenotypes){
       }//for diplo
   }
 }
+
+double Haplotypes::computeHaplotypeFrequencySum() const{
+
+  double frequencySum = 0.;
+  for(auto haplotype = hashList.begin();
+      haplotype != hashList.end();
+      haplotype ++){
+    frequencySum += haplotype->second.getFrequency();
+  }
+  return frequencySum;
+}

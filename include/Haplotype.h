@@ -57,6 +57,7 @@ class Haplotypes : public Hash<Haplotype>{
   void maximization(const Phenotypes & phenotypes);
   void writeFrequenciesToFile() const;
   void writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const;
+  double computeHaplotypeFrequencySum() const;
 
  private:
   Haplotypes(const Haplotypes &);

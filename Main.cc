@@ -75,6 +75,7 @@ int main(int argc, char *argv[]){
   else{
     haplotypes.initialiseFrequencies(phenotypes);
     haplotypes.EMAlgorithm(phenotypes);
+    std::cout << "\t Summed haplotype frequencies: " << haplotypes.computeHaplotypeFrequencySum() << std::endl;
   }
   endTime = getTime();
   timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime);
