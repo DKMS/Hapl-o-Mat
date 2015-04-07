@@ -151,7 +151,7 @@ void Haplotypes::writeFrequenciesToFile() const{
     auto pos = hashList.find(hashValue);
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
-      if(freq > epsilon){
+      if(freq > ZERO){
 	outFile << code
 		<< "\t";
 	outFile << freq
@@ -219,7 +219,7 @@ void Haplotypes::maximizationStep(const Phenotypes & phenotypes, double & larges
 
     auto it = hashList.begin();
     while(it != hashList.end()){
-      if((it->second.getFrequency() - epsilon/10.) < ZERO ){
+      if(it->second.getFrequency() < ZERO){
 	it = hashList.erase(it);
       }
       else{
