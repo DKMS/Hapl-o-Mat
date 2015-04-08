@@ -10,11 +10,9 @@ def copyFolder(path):
           print('Folder ' + pathNewFolder + ' already exists.')
      else:
           shutil.copytree(path, pathNewFolder)
-          os.remove(pathNewFolder + '/Log.dat')
-          os.remove(pathNewFolder + '/Err.dat')
-          os.remove(pathNewFolder + '/haplomat')
           shutil.rmtree(pathNewFolder + '/results')
           os.makedirs(pathNewFolder + '/results')
+          shutil.copytree('data', pathNewFolder + '/data')
           shutil.copy('../haplomat', pathNewFolder)
 
 def startJob(path):
@@ -53,7 +51,7 @@ def compareResults(path):
 def clean(path):
      shutil.rmtree(path)
 
-folders = ('test', 'DKMS_g')
+folders = ('DKMS_g', 'DKMS_4d', 'DKMS_G', 'DKMS_6d', 'DKMS_8d', 'GL')
 testsPassed = 0
 
 for folder in folders:          
@@ -63,7 +61,7 @@ for folder in folders:
      missing, tooMany, different = compareResults(folder)
      if missing == 0 and tooMany == 0 and different == 0:
           testsPassed += 1
-          print('Test suceeded.')
+          print('Test succeeded.')
           clean(folder + 'New')
      else:
           print('Test failed')
