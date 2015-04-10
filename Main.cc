@@ -81,6 +81,7 @@ int main(int argc, char *argv[]){
   timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime);
 
   startTime = getTime();
+  bool writeHaplotypeFrequencies = true;
   if(pParameters->getDoVariance()){
     std::cout << "#########Variance" << std::endl;
     double requiredMemoryForInformationMatrix = haplotypes.getSize() * haplotypes.getSize() * 8. / 1024. / 1024.;
@@ -90,9 +91,10 @@ int main(int argc, char *argv[]){
     else{
       phenotypes.expectationAndRemoveStep(haplotypes);
       fisherInformation(haplotypes, phenotypes);
+      writeHaplotypeFrequencies = false;
     }
   }
-  else{
+  if(writeHaplotypeFrequencies){
     haplotypes.writeFrequenciesToFile();
   }
   endTime = getTime();
@@ -101,5 +103,5 @@ int main(int argc, char *argv[]){
   std::cout << "#########Time" << std::endl;
   std::cout << "\t Data pre-processing time: " << timeTakenForDataPreProcessing << " mus" << std::endl;
   std::cout << "\t EM-algorithm time: " << timeTakenForEMAlgorithm << " mus" << std::endl;
-  std::cout << "\t Variance time: " << timeTakenForVariance << " mus" << std::endl;
+  std::cout << "\t Variance and printing time: " << timeTakenForVariance << " mus" << std::endl;
 }
