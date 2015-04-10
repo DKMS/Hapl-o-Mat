@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
   startTime = getTime();
   double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
   if(minEpsilon - haplotypes.getEpsilon() < ZERO){
-    std::cerr << "Choosen epsilon is larger than 0.5/2n" <<std::endl;
+    std::cerr << "Chosen epsilon is larger than 0.5/n" <<std::endl;
     exit(EXIT_FAILURE);
   }
   else{
