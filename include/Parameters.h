@@ -17,7 +17,21 @@ class Parameters{
     equal
   };
 
-  explicit Parameters(){}
+  explicit Parameters()
+    :  parametersFileName(),
+    haplotypesFileName("results/haplotypes.dat"),
+    phenotypesFileName("results/phenotypes.dat"),
+    haplotypeFrequenciesFileName("results/estimatedHaplotypeFrequencies.dat"),
+    epsilonFileName("results/epsilonVsSteps.dat"),
+    precision(),
+    minimalFrequency(1e-5),
+    doH2Filter(true),
+    expandH2Lines(true),
+    doVariance(false),
+    initType(initialisationHaplotypeFrequencies::numberOccurence),
+    epsilon(1e-6),
+    seed(0){}
+
   virtual ~Parameters(){}
 
   virtual void init() = 0;
@@ -66,11 +80,16 @@ class Parameters{
 class ParametersGL : public Parameters{
 
  public:
-  explicit ParametersGL(){
-    parametersFileName = "parametersGL";
-    init();
-    print();
-  }
+  explicit ParametersGL()
+    : pullFileName(),
+    glidFileName(),
+    lociToDo(),
+    resolveUnknownGenotype(false)
+      {
+	parametersFileName = "parametersGL";
+	init();
+	print();
+      }
   
   virtual void init();
   virtual void print() const;
@@ -92,11 +111,13 @@ class ParametersGL : public Parameters{
 class ParametersDKMS : public Parameters{
 
  public:
-  explicit ParametersDKMS(){
-    parametersFileName = "parametersDKMS";
-    init();
-    print();
-  }
+  explicit ParametersDKMS()
+    :inputFileName()
+    {
+      parametersFileName = "parametersDKMS";
+      init();
+      print();
+    }
 
   virtual void init();
   virtual void print() const;
@@ -110,11 +131,13 @@ class ParametersDKMS : public Parameters{
 class ParametersReadin : public Parameters{
 
  public:
-  explicit ParametersReadin(){
-    parametersFileName = "parametersREAD";
-    init();
-    print();
-  }
+  explicit ParametersReadin()
+    : inputFileName()
+    {
+      parametersFileName = "parametersREAD";
+      init();
+      print();
+    }
 
   virtual void init();
   virtual void print() const;
