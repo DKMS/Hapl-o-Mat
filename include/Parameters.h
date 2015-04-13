@@ -30,6 +30,7 @@ class Parameters{
     doVariance(false),
     initType(initialisationHaplotypeFrequencies::numberOccurence),
     epsilon(1e-6),
+    cutHaplotypeFrequencies(epsilon),
     seed(0){}
 
   virtual ~Parameters(){}
@@ -48,6 +49,7 @@ class Parameters{
   bool getDoVariance() const {return doVariance;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}
   double getEpsilon() const {return epsilon;}
+  double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   size_t getSeed() const {return seed;}
 
  protected:
@@ -74,6 +76,7 @@ class Parameters{
   bool doVariance;
   initialisationHaplotypeFrequencies initType;
   double epsilon;
+  double cutHaplotypeFrequencies;
   size_t seed;
 };
 
