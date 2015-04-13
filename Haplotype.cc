@@ -151,7 +151,7 @@ void Haplotypes::writeFrequenciesToFile() const{
     auto pos = hashList.find(hashValue);
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
-      if(freq > ZERO){
+      if(freq > cutHaplotypeFrequencies){
 	outFile << code
 		<< "\t";
 	outFile << freq

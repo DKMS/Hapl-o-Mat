@@ -33,6 +33,7 @@ class Haplotypes : public Hash<Haplotype>{
     numberDonors(0),
     initType(parameters.getInitType()),
     epsilon(parameters.getEpsilon()),
+    cutHaplotypeFrequencies(parameters.getCutHaplotypeFrequencies()),
     rng(parameters.getSeed()){}
 
   virtual std::size_t computeSizeInBytes();
@@ -49,6 +50,7 @@ class Haplotypes : public Hash<Haplotype>{
   void setNumberLoci(const size_t in) {numberLoci = in;}
   void setNumberDonors(const size_t in) {numberDonors = in;}
   double getEpsilon() const {return epsilon;}
+  double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   void initialiseFrequencies(const Phenotypes & phenotypes);
   void initialiseNumberOccurence(const Phenotypes & phenotypes);
   void initialisePerturbation();
@@ -70,6 +72,7 @@ class Haplotypes : public Hash<Haplotype>{
   size_t numberDonors;
   Parameters::initialisationHaplotypeFrequencies initType;
   double epsilon;
+  double cutHaplotypeFrequencies;
   std::mt19937 rng;
 };
 
