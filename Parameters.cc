@@ -138,6 +138,7 @@ void ParametersGL::init(){
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
+    else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
@@ -193,6 +194,8 @@ void ParametersGL::print() const {
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  if(renormaliseHaplotypeFrequencies)
+    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << "\t Compute variance: ";
@@ -225,6 +228,7 @@ void ParametersDKMS::init(){
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
+    else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
@@ -266,6 +270,8 @@ void ParametersDKMS::print() const {
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  if(renormaliseHaplotypeFrequencies)
+    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << "\t Compute variance: ";
@@ -294,6 +300,7 @@ void ParametersReadin::init(){
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
+    else if(line.find("RENORMALISE_HAPLTOYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
@@ -321,6 +328,8 @@ void ParametersReadin::print() const {
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  if(renormaliseHaplotypeFrequencies)
+    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << "\t Compute variance: ";

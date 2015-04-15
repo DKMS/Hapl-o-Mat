@@ -154,9 +154,12 @@ void Haplotypes::writeFrequenciesToFile() const{
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
       if(freq > cutHaplotypeFrequencies){
+	if(renormaliseHaplotypeFrequencies){
+	  freq /= sum;
+	}
 	outFile << code
 		<< "\t";
-	outFile << freq/sum
+	outFile << freq
 		<< "\n";
       }
     }

@@ -34,6 +34,7 @@ class Haplotypes : public Hash<Haplotype>{
     initType(parameters.getInitType()),
     epsilon(parameters.getEpsilon()),
     cutHaplotypeFrequencies(parameters.getCutHaplotypeFrequencies()),
+    renormaliseHaplotypeFrequencies(parameters.getRenormaliseHaplotypeFrequencies()),
     rng(parameters.getSeed()){}
 
   virtual std::size_t computeSizeInBytes();
@@ -74,6 +75,7 @@ class Haplotypes : public Hash<Haplotype>{
   Parameters::initialisationHaplotypeFrequencies initType;
   double epsilon;
   double cutHaplotypeFrequencies;
+  bool renormaliseHaplotypeFrequencies;
   std::mt19937 rng;
 };
 
