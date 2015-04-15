@@ -145,6 +145,8 @@ void Haplotypes::writeFrequenciesToFile() const{
   outFile.precision(14);
   outFile << std::fixed;
 
+  double sum = computeCuttedHaplotypeFrequencySum();
+
   std::string code;
   while(inFile >> code){
     size_t hashValue = string_hash(code);
@@ -154,7 +156,7 @@ void Haplotypes::writeFrequenciesToFile() const{
       if(freq > cutHaplotypeFrequencies){
 	outFile << code
 		<< "\t";
-	outFile << freq
+	outFile << freq/sum
 		<< "\n";
       }
     }
@@ -269,4 +271,19 @@ double Haplotypes::computeHaplotypeFrequencySum() const{
     frequencySum += haplotype->second.getFrequency();
   }
   return frequencySum;
+}
+
+double Haplotypes::computeCuttedHaplotypeFrequencySum() const{
+
+  double frequencySum = 0.;
+  for(auto haplotype = hashList.begin();
+      haplotype != hashList.end();
+      haplotype ++){
+    double frequency = haplotype->second.getFrequency();
+    if(frequency > cutHaplotypeFrequencies){ 
+      frequencySum += frequency;
+    }
+  }
+  return frequencySum;
+
 }
