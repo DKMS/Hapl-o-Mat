@@ -153,7 +153,7 @@ void Haplotypes::writeFrequenciesToFile() const{
     auto pos = hashList.find(hashValue);
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
-      if(freq > cutHaplotypeFrequencies){
+      if(freq - cutHaplotypeFrequencies > ZERO ){
 	if(renormaliseHaplotypeFrequencies){
 	  freq /= sum;
 	}
@@ -185,7 +185,7 @@ void Haplotypes::writeFrequenciesAndErrorsToFile(const std::vector<double> error
       double freq = pos->second.getFrequency();
       size_t positionError = distance(hashList.cbegin(), pos);
       double error = errors.at(positionError);
-      if(freq > epsilon){
+      if(freq - epsilon > ZERO ){
 	outFile << code	<< "\t" << freq << "\t" << error << "\n";
       }
     }
@@ -217,7 +217,7 @@ void Haplotypes::maximizationStep(const Phenotypes & phenotypes, double & larges
       it->second.multiplyFrequency(.5 / static_cast<double>(numberDonors));
       
       double possibleEpsilon = fabs(it->second.getFrequency() - *itOld);
-      if(possibleEpsilon > largestEpsilon){
+      if(possibleEpsilon - largestEpsilon > ZERO ){
 	largestEpsilon = possibleEpsilon; 
       }
     }
@@ -283,7 +283,7 @@ double Haplotypes::computeCuttedHaplotypeFrequencySum() const{
       haplotype != hashList.end();
       haplotype ++){
     double frequency = haplotype->second.getFrequency();
-    if(frequency > cutHaplotypeFrequencies){ 
+    if(frequency - cutHaplotypeFrequencies > ZERO ){ 
       frequencySum += frequency;
     }
   }
