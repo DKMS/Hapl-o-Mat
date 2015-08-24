@@ -234,8 +234,8 @@ for report in syntacticallyCleanedReports:
                     if not resolvedCode in expandedAlleles:
                         print ('Code ' + resolvedCode + ' from NMPD-code ' + code + ' is not in allAllelesExpanded.txt.')
                         reportOkay = False
-                    else:
-                        numberNMDP += 1
+                if reportOkay:
+                    numberNMDP += 1
         #G
         elif code.endswith('G'):
             codeWithLocus = loci[counter] + code
