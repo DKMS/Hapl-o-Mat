@@ -6,6 +6,9 @@ python BuildH1.py
 python BuildH1g.py  
 python BuildAllAllelesExpanded.py
 python AddGToH2.py
+python PrintAllelesMissingIngCode.py
+
+#add printed alleles by hand
 
 mv H1.txt ../data
 mv H1g.txt ../data
