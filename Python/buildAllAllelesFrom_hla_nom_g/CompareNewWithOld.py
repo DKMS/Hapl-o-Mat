@@ -1,3 +1,7 @@
+#Christian Schaefer
+#Dec 2015
+#Compare new list of all alleles with old list built from table on hla.alleles.net
+
 allelesNew = set()
 with open('allAlleles.txt') as file:
     for line in file:

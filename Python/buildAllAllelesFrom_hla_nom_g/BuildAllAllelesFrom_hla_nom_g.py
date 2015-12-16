@@ -1,3 +1,6 @@
+#Christian Schaefer
+#Dec 2015
+#Extract list of all alleles from hla_nom_g.txt. Thus still confidential alleles are not included in list.
 
 alleles = []
 with open('hla_nom_g.txt') as file:
