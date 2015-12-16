@@ -46,6 +46,7 @@ with open('allAllelesExpanded.txt') as file:
                         missingAllelesIng.append(allele)
 
 #output missing alleles for relevant loci
+print('Alleles which must be added to H1g.txt')
 missingAllelesIng.sort()
 for missingAlleleIng in missingAllelesIng:
     locus = missingAlleleIng.split('*')[0]

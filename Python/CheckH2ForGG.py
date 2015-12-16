@@ -13,5 +13,7 @@ with open('H2WithAddedG.txt') as file:
                 if allele.endswith('GG'):
                     allelesWithGG.add(allele)
 
-print(allelesWithGG)
+print('Alleles which end with \'GG\' and must be changed in H2.txt')
+for alleleWithGG in allelesWithGG:
+    print(alleleWithGG)
                 
