@@ -4,7 +4,7 @@
 #hla_nom_p.txt. Furthermore some null-alleles exist which do not correspond to a large-G code. Since they are also missing in the P-list,
 #they cannot appear in our small-g list. This script searches allAllelexExpanded.txt for alleles missing in H1g.txt. Note we only print
 #alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
-#-> not required anymore since we changed allAlleles.txt to excluding still confidential alleles. Run it anyway to be sure
+#Problem with still confidential alleles solved by changing to list of all alleles (allAlleles.txt) excluding still confidential alleles
 
 #get loci which are in P and G file
 loci = []
