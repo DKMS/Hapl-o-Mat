@@ -6,9 +6,11 @@
 
 FileAllelesTogOrG Allele::fileAllelesTog("data/H1g.txt");
 FileAllelesTogOrG Allele::fileAllelesToG("data/H1.txt");
+FileAllelesTogOrG Allele::fileAllelesToP("data/P.txt");
 
-FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/H1.txt");
 FilegOrGOr4dToAlleles Allele::filegToAlleles("data/H1g.txt");
+FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/H1.txt");
+FilegOrGOr4dToAlleles Allele::filePToAlleles("data/P.txt");
 FilegOrGOr4dToAlleles Allele::file4dToAlleles("data/allAllelesExpanded.txt");
 
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){

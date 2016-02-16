@@ -66,8 +66,10 @@ class Allele{
   double frequency;
   static FileAllelesTogOrG fileAllelesTog;
   static FileAllelesTogOrG fileAllelesToG;
+  static FileAllelesTogOrG fileAllelesToP;
   static FilegOrGOr4dToAlleles fileGToAlleles;
   static FilegOrGOr4dToAlleles filegToAlleles;
+  static FilegOrGOr4dToAlleles filePToAlleles;
   static FilegOrGOr4dToAlleles file4dToAlleles;
 };
 
