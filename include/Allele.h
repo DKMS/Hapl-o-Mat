@@ -13,6 +13,7 @@ class Allele{
  public:
   enum codePrecision{
     g,
+    P,
     fourDigit,
     G,
     sixDigit,

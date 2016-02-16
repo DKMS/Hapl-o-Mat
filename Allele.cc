@@ -99,6 +99,11 @@ std::string Allele::printCodePrecision(const codePrecision precision){
       out = "g";
       break;
     }
+  case codePrecision::P:
+    {
+      out = "P";
+      break;
+    }
   case codePrecision::fourDigit:
     {
       out = "4d";
