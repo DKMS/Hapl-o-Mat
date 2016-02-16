@@ -61,6 +61,8 @@ void Parameters::precision_assign(const std::string line){
   std::string value = line.substr(pos + 1);
   if(value == "g")
     precision = Allele::codePrecision::g;
+  else if(value == "P")
+    precision = Allele::codePrecision::P;
   else if(value == "4d")
     precision = Allele::codePrecision::fourDigit;
   else if(value =="G")

@@ -15,6 +15,7 @@ mv H1.txt ../data
 mv H1g.txt ../data
 mv allAllelesExpanded.txt ../data
 mv H2WithAddedG.txt ../data/H2.txt
+mv P.txt ../data
 cp code2dna.txt ../data 
 
 
