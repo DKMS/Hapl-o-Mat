@@ -142,7 +142,6 @@ void ParametersGL::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
 		<< line
@@ -200,13 +199,6 @@ void ParametersGL::print() const {
     std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
-  std::cout << "\t Compute variance: ";
-  if(doVariance){
-    std::cout << "yes" << std::endl;
-  }
-  else{
-    std::cout << "no" << std::endl;
-  }
   std::cout << std::endl;
 }
 
@@ -232,7 +224,6 @@ void ParametersDKMS::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
 		<< line
@@ -276,13 +267,6 @@ void ParametersDKMS::print() const {
     std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
-  std::cout << "\t Compute variance: ";
-  if(doVariance){
-    std::cout << "yes" << std::endl;
-  }
-  else{
-    std::cout << "no" << std::endl;
-  }
   std::cout << std::endl;
 }
 
@@ -304,7 +288,6 @@ void ParametersReadin::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
 		<< line
@@ -334,12 +317,5 @@ void ParametersReadin::print() const {
     std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
-  std::cout << "\t Compute variance: ";
-  if(doVariance){
-    std::cout << "yes" << std::endl;
-  }
-  else{
-    std::cout << "no" << std::endl;
-  }
   std::cout << std::endl;
 }
