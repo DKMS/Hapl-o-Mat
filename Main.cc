@@ -11,7 +11,6 @@
 #include "Parameters.h"
 #include "Utility.h"
 #include "Report.h"
-#include "FisherInformation.h"
 
 int main(int argc, char *argv[]){
 
@@ -28,7 +27,7 @@ int main(int argc, char *argv[]){
   timePoint endTime;
   double timeTakenForDataPreProcessing = 0.;
   double timeTakenForEMAlgorithm = 0.;
-  double timeTakenForVariance = 0.;
+  double timeTakenForWriting = 0.;
   std::unique_ptr<Parameters> pParameters;
   std::unique_ptr<InputFile> pInputFile;
   if(inputFileFormat == "DKMS"){
@@ -82,27 +81,12 @@ int main(int argc, char *argv[]){
   timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime);
 
   startTime = getTime();
-  bool writeHaplotypeFrequencies = true;
-  if(pParameters->getDoVariance()){
-    std::cout << "#########Variance" << std::endl;
-    double requiredMemoryForInformationMatrix = haplotypes.getSize() * haplotypes.getSize() * 8. / 1024. / 1024.;
-    if(requiredMemoryForInformationMatrix >= MAX_MEMORY){
-      std::cout << "\t Size of information matrix exceeds memory." << std::endl;
-    }
-    else{
-      phenotypes.expectationAndRemoveStep(haplotypes);
-      fisherInformation(haplotypes, phenotypes);
-      writeHaplotypeFrequencies = false;
-    }
-  }
-  if(writeHaplotypeFrequencies){
-    haplotypes.writeFrequenciesToFile();
-  }
+  haplotypes.writeFrequenciesToFile();
   endTime = getTime();
-  timeTakenForVariance = getTimeDifference(startTime, endTime);
+  timeTakenForWriting = getTimeDifference(startTime, endTime);
 
   std::cout << "#########Time" << std::endl;
   std::cout << "\t Data pre-processing time: " << timeTakenForDataPreProcessing << " mus" << std::endl;
   std::cout << "\t EM-algorithm time: " << timeTakenForEMAlgorithm << " mus" << std::endl;
-  std::cout << "\t Variance and printing time: " << timeTakenForVariance << " mus" << std::endl;
+  std::cout << "\t Writing time: " << timeTakenForWriting << " mus" << std::endl;
 }
