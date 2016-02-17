@@ -138,33 +138,49 @@ void Haplotypes::initialisePerturbation(){
 
 void Haplotypes::writeFrequenciesToFile() const{
 
-  std::ifstream inFile;
-  openFileToRead(haplotypesFileName ,inFile);
-  std::ofstream outFile;
-  openFileToWrite(haplotypeFrequenciesFileName ,outFile);
-  outFile.precision(14);
-  outFile << std::fixed;
-
   double sum = computeCuttedHaplotypeFrequencySum();
 
+  std::vector<std::pair<std::string, double>> sortedHaplotypes;
+
+  std::ifstream inFile;
+  openFileToRead(haplotypesFileName, inFile);
   std::string code;
   while(inFile >> code){
     size_t hashValue = string_hash(code);
     auto pos = hashList.find(hashValue);
+
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
       if(freq - cutHaplotypeFrequencies > ZERO ){
 	if(renormaliseHaplotypeFrequencies){
 	  freq /= sum;
 	}
-	outFile << code
-		<< "\t";
-	outFile << freq
-		<< "\n";
+	sortedHaplotypes.push_back(std::make_pair(code, freq));
       }
     }
   }
   inFile.close();
+
+  std::sort(sortedHaplotypes.begin(),
+	    sortedHaplotypes.end(),
+	    [](const std::pair<std::string, double> haploA,
+	       const std::pair<std::string, double> haploB)
+	    {
+	      return haploA.second > haploB.second;
+	    });
+
+  std::ofstream outFile;
+  openFileToWrite(haplotypeFrequenciesFileName, outFile);
+  outFile.precision(14);
+  outFile << std::fixed;
+
+  for(auto it : sortedHaplotypes){
+    outFile << it.first
+	    << "\t";
+    outFile << it.second
+	    << "\n";
+  }
+
   outFile.close();
 }
 
