@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream> 
 #include <algorithm>
+#include <cstdio>
 
 #include "Haplotype.h"
 #include "Phenotype.h"
@@ -305,4 +306,11 @@ double Haplotypes::computeCuttedHaplotypeFrequencySum() const{
   }
   return frequencySum;
 
+}
+
+void Haplotypes::deleteHaplotypesFile() const{
+
+  if (remove(haplotypesFileName.c_str()) != 0){
+    std::cerr << "Not able to delete " << haplotypesFileName << std::endl;
+  }
 }

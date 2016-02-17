@@ -82,6 +82,7 @@ int main(int argc, char *argv[]){
 
   startTime = getTime();
   haplotypes.writeFrequenciesToFile();
+  haplotypes.deleteHaplotypesFile();
   endTime = getTime();
   timeTakenForWriting = getTimeDifference(startTime, endTime);
 

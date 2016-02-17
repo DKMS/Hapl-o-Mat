@@ -62,6 +62,7 @@ class Haplotypes : public Hash<Haplotype>{
   void writeFrequenciesAndErrorsToFile(const std::vector<double> errors) const;
   double computeHaplotypeFrequencySum() const;
   double computeCuttedHaplotypeFrequencySum() const;
+  void deleteHaplotypesFile() const;
 
  private:
   Haplotypes(const Haplotypes &);
