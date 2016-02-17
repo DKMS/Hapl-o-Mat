@@ -2,10 +2,10 @@
 *~
 haplomat
 CheckReports.py
+Err.dat
+Log.dat
 *.txt
-*.dat
 *.glid
 *.pull
 data/
 rawdata/
-results/
