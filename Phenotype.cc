@@ -175,3 +175,22 @@ void Phenotypes::expectationAndRemoveStep(const Haplotypes & haplotypes){
     }
   }
 }
+
+double Phenotypes::computeLogLikelihood() const{
+
+  double logLikelihood = 0.;
+  for(auto pheno : hashList){
+
+    double probabilityPheno = 0.;
+    for(auto diplo = pheno.second.c_diplotypeListBegin();
+	diplo != pheno.second.c_diplotypeListEnd();
+	diplo ++){
+
+      probabilityPheno += diplo->frequency;
+    }
+
+    logLikelihood += pheno.second.getNumInDonors()*log(probabilityPheno);
+  }
+
+  return logLikelihood;
+}

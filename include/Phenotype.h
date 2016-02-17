@@ -60,6 +60,7 @@ class Phenotypes : public Hash<Phenotype>{
  
  void expectationStep(const Haplotypes & haplotypes);
  void expectationAndRemoveStep(const Haplotypes & haplotypes);
+ double computeLogLikelihood() const;
 
  private:
   Phenotypes(const Phenotypes &);

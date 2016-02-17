@@ -3,7 +3,7 @@ FILENAME_INPUT=phenotypes.dat
 FILENAME_HAPLOTYPES=results/haplotypes.dat
 FILENAME_PHENOTYPES=results/phenotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
-FILENAME_EPSILON=results/epsilonVsSteps.dat
+FILENAME_EPSILON=results/epsilon.dat
 #EM-algorithm
 INITIALISATION_HAPLOTYPE_FREQUENCIES=numberOccurence
 EPSILON=7e-5

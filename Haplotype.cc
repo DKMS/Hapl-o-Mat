@@ -37,11 +37,14 @@ void Haplotypes::EMAlgorithm(Phenotypes & phenotypes){
     phenotypes.expectationStep(*this);
     double largestEpsilon = 0.;
     maximizationStep(phenotypes, largestEpsilon);
-    
+
+    phenotypes.expectationStep(*this);
+    double logLikelihood = phenotypes.computeLogLikelihood();
+
     if(largestEpsilon - epsilon < ZERO ){
       stop = true;
     }
-    epsilonFile << largestEpsilon << std::endl;
+    epsilonFile << largestEpsilon << "\t" << logLikelihood << std::endl;
   } while(!stop);
   std::cout << "\t Used " << counter <<" steps" << std::endl;
   epsilonFile.close();
