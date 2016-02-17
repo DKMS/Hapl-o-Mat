@@ -4,6 +4,7 @@ haplomat
 CheckReports.py
 Err.dat
 Log.dat
+runHaplomat
 *.txt
 *.glid
 *.pull
