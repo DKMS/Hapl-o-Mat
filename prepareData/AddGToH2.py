@@ -32,6 +32,11 @@ with open('H2.txt') as file:
             newGenotypes.append(newGenotype)
         newH2.append(newGenotypes)
 
+for genotypes in newH2:
+    for genotype in genotypes:
+        if 'GG' in genotype:
+            print('Found GG in', genotype)
+
 with open('H2.txt', 'w') as file:
     for genotypes in newH2:
         file.write('\t'.join(genotypes) + '\n')
