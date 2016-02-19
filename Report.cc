@@ -339,9 +339,12 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
   double numberOfReports = 1.;
   bool discardReport = false;
-  for(auto locus : inLoci){
+  for(auto locus = inLoci.begin();
+      locus != inLoci.end();
+      locus ++){
+    std::sort(locus->begin(), locus->end());
     std::string locusCombination = "";
-    for(auto code : locus){
+    for(auto code : *locus){
       locusCombination += code;
       locusCombination += "+";    
     }
@@ -352,7 +355,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     if(pos == lociAlreadyDone.cend()){
       strVecArr_t locusPositions;
       size_t counter = 0;
-      for(auto code : locus){
+      for(auto code : *locus){
 	strVec_t codes;
 	if(checkNMDPCode(code)){
 	  resolveNMDPCode(code, codes);
