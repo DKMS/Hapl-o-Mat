@@ -409,7 +409,7 @@ void H2Filter::filter(){
 	  if(addCandidateCode == false){
 	    if(isH2ElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition1)){
 	      if(isH2ElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition2))
-		addCandidateCode = false;
+		addCandidateCode = true;
 	    }
 	  }
 	}
