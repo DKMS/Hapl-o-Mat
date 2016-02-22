@@ -45,7 +45,18 @@ class PhasedLocus : public Locus{
     {
       wantedPrecision = in_wantedPrecision;
     }
-  
+  explicit PhasedLocus(const strVecArr_t & in_unphasedLocus,
+		       const Allele::codePrecision in_wantedPrecision)
+    : Locus(),
+    phasedLocus()
+    {
+      wantedPrecision = in_wantedPrecision;
+      strArr_t locusPositions;
+      locusPositions.at(0) = in_unphasedLocus.at(0).at(0);
+      locusPositions.at(1) = in_unphasedLocus.at(1).at(0);
+      phasedLocus.push_back(locusPositions);
+    }
+
   virtual void resolve();
 
  private:

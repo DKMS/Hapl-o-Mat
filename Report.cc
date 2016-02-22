@@ -367,7 +367,15 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	counter ++;
       }
       
-      std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter, expandH2Lines));
+      std::shared_ptr<Locus> pLocus;
+      if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
+	{
+	  pLocus = std::make_shared<PhasedLocus>(locusPositions, wantedPrecision);
+	}
+      else
+	{
+	  pLocus = std::make_shared<UnphasedLocus> (locusPositions, wantedPrecision, doH2Filter, expandH2Lines);
+	}
       pLocus->resolve();
       lociAlreadyDone.emplace(locusCombination, pLocus);
 
