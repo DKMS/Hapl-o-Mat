@@ -1,4 +1,0 @@
-#!/bin/sh
-#make executable chmod +x runHaplomat
-
-./haplomat GL > Log.dat 2> Err.dat
