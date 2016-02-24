@@ -1,7 +1,7 @@
 /*
  * Hapl-O-mat: A program for HLA haplotype frequency estimation
  *
- * Copyright (C) 2014-2016, DKMS gGmbH 
+ * Copyright (C) 2016, DKMS gGmbH 
  *
  * This file is part of Hapl-O-mat
  *
