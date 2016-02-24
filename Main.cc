@@ -46,10 +46,8 @@ int main(int argc, char *argv[]){
 
   std::cout << std::endl;
   std::cout << "\tHapl-O-mat" << std::endl;
-  std::cout << "Copyright (C) 2016 DKMS gGmbH" << std::endl;
-  std::cout << "\tThis program comes with ABSOLUTELY NO WARRANTY; for details see COPYING." << std::endl;
-  std::cout << "\tThis is free software, and you are welcome to redistribute it" << std::endl;
-  std::cout << "\tunder certain conditions; see COPYING for details.\n" << std::endl;
+  std::cout << "\tCopyright (C) 2016 DKMS gGmbH" << std::endl;
+  std::cout << std::endl;
 
   std::cout << "#########Initialisation" << std::endl;
   timePoint startTime;
