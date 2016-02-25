@@ -1,3 +1,25 @@
+/*
+ * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ *
+ * Copyright (C) 2016, DKMS gGmbH 
+ *
+ * This file is part of Hapl-O-mat
+ *
+ * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * Hapl-O-mat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
 #include <iostream>
 #include <cmath>
 #include <chrono>
@@ -61,6 +83,8 @@ void Parameters::precision_assign(const std::string line){
   std::string value = line.substr(pos + 1);
   if(value == "g")
     precision = Allele::codePrecision::g;
+  else if(value == "P")
+    precision = Allele::codePrecision::P;
   else if(value == "4d")
     precision = Allele::codePrecision::fourDigit;
   else if(value =="G")
@@ -140,7 +164,6 @@ void ParametersGL::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
 		<< line
@@ -198,13 +221,6 @@ void ParametersGL::print() const {
     std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
-  std::cout << "\t Compute variance: ";
-  if(doVariance){
-    std::cout << "yes" << std::endl;
-  }
-  else{
-    std::cout << "no" << std::endl;
-  }
   std::cout << std::endl;
 }
 
@@ -230,7 +246,6 @@ void ParametersDKMS::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
 		<< line
@@ -274,13 +289,6 @@ void ParametersDKMS::print() const {
     std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
-  std::cout << "\t Compute variance: ";
-  if(doVariance){
-    std::cout << "yes" << std::endl;
-  }
-  else{
-    std::cout << "no" << std::endl;
-  }
   std::cout << std::endl;
 }
 
@@ -302,7 +310,6 @@ void ParametersReadin::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("DO_VARIANCE") != std::string::npos) bool_assign(doVariance, line);
     else{
       std::cerr << "Could not match "
 		<< line
@@ -332,12 +339,5 @@ void ParametersReadin::print() const {
     std::cout << "\t Renormalise haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
-  std::cout << "\t Compute variance: ";
-  if(doVariance){
-    std::cout << "yes" << std::endl;
-  }
-  else{
-    std::cout << "no" << std::endl;
-  }
   std::cout << std::endl;
 }

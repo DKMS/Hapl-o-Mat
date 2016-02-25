@@ -51,7 +51,7 @@ def compareResults(path):
 def clean(path):
      shutil.rmtree(path)
 
-folders = ('DKMS_g', 'DKMS_4d', 'DKMS_G', 'DKMS_6d', 'DKMS_8d', 'GL')
+folders = ['DKMS_g', 'DKMS_P', 'DKMS_4d', 'DKMS_G', 'DKMS_6d', 'DKMS_8d', 'GL']
 testsPassed = 0
 
 for folder in folders:          

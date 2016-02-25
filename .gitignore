@@ -1,11 +1,11 @@
 *.o
 *~
 haplomat
-CheckReports.py
+Err.dat
+Log.dat
+runHaplomat
 *.txt
-*.dat
 *.glid
 *.pull
 data/
-rawdata/
 results/

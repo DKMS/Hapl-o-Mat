@@ -1,8 +1,31 @@
+/*
+ * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ *
+ * Copyright (C) 2016, DKMS gGmbH 
+ *
+ * This file is part of Hapl-O-mat
+ *
+ * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * Hapl-O-mat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
 #include <cmath>
 #include <fstream>
 #include <sstream>
 #include <iostream> 
 #include <algorithm>
+#include <cstdio>
 
 #include "Haplotype.h"
 #include "Phenotype.h"
@@ -36,11 +59,14 @@ void Haplotypes::EMAlgorithm(Phenotypes & phenotypes){
     phenotypes.expectationStep(*this);
     double largestEpsilon = 0.;
     maximizationStep(phenotypes, largestEpsilon);
-    
+
+    phenotypes.expectationStep(*this);
+    double logLikelihood = phenotypes.computeLogLikelihood();
+
     if(largestEpsilon - epsilon < ZERO ){
       stop = true;
     }
-    epsilonFile << largestEpsilon << std::endl;
+    epsilonFile << largestEpsilon << "\t" << logLikelihood << std::endl;
   } while(!stop);
   std::cout << "\t Used " << counter <<" steps" << std::endl;
   epsilonFile.close();
@@ -138,33 +164,49 @@ void Haplotypes::initialisePerturbation(){
 
 void Haplotypes::writeFrequenciesToFile() const{
 
-  std::ifstream inFile;
-  openFileToRead(haplotypesFileName ,inFile);
-  std::ofstream outFile;
-  openFileToWrite(haplotypeFrequenciesFileName ,outFile);
-  outFile.precision(14);
-  outFile << std::fixed;
-
   double sum = computeCuttedHaplotypeFrequencySum();
 
+  std::vector<std::pair<std::string, double>> sortedHaplotypes;
+
+  std::ifstream inFile;
+  openFileToRead(haplotypesFileName, inFile);
   std::string code;
   while(inFile >> code){
     size_t hashValue = string_hash(code);
     auto pos = hashList.find(hashValue);
+
     if(pos != hashList.end()){
       double freq = pos->second.getFrequency();
       if(freq - cutHaplotypeFrequencies > ZERO ){
 	if(renormaliseHaplotypeFrequencies){
 	  freq /= sum;
 	}
-	outFile << code
-		<< "\t";
-	outFile << freq
-		<< "\n";
+	sortedHaplotypes.push_back(std::make_pair(code, freq));
       }
     }
   }
   inFile.close();
+
+  std::sort(sortedHaplotypes.begin(),
+	    sortedHaplotypes.end(),
+	    [](const std::pair<std::string, double> haploA,
+	       const std::pair<std::string, double> haploB)
+	    {
+	      return haploA.second > haploB.second;
+	    });
+
+  std::ofstream outFile;
+  openFileToWrite(haplotypeFrequenciesFileName, outFile);
+  outFile.precision(14);
+  outFile << std::fixed;
+
+  for(auto it : sortedHaplotypes){
+    outFile << it.first
+	    << "\t";
+    outFile << it.second
+	    << "\n";
+  }
+
   outFile.close();
 }
 
@@ -289,4 +331,11 @@ double Haplotypes::computeCuttedHaplotypeFrequencySum() const{
   }
   return frequencySum;
 
+}
+
+void Haplotypes::deleteHaplotypesFile() const{
+
+  if (remove(haplotypesFileName.c_str()) != 0){
+    std::cerr << "Not able to delete " << haplotypesFileName << std::endl;
+  }
 }

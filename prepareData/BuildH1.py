@@ -1,7 +1,7 @@
 #Jan 2015
 #Christian Schaefer
 #input: hla_nom_g.txt (http://hla.alleles.org/alleles/g_groups.html)
-#Builds list of G-groups from hla_nom_g.txt and saves it to H1.txt. Write out G-codes containing only one allele toOneElementG.txt
+#Build list of G-groups from hla_nom_g.txt and save it to H1.txt
 
 with open('H1.txt', 'w') as outFile:
     with open('OneElementG.txt', 'w') as oneElementGFile:

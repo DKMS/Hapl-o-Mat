@@ -1,10 +1,8 @@
 #Dec 2015
 #Christian Schaefer
-#The small-g list created from G-P matching is not complete since still confidential alleles are neither listed in hla_nom_g.txt nor
-#hla_nom_p.txt. Furthermore some null-alleles exist which do not correspond to a large-G code. Since they are also missing in the P-list,
-#they cannot appear in our small-g list. This script searches allAllelexExpanded.txt for alleles missing in H1g.txt. Note we only print
-#alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
-#Problem with still confidential alleles solved by changing to list of all alleles (allAlleles.txt) excluding still confidential alleles
+#The small-g list created from G-P matching is not complete since some null-alleles exist which do not correspond to a large-G code.
+#Since they are also missing in the P-list, they cannot appear in our small-g list. This script searches allAllelexExpanded.txt for
+#alleles missing in H1g.txt. Note we only print alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
 
 #get loci which are in P and G file
 loci = []

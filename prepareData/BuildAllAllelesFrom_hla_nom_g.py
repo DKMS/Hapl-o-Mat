@@ -1,6 +1,7 @@
-#Christian Schaefer
 #Dec 2015
-#Extract list of all alleles from hla_nom_g.txt. Thus still confidential alleles are not included in list.
+#Christian Schaefer
+#input: hla_nom_g.txt from http://hla.alleles.org/wmda/hla_nom_g.txt
+#Build list of all alleles from hla_nom_g.txt and save to allAllele.txt. 
 
 alleles = []
 with open('hla_nom_g.txt') as file:

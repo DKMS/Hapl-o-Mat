@@ -1,3 +1,25 @@
+/*
+ * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ *
+ * Copyright (C) 2016, DKMS gGmbH 
+ *
+ * This file is part of Hapl-O-mat
+ *
+ * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * Hapl-O-mat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef Parameters_header
 #define Parameters_header
 
@@ -27,7 +49,6 @@ class Parameters{
     minimalFrequency(1e-5),
     doH2Filter(true),
     expandH2Lines(true),
-    doVariance(false),
     initType(initialisationHaplotypeFrequencies::numberOccurence),
     epsilon(1e-6),
     cutHaplotypeFrequencies(epsilon),
@@ -47,7 +68,6 @@ class Parameters{
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoH2Filter() const {return doH2Filter;}
   bool getExpandH2Lines() const {return expandH2Lines;}
-  bool getDoVariance() const {return doVariance;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}
   double getEpsilon() const {return epsilon;}
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
@@ -75,7 +95,6 @@ class Parameters{
   double minimalFrequency;
   bool doH2Filter;
   bool expandH2Lines;
-  bool doVariance;
   initialisationHaplotypeFrequencies initType;
   double epsilon;
   double cutHaplotypeFrequencies;

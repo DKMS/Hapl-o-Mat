@@ -1,3 +1,25 @@
+/*
+ * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ *
+ * Copyright (C) 2016, DKMS gGmbH 
+ *
+ * This file is part of Hapl-O-mat
+ *
+ * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * Hapl-O-mat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
 #include <string>
 #include <iostream>
 #include <memory>
@@ -11,7 +33,6 @@
 #include "Parameters.h"
 #include "Utility.h"
 #include "Report.h"
-#include "FisherInformation.h"
 
 int main(int argc, char *argv[]){
 
@@ -23,12 +44,17 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
+  std::cout << std::endl;
+  std::cout << "\tHapl-O-mat" << std::endl;
+  std::cout << "\tCopyright (C) 2016 DKMS gGmbH" << std::endl;
+  std::cout << std::endl;
+
   std::cout << "#########Initialisation" << std::endl;
   timePoint startTime;
   timePoint endTime;
   double timeTakenForDataPreProcessing = 0.;
   double timeTakenForEMAlgorithm = 0.;
-  double timeTakenForVariance = 0.;
+  double timeTakenForWriting = 0.;
   std::unique_ptr<Parameters> pParameters;
   std::unique_ptr<InputFile> pInputFile;
   if(inputFileFormat == "DKMS"){
@@ -82,27 +108,13 @@ int main(int argc, char *argv[]){
   timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime);
 
   startTime = getTime();
-  bool writeHaplotypeFrequencies = true;
-  if(pParameters->getDoVariance()){
-    std::cout << "#########Variance" << std::endl;
-    double requiredMemoryForInformationMatrix = haplotypes.getSize() * haplotypes.getSize() * 8. / 1024. / 1024.;
-    if(requiredMemoryForInformationMatrix >= MAX_MEMORY){
-      std::cout << "\t Size of information matrix exceeds memory." << std::endl;
-    }
-    else{
-      phenotypes.expectationAndRemoveStep(haplotypes);
-      fisherInformation(haplotypes, phenotypes);
-      writeHaplotypeFrequencies = false;
-    }
-  }
-  if(writeHaplotypeFrequencies){
-    haplotypes.writeFrequenciesToFile();
-  }
+  haplotypes.writeFrequenciesToFile();
+  haplotypes.deleteHaplotypesFile();
   endTime = getTime();
-  timeTakenForVariance = getTimeDifference(startTime, endTime);
+  timeTakenForWriting = getTimeDifference(startTime, endTime);
 
   std::cout << "#########Time" << std::endl;
   std::cout << "\t Data pre-processing time: " << timeTakenForDataPreProcessing << " mus" << std::endl;
   std::cout << "\t EM-algorithm time: " << timeTakenForEMAlgorithm << " mus" << std::endl;
-  std::cout << "\t Variance and printing time: " << timeTakenForVariance << " mus" << std::endl;
+  std::cout << "\t Writing time: " << timeTakenForWriting << " mus" << std::endl;
 }

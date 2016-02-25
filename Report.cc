@@ -1,3 +1,25 @@
+/*
+ * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ *
+ * Copyright (C) 2016, DKMS gGmbH 
+ *
+ * This file is part of Hapl-O-mat
+ *
+ * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * Hapl-O-mat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -339,9 +361,12 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
   double numberOfReports = 1.;
   bool discardReport = false;
-  for(auto locus : inLoci){
+  for(auto locus = inLoci.begin();
+      locus != inLoci.end();
+      locus ++){
+    std::sort(locus->begin(), locus->end());
     std::string locusCombination = "";
-    for(auto code : locus){
+    for(auto code : *locus){
       locusCombination += code;
       locusCombination += "+";    
     }
@@ -352,7 +377,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     if(pos == lociAlreadyDone.cend()){
       strVecArr_t locusPositions;
       size_t counter = 0;
-      for(auto code : locus){
+      for(auto code : *locus){
 	strVec_t codes;
 	if(checkNMDPCode(code)){
 	  resolveNMDPCode(code, codes);
@@ -364,7 +389,15 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	counter ++;
       }
       
-      std::shared_ptr<Locus> pLocus (new UnphasedLocus(locusPositions, wantedPrecision, doH2Filter, expandH2Lines));
+      std::shared_ptr<Locus> pLocus;
+      if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
+	{
+	  pLocus = std::make_shared<PhasedLocus>(locusPositions, wantedPrecision);
+	}
+      else
+	{
+	  pLocus = std::make_shared<UnphasedLocus> (locusPositions, wantedPrecision, doH2Filter, expandH2Lines);
+	}
       pLocus->resolve();
       lociAlreadyDone.emplace(locusCombination, pLocus);
 
