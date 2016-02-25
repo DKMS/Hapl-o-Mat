@@ -8,5 +8,4 @@ runHaplomat
 *.glid
 *.pull
 data/
-SystemTest/
 results/
