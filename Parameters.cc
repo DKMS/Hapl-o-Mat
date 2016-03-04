@@ -224,7 +224,7 @@ void ParametersGL::print() const {
   std::cout << std::endl;
 }
 
-void ParametersDKMS::init(){
+void ParametersMA::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
@@ -258,9 +258,9 @@ void ParametersDKMS::init(){
   file.close();
 }
 
-void ParametersDKMS::print() const {
+void ParametersMA::print() const {
 
-  std::cout << "DKMS format" << std::endl;
+  std::cout << "MA format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Read data from: " << inputFileName << std::endl;
   std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;

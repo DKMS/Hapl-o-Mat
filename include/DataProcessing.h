@@ -145,10 +145,10 @@ class GL : public InputFileToEdit{
   GlidFile glid;
 };
 
-class DKMS : public InputFileToEdit{
+class MA : public InputFileToEdit{
 
  public:
-  explicit DKMS(const ParametersDKMS & parameters)
+  explicit MA(const ParametersMA & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doH2Filter(parameters.getDoH2Filter()),
     expandH2Lines(parameters.getExpandH2Lines()),

@@ -133,13 +133,13 @@ class ParametersGL : public Parameters{
   bool resolveUnknownGenotype;
 };
 
-class ParametersDKMS : public Parameters{
+class ParametersMA : public Parameters{
 
  public:
-  explicit ParametersDKMS()
+  explicit ParametersMA()
     :inputFileName()
     {
-      parametersFileName = "parametersDKMS";
+      parametersFileName = "parametersMA";
       init();
       print();
     }

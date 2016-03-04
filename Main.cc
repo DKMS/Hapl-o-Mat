@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
   if (argc == 2)
     inputFileFormat = argv[1];
   else{
-    std::cerr << "Specify a input file format (DKMS, GL, READ)" << std::endl;
+    std::cerr << "Specify a input file format (MA, GL, READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 
@@ -57,9 +57,9 @@ int main(int argc, char *argv[]){
   double timeTakenForWriting = 0.;
   std::unique_ptr<Parameters> pParameters;
   std::unique_ptr<InputFile> pInputFile;
-  if(inputFileFormat == "DKMS"){
-    std::unique_ptr<ParametersDKMS> pParametersTmp(new ParametersDKMS());
-    std::unique_ptr<InputFile> pInputFileTmp(new DKMS(*pParametersTmp));
+  if(inputFileFormat == "MA"){
+    std::unique_ptr<ParametersMA> pParametersTmp(new ParametersMA());
+    std::unique_ptr<InputFile> pInputFileTmp(new MA(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pInputFile = std::move(pInputFileTmp);
   }
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
     pInputFile = std::move(pInputFileTmp);
   }
   else{
-    std::cerr << "Specify one of the input file formats (DKMS, GL, READ)" << std::endl;
+    std::cerr << "Specify one of the input file formats (MA, GL, READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 

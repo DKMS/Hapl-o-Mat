@@ -220,7 +220,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
-void DKMS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -266,7 +266,7 @@ void DKMS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
-void DKMS::readLociNames(const std::string line){
+void MA::readLociNames(const std::string line){
 
   std::stringstream ss(line);
   std::string name;
