@@ -201,8 +201,6 @@ void Phenotypes::expectationAndRemoveStep(const Haplotypes & haplotypes){
 double Phenotypes::computeLogLikelihood() const{
 
   double logLikelihood = 0.;
-  double numberDonors = 0.;
-  double factor = 0.;
 
   for(auto pheno : hashList){
 
@@ -215,12 +213,7 @@ double Phenotypes::computeLogLikelihood() const{
     }
 
     logLikelihood += pheno.second.getNumInDonors()*log(probabilityPheno);
-    numberDonors += pheno.second.getNumInDonors();
-    factor += log(tgamma(pheno.second.getNumInDonors() + 1.));
   }
-  
-  factor += log(tgamma(numberDonors + 1.));
-  logLikelihood += factor;
 
   return logLikelihood;
 }
