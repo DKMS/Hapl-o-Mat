@@ -33,19 +33,16 @@
 class AllPossibleGenotypes{
 
  public:
-  explicit AllPossibleGenotypes(const std::string locus,
-				const Allele::codePrecision in_wantedPrecision)
-    : wantedPrecision(in_wantedPrecision),
-    genotypes()
+  explicit AllPossibleGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup)
+    : genotypes()
       {
-	buildGenotypes(locus);
+	buildGenotypes(locus, wantedAlleleGroup);
       }
 
-  void buildGenotypes(const std::string locus);
+  void buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup);
   const std::vector<std::pair<strArr_t, double>> & getGenotypes() const {return genotypes;}
 
  private:
-  const Allele::codePrecision wantedPrecision;
   std::vector<std::pair<strArr_t, double>> genotypes;
   static FileAlleles allAlleles;
 };
@@ -55,12 +52,12 @@ class GlidFile{
   typedef std::unordered_map<size_t, std::shared_ptr<Locus>> list_t;
  public:
   explicit GlidFile(const std::string in_fileName,
-		    const Allele::codePrecision in_wantedPrecision,
+		    const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
 		    const strVec_t in_lociToDo,
 		    const bool in_doH2Filter,
 		    const bool in_expandH2Lines,
 		    const bool in_resolveUnknownGenotypes) 
-    : wantedPrecision(in_wantedPrecision),
+    : lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     fileName(in_fileName),
     lociToDo(in_lociToDo),
     doH2Filter(in_doH2Filter),
@@ -80,8 +77,7 @@ class GlidFile{
   void readAndResolveFile();
   std::shared_ptr<Locus> resolve(const std::string line) const;
   
-
-  const Allele::codePrecision wantedPrecision;
+  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::string fileName;
   strVec_t lociToDo;
   bool doH2Filter;

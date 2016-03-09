@@ -29,7 +29,7 @@
 
 FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt");
 
-void AllPossibleGenotypes::buildGenotypes(const std::string locus){
+void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup){
 
   std::cout << "Build list of all possible genotypes for locus " << locus << std::endl;
 
@@ -56,7 +56,7 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus){
   }
   
   if(!(in_phasedLocus.empty())){
-    PhasedLocus phasedLocus(in_phasedLocus, wantedPrecision);
+    PhasedLocus phasedLocus(in_phasedLocus, wantedAlleleGroup);
     phasedLocus.resolve();
     phasedLocus.reduce(genotypes);
   }
@@ -78,7 +78,10 @@ void GlidFile::readAndResolveFile(){
     size_t pos = 0;
     for(auto locus : lociToDo){
       if(locus != "NONE")
-	possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, wantedPrecision));
+	{
+	  auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locus);
+	  possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, locusAndWantedAlleleGroup->second));
+	}
       pos ++;
     }
   }
@@ -105,6 +108,10 @@ void GlidFile::readAndResolveFile(){
 
 std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
 
+  std::string locusName = split(line, '*')[0];
+  auto locusAndwantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
+  Allele::codePrecision wantedAlleleGroup = locusAndwantedAlleleGroup->second;
+
   std::shared_ptr<Locus> pLocus;
 
   if(line.find("|") != std::string::npos){
@@ -118,7 +125,7 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
 	splittedGenotype.at(pos) = alleles.at(pos);
       in_phasedLocus.push_back(splittedGenotype);
     }
-    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedPrecision);
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
   }
   else if (line.find("/") != std::string::npos){
     strVec_t separatePlus;
@@ -128,7 +135,7 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
     strVecArr_t in_unphasedLocus;
     in_unphasedLocus.at(0) = lhs;
     in_unphasedLocus.at(1) = rhs;
-    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedPrecision, doH2Filter, expandH2Lines);
+    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doH2Filter, expandH2Lines);
     }
   else{
     strArrVec_t in_phasedLocus;
@@ -137,7 +144,7 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
     for(size_t pos = 0; pos < alleles.size(); pos++)
       splittedGenotype.at(pos) = alleles.at(pos);
     in_phasedLocus.push_back(splittedGenotype);
-    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedPrecision);
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
   }
 
   pLocus->resolve();

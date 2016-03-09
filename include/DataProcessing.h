@@ -72,7 +72,6 @@ class InputFile{
 				 const std::shared_ptr<BasicReport> listOfpReports,
 				 std::ofstream & HaplotypesFile);
 
-  size_t getNumberLoci() const {return numberLoci;}
   size_t getNumberDonors() const {return numberDonors;}
 
  protected:
@@ -92,7 +91,7 @@ class InputFileToEdit : public InputFile{
   explicit InputFileToEdit(const std::string in_inputFileName)
     : InputFile(in_inputFileName),
     numberRemovedDonors(0),
-    wantedPrecision(),
+    lociAndWantedAlleleGroups(),
     minimalFrequency(){}
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
@@ -106,7 +105,7 @@ class InputFileToEdit : public InputFile{
 
  protected:
   size_t numberRemovedDonors;
-  Allele::codePrecision wantedPrecision;
+  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   double minimalFrequency;
 };
 
@@ -120,7 +119,7 @@ class GL : public InputFileToEdit{
     booleanLociToDo(buildBooleanLociToDo()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
-	 parameters.getWantedPrecision(),
+	 parameters.getLociAndWantedAlleleGroups(),
 	 updateLociToDoViaPullFile(),
 	 parameters.getDoH2Filter(),
 	 parameters.getExpandH2Lines(),
@@ -128,7 +127,8 @@ class GL : public InputFileToEdit{
       {
 	haplotypesFileName = parameters.getHaplotypesFileName();
 	phenotypesFileName = parameters.getPhenotypesFileName();
-	wantedPrecision = parameters.getWantedPrecision();
+	lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
+	numberLoci = parameters.getNumberLoci();
 	minimalFrequency = parameters.getMinimalFrequency();
       }
   
@@ -152,22 +152,23 @@ class MA : public InputFileToEdit{
     : InputFileToEdit(parameters.getInputFileName()),
     doH2Filter(parameters.getDoH2Filter()),
     expandH2Lines(parameters.getExpandH2Lines()),
-    lociNames()
+    lociNamesFromFile()
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
-      wantedPrecision = parameters.getWantedPrecision();
+      lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
+      numberLoci = parameters.getNumberLoci();
       minimalFrequency = parameters.getMinimalFrequency();
     }
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
 
-  void readLociNames(const std::string line);
+  void readLociNamesFromFile(const std::string line);
 
  private:
   bool doH2Filter;
   bool expandH2Lines;
-  strVec_t lociNames;
+  strVec_t lociNamesFromFile;
 };
 
 class InputFileToRead : public InputFile{

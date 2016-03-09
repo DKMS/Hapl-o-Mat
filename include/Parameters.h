@@ -25,6 +25,7 @@
 
 #include <string>
 #include <fstream>
+#include <unordered_map>
 
 #include "Typedefs.h"
 #include "Allele.h"
@@ -45,7 +46,7 @@ class Parameters{
     phenotypesFileName("results/phenotypes.dat"),
     haplotypeFrequenciesFileName("results/estimatedHaplotypeFrequencies.dat"),
     epsilonFileName("results/epsilonVsSteps.dat"),
-    precision(),
+    lociAndWantedAlleleGroups(),
     minimalFrequency(1e-5),
     doH2Filter(true),
     expandH2Lines(true),
@@ -64,7 +65,7 @@ class Parameters{
   std::string getPhenotypesFileName() const {return phenotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
   std::string getEpsilonFileName() const {return epsilonFileName;}
-  Allele::codePrecision getWantedPrecision() const {return precision;}
+  const std::unordered_map<std::string, Allele::codePrecision>& getLociAndWantedAlleleGroups() const {return lociAndWantedAlleleGroups;}
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoH2Filter() const {return doH2Filter;}
   bool getExpandH2Lines() const {return expandH2Lines;}
@@ -73,6 +74,7 @@ class Parameters{
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   bool getRenormaliseHaplotypeFrequencies() const {return renormaliseHaplotypeFrequencies;}
   size_t getSeed() const {return seed;}
+  size_t getNumberLoci() const {return lociAndWantedAlleleGroups.size();}
 
  protected:
   void val_assign(size_t & out, const std::string line);  
@@ -80,7 +82,7 @@ class Parameters{
   void val_assign(std::string & out, const std::string line);  
   void bool_assign(bool & out, const std::string line);
   void initType_assign(const std::string line);
-  void precision_assign(const std::string line);
+  void lociAndWantedAlleleGroups_assign(const std::string line);
   void seed_assign(size_t & out, const std::string line);
 
   std::string printInitialisationHaplotypeFrequencies() const;
@@ -91,7 +93,7 @@ class Parameters{
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
 
-  Allele::codePrecision precision;
+  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   double minimalFrequency;
   bool doH2Filter;
   bool expandH2Lines;

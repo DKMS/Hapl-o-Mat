@@ -287,19 +287,19 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
-void HReport::translateLine(const std::string line, const strVec_t lociNames){
+void HReport::translateLine(const std::string line){
 
   std::stringstream ss(line);
   std::string entry;
   if(ss >> entry)
     id = entry;
 
-  auto locusName = lociNames.cbegin();
+  auto locusName = lociNamesFromFile.cbegin();
   std::string entry2;
   while(ss >> entry >> entry2){
-    std::string code1 = *locusName;
+    std::string code1 = *locusName + '*';
     locusName ++;
-    std::string code2 = *locusName;
+    std::string code2 = *locusName + '*';
     locusName ++;
     code1.append(entry);
     code2.append(entry2);
@@ -361,67 +361,76 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
   double numberOfReports = 1.;
   bool discardReport = false;
+  auto locusNameFromFile = lociNamesFromFile.cbegin();
   for(auto locus = inLoci.begin();
       locus != inLoci.end();
       locus ++){
-    std::sort(locus->begin(), locus->end());
-    std::string locusCombination = "";
-    for(auto code : *locus){
-      locusCombination += code;
-      locusCombination += "+";    
-    }
-    locusCombination.pop_back();
 
-    std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-    auto pos = lociAlreadyDone.find(locusCombination);
-    if(pos == lociAlreadyDone.cend()){
-      strVecArr_t locusPositions;
-      size_t counter = 0;
-      for(auto code : *locus){
-	strVec_t codes;
-	if(checkNMDPCode(code)){
-	  resolveNMDPCode(code, codes);
+    auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
+    if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+      { 
+	std::sort(locus->begin(), locus->end());
+	std::string locusCombination = "";
+	for(auto code : *locus){
+	  locusCombination += code;
+	  locusCombination += "+";    
+	}
+	locusCombination.pop_back();
+
+	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	auto pos = lociAlreadyDone.find(locusCombination);
+	if(pos == lociAlreadyDone.cend()){
+	  strVecArr_t locusPositions;
+	  size_t counter = 0;
+	  for(auto code : *locus){
+	    strVec_t codes;
+	    if(checkNMDPCode(code)){
+	      resolveNMDPCode(code, codes);
+	    }
+	    else{
+	      codes.push_back(code);
+	    }
+	    locusPositions.at(counter) = codes;
+	    counter ++;
+	  }
+      
+	  std::shared_ptr<Locus> pLocus;
+	  if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
+	    {
+	      pLocus = std::make_shared<PhasedLocus>(locusPositions, locusAndWantedAlleleGroup->second);
+	    }
+	  else
+	    {
+	      pLocus = std::make_shared<UnphasedLocus> (locusPositions, locusAndWantedAlleleGroup->second, doH2Filter, expandH2Lines);
+	    }
+	  pLocus->resolve();
+	  lociAlreadyDone.emplace(locusCombination, pLocus);
+
+	  types.push_back(pLocus->getType());
+	  pLocus->reduce(genotypesAtLocus);
+
 	}
 	else{
-	  codes.push_back(code);
+	  types.push_back(pos->second->getType());
+	  pos->second->reduce(genotypesAtLocus);
 	}
-	locusPositions.at(counter) = codes;
-	counter ++;
-      }
-      
-      std::shared_ptr<Locus> pLocus;
-      if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
-	{
-	  pLocus = std::make_shared<PhasedLocus>(locusPositions, wantedPrecision);
-	}
-      else
-	{
-	  pLocus = std::make_shared<UnphasedLocus> (locusPositions, wantedPrecision, doH2Filter, expandH2Lines);
-	}
-      pLocus->resolve();
-      lociAlreadyDone.emplace(locusCombination, pLocus);
-
-      types.push_back(pLocus->getType());
-      pLocus->reduce(genotypesAtLocus);
-
-    }
-    else{
-      types.push_back(pos->second->getType());
-      pos->second->reduce(genotypesAtLocus);
-    }
   
-    numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-    if(1./numberOfReports - minimalFrequency < ZERO){
-      std::cout << "Report "
-		<< id
-		<< " comes below allowed frequency. Report discarded."
-		<< std::endl;
-      discardReport = true;
-      break;
-    }
-    else{
-      genotypesAtLoci.push_back(genotypesAtLocus);
-    }
+	numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+	if(1./numberOfReports - minimalFrequency < ZERO){
+	  std::cout << "Report "
+		    << id
+		    << " comes below allowed frequency. Report discarded."
+		    << std::endl;
+	  discardReport = true;
+	  break;
+	}
+	else{
+	  genotypesAtLoci.push_back(genotypesAtLocus);
+	}
+
+      }//if 
+    locusNameFromFile ++;
+    locusNameFromFile ++;
   }//for inLoci
   
   if(!discardReport)

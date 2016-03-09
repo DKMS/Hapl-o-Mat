@@ -80,10 +80,10 @@ class ReadinReport : public BasicReport{
 class Report : public BasicReport{
 
  public:
- explicit Report(const Allele::codePrecision in_wantedPrecision,
+ explicit Report(const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
 		 const size_t in_numberLoci)
    : BasicReport(in_numberLoci),
-    wantedPrecision(in_wantedPrecision),
+    lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     types()
     {
       genotypeAtLoci.reserve(numberLoci);
@@ -94,7 +94,7 @@ class Report : public BasicReport{
 		  const std::string in_id,
 		  const std::vector<Locus::reportType> & in_types)
     : BasicReport(in_numberLoci),
-    wantedPrecision(),
+    lociAndWantedAlleleGroups(),
     types(in_types)
       {
 	genotypeAtLoci = in_genotypeAtLoci;
@@ -119,7 +119,7 @@ class Report : public BasicReport{
   static double getNumberIReports() {return numberIReports;}
 
  protected:
-  Allele::codePrecision wantedPrecision;
+  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::vector<Locus::reportType> types;
   static double numberH0Reports;
   static double numberH1Reports;
@@ -134,8 +134,8 @@ class GLReport : public Report{
   explicit GLReport(const std::string line,
 		    const std::vector<bool> & booleanLociToDo,
 		    const size_t numberLoci,
-		    const Allele::codePrecision in_wantedPrecision) 
-    : Report(in_wantedPrecision, numberLoci),
+		    const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups) 
+    : Report(in_lociAndWantedAlleleGroups, numberLoci),
     inLoci()
       {
 	translateLine(line, booleanLociToDo);
@@ -174,13 +174,14 @@ class HReport : public Report{
   
  public:
   explicit HReport(const std::string line,
-		   const strVec_t & lociNames,
+		   const strVec_t & in_lociNamesFromFile,
 		   const size_t numberLoci,
-		   const Allele::codePrecision in_wantedPrecision)
-    : Report(in_wantedPrecision, numberLoci),
-    inLoci()
+		   const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
+    : Report(in_lociAndWantedAlleleGroups, numberLoci),
+    inLoci(),
+    lociNamesFromFile(in_lociNamesFromFile)
       {
-	translateLine(line, lociNames);
+	translateLine(line);
       }
   explicit HReport(const strArrVec_t & in_genotypeAtLoci,
 		   const double in_frequency,
@@ -202,7 +203,7 @@ class HReport : public Report{
       return pReport;
     }
   
-  void translateLine(const std::string line, const strVec_t lociNames);
+  void translateLine(const std::string line);
   void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	       const double minimalFrequency,
 	       const bool doH2Filter,
@@ -211,6 +212,7 @@ class HReport : public Report{
 
  private:
   strArrVec_t inLoci;
+  strVec_t lociNamesFromFile;
   static std::unordered_map<std::string, std::shared_ptr<Locus>> lociAlreadyDone;
   static FileNMDPCodes fileNMDPCodes;
 };
