@@ -122,7 +122,7 @@ class ParametersGL : public Parameters{
   
   std::string getGlidFileName() const {return glidFileName;}
   std::string getPullFileName() const {return pullFileName;}
-  strVec_t getLociOrder() const {return lociOrder;}
+  const strVec_t & getLociOrder() const {return lociOrder;}
   bool getResolveUnknownGenotype() const {return resolveUnknownGenotype;}
 
  private:

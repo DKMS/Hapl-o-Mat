@@ -80,7 +80,7 @@ class ReadinReport : public BasicReport{
 class Report : public BasicReport{
 
  public:
- explicit Report(const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
+ explicit Report(const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups)
    : BasicReport(in_lociAndWantedAlleleGroups.size()),
     lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     types()
@@ -174,9 +174,9 @@ class HReport : public Report{
  public:
   explicit HReport(const std::string line,
 		   const strVec_t & in_lociNamesFromFile,
-		   const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
+		   const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups)
     : Report(in_lociAndWantedAlleleGroups),
-    inLoci(),
+    lociFromFile(),
     lociNamesFromFile(in_lociNamesFromFile)
       {
 	translateLine(line);
@@ -209,7 +209,7 @@ class HReport : public Report{
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
 
  private:
-  strArrVec_t inLoci;
+  strArrVec_t lociFromFile;
   strVec_t lociNamesFromFile;
   static std::unordered_map<std::string, std::shared_ptr<Locus>> lociAlreadyDone;
   static FileNMDPCodes fileNMDPCodes;

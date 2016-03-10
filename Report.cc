@@ -216,12 +216,12 @@ void GLReport::translateLine(const std::string line){
 
   glids.reserve(lociAndWantedAlleleGroups.size());
   auto locus = lociOrder.cbegin();
-  for(auto glid : allGlids)
+  for(auto glidNumber : allGlids)
     {
       auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locus);
       if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
 	{
-	  size_t number = stoull(glid);
+	  size_t number = stoull(glidNumber);
 	  glids.push_back(number);	  
 	}
       locus ++;
@@ -237,8 +237,8 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   bool discardReport = false;
 
   double numberOfReports = 1.;
-  for(auto code : glids){
-    if(code == 0){
+  for(auto glidNumber : glids){
+    if(glidNumber == 0){
       if(resolveUnknownGenotype){
 	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(genotypesAtLoci.size())->second.getGenotypes());
       }
@@ -252,10 +252,10 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }
     }
     else{
-      auto itGlid = glid.getList().find(code);
+      auto itGlid = glid.getList().find(glidNumber);
       if(itGlid == glid.getList().cend()){
 	std::cerr << "Key "
-		  << code
+		  << glidNumber
 		  << " not in glid-file" << std::endl;
 	exit(EXIT_FAILURE);
       }
@@ -266,7 +266,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	genotypesAtLoci.push_back(genotypesAtLocus);
 	types.push_back(pLocus->getType());
       }
-    }//else code=0
+    }//else glidNumber=0
 
     numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
     if(1./numberOfReports - minimalFrequency < ZERO){
@@ -285,7 +285,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		<< std::endl;
       break;
     }
-  }//for inLoci
+  }//for glids
 
   if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);
@@ -310,7 +310,7 @@ void HReport::translateLine(const std::string line){
     strArr_t locus;
     locus.at(0) = code1;
     locus.at(1) = code2;
-    inLoci.push_back(locus);
+    lociFromFile.push_back(locus);
   }
 }
 
@@ -366,8 +366,8 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   double numberOfReports = 1.;
   bool discardReport = false;
   auto locusNameFromFile = lociNamesFromFile.cbegin();
-  for(auto locus = inLoci.begin();
-      locus != inLoci.end();
+  for(auto locus = lociFromFile.begin();
+      locus != lociFromFile.end();
       locus ++){
 
     auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
@@ -435,7 +435,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }//if 
     locusNameFromFile ++;
     locusNameFromFile ++;
-  }//for inLoci
+  }//for lociFromFile
   
   if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);

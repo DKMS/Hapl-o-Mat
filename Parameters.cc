@@ -203,7 +203,7 @@ void ParametersGL::print() const {
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
   std::cout << "\t Processed loci with target allele groups: " << std::endl;
   for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout << "\t" << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+    std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
   }
   std::cout << "\t Resolve reports with unknown genotype: ";
   if(resolveUnknownGenotype)
