@@ -132,13 +132,12 @@ class GLReport : public Report{
 
  public:
   explicit GLReport(const std::string line,
-		    const std::vector<bool> & booleanLociToDo,
-		    const size_t numberLoci,
-		    const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups) 
-    : Report(in_lociAndWantedAlleleGroups, numberLoci),
-    inLoci()
+		    const strVec_t & in_lociOrder,
+		    const std::unordered_map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups) 
+    : Report(in_lociAndWantedAlleleGroups, in_lociAndWantedAlleleGroups.size()),
+    lociOrder(in_lociOrder)
       {
-	translateLine(line, booleanLociToDo);
+	translateLine(line);
       }
   explicit GLReport(const strArrVec_t & in_genotypeAtLoci,
 		    const double in_frequency,
@@ -160,14 +159,15 @@ class GLReport : public Report{
       return pReport;
     }
   
-  void translateLine(const std::string line, const std::vector<bool> & booleanLociToDo);
+  void translateLine(const std::string line);
   void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	       const GlidFile & glid,
 	       const double minimalFrequency, 
 	       const bool resolveUnknownGenotype);
   
  private:
-  std::vector<size_t> inLoci;
+  strVec_t lociOrder;
+  std::vector<size_t> glids;
 };
 
 class HReport : public Report{

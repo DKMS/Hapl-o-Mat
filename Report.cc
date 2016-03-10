@@ -207,21 +207,25 @@ std::string Report::evaluateReportType(const size_t numberReports) const{
   return totalType;
 }
 
-void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
+void GLReport::translateLine(const std::string line){
 
   id = leftOfFirstDelim(line, ';');
 
   std::string rightPartOfLine = rightOfFirstDelim(line, ';');
-  strVec_t codes = split(rightPartOfLine, ':');
-  inLoci.reserve(codes.size());
-  size_t counter = 0;
-  for(auto code : codes){
-    if(booleanLociToDo.at(counter)){
-      size_t number = stoull(code);
-      inLoci.push_back(number);
+  strVec_t allGlids = split(rightPartOfLine, ':');
+
+  glids.reserve(lociAndWantedAlleleGroups.size());
+  auto locus = lociOrder.cbegin();
+  for(auto glid : allGlids)
+    {
+      auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locus);
+      if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+	{
+	  size_t number = stoull(glid);
+	  glids.push_back(number);	  
+	}
+      locus ++;
     }
-    counter ++;
-  }
 }
 				
 void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
@@ -233,7 +237,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   bool discardReport = false;
 
   double numberOfReports = 1.;
-  for(auto code : inLoci){
+  for(auto code : glids){
     if(code == 0){
       if(resolveUnknownGenotype){
 	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(genotypesAtLoci.size())->second.getGenotypes());

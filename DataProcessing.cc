@@ -199,7 +199,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLReport report(line, booleanLociToDo, numberLoci, lociAndWantedAlleleGroups);
+    GLReport report(line, lociOrder, lociAndWantedAlleleGroups);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
