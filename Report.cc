@@ -369,6 +369,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		      const bool expandH2Lines){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+  genotypesAtLoci.resize(numberLoci);
 
   double numberOfReports = 1.;
   bool discardReport = false;
@@ -378,6 +379,8 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       locus ++){
 
     auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
+    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+
     if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
       { 
 	std::sort(locus->begin(), locus->end());
@@ -436,7 +439,7 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	  break;
 	}
 	else{
-	  genotypesAtLoci.push_back(genotypesAtLocus);
+	  genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
 	}
 
       }//if 
