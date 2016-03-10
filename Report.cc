@@ -234,13 +234,20 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const bool resolveUnknownGenotype){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+  genotypesAtLoci.resize(numberLoci);
   bool discardReport = false;
 
   double numberOfReports = 1.;
-  for(auto glidNumber : glids){
-    if(glidNumber == 0){
+  for(auto glidNumber = glids.cbegin();
+      glidNumber != glids.cend();
+      glidNumber ++){
+    size_t positionLociOrder = glidNumber - glids.cbegin();
+    std::string locusName = lociOrder.at(positionLociOrder);
+    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), lociAndWantedAlleleGroups.find(locusName));
+    if(*glidNumber == 0){
       if(resolveUnknownGenotype){
-	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(genotypesAtLoci.size())->second.getGenotypes());
+	std::cout << locusName << " " << positionWantedLocus << " " << positionLociOrder << std::endl;
+	genotypesAtLoci.at(positionWantedLocus) = (glid.getPossibleGenotypesForAllLoci().find(positionLociOrder)->second.getGenotypes());
       }
       else{
 	discardReport = true;
@@ -252,10 +259,10 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }
     }
     else{
-      auto itGlid = glid.getList().find(glidNumber);
+      auto itGlid = glid.getList().find(*glidNumber);
       if(itGlid == glid.getList().cend()){
 	std::cerr << "Key "
-		  << glidNumber
+		  << *glidNumber
 		  << " not in glid-file" << std::endl;
 	exit(EXIT_FAILURE);
       }
@@ -263,12 +270,12 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	std::shared_ptr<Locus> pLocus = itGlid->second;
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
 	pLocus->reduce(genotypesAtLocus);
-	genotypesAtLoci.push_back(genotypesAtLocus);
+	genotypesAtLoci.at(positionWantedLocus) = (genotypesAtLocus);
 	types.push_back(pLocus->getType());
       }
     }//else glidNumber=0
 
-    numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
+    numberOfReports *= static_cast<double>(genotypesAtLoci.at(positionWantedLocus).size());
     if(1./numberOfReports - minimalFrequency < ZERO){
       discardReport = true;
       std::cout << "Report "
