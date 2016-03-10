@@ -75,7 +75,7 @@ class GlidFile{
  private:
   void reserveSize();
   void readAndResolveFile();
-  std::shared_ptr<Locus> resolve(const std::string line) const;
+  bool resolve(const std::string line, std::shared_ptr<Locus> & pLocus) const;
   
   std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::string fileName;

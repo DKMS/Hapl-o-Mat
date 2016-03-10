@@ -97,8 +97,9 @@ void GlidFile::readAndResolveFile(){
   while(std::getline(file, line)){
     strVec_t entries = split(line, ';');
     if(entries.at(0) != "0"){
-      std::shared_ptr<Locus> pLocus = resolve(entries.at(1));
-      if(! pLocus->getPAllelesAtPhasedLocus().empty()){
+      std::shared_ptr<Locus> pLocus;
+      bool locusResolved = resolve(entries.at(1), pLocus);
+      if(locusResolved){
 	std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), pLocus);
 	if(! inserted.second){
 	  std::cerr << fileName
@@ -111,14 +112,15 @@ void GlidFile::readAndResolveFile(){
   }//while
 }
 
-std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
+bool GlidFile::resolve(const std::string line, std::shared_ptr<Locus> & pLocus) const{
 
-  std::shared_ptr<Locus> pLocus;
+  bool locusResolved = false;
 
   std::string locusName = split(line, '*')[0];
   auto locusAndwantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
   if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend())
     {
+      locusResolved = true;
       Allele::codePrecision wantedAlleleGroup = locusAndwantedAlleleGroup->second;
 
       if(line.find("|") != std::string::npos){
@@ -156,5 +158,6 @@ std::shared_ptr<Locus> GlidFile::resolve(const std::string line) const{
 
       pLocus->resolve();
     }
-  return pLocus;
+
+  return locusResolved;
 }
