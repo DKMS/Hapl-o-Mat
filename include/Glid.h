@@ -52,7 +52,7 @@ class GlidFile{
   typedef std::unordered_map<size_t, std::shared_ptr<Locus>> list_t;
  public:
   explicit GlidFile(const std::string in_fileName,
-		    const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
+		    const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
 		    const strVec_t in_lociOrder,
 		    const bool in_doH2Filter,
 		    const bool in_expandH2Lines,
@@ -77,7 +77,7 @@ class GlidFile{
   void readAndResolveFile();
   bool resolve(const std::string line, std::shared_ptr<Locus> & pLocus) const;
   
-  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::string fileName;
   strVec_t lociOrder;
   bool doH2Filter;

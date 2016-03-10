@@ -80,7 +80,7 @@ class ReadinReport : public BasicReport{
 class Report : public BasicReport{
 
  public:
- explicit Report(const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
+ explicit Report(const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
 		 const size_t in_numberLoci)
    : BasicReport(in_numberLoci),
     lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
@@ -119,7 +119,7 @@ class Report : public BasicReport{
   static double getNumberIReports() {return numberIReports;}
 
  protected:
-  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::vector<Locus::reportType> types;
   static double numberH0Reports;
   static double numberH1Reports;
@@ -133,7 +133,7 @@ class GLReport : public Report{
  public:
   explicit GLReport(const std::string line,
 		    const strVec_t & in_lociOrder,
-		    const std::unordered_map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups) 
+		    const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups) 
     : Report(in_lociAndWantedAlleleGroups, in_lociAndWantedAlleleGroups.size()),
     lociOrder(in_lociOrder)
       {
@@ -176,7 +176,7 @@ class HReport : public Report{
   explicit HReport(const std::string line,
 		   const strVec_t & in_lociNamesFromFile,
 		   const size_t numberLoci,
-		   const std::unordered_map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
+		   const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
     : Report(in_lociAndWantedAlleleGroups, numberLoci),
     inLoci(),
     lociNamesFromFile(in_lociNamesFromFile)

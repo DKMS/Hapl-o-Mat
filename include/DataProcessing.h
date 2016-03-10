@@ -105,7 +105,7 @@ class InputFileToEdit : public InputFile{
 
  protected:
   size_t numberRemovedDonors;
-  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   double minimalFrequency;
 };
 

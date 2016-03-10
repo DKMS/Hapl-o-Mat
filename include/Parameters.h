@@ -65,7 +65,7 @@ class Parameters{
   std::string getPhenotypesFileName() const {return phenotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
   std::string getEpsilonFileName() const {return epsilonFileName;}
-  const std::unordered_map<std::string, Allele::codePrecision>& getLociAndWantedAlleleGroups() const {return lociAndWantedAlleleGroups;}
+  const std::map<std::string, Allele::codePrecision>& getLociAndWantedAlleleGroups() const {return lociAndWantedAlleleGroups;}
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoH2Filter() const {return doH2Filter;}
   bool getExpandH2Lines() const {return expandH2Lines;}
@@ -93,7 +93,7 @@ class Parameters{
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
 
-  std::unordered_map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   double minimalFrequency;
   bool doH2Filter;
   bool expandH2Lines;
