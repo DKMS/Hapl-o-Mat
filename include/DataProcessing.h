@@ -127,7 +127,7 @@ class GL : public InputFileToEdit{
 	haplotypesFileName = parameters.getHaplotypesFileName();
 	phenotypesFileName = parameters.getPhenotypesFileName();
 	lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
-	numberLoci = parameters.getNumberLoci();
+	numberLoci = lociAndWantedAlleleGroups.size();
 	minimalFrequency = parameters.getMinimalFrequency();
       }
   
@@ -153,7 +153,7 @@ class MA : public InputFileToEdit{
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
       lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
-      numberLoci = parameters.getNumberLoci();
+      numberLoci = lociAndWantedAlleleGroups.size();
       minimalFrequency = parameters.getMinimalFrequency();
     }
 

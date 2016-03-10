@@ -74,7 +74,6 @@ class Parameters{
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   bool getRenormaliseHaplotypeFrequencies() const {return renormaliseHaplotypeFrequencies;}
   size_t getSeed() const {return seed;}
-  size_t getNumberLoci() const {return lociAndWantedAlleleGroups.size();}
 
  protected:
   void val_assign(size_t & out, const std::string line);  

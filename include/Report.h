@@ -80,9 +80,8 @@ class ReadinReport : public BasicReport{
 class Report : public BasicReport{
 
  public:
- explicit Report(const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups,
-		 const size_t in_numberLoci)
-   : BasicReport(in_numberLoci),
+ explicit Report(const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
+   : BasicReport(in_lociAndWantedAlleleGroups.size()),
     lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     types()
     {
@@ -134,11 +133,11 @@ class GLReport : public Report{
   explicit GLReport(const std::string line,
 		    const strVec_t & in_lociOrder,
 		    const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups) 
-    : Report(in_lociAndWantedAlleleGroups, in_lociAndWantedAlleleGroups.size()),
+    : Report(in_lociAndWantedAlleleGroups),
     lociOrder(in_lociOrder)
-      {
-	translateLine(line);
-      }
+    {
+      translateLine(line);
+    }
   explicit GLReport(const strArrVec_t & in_genotypeAtLoci,
 		    const double in_frequency,
 		    const size_t in_numberLoci, 
@@ -175,9 +174,8 @@ class HReport : public Report{
  public:
   explicit HReport(const std::string line,
 		   const strVec_t & in_lociNamesFromFile,
-		   const size_t numberLoci,
 		   const std::map<std::string, Allele::codePrecision> in_lociAndWantedAlleleGroups)
-    : Report(in_lociAndWantedAlleleGroups, numberLoci),
+    : Report(in_lociAndWantedAlleleGroups),
     inLoci(),
     lociNamesFromFile(in_lociNamesFromFile)
       {
