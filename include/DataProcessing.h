@@ -115,12 +115,12 @@ class GL : public InputFileToEdit{
   explicit GL(const ParametersGL & parameters)
     : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
-    lociToDo(parameters.getLociToDo()),
-    booleanLociToDo(buildBooleanLociToDo()),
+    lociOrder(parameters.getLociOrder()),
+    //    booleanLociToDo(buildBooleanLociToDo()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
 	 parameters.getLociAndWantedAlleleGroups(),
-	 updateLociToDoViaPullFile(),
+	 parameters.getLociOrder(),
 	 parameters.getDoH2Filter(),
 	 parameters.getExpandH2Lines(),
 	 parameters.getResolveUnknownGenotype())
@@ -134,12 +134,12 @@ class GL : public InputFileToEdit{
   
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
 
-  std::vector<bool> buildBooleanLociToDo();
-  strVec_t updateLociToDoViaPullFile() const;
+  //  std::vector<bool> buildBooleanLociToDo();
+  //  strVec_t updateLociToDoViaPullFile() const;
 
  private:
   std::string glidFileName;
-  strVec_t lociToDo;
+  strVec_t lociOrder;
   std::vector<bool> booleanLociToDo;
   bool resolveUnknownGenotype;
   GlidFile glid;

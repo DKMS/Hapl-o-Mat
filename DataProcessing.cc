@@ -127,6 +127,7 @@ void InputFileToEdit::printStatistics(){
   std::cout << std::endl;
 }
 
+/*
 std::vector<bool> GL::buildBooleanLociToDo(){
   
   std::vector<bool> booleanLociToDoOut;
@@ -178,6 +179,7 @@ strVec_t GL::updateLociToDoViaPullFile() const{
 
   return lociToDoOut;
 }
+*/
 
 void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   
