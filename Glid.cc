@@ -109,6 +109,18 @@ void GlidFile::readAndResolveFile(){
 	}
       }//!empty
     }//!=0
+    else
+      {
+	if(resolveUnknownGenotypes)
+	  {
+	    size_t pos = 0;
+	    for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups)
+	      {
+		possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
+		pos ++;
+	      }
+	  }
+      }
   }//while
 }
 
