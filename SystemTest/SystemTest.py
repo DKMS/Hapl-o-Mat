@@ -16,7 +16,7 @@ def copyFolder(path):
           shutil.copy('../haplomat', pathNewFolder)
 
 def startJob(path):
-     proc = Popen('./runHaplomat', cwd=path, shell=True)
+     proc = Popen('./runHaplomat.sh', cwd=path, shell=True)
      proc.wait()
 
 def readResults(path):
