@@ -127,60 +127,6 @@ void InputFileToEdit::printStatistics(){
   std::cout << std::endl;
 }
 
-/*
-std::vector<bool> GL::buildBooleanLociToDo(){
-  
-  std::vector<bool> booleanLociToDoOut;
-  for(auto locus : lociToDo){
-    if(locus == "NONE"){
-      booleanLociToDoOut.push_back(false);
-    }
-    else{
-      booleanLociToDoOut.push_back(true);
-    }
-  }
-  return booleanLociToDoOut;
-}
-
-strVec_t GL::updateLociToDoViaPullFile() const{
-
-  std::vector<bool> buildAllGenotypesForLocus(lociToDo.size(), false);
-
-  std::ifstream inputFile;
-  openFileToRead(inputFileName, inputFile);
-
-  std::string line;
-  while(std::getline(inputFile, line)){
-    if(line.length() == 1 || line.length() == 0)
-      continue;
-    strVec_t splittedLine = split(line, ';');
-    strVec_t glids = split(splittedLine.at(1), ':');
-
-    auto it_lociToDo = lociToDo.cbegin();
-    auto it_buildAllGenotypesForLocus = buildAllGenotypesForLocus.begin();
-    for(auto glid : glids){
-      if(glid == "0" && *it_lociToDo != "NONE")
-	*it_buildAllGenotypesForLocus = true;
-      it_buildAllGenotypesForLocus ++;
-      it_lociToDo ++;
-    }
-  }
-
-  strVec_t lociToDoOut;
-  lociToDoOut = lociToDo;
-  auto it_lociToDo = lociToDoOut.begin();
-  for(auto it_buildAllGenotypesForLocus = buildAllGenotypesForLocus.begin();
-      it_buildAllGenotypesForLocus != buildAllGenotypesForLocus.end();
-      it_buildAllGenotypesForLocus ++){
-    if(! *it_buildAllGenotypesForLocus)
-      *it_lociToDo = "NONE";
-    it_lociToDo ++;
-  }
-
-  return lociToDoOut;
-}
-*/
-
 void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   
   std::ifstream inputFile;

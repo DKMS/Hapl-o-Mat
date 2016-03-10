@@ -116,7 +116,6 @@ class GL : public InputFileToEdit{
     : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
     lociOrder(parameters.getLociOrder()),
-    //    booleanLociToDo(buildBooleanLociToDo()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
 	 parameters.getLociAndWantedAlleleGroups(),
@@ -133,9 +132,6 @@ class GL : public InputFileToEdit{
       }
   
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
-
-  //  std::vector<bool> buildBooleanLociToDo();
-  //  strVec_t updateLociToDoViaPullFile() const;
 
  private:
   std::string glidFileName;
