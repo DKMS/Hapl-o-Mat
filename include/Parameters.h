@@ -110,7 +110,7 @@ class ParametersGL : public Parameters{
   explicit ParametersGL()
     : pullFileName(),
     glidFileName(),
-    lociToDo(),
+    lociOrder(),
     resolveUnknownGenotype(false)
       {
 	parametersFileName = "parametersGL";
@@ -123,7 +123,7 @@ class ParametersGL : public Parameters{
   
   std::string getGlidFileName() const {return glidFileName;}
   std::string getPullFileName() const {return pullFileName;}
-  strVec_t getLociToDo() const {return lociToDo;}
+  strVec_t getLociOrder() const {return lociOrder;}
   bool getResolveUnknownGenotype() const {return resolveUnknownGenotype;}
 
  private:
@@ -131,7 +131,7 @@ class ParametersGL : public Parameters{
   
   std::string pullFileName;
   std::string glidFileName;
-  strVec_t lociToDo;
+  strVec_t lociOrder;
   bool resolveUnknownGenotype;
 };
 

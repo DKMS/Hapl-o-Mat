@@ -161,12 +161,12 @@ void ParametersGL::init(){
     else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
+    else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
     else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
     else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
-    else if(line.find("LOCI") != std::string::npos) loci_assign(line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
@@ -186,7 +186,7 @@ void ParametersGL::loci_assign(const std::string line){
 
   size_t pos = line.find("=");
   std::string value = line.substr(pos + 1);
-  lociToDo = split(value, ',');
+  lociOrder = split(value, ',');
 }
 
 void ParametersGL::print() const {
@@ -221,8 +221,8 @@ void ParametersGL::print() const {
   }
   else
     std::cout << "no" << std::endl;
-  std::cout << "\t Consider loci: ";
-  for(auto locus : lociToDo){std::cout << locus << " ";}
+  std::cout << "\t Loci order in pull file: ";
+  for(auto locus : lociOrder){std::cout << locus << " ";}
   std::cout << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
