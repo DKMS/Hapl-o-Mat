@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
   std::cout << "#########EM-algorithm" << std::endl;
   startTime = getTime();
   double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
-  if(minEpsilon - haplotypes.getEpsilon() < ZERO){
+  if(haplotypes.getEpsilon() - minEpsilon > ZERO){
     std::cerr << "Chosen epsilon is larger than 0.5/n" <<std::endl;
     exit(EXIT_FAILURE);
   }
