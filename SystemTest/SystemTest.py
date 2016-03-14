@@ -12,7 +12,7 @@ def copyFolder(path):
           shutil.copytree(path, pathNewFolder)
           #shutil.rmtree(pathNewFolder + '/results')
           os.makedirs(pathNewFolder + '/results')
-          shutil.copytree('data', pathNewFolder + '/data')
+          shutil.copytree('dataSystemTest', pathNewFolder + '/data')
           shutil.copy('../haplomat', pathNewFolder)
 
 def startJob(path):
