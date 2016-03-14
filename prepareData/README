@@ -1,0 +1,63 @@
+1)http://hla.alleles.org/wmda/hla_nom_p.txt
+hla_nom_p.txt
+
+2)http://hla.alleles.org/wmda/hla_nom_g.txt
+hla_nom_g.txt
+
+3)https://bioinformatics.bethematchclinical.org/HLA-Resources/Allele-Codes/Allele-Code-Lists/Allele-Code-List-in-Alphabetical-Order/
+alpha.v3.zip
+alpha.v3.txt
+
+4)https://www.ebi.ac.uk/ipd/imgt/hla/ambig.html
+ambiguity_v<>.xls (replace <> by version)
+Open ambiguity_v<>.xls in Excel and save as ambiguity_v<>.xlsm
+Run the following macro which saves relevant worksheets as .txt-files:
+
+    		****************************
+                Sub saveSheets()
+                '
+                '
+                Dim strPath As String, NameSheet As String, NameFile As String
+                Dim ws As Excel.Worksheet
+
+                strPath = Application.ActiveWorkbook.Path
+
+                For i = 2 To Worksheets.Count
+
+                        Worksheets(i).Activate
+                        Set ws = ActiveSheet
+                        ws.Copy
+
+                        NameSheet = ActiveSheet.name
+                        NameFile = strPath & "\" & NameSheet & ".txt"
+                        ActiveWorkbook.SaveAs Filename:=NameFile, FileFormat:=xlText
+                        ActiveWorkbook.Close False
+
+                Next i
+
+                End Sub
+		*******************************
+
+5)Move all files to folder prepareData
+
+6)Create list of class 1 alleles of loci not included in hla_nom_g (HLA-E, HLA-F, HLA-G, HLA-H, HLA-J, HLA-K, HLA-L, HLA-P, HLA-V, HLA-Y) from
+http://hla.alleles.org/alleles/class1.html if you require those loci
+
+7)Create list of class 2 alleles of loci not included in hla_nom_g (HLA-DMA, HLA-DMB, HLA-DOA, HLA-DOB, HLA-DRB6, HLA-DRB7,
+HLA-DRB8, HLA-DRB9, HLA-DRB10) from http://hla.alleles.org/alleles/class2.html if you require those loci
+
+8)Create files 
+	 a)python3 TransferAlphaToCode2dna.py
+	 b)python3 BuildAllAllelesFrom_hla_nom_g.py
+	 c)add alleles from step 6) and 7) to allAlleles.txt
+	 d)python3 BuildAllAllelesExpanded.py
+	 e)python3 BuildP.py
+	 f)python3 BuildH1.py
+	 g)python3 BuildH1g.py
+	 h)python3 CreateH2.py
+	 i)python3 AddGToH2.py
+	 j)python3 PrintAllelesMissingIngCode.py
+	 
+9)Add the listed alleles to H1g.txt
+
+10)Move H1.txt, P.txt, H1g.txt, H2.txt, code2dna.txt, allAllelesExpanded.txt to folder data
