@@ -70,7 +70,7 @@ class GlidFile{
   }
   
   const list_t & getList() const {return list;}
-  const std::map<size_t, AllPossibleGenotypes> & getPossibleGenotypesForAllLoci() const {return possibleGenotypesForAllLoci;}
+  const std::vector<AllPossibleGenotypes> & getPossibleGenotypesForAllLoci() const {return possibleGenotypesForAllLoci;}
 
  private:
   void reserveSize();
@@ -84,7 +84,7 @@ class GlidFile{
   bool expandH2Lines;
   bool resolveUnknownGenotypes;
   list_t list;
-  std::map<size_t, AllPossibleGenotypes> possibleGenotypesForAllLoci;
+  std::vector<AllPossibleGenotypes> possibleGenotypesForAllLoci;
 };
 
 

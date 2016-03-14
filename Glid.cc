@@ -74,20 +74,6 @@ void GlidFile::reserveSize(){
 
 void GlidFile::readAndResolveFile(){
 
-  /*
-  if(resolveUnknownGenotypes){
-    size_t pos = 0;
-    for(auto locus : lociToDo){
-      if(locus != "NONE")
-	{
-	  auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locus);
-	  possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locus, locusAndWantedAlleleGroup->second));
-	}
-      pos ++;
-    }
-  }
-  */
-
   std::cout << "Resolve Glids" << std::endl;
 
   std::ifstream file;
@@ -115,9 +101,7 @@ void GlidFile::readAndResolveFile(){
 	  {
 	    for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups)
 	      {
-		auto positionInLociOrder = find(lociOrder.cbegin(), lociOrder.cend(), locusAndWantedAlleleGroup.first);
-		size_t pos = positionInLociOrder - lociOrder.cbegin();
-		possibleGenotypesForAllLoci.emplace(pos, AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
+		possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
 	      }
 	  }
       }

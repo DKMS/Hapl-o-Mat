@@ -242,12 +242,11 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   for(auto glidNumber = glids.cbegin();
       glidNumber != glids.cend();
       glidNumber ++){
-    size_t positionLociOrder = glidNumber - glids.cbegin();
 
     if(*glidNumber == 0){
       if(resolveUnknownGenotype){
-	//wont work
-	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(positionLociOrder)->second.getGenotypes());
+	size_t positionGlidNumber = glidNumber - glids.cbegin();
+	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().at(positionGlidNumber).getGenotypes());
       }
       else{
 	discardReport = true;
