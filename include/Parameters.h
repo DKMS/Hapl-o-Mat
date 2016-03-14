@@ -134,6 +134,27 @@ class ParametersGL : public Parameters{
   bool resolveUnknownGenotype;
 };
 
+class ParametersGLC : public Parameters{
+
+ public:
+  explicit ParametersGLC()
+    :inputFileName()
+    {
+      parametersFileName = "parametersGLC";
+      init();
+      print();
+    }
+
+  virtual void init();
+  virtual void print() const;
+
+  std::string getInputFileName() const {return inputFileName;}
+
+ private:
+  std::string inputFileName;
+};
+
+
 class ParametersMA : public Parameters{
 
  public:

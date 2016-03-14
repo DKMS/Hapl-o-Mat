@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
   if (argc == 2)
     inputFileFormat = argv[1];
   else{
-    std::cerr << "Specify a input file format (MA, GL, READ)" << std::endl;
+    std::cerr << "Specify a input file format (MA, GL, GLC or READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 
@@ -68,6 +68,12 @@ int main(int argc, char *argv[]){
     std::unique_ptr<InputFile> pInputFileTmp(new GL(*pParametersTmp));
     pParameters = std::move(pParametersTmp);
     pInputFile = std::move(pInputFileTmp);
+  }
+  else if(inputFileFormat == "GLC"){
+    std::unique_ptr<ParametersGLC>pParametersTmp(new ParametersGLC());
+    //    std::unique_ptr<InputFile> pInputFileTmp(new GL(*pParametersTmp));
+    pParameters = std::move(pParametersTmp);
+    //pInputFile = std::move(pInputFileTmp);
   }
   else if(inputFileFormat == "READ"){
     std::unique_ptr<ParametersReadin>pParametersTmp(new ParametersReadin());
