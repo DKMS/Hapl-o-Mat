@@ -315,7 +315,8 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 			const bool expandH2Lines){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
-  genotypesAtLoci.reserve(numberLoci);
+  genotypesAtLoci.resize(numberLoci);
+
   double numberOfReports = 1.;
   bool discardReport = false;
   for(auto singleLocusGenotype : singleLocusGenotypes){
@@ -325,6 +326,9 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend())
       {
 	Allele::codePrecision wantedAlleleGroup = locusAndwantedAlleleGroup->second;
+	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
+	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+
 	std::shared_ptr<Locus> pLocus;
 
 	if(singleLocusGenotype.find("|") != std::string::npos){
@@ -364,19 +368,22 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
 	pLocus->reduce(genotypesAtLocus);
-	genotypesAtLoci.push_back(genotypesAtLocus);
-	types.push_back(pLocus->getType());
-      }//if locus in lociAndWantedAlleleGroup
     
-    numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
-    if(1./numberOfReports - minimalFrequency < ZERO){
-      discardReport = true;
-      std::cout << "Report "
-		<< id
-		<< " comes below allowed frequency. Report discarded."
-		<< std::endl;
-      break;
-    }
+	numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+	if(1./numberOfReports - minimalFrequency < ZERO){
+	  std::cout << "Report "
+		    << id
+		    << " comes below allowed frequency. Report discarded."
+		    << std::endl;
+	  discardReport = true;
+	  break;
+	}
+	else
+	  {
+	    genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
+	    types.push_back(pLocus->getType());
+	  }
+      }//if locus in lociAndWantedAlleleGroup
   }//for singleLocusGenotpyes
 
   if(!discardReport){  
@@ -466,10 +473,11 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       locus ++){
 
     auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
-    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 
     if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
       { 
+	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+
 	std::sort(locus->begin(), locus->end());
 	std::string locusCombination = "";
 	for(auto code : *locus){
