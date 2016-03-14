@@ -214,17 +214,19 @@ void GLReport::translateLine(const std::string line){
   std::string rightPartOfLine = rightOfFirstDelim(line, ';');
   strVec_t allGlids = split(rightPartOfLine, ':');
 
-  glids.reserve(lociAndWantedAlleleGroups.size());
-  auto locus = lociOrder.cbegin();
+  glids.resize(numberLoci);
+
+  auto locusName = lociOrder.cbegin();
   for(auto glidNumber : allGlids)
     {
-      auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locus);
+      auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusName);
       if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
 	{
 	  size_t number = stoull(glidNumber);
-	  glids.push_back(number);	  
+	  size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+	  glids.at(positionWantedLocus) = number;
 	}
-      locus ++;
+      locusName ++;
     }
 }
 				
@@ -234,7 +236,6 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const bool resolveUnknownGenotype){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
-  genotypesAtLoci.resize(numberLoci);
   bool discardReport = false;
 
   double numberOfReports = 1.;
@@ -242,12 +243,11 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       glidNumber != glids.cend();
       glidNumber ++){
     size_t positionLociOrder = glidNumber - glids.cbegin();
-    std::string locusName = lociOrder.at(positionLociOrder);
-    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), lociAndWantedAlleleGroups.find(locusName));
+
     if(*glidNumber == 0){
       if(resolveUnknownGenotype){
-	std::cout << locusName << " " << positionWantedLocus << " " << positionLociOrder << std::endl;
-	genotypesAtLoci.at(positionWantedLocus) = (glid.getPossibleGenotypesForAllLoci().find(positionLociOrder)->second.getGenotypes());
+	//wont work
+	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(positionLociOrder)->second.getGenotypes());
       }
       else{
 	discardReport = true;
@@ -270,12 +270,12 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	std::shared_ptr<Locus> pLocus = itGlid->second;
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
 	pLocus->reduce(genotypesAtLocus);
-	genotypesAtLoci.at(positionWantedLocus) = (genotypesAtLocus);
+	genotypesAtLoci.push_back(genotypesAtLocus);
 	types.push_back(pLocus->getType());
       }
     }//else glidNumber=0
 
-    numberOfReports *= static_cast<double>(genotypesAtLoci.at(positionWantedLocus).size());
+    numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
     if(1./numberOfReports - minimalFrequency < ZERO){
       discardReport = true;
       std::cout << "Report "
