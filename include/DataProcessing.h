@@ -61,7 +61,10 @@ class InputFile{
     numberDonors(0),
     numberHaplotypes(0),
     numberPhenotypes(0),  
-    haplotypeCombinations(){}
+    haplotypeCombinations()
+      {
+	std::cout << "#########Data-preprocessing" << std::endl;
+      }
   virtual ~InputFile(){}
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
