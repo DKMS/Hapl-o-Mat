@@ -169,6 +169,48 @@ class GLReport : public Report{
   std::vector<size_t> glids;
 };
 
+class GLCReport : public Report{
+
+ public:
+  explicit GLCReport(const std::string line,
+		     const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups)
+    : Report(in_lociAndWantedAlleleGroups),
+    singleLocusGenotypes()
+  {
+    translateLine(line);
+  }
+  explicit GLCReport(const strArrVec_t & in_genotypeAtLoci,
+		    const double in_frequency,
+		    const size_t in_numberLoci, 
+		    const std::string in_id,
+		    const std::vector<Locus::reportType> & in_types)
+    : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id, in_types){}
+
+  virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
+					 const double in_frequency, 
+					 const size_t in_numberLoci,
+					 const std::string in_id,
+					 const std::vector<Locus::reportType> & in_types)
+    {
+      std::shared_ptr<Report> pReport = std::make_shared<GLCReport> (in_genotypeAtLoci,
+								    in_frequency, 
+								    in_numberLoci,
+								    in_id,
+								    in_types);
+      return pReport;
+    }
+
+
+  void translateLine(const std::string line);
+  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+	       const double minimalFrequency,
+	       const bool doH2Filter,
+	       const bool expandh2Lines);
+
+ private:
+  strVec_t singleLocusGenotypes;
+};
+
 class HReport : public Report{
   
  public:

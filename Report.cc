@@ -297,6 +297,94 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
+void GLCReport::translateLine(const std::string line){
+	
+  std::stringstream ss(line);
+  std::string entry;
+  if(ss >> entry)
+    id = entry;
+
+  while(ss >> entry){  
+    singleLocusGenotypes.push_back(entry);
+  }
+}
+
+void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+			const double minimalFrequency,
+			const bool doH2Filter,
+			const bool expandH2Lines){
+
+  std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+  genotypesAtLoci.reserve(numberLoci);
+  double numberOfReports = 1.;
+  bool discardReport = false;
+  for(auto singleLocusGenotype : singleLocusGenotypes){
+
+    std::string locusName = split(singleLocusGenotype, '*')[0];
+    auto locusAndwantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
+    if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+      {
+	Allele::codePrecision wantedAlleleGroup = locusAndwantedAlleleGroup->second;
+	std::shared_ptr<Locus> pLocus;
+
+	if(singleLocusGenotype.find("|") != std::string::npos){
+	  strVec_t genotypes = split(singleLocusGenotype, '|');
+
+	  strArrVec_t in_phasedLocus;
+	  for(auto genotype : genotypes){
+	    strVec_t alleles = split(genotype, '+');
+	    std::array<std::string, 2> splittedGenotype;
+	    for(size_t pos = 0; pos < alleles.size(); pos++)
+	      splittedGenotype.at(pos) = alleles.at(pos);
+	    in_phasedLocus.push_back(splittedGenotype);
+	  }
+	  pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
+	}
+	else if (singleLocusGenotype.find("/") != std::string::npos){
+	  strVec_t separatePlus;
+	  separatePlus = split(singleLocusGenotype, '+');
+	  strVec_t lhs = split(separatePlus.at(0), '/');
+	  strVec_t rhs = split(separatePlus.at(1), '/');
+	  strVecArr_t in_unphasedLocus;
+	  in_unphasedLocus.at(0) = lhs;
+	  in_unphasedLocus.at(1) = rhs;
+	  pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doH2Filter, expandH2Lines);
+	}
+	else{
+	  strArrVec_t in_phasedLocus;
+	  strVec_t alleles = split(singleLocusGenotype, '+');    
+	  std::array<std::string, 2> splittedGenotype;
+	  for(size_t pos = 0; pos < alleles.size(); pos++)
+	    splittedGenotype.at(pos) = alleles.at(pos);
+	  in_phasedLocus.push_back(splittedGenotype);
+	  pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
+	}
+
+	pLocus->resolve();
+
+	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	pLocus->reduce(genotypesAtLocus);
+	genotypesAtLoci.push_back(genotypesAtLocus);
+	types.push_back(pLocus->getType());
+      }//if locus in lociAndWantedAlleleGroup
+    
+    numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
+    if(1./numberOfReports - minimalFrequency < ZERO){
+      discardReport = true;
+      std::cout << "Report "
+		<< id
+		<< " comes below allowed frequency. Report discarded."
+		<< std::endl;
+      break;
+    }
+  }//for singleLocusGenotpyes
+
+  if(!discardReport){  
+    buildListOfReports(listOfReports, genotypesAtLoci);
+  }
+}
+
+
 void HReport::translateLine(const std::string line){
 
   std::stringstream ss(line);

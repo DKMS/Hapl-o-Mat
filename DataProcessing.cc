@@ -185,8 +185,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    /*
-    HReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups);
+    GLCReport report(line, lociAndWantedAlleleGroups);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, minimalFrequency, doH2Filter, expandH2Lines);
 
@@ -199,7 +198,6 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 	buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
       }
     }
-    */
   }//while
     
   inputFile.close();
