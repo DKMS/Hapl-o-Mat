@@ -144,6 +144,28 @@ class GL : public InputFileToEdit{
   GlidFile glid;
 };
 
+class GLC : public InputFileToEdit{
+
+ public:
+  explicit GLC(const ParametersGLC & parameters)
+    : InputFileToEdit(parameters.getInputFileName()),
+    doH2Filter(parameters.getDoH2Filter()),
+    expandH2Lines(parameters.getExpandH2Lines())
+    {
+      haplotypesFileName = parameters.getHaplotypesFileName();
+      phenotypesFileName = parameters.getPhenotypesFileName();
+      lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
+      numberLoci = lociAndWantedAlleleGroups.size();
+      minimalFrequency = parameters.getMinimalFrequency();
+    }
+
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
+
+ private:
+  bool doH2Filter;
+  bool expandH2Lines;
+};
+
 class MA : public InputFileToEdit{
 
  public:
