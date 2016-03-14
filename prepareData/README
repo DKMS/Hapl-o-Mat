@@ -61,3 +61,5 @@ HLA-DRB8, HLA-DRB9, HLA-DRB10) from http://hla.alleles.org/alleles/class2.html i
 9)Add the listed alleles to H1g.txt
 
 10)Move H1.txt, P.txt, H1g.txt, H2.txt, code2dna.txt, allAllelesExpanded.txt to folder data
+
+11)If you want to analyse data in GL-format with unresolved genotypes (GL-id=0), you can prepare the file alleleList.txt from the GL-id input file by running BuildAlleleList.py. Then move alleleList.txt to data.
