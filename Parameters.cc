@@ -78,27 +78,35 @@ void Parameters::initType_assign(const std::string line){
   }
 }
 
-void Parameters::precision_assign(const std::string line){
+void Parameters::lociAndWantedAlleleGroups_assign(const std::string line){
   size_t pos = line.find("=");
-  std::string value = line.substr(pos + 1);
-  if(value == "g")
-    precision = Allele::codePrecision::g;
-  else if(value == "P")
-    precision = Allele::codePrecision::P;
-  else if(value == "4d")
-    precision = Allele::codePrecision::fourDigit;
-  else if(value =="G")
-    precision = Allele::codePrecision::G;
-  else if(value == "6d")
-    precision = Allele::codePrecision::sixDigit;
-  else if(value == "8d")
-    precision = Allele::codePrecision::eightDigit;
-  else if(value == "asItIs")
-    precision = Allele::codePrecision::asItIs;
-  else{
-    std::cerr << "No code precision specified" << std::endl;
-    exit(EXIT_FAILURE);
-  }
+  std::string text = line.substr(pos + 1);
+  strVec_t lociAndWantedAlleleGroupsIn = split(text, ',');
+  for(auto locusAndWantedAlleleGroupText : lociAndWantedAlleleGroupsIn)
+    {
+      strVec_t locusAndWantedAlleleGroup = split(locusAndWantedAlleleGroupText, ':');
+      std::string locus = locusAndWantedAlleleGroup[0];
+      std::string wantedAlleleGroup = locusAndWantedAlleleGroup[1];
+
+      if(wantedAlleleGroup == "g")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::g);
+      else if(wantedAlleleGroup == "P")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::P);
+      else if(wantedAlleleGroup == "4d")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::fourDigit);
+      else if(wantedAlleleGroup =="G")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::G);
+      else if(wantedAlleleGroup == "6d")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::sixDigit);
+      else if(wantedAlleleGroup == "8d")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::eightDigit);
+      else if(wantedAlleleGroup == "asItIs")
+	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::asItIs);
+      else{
+	std::cerr << "Allele group for locus " << locus << " not known" << std::endl;
+	exit(EXIT_FAILURE);
+      }
+    }
 }
 
 void Parameters::seed_assign(size_t & out, const std::string line){
@@ -153,12 +161,12 @@ void ParametersGL::init(){
     else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-    else if(line.find("CODE_PRECISION") != std::string::npos) precision_assign(line);
+    else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
+    else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
     else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
     else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
-    else if(line.find("LOCI") != std::string::npos) loci_assign(line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
@@ -178,7 +186,7 @@ void ParametersGL::loci_assign(const std::string line){
 
   size_t pos = line.find("=");
   std::string value = line.substr(pos + 1);
-  lociToDo = split(value, ',');
+  lociOrder = split(value, ',');
 }
 
 void ParametersGL::print() const {
@@ -193,7 +201,10 @@ void ParametersGL::print() const {
   std::cout << "\t Write epsilon vs steps to: " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving reports" << std::endl;
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
-  std::cout << "\t Resolve codes to precision: " << Allele::printCodePrecision(precision) << std::endl;
+  std::cout << "\t Processed loci with target allele groups: " << std::endl;
+  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
+    std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  }
   std::cout << "\t Resolve reports with unknown genotype: ";
   if(resolveUnknownGenotype)
     std::cout << "yes" << std::endl;
@@ -210,8 +221,8 @@ void ParametersGL::print() const {
   }
   else
     std::cout << "no" << std::endl;
-  std::cout << "\t Consider loci: ";
-  for(auto locus : lociToDo){std::cout << locus << " ";}
+  std::cout << "\t Loci order in pull file: ";
+  for(auto locus : lociOrder){std::cout << locus << " ";}
   std::cout << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
   std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
@@ -237,7 +248,7 @@ void ParametersMA::init(){
     else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-    else if(line.find("CODE_PRECISION") != std::string::npos) precision_assign(line);
+    else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
     else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
@@ -269,7 +280,10 @@ void ParametersMA::print() const {
   std::cout << "\t Write epsilon vs steps to: " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving reports" << std::endl;
   std::cout << "\t Minimal frequency of phenotypes= " << minimalFrequency << std::endl;
-  std::cout << "\t Resolve codes to precision: " << Allele::printCodePrecision(precision) << std::endl;
+  std::cout << "\t Processed loci with target allele groups: " << std::endl;
+  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
+    std::cout <<  "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  }
   std::cout << "\t Apply H2-filter: ";
   if(doH2Filter){
     std::cout << "yes" << std::endl;

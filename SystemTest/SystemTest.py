@@ -10,18 +10,18 @@ def copyFolder(path):
           print('Folder ' + pathNewFolder + ' already exists.')
      else:
           shutil.copytree(path, pathNewFolder)
-          shutil.rmtree(pathNewFolder + '/results')
+          #shutil.rmtree(pathNewFolder + '/results')
           os.makedirs(pathNewFolder + '/results')
-          shutil.copytree('data', pathNewFolder + '/data')
+          shutil.copytree('dataSystemTest', pathNewFolder + '/data')
           shutil.copy('../haplomat', pathNewFolder)
 
 def startJob(path):
-     proc = Popen('./runHaplomat', cwd=path, shell=True)
+     proc = Popen('./runHaplomat.sh', cwd=path, shell=True)
      proc.wait()
 
 def readResults(path):
      haploAndFreqs = dict()
-     with open(path + '/results/estimatedHaplotypeFrequencies.dat') as file:
+     with open(path + '/estimatedHaplotypeFrequencies.dat') as file:
           for line in file:
                line = line.rstrip('\r\n')
                split = line.split()
@@ -51,7 +51,7 @@ def compareResults(path):
 def clean(path):
      shutil.rmtree(path)
 
-folders = ['DKMS_g', 'DKMS_P', 'DKMS_4d', 'DKMS_G', 'DKMS_6d', 'DKMS_8d', 'GL']
+folders = ['MA_g', 'MA_P', 'MA_4d', 'MA_G', 'MA_6d', 'MA_8d', 'GL_a', 'GL_b']
 testsPassed = 0
 
 for folder in folders:          

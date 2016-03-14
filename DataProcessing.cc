@@ -127,59 +127,6 @@ void InputFileToEdit::printStatistics(){
   std::cout << std::endl;
 }
 
-std::vector<bool> GL::buildBooleanLociToDo(){
-  
-  std::vector<bool> booleanLociToDoOut;
-  for(auto locus : lociToDo){
-    if(locus == "NONE"){
-      booleanLociToDoOut.push_back(false);
-    }
-    else{
-      booleanLociToDoOut.push_back(true);
-      numberLoci ++;
-    }
-  }
-  return booleanLociToDoOut;
-}
-
-strVec_t GL::updateLociToDoViaPullFile() const{
-
-  std::vector<bool> buildAllGenotypesForLocus(lociToDo.size(), false);
-
-  std::ifstream inputFile;
-  openFileToRead(inputFileName, inputFile);
-
-  std::string line;
-  while(std::getline(inputFile, line)){
-    if(line.length() == 1 || line.length() == 0)
-      continue;
-    strVec_t splittedLine = split(line, ';');
-    strVec_t glids = split(splittedLine.at(1), ':');
-
-    auto it_lociToDo = lociToDo.cbegin();
-    auto it_buildAllGenotypesForLocus = buildAllGenotypesForLocus.begin();
-    for(auto glid : glids){
-      if(glid == "0" && *it_lociToDo != "NONE")
-	*it_buildAllGenotypesForLocus = true;
-      it_buildAllGenotypesForLocus ++;
-      it_lociToDo ++;
-    }
-  }
-
-  strVec_t lociToDoOut;
-  lociToDoOut = lociToDo;
-  auto it_lociToDo = lociToDoOut.begin();
-  for(auto it_buildAllGenotypesForLocus = buildAllGenotypesForLocus.begin();
-      it_buildAllGenotypesForLocus != buildAllGenotypesForLocus.end();
-      it_buildAllGenotypesForLocus ++){
-    if(! *it_buildAllGenotypesForLocus)
-      *it_lociToDo = "NONE";
-    it_lociToDo ++;
-  }
-
-  return lociToDoOut;
-}
-
 void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   
   std::ifstream inputFile;
@@ -198,7 +145,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLReport report(line, booleanLociToDo, numberLoci, wantedPrecision);
+    GLReport report(line, lociOrder, lociAndWantedAlleleGroups);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
@@ -232,7 +179,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::string line;
   if(std::getline(inputFile, line))
-    readLociNames(line);
+    readLociNamesFromFile(line);
 
   haplotypeCombinations.findCombinations(numberLoci);
 
@@ -241,7 +188,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    HReport report(line, lociNames, numberLoci, wantedPrecision);
+    HReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, minimalFrequency, doH2Filter, expandH2Lines);
 
@@ -266,18 +213,15 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
-void MA::readLociNames(const std::string line){
+void MA::readLociNamesFromFile(const std::string line){
 
   std::stringstream ss(line);
   std::string name;
   if (ss >> name){
     while(ss >> name){
-      lociNames.push_back(name);
-      numberLoci ++;
+      lociNamesFromFile.push_back(name);
     }
   }
-  numberLoci ++;
-  numberLoci /= 2;
 }
 
 void InputFileToRead::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){

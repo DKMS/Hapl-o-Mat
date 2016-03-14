@@ -207,21 +207,27 @@ std::string Report::evaluateReportType(const size_t numberReports) const{
   return totalType;
 }
 
-void GLReport::translateLine(const std::string line, const std::vector<bool> & booleanLociToDo){
+void GLReport::translateLine(const std::string line){
 
   id = leftOfFirstDelim(line, ';');
 
   std::string rightPartOfLine = rightOfFirstDelim(line, ';');
-  strVec_t codes = split(rightPartOfLine, ':');
-  inLoci.reserve(codes.size());
-  size_t counter = 0;
-  for(auto code : codes){
-    if(booleanLociToDo.at(counter)){
-      size_t number = stoull(code);
-      inLoci.push_back(number);
+  strVec_t allGlids = split(rightPartOfLine, ':');
+
+  glids.resize(numberLoci);
+
+  auto locusName = lociOrder.cbegin();
+  for(auto glidNumber : allGlids)
+    {
+      auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusName);
+      if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+	{
+	  size_t number = stoull(glidNumber);
+	  size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+	  glids.at(positionWantedLocus) = number;
+	}
+      locusName ++;
     }
-    counter ++;
-  }
 }
 				
 void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
@@ -233,10 +239,14 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   bool discardReport = false;
 
   double numberOfReports = 1.;
-  for(auto code : inLoci){
-    if(code == 0){
+  for(auto glidNumber = glids.cbegin();
+      glidNumber != glids.cend();
+      glidNumber ++){
+
+    if(*glidNumber == 0){
       if(resolveUnknownGenotype){
-	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().find(genotypesAtLoci.size())->second.getGenotypes());
+	size_t positionGlidNumber = glidNumber - glids.cbegin();
+	genotypesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().at(positionGlidNumber).getGenotypes());
       }
       else{
 	discardReport = true;
@@ -248,10 +258,10 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }
     }
     else{
-      auto itGlid = glid.getList().find(code);
+      auto itGlid = glid.getList().find(*glidNumber);
       if(itGlid == glid.getList().cend()){
 	std::cerr << "Key "
-		  << code
+		  << *glidNumber
 		  << " not in glid-file" << std::endl;
 	exit(EXIT_FAILURE);
       }
@@ -262,7 +272,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	genotypesAtLoci.push_back(genotypesAtLocus);
 	types.push_back(pLocus->getType());
       }
-    }//else code=0
+    }//else glidNumber=0
 
     numberOfReports *= static_cast<double>(genotypesAtLoci.rbegin()->size());
     if(1./numberOfReports - minimalFrequency < ZERO){
@@ -281,32 +291,32 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		<< std::endl;
       break;
     }
-  }//for inLoci
+  }//for glids
 
   if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
-void HReport::translateLine(const std::string line, const strVec_t lociNames){
+void HReport::translateLine(const std::string line){
 
   std::stringstream ss(line);
   std::string entry;
   if(ss >> entry)
     id = entry;
 
-  auto locusName = lociNames.cbegin();
+  auto locusName = lociNamesFromFile.cbegin();
   std::string entry2;
   while(ss >> entry >> entry2){
-    std::string code1 = *locusName;
+    std::string code1 = *locusName + '*';
     locusName ++;
-    std::string code2 = *locusName;
+    std::string code2 = *locusName + '*';
     locusName ++;
     code1.append(entry);
     code2.append(entry2);
     strArr_t locus;
     locus.at(0) = code1;
     locus.at(1) = code2;
-    inLoci.push_back(locus);
+    lociFromFile.push_back(locus);
   }
 }
 
@@ -358,71 +368,83 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		      const bool expandH2Lines){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
+  genotypesAtLoci.resize(numberLoci);
 
   double numberOfReports = 1.;
   bool discardReport = false;
-  for(auto locus = inLoci.begin();
-      locus != inLoci.end();
+  auto locusNameFromFile = lociNamesFromFile.cbegin();
+  for(auto locus = lociFromFile.begin();
+      locus != lociFromFile.end();
       locus ++){
-    std::sort(locus->begin(), locus->end());
-    std::string locusCombination = "";
-    for(auto code : *locus){
-      locusCombination += code;
-      locusCombination += "+";    
-    }
-    locusCombination.pop_back();
 
-    std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-    auto pos = lociAlreadyDone.find(locusCombination);
-    if(pos == lociAlreadyDone.cend()){
-      strVecArr_t locusPositions;
-      size_t counter = 0;
-      for(auto code : *locus){
-	strVec_t codes;
-	if(checkNMDPCode(code)){
-	  resolveNMDPCode(code, codes);
+    auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
+    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+
+    if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+      { 
+	std::sort(locus->begin(), locus->end());
+	std::string locusCombination = "";
+	for(auto code : *locus){
+	  locusCombination += code;
+	  locusCombination += "+";    
+	}
+	locusCombination.pop_back();
+
+	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	auto pos = lociAlreadyDone.find(locusCombination);
+	if(pos == lociAlreadyDone.cend()){
+	  strVecArr_t locusPositions;
+	  size_t counter = 0;
+	  for(auto code : *locus){
+	    strVec_t codes;
+	    if(checkNMDPCode(code)){
+	      resolveNMDPCode(code, codes);
+	    }
+	    else{
+	      codes.push_back(code);
+	    }
+	    locusPositions.at(counter) = codes;
+	    counter ++;
+	  }
+      
+	  std::shared_ptr<Locus> pLocus;
+	  if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
+	    {
+	      pLocus = std::make_shared<PhasedLocus>(locusPositions, locusAndWantedAlleleGroup->second);
+	    }
+	  else
+	    {
+	      pLocus = std::make_shared<UnphasedLocus> (locusPositions, locusAndWantedAlleleGroup->second, doH2Filter, expandH2Lines);
+	    }
+	  pLocus->resolve();
+	  lociAlreadyDone.emplace(locusCombination, pLocus);
+
+	  types.push_back(pLocus->getType());
+	  pLocus->reduce(genotypesAtLocus);
+
 	}
 	else{
-	  codes.push_back(code);
+	  types.push_back(pos->second->getType());
+	  pos->second->reduce(genotypesAtLocus);
 	}
-	locusPositions.at(counter) = codes;
-	counter ++;
-      }
-      
-      std::shared_ptr<Locus> pLocus;
-      if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
-	{
-	  pLocus = std::make_shared<PhasedLocus>(locusPositions, wantedPrecision);
-	}
-      else
-	{
-	  pLocus = std::make_shared<UnphasedLocus> (locusPositions, wantedPrecision, doH2Filter, expandH2Lines);
-	}
-      pLocus->resolve();
-      lociAlreadyDone.emplace(locusCombination, pLocus);
-
-      types.push_back(pLocus->getType());
-      pLocus->reduce(genotypesAtLocus);
-
-    }
-    else{
-      types.push_back(pos->second->getType());
-      pos->second->reduce(genotypesAtLocus);
-    }
   
-    numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-    if(1./numberOfReports - minimalFrequency < ZERO){
-      std::cout << "Report "
-		<< id
-		<< " comes below allowed frequency. Report discarded."
-		<< std::endl;
-      discardReport = true;
-      break;
-    }
-    else{
-      genotypesAtLoci.push_back(genotypesAtLocus);
-    }
-  }//for inLoci
+	numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+	if(1./numberOfReports - minimalFrequency < ZERO){
+	  std::cout << "Report "
+		    << id
+		    << " comes below allowed frequency. Report discarded."
+		    << std::endl;
+	  discardReport = true;
+	  break;
+	}
+	else{
+	  genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
+	}
+
+      }//if 
+    locusNameFromFile ++;
+    locusNameFromFile ++;
+  }//for lociFromFile
   
   if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);

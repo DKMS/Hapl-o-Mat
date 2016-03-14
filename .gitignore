@@ -3,9 +3,9 @@
 haplomat
 Err.dat
 Log.dat
-runHaplomat
 *.txt
-*.glid
-*.pull
-data/
 results/
+test*
+BuildReports.py
+BuildAlleleList.py
+data

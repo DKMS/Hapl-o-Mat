@@ -80,7 +80,6 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
-  std::cout << "#########Data-preprocessing" << std::endl;
   startTime = getTime();
   Phenotypes phenotypes;
   Haplotypes haplotypes(*pParameters);
