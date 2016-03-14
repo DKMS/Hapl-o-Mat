@@ -82,30 +82,26 @@ void GlidFile::readAndResolveFile(){
   std::string line;
   while(std::getline(file, line)){
     strVec_t entries = split(line, ';');
-    if(entries.at(0) != "0"){
-      std::shared_ptr<Locus> pLocus;
-      bool locusResolved = resolve(entries.at(1), pLocus);
-      if(locusResolved){
-	std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), pLocus);
-	if(! inserted.second){
-	  std::cerr << fileName
-		    << ": Glid::readAndResolveFile: Collision of "
-		    << stoull(entries.at(0))
-		    << std::endl;
-	}
-      }//!empty
-    }//!=0
-    else
-      {
-	if(resolveUnknownGenotypes)
-	  {
-	    for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups)
-	      {
-		possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
-	      }
-	  }
+    std::shared_ptr<Locus> pLocus;
+    bool locusResolved = resolve(entries.at(1), pLocus);
+    if(locusResolved){
+      std::pair<list_t::iterator, bool> inserted = list.emplace(stoull(entries.at(0)), pLocus);
+      if(! inserted.second){
+	std::cerr << fileName
+		  << ": Glid::readAndResolveFile: Collision of "
+		  << stoull(entries.at(0))
+		  << std::endl;
       }
-  }//while
+    }//!empty
+  }//while    
+
+  if(resolveUnknownGenotypes)
+    {
+      for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups)
+	{
+	  possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
+	}
+    }
 }
 
 bool GlidFile::resolve(const std::string line, std::shared_ptr<Locus> & pLocus) const{
