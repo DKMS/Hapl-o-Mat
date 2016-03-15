@@ -131,12 +131,11 @@ void ReadinReport::translateLine(const std::string line){
   }
 }
 
-bool ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype, 
+void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype, 
 					      const size_t positionWantedLocus,
 					      std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci){
 					  
   std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-  bool discardReport = false;
 
   auto pos = singleLocusGenotypesAlreadyDone.find(genotype->getSingleLocusGenotype());
   if(pos == singleLocusGenotypesAlreadyDone.cend())
@@ -165,8 +164,6 @@ bool ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   else{
     genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
   }
-  
-  return discardReport;
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
@@ -272,7 +269,6 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const bool resolveUnknownGenotype){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
-  bool discardReport = false;
 
   for(auto glidNumber = glids.cbegin();
       glidNumber != glids.cend();
@@ -349,7 +345,6 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   genotypesAtLoci.resize(numberLoci);
 
-  bool discardReport = false;
   for(auto singleLocusGenotype : singleLocusGenotypes){
 
     if(!discardReport)
@@ -362,9 +357,9 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 	    std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
 	    
-	    discardReport = resolveSingleLocusGenotype(genotype,
-						       positionWantedLocus,
-						       genotypesAtLoci);
+	    resolveSingleLocusGenotype(genotype,
+				       positionWantedLocus,
+				       genotypesAtLoci);
 	  }
       }
   }
@@ -403,7 +398,6 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   genotypesAtLoci.resize(numberLoci);
 
-  bool discardReport = false;
   auto locusNameFromFile = lociNamesFromFile.cbegin();
   for(auto singleLocusGenotype = lociFromFile.begin();
       singleLocusGenotype != lociFromFile.end();
@@ -418,9 +412,9 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(*singleLocusGenotype, locusAndWantedAlleleGroup->second);
 	    
-	    discardReport = resolveSingleLocusGenotype(genotype,
-						       positionWantedLocus,
-						       genotypesAtLoci);
+	    resolveSingleLocusGenotype(genotype,
+				       positionWantedLocus,
+				       genotypesAtLoci);
 	  }
 	locusNameFromFile ++;
 	locusNameFromFile ++;

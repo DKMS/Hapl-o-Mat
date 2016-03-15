@@ -84,7 +84,8 @@ class Report : public BasicReport{
    : BasicReport(in_lociAndWantedAlleleGroups.size()),
     lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     types(),
-    numberOfReports(1.)
+    numberOfReports(1.),
+    discardReport(false)
       {
 	genotypeAtLoci.reserve(numberLoci);
       }
@@ -122,6 +123,7 @@ class Report : public BasicReport{
   std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::vector<Locus::reportType> types;
   double numberOfReports;
+  bool discardReport;
   static double numberH0Reports;
   static double numberH1Reports;
   static double numberH2Reports;
@@ -193,7 +195,7 @@ class ColumnReport : public Report{
   virtual void translateLine(const std::string line) = 0;
   virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports) = 0;
 
-  bool resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype,
+  void resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype,
 				  const size_t positionWantedLocus,
 				  std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
   
