@@ -177,6 +177,7 @@ class GLCReport : public Report{
     singleLocusGenotypes()
   {
     translateLine(line);
+    types.resize(numberLoci);
   }
   explicit GLCReport(const strArrVec_t & in_genotypeAtLoci,
 		    const double in_frequency,
@@ -208,6 +209,7 @@ class GLCReport : public Report{
 
  private:
   strVec_t singleLocusGenotypes;
+  static std::unordered_map<std::string, std::shared_ptr<Locus>> singleLocusGenotypesAlreadyDone;
 };
 
 class HReport : public Report{
@@ -221,6 +223,7 @@ class HReport : public Report{
     lociNamesFromFile(in_lociNamesFromFile)
       {
 	translateLine(line);
+	types.resize(numberLoci);
       }
   explicit HReport(const strArrVec_t & in_genotypeAtLoci,
 		   const double in_frequency,

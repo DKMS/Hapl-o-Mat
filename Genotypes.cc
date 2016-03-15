@@ -72,8 +72,6 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool exp
 
 void GLGenotype::orderSingleLocusGenotype(){
 
-  std::cout << singleLocusGenotype << std::endl;
-
   if(singleLocusGenotype.find("|") != std::string::npos){
     strVec_t genotypes = split(singleLocusGenotype, '|');
     for(auto genotype = genotypes.begin();
@@ -134,10 +132,7 @@ void GLGenotype::orderSingleLocusGenotype(){
       }    
     singleLocusGenotype.pop_back();
   }
-
-  std::cout << singleLocusGenotype << std::endl;
 }
-
 
 void MAGenotype::buildSingleLocusGenotype(){
 

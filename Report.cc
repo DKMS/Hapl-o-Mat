@@ -33,6 +33,7 @@
 #include "DataProcessing.h"
 #include "Genotypes.h"
 
+std::unordered_map<std::string, std::shared_ptr<Locus>> GLCReport::singleLocusGenotypesAlreadyDone;
 std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::singleLocusGenotypesAlreadyDone;
 double Report::numberH0Reports = 0.;
 double Report::numberH1Reports = 0.;
@@ -326,12 +327,25 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     
     if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
       {
-	
+	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 	GLGenotype genotypeGL(singleLocusGenotype, locusAndWantedAlleleGroup->second);
-	std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doH2Filter, expandH2Lines);
-
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	pLocus->reduce(genotypesAtLocus);
+
+	auto pos = singleLocusGenotypesAlreadyDone.find(genotypeGL.getSingleLocusGenotype());
+	if(pos == singleLocusGenotypesAlreadyDone.cend())
+	  {
+	    std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doH2Filter, expandH2Lines);
+	    
+	    types.at(positionWantedLocus) = pLocus->getType();
+	    pLocus->reduce(genotypesAtLocus);
+	  
+	    singleLocusGenotypesAlreadyDone.emplace(genotypeGL.getSingleLocusGenotype(), pLocus);
+	  }
+	else
+	  {
+	    types.at(positionWantedLocus) = pos->second->getType();
+	    pos->second->reduce(genotypesAtLocus);
+	  }
     
 	numberOfReports *= static_cast<double>(genotypesAtLocus.size());
 	if(1./numberOfReports - minimalFrequency < ZERO){
@@ -344,9 +358,7 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	}
 	else
 	  {
-	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 	    genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
-	    types.push_back(pLocus->getType());
 	  }
       }//if locus in lociAndWantedAlleleGroup
   }//for singleLocusGenotpyes
@@ -411,11 +423,11 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
 	  singleLocusGenotypesAlreadyDone.emplace(genotypeMA.getSingleLocusGenotype(), pLocus);
 
-	  types.push_back(pLocus->getType());
+	  types.at(positionWantedLocus) = pLocus->getType();
 	  pLocus->reduce(genotypesAtLocus);
 	}
 	else{
-	  types.push_back(pos->second->getType());
+	  types.at(positionWantedLocus) = pos->second->getType();
 	  pos->second->reduce(genotypesAtLocus);
 	}
   
