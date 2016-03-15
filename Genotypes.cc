@@ -70,6 +70,75 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool exp
   return pLocus;
 }
 
+void GLGenotype::orderSingleLocusGenotype(){
+
+  std::cout << singleLocusGenotype << std::endl;
+
+  if(singleLocusGenotype.find("|") != std::string::npos){
+    strVec_t genotypes = split(singleLocusGenotype, '|');
+    for(auto genotype = genotypes.begin();
+	genotype != genotypes.end();
+	genotype ++)
+      {
+	strVec_t alleles = split(*genotype, '+');
+	std::sort(alleles.begin(), alleles.end());
+	*genotype = "";
+	for(auto allele : alleles){
+	  *genotype += allele + "+";
+	}
+	genotype->pop_back();
+      }
+    
+    std::sort(genotypes.begin(), genotypes.end());
+    singleLocusGenotype = "";
+    for(auto genotype : genotypes)
+      {
+	singleLocusGenotype += genotype + "|";
+      }
+    singleLocusGenotype.pop_back();
+  }
+    
+  else if(singleLocusGenotype.find("/") != std::string::npos){  
+    strVec_t allelesAtLocusPositions = split(singleLocusGenotype, '+');
+    for(auto allelesAtLocusPosition = allelesAtLocusPositions.begin();
+	allelesAtLocusPosition != allelesAtLocusPositions.end();
+	allelesAtLocusPosition ++)
+      {
+	strVec_t alleles = split(*allelesAtLocusPosition, '/');
+	std::sort(alleles.begin(), alleles.end());
+	*allelesAtLocusPosition = "";
+	for(auto allele : alleles)
+	  {
+	    *allelesAtLocusPosition += allele + "/";
+	  }
+	allelesAtLocusPosition->pop_back();
+      }
+    
+    std::sort(allelesAtLocusPositions.begin(), allelesAtLocusPositions.end());
+    singleLocusGenotype = "";
+    for(auto allelesAtLocusPosition : allelesAtLocusPositions)
+      {
+	singleLocusGenotype += allelesAtLocusPosition + "+";
+      }
+    singleLocusGenotype.pop_back();
+  }
+
+  else{
+    strVec_t alleleAtLocusPositions = split(singleLocusGenotype, '+');
+    std::sort(alleleAtLocusPositions.begin(), alleleAtLocusPositions.end());
+
+    singleLocusGenotype = "";
+    for(auto alleleAtLocusPosition : alleleAtLocusPositions)
+      {
+	singleLocusGenotype += alleleAtLocusPosition + "+";
+      }    
+    singleLocusGenotype.pop_back();
+  }
+
+  std::cout << singleLocusGenotype << std::endl;
+}
+
+
 void MAGenotype::buildSingleLocusGenotype(){
 
   std::sort(initialAllelesAtLocusPositions.begin(), initialAllelesAtLocusPositions.end());

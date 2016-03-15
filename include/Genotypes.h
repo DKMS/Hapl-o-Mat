@@ -50,11 +50,13 @@ class GLGenotype : public Genotype{
     : Genotype(in_wantedAlleleGroup)
     {
       singleLocusGenotype = in_singleLocusGenotype;
+      orderSingleLocusGenotype();
     }
   
   virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;
 
  private:
+  void orderSingleLocusGenotype();
 };
 
 class MAGenotype : public Genotype{
