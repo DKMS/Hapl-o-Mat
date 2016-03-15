@@ -52,7 +52,7 @@ class GLGenotype : public Genotype{
     : Genotype(in_wantedAlleleGroup)
     {
       singleLocusGenotype = in_singleLocusGenotype;
-      //      orderSingleLocusGenotype();
+      orderSingleLocusGenotype();
     }
   
   virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;
