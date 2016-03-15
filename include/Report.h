@@ -85,7 +85,8 @@ class Report : public BasicReport{
     lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     types(),
     numberOfReports(1.),
-    discardReport(false)
+    discardReport(false),
+    genotypesWithFrequenciesAtLoci()
       {
 	genotypeAtLoci.reserve(numberLoci);
       }
@@ -109,8 +110,7 @@ class Report : public BasicReport{
 					 const std::vector<Locus::reportType> & in_types) = 0;
   virtual ~Report(){}
 
-  void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
-			  const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
+  void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports);
   std::string evaluateReportType(const size_t numberReports) const;
 
   static double getNumberH0Reports() {return numberH0Reports;}
@@ -124,6 +124,7 @@ class Report : public BasicReport{
   std::vector<Locus::reportType> types;
   double numberOfReports;
   bool discardReport;
+  std::vector<std::vector<std::pair<strArr_t, double>>> genotypesWithFrequenciesAtLoci;
   static double numberH0Reports;
   static double numberH1Reports;
   static double numberH2Reports;
@@ -184,7 +185,11 @@ class ColumnReport : public Report{
     : Report(in_lociAndWantedAlleleGroups),
     minimalFrequency(in_minimalFrequency),
     doH2Filter(in_doH2Filter),
-    expandH2Lines(in_expandH2Lines){}
+    expandH2Lines(in_expandH2Lines)
+    {
+      genotypesWithFrequenciesAtLoci.resize(numberLoci);
+    }
+
   explicit ColumnReport(const strArrVec_t & in_genotypeAtLoci,
 			const double in_frequency,
 			const size_t in_numberLoci, 
@@ -196,8 +201,7 @@ class ColumnReport : public Report{
   virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports) = 0;
 
   void resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype,
-				  const size_t positionWantedLocus,
-				  std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
+				  const size_t positionWantedLocus);
   
  protected:
   double minimalFrequency;
