@@ -31,10 +31,8 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 #include "DataProcessing.h"
-#include "Genotypes.h"
 
-std::unordered_map<std::string, std::shared_ptr<Locus>> GLCReport::singleLocusGenotypesAlreadyDone;
-std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::singleLocusGenotypesAlreadyDone;
+std::unordered_map<std::string, std::shared_ptr<Locus>> ColumnReport::singleLocusGenotypesAlreadyDone;
 double Report::numberH0Reports = 0.;
 double Report::numberH1Reports = 0.;
 double Report::numberH2Reports = 0.;
@@ -133,6 +131,44 @@ void ReadinReport::translateLine(const std::string line){
   }
 }
 
+bool ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype, 
+					      const size_t positionWantedLocus,
+					      std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci){
+					  
+  std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+  bool discardReport = false;
+
+  auto pos = singleLocusGenotypesAlreadyDone.find(genotype->getSingleLocusGenotype());
+  if(pos == singleLocusGenotypesAlreadyDone.cend()){
+
+    std::shared_ptr<Locus> pLocus = genotype->resolve(doH2Filter, expandH2Lines);
+    
+    types.at(positionWantedLocus) = pLocus->getType();
+    pLocus->reduce(genotypesAtLocus);
+
+    singleLocusGenotypesAlreadyDone.emplace(genotype->getSingleLocusGenotype(), pLocus);
+  }
+  else{
+    types.at(positionWantedLocus) = pos->second->getType();
+    pos->second->reduce(genotypesAtLocus);
+  }
+  
+  numberOfReports *= static_cast<double>(genotypesAtLocus.size());
+  if(1./numberOfReports - minimalFrequency < ZERO){
+    std::cout << "Report "
+	      << id
+	      << " comes below allowed frequency. Report discarded."
+	      << std::endl;
+    discardReport = true;
+  }
+  else{
+    genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
+  }
+  
+  return discardReport;
+  
+}
+
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
 				const std::vector<std::vector<std::pair<strArr_t,double>>> & genotypesAtLoci){
 
@@ -187,8 +223,7 @@ std::string Report::evaluateReportType(const size_t numberReports) const{
 	break;
       }
     case Locus::reportType::H2:
-      {
-	totalType += "H2";
+      {	totalType += "H2";
 	break;
       }
     case Locus::reportType::H2M:
@@ -239,7 +274,6 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   bool discardReport = false;
 
-  double numberOfReports = 1.;
   for(auto glidNumber = glids.cbegin();
       glidNumber != glids.cend();
       glidNumber ++){
@@ -310,58 +344,30 @@ void GLCReport::translateLine(const std::string line){
   }
 }
 
-void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
-			const double minimalFrequency,
-			const bool doH2Filter,
-			const bool expandH2Lines){
+void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   genotypesAtLoci.resize(numberLoci);
 
-  double numberOfReports = 1.;
   bool discardReport = false;
   for(auto singleLocusGenotype : singleLocusGenotypes){
 
-    std::string locusName = split(singleLocusGenotype, '*')[0];
-    auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
-    
-    if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+    if(!discardReport)
       {
-	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-	GLGenotype genotypeGL(singleLocusGenotype, locusAndWantedAlleleGroup->second);
-	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-
-	auto pos = singleLocusGenotypesAlreadyDone.find(genotypeGL.getSingleLocusGenotype());
-	if(pos == singleLocusGenotypesAlreadyDone.cend())
-	  {
-	    std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doH2Filter, expandH2Lines);
-	    
-	    types.at(positionWantedLocus) = pLocus->getType();
-	    pLocus->reduce(genotypesAtLocus);
-	  
-	    singleLocusGenotypesAlreadyDone.emplace(genotypeGL.getSingleLocusGenotype(), pLocus);
-	  }
-	else
-	  {
-	    types.at(positionWantedLocus) = pos->second->getType();
-	    pos->second->reduce(genotypesAtLocus);
-	  }
+	std::string locusName = split(singleLocusGenotype, '*')[0];
+	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
     
-	numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-	if(1./numberOfReports - minimalFrequency < ZERO){
-	  std::cout << "Report "
-		    << id
-		    << " comes below allowed frequency. Report discarded."
-		    << std::endl;
-	  discardReport = true;
-	  break;
-	}
-	else
+	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
 	  {
-	    genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
+	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+	    std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	    
+	    discardReport = resolveSingleLocusGenotype(genotype,
+						       positionWantedLocus,
+						       genotypesAtLoci);
 	  }
-      }//if locus in lociAndWantedAlleleGroup
-  }//for singleLocusGenotpyes
+      }
+  }
 
   if(!discardReport){  
     buildListOfReports(listOfReports, genotypesAtLoci);
@@ -369,7 +375,7 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 }
 
 
-void HReport::translateLine(const std::string line){
+void MAReport::translateLine(const std::string line){
 
   std::stringstream ss(line);
   std::string entry;
@@ -392,62 +398,34 @@ void HReport::translateLine(const std::string line){
   }
 }
 
-void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
-		      const double minimalFrequency,
-		      const bool doH2Filter,
-		      const bool expandH2Lines){
+void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesAtLoci;
   genotypesAtLoci.resize(numberLoci);
 
-  double numberOfReports = 1.;
   bool discardReport = false;
   auto locusNameFromFile = lociNamesFromFile.cbegin();
   for(auto singleLocusGenotype = lociFromFile.begin();
       singleLocusGenotype != lociFromFile.end();
       singleLocusGenotype ++){
 
-    auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
+    if(!discardReport)
+      {
+	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
 
-    if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
-      { 
-	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-
-	MAGenotype genotypeMA(*singleLocusGenotype, locusAndWantedAlleleGroup->second);
-
-	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	auto pos = singleLocusGenotypesAlreadyDone.find(genotypeMA.getSingleLocusGenotype());
-	if(pos == singleLocusGenotypesAlreadyDone.cend()){
-
-	  std::shared_ptr<Locus> pLocus = genotypeMA.resolve(doH2Filter, expandH2Lines);
-
-	  singleLocusGenotypesAlreadyDone.emplace(genotypeMA.getSingleLocusGenotype(), pLocus);
-
-	  types.at(positionWantedLocus) = pLocus->getType();
-	  pLocus->reduce(genotypesAtLocus);
-	}
-	else{
-	  types.at(positionWantedLocus) = pos->second->getType();
-	  pos->second->reduce(genotypesAtLocus);
-	}
-  
-	numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-	if(1./numberOfReports - minimalFrequency < ZERO){
-	  std::cout << "Report "
-		    << id
-		    << " comes below allowed frequency. Report discarded."
-		    << std::endl;
-	  discardReport = true;
-	  break;
-	}
-	else{
-	  genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
-	}
-
-      }//if 
-    locusNameFromFile ++;
-    locusNameFromFile ++;
-  }//for lociFromFile
+	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+	  { 
+	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(*singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	    
+	    discardReport = resolveSingleLocusGenotype(genotype,
+						       positionWantedLocus,
+						       genotypesAtLoci);
+	  }
+	locusNameFromFile ++;
+	locusNameFromFile ++;
+      }
+  }
   
   if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);
