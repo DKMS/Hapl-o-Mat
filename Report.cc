@@ -31,6 +31,7 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 #include "DataProcessing.h"
+#include "Genotypes.h"
 
 FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt");
 std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
@@ -509,46 +510,4 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   
   if(!discardReport)
     buildListOfReports(listOfReports, genotypesAtLoci);
-}
-
-std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool expandH2Lines) const{
-
-  std::shared_ptr<Locus> pLocus;
-
-  if(singleLocusGenotype.find("|") != std::string::npos){
-    strVec_t genotypes = split(singleLocusGenotype, '|');
-    
-    strArrVec_t in_phasedLocus;
-    for(auto genotype : genotypes){
-      strVec_t alleles = split(genotype, '+');
-      std::array<std::string, 2> splittedGenotype;
-      for(size_t pos = 0; pos < alleles.size(); pos++)
-	splittedGenotype.at(pos) = alleles.at(pos);
-      in_phasedLocus.push_back(splittedGenotype);
-    }
-    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
-  }
-  else if (singleLocusGenotype.find("/") != std::string::npos){
-    strVec_t separatePlus;
-    separatePlus = split(singleLocusGenotype, '+');
-    strVec_t lhs = split(separatePlus.at(0), '/');
-    strVec_t rhs = split(separatePlus.at(1), '/');
-    strVecArr_t in_unphasedLocus;
-    in_unphasedLocus.at(0) = lhs;
-    in_unphasedLocus.at(1) = rhs;
-    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doH2Filter, expandH2Lines);
-  }
-  else{
-    strArrVec_t in_phasedLocus;
-    strVec_t alleles = split(singleLocusGenotype, '+');    
-    std::array<std::string, 2> splittedGenotype;
-    for(size_t pos = 0; pos < alleles.size(); pos++)
-      splittedGenotype.at(pos) = alleles.at(pos);
-    in_phasedLocus.push_back(splittedGenotype);
-    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
-  }
-
-  pLocus->resolve();
-
-  return pLocus;
 }

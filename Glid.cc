@@ -26,7 +26,7 @@
 
 #include "Glid.h"
 #include "Utility.h"
-#include "Report.h"
+#include "Genotypes.h"
 
 FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt");
 

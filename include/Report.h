@@ -257,21 +257,6 @@ class HReport : public Report{
   static FileNMDPCodes fileNMDPCodes;
 };
 
-class GLGenotype{
-
- public:
-  explicit GLGenotype(const std::string in_singleLocusGenotype, 
-		      const Allele::codePrecision in_wantedAlleleGroup)
-    : singleLocusGenotype(in_singleLocusGenotype),
-    wantedAlleleGroup(in_wantedAlleleGroup){}
-
-  std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;
-
- private:
-  std::string singleLocusGenotype;
-  Allele::codePrecision wantedAlleleGroup;
-};
-
 
 
 #endif
