@@ -20,9 +20,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
+
 #include "Genotypes.h"
 #include "Typedefs.h"
 #include "Utility.h"
+
+FileNMDPCodes MAGenotype::fileNMDPCodes("data/code2dna.txt");
 
 std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool expandH2Lines) const{
 
@@ -60,6 +64,91 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool exp
     in_phasedLocus.push_back(splittedGenotype);
     pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
   }
+
+  pLocus->resolve();
+
+  return pLocus;
+}
+
+void MAGenotype::buildSingleLocusGenotype(){
+
+  std::sort(initialAllelesAtLocusPositions.begin(), initialAllelesAtLocusPositions.end());
+  singleLocusGenotype = "";
+  for(auto allele : initialAllelesAtLocusPositions){
+    singleLocusGenotype += allele;
+    singleLocusGenotype += "+";
+  }
+  singleLocusGenotype.pop_back();
+}
+
+void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
+
+  std::string nmdpCode = findNMDPCode(code);
+  auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
+  if(itFileNMDPCodes == fileNMDPCodes.getList().cend()){
+    std::cerr << "Could not find NMDP-Code "
+              << nmdpCode
+              << std::endl;
+    exit (EXIT_FAILURE);
+  }
+  else{
+    std::string newCode = code;
+    size_t positionAsterik = code.find('*') + 1;
+    size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
+    newCode.erase(positionNMDPCodeInCode);
+    if(itFileNMDPCodes->second.find(':') != std::string::npos){
+      std::size_t posLastColon = newCode.find_last_of(':');
+      newCode.erase(posLastColon);
+      posLastColon = newCode.find_last_of(':');
+      if(posLastColon == std::string::npos)
+        posLastColon = newCode.find_last_of('*');
+      newCode.erase(posLastColon+1);
+    }
+
+    strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
+    for(auto itSplittedCode : splittedCode)
+      {
+	std::string newCode2 = newCode;
+        newCode2.append(itSplittedCode);
+        newCodes.push_back(newCode2);
+      }//for splittedCode                                                                                                                                 
+  }//else                                                                                                                                                 
+
+  if(newCodes.empty()){
+    std::cerr << "Did not find allele from multi allele code "
+	      << nmdpCode
+	      << " in allAlleles.txt. Please update allAlleles.txt."
+	      <<std::endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
+
+std::shared_ptr<Locus> MAGenotype::resolve(const bool doH2Filter, const bool expandH2Lines) const{
+
+  strVecArr_t allelesAtLocusPositions;
+  size_t locusPosition = 0;
+  for(auto allele : initialAllelesAtLocusPositions){
+    strVec_t alleles;
+    if(checkNMDPCode(allele)){
+      resolveNMDPCode(allele, alleles);
+    }
+    else{
+      alleles.push_back(allele);
+    }
+    allelesAtLocusPositions.at(locusPosition) = alleles;
+    locusPosition ++;
+  }
+
+  std::shared_ptr<Locus> pLocus;
+  if(allelesAtLocusPositions.at(0).size() == 1 and allelesAtLocusPositions.at(1).size() == 1)
+    {
+      pLocus = std::make_shared<PhasedLocus>(allelesAtLocusPositions, wantedAlleleGroup);
+    }
+  else
+    {
+      pLocus = std::make_shared<UnphasedLocus> (allelesAtLocusPositions, wantedAlleleGroup, doH2Filter, expandH2Lines);
+    }
 
   pLocus->resolve();
 

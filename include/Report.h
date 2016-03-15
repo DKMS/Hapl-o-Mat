@@ -27,7 +27,6 @@
 #include <vector>
 #include <fstream>
 
-#include "File.h"
 #include "Typedefs.h"
 #include "Allele.h"
 #include "Phenotype.h"
@@ -248,13 +247,11 @@ class HReport : public Report{
 	       const double minimalFrequency,
 	       const bool doH2Filter,
 	       const bool expandh2Lines);
-  void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
 
  private:
   strArrVec_t lociFromFile;
   strVec_t lociNamesFromFile;
   static std::unordered_map<std::string, std::shared_ptr<Locus>> lociAlreadyDone;
-  static FileNMDPCodes fileNMDPCodes;
 };
 
 

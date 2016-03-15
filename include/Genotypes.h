@@ -25,20 +25,58 @@
 
 #include "Allele.h"
 #include "Locus.h"
+#include "File.h"
 
-class GLGenotype{
+class Genotype{
+
+ public:
+  explicit Genotype(const Allele::codePrecision in_wantedAlleleGroup)
+    : wantedAlleleGroup(in_wantedAlleleGroup),
+    singleLocusGenotype(){}
+
+  virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const = 0;  
+
+ protected:
+  Allele::codePrecision wantedAlleleGroup;
+  std::string singleLocusGenotype;
+
+};
+
+class GLGenotype : public Genotype{
 
  public:
   explicit GLGenotype(const std::string in_singleLocusGenotype, 
 		      const Allele::codePrecision in_wantedAlleleGroup)
-    : singleLocusGenotype(in_singleLocusGenotype),
-    wantedAlleleGroup(in_wantedAlleleGroup){}
-
-  std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;
+    : Genotype(in_wantedAlleleGroup)
+    {
+      singleLocusGenotype = in_singleLocusGenotype;
+    }
+  
+  virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;
 
  private:
-  std::string singleLocusGenotype;
-  Allele::codePrecision wantedAlleleGroup;
+};
+
+class MAGenotype : public Genotype{
+
+ public:
+  explicit MAGenotype(const strArr_t & in_initialAllelesAtLocusPositions, 
+		      const Allele::codePrecision in_wantedAlleleGroup)
+    : Genotype(in_wantedAlleleGroup),
+    initialAllelesAtLocusPositions(in_initialAllelesAtLocusPositions)
+  {
+    buildSingleLocusGenotype();
+  }
+
+  void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
+  virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;  
+  std::string getSingleLocusGenotype() const {return singleLocusGenotype;};
+
+ private:
+  void buildSingleLocusGenotype();
+
+  strArr_t initialAllelesAtLocusPositions;
+  static FileNMDPCodes fileNMDPCodes;
 };
 
 #endif

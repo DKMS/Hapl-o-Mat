@@ -33,7 +33,6 @@
 #include "DataProcessing.h"
 #include "Genotypes.h"
 
-FileNMDPCodes HReport::fileNMDPCodes("data/code2dna.txt");
 std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
 double Report::numberH0Reports = 0.;
 double Report::numberH1Reports = 0.;
@@ -381,48 +380,6 @@ void HReport::translateLine(const std::string line){
   }
 }
 
-void HReport::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
-
-  std::string nmdpCode = findNMDPCode(code);
-  auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
-  if(itFileNMDPCodes == fileNMDPCodes.getList().cend()){
-    std::cerr << "Could not find NMDP-Code "
-	      << nmdpCode
-	      << std::endl;
-    exit (EXIT_FAILURE);
-  }
-  else{
-    std::string newCode = code;
-    size_t positionAsterik = code.find('*') + 1;
-    size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
-    newCode.erase(positionNMDPCodeInCode);
-    if(itFileNMDPCodes->second.find(':') != std::string::npos){
-      std::size_t posLastColon = newCode.find_last_of(':');
-      newCode.erase(posLastColon);
-      posLastColon = newCode.find_last_of(':');
-      if(posLastColon == std::string::npos)
-	posLastColon = newCode.find_last_of('*');
-      newCode.erase(posLastColon+1);
-    }
-
-    strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
-    for(auto itSplittedCode : splittedCode)
-      {
-	std::string newCode2 = newCode;
-	newCode2.append(itSplittedCode);
-	newCodes.push_back(newCode2);
-      }//for splittedCode
-  }//else
-
-  if(newCodes.empty()){
-    std::cerr << "Did not find allele from multi allele code "
-	     << nmdpCode
-	     << " in allAlleles.txt. Please update allAlleles.txt."
-	     <<std::endl;
-    exit(EXIT_FAILURE);
-  }
-}
-
 void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		      const double minimalFrequency,
 		      const bool doH2Filter,
@@ -444,46 +401,18 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       { 
 	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 
-	std::sort(locus->begin(), locus->end());
-	std::string locusCombination = "";
-	for(auto code : *locus){
-	  locusCombination += code;
-	  locusCombination += "+";    
-	}
-	locusCombination.pop_back();
+	MAGenotype genotypeMA(*locus, locusAndWantedAlleleGroup->second);
 
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	auto pos = lociAlreadyDone.find(locusCombination);
+	auto pos = lociAlreadyDone.find(genotypeMA.getSingleLocusGenotype());
 	if(pos == lociAlreadyDone.cend()){
-	  strVecArr_t locusPositions;
-	  size_t counter = 0;
-	  for(auto code : *locus){
-	    strVec_t codes;
-	    if(checkNMDPCode(code)){
-	      resolveNMDPCode(code, codes);
-	    }
-	    else{
-	      codes.push_back(code);
-	    }
-	    locusPositions.at(counter) = codes;
-	    counter ++;
-	  }
-      
-	  std::shared_ptr<Locus> pLocus;
-	  if(locusPositions.at(0).size() == 1 and locusPositions.at(1).size() == 1)
-	    {
-	      pLocus = std::make_shared<PhasedLocus>(locusPositions, locusAndWantedAlleleGroup->second);
-	    }
-	  else
-	    {
-	      pLocus = std::make_shared<UnphasedLocus> (locusPositions, locusAndWantedAlleleGroup->second, doH2Filter, expandH2Lines);
-	    }
-	  pLocus->resolve();
-	  lociAlreadyDone.emplace(locusCombination, pLocus);
+
+	  std::shared_ptr<Locus> pLocus = genotypeMA.resolve(doH2Filter, expandH2Lines);
+
+	  lociAlreadyDone.emplace(genotypeMA.getSingleLocusGenotype(), pLocus);
 
 	  types.push_back(pLocus->getType());
 	  pLocus->reduce(genotypesAtLocus);
-
 	}
 	else{
 	  types.push_back(pos->second->getType());
