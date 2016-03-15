@@ -75,7 +75,6 @@ class GlidFile{
  private:
   void reserveSize();
   void readAndResolveFile();
-  bool resolve(const std::string line, std::shared_ptr<Locus> & pLocus) const;
   
   std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::string fileName;
@@ -86,6 +85,5 @@ class GlidFile{
   list_t list;
   std::vector<AllPossibleGenotypes> possibleGenotypesForAllLoci;
 };
-
 
 #endif

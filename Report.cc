@@ -322,49 +322,13 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   for(auto singleLocusGenotype : singleLocusGenotypes){
 
     std::string locusName = split(singleLocusGenotype, '*')[0];
-    auto locusAndwantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
-    if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+    auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
+    
+    if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
       {
-	Allele::codePrecision wantedAlleleGroup = locusAndwantedAlleleGroup->second;
-	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
-	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-
-	std::shared_ptr<Locus> pLocus;
-
-	if(singleLocusGenotype.find("|") != std::string::npos){
-	  strVec_t genotypes = split(singleLocusGenotype, '|');
-
-	  strArrVec_t in_phasedLocus;
-	  for(auto genotype : genotypes){
-	    strVec_t alleles = split(genotype, '+');
-	    std::array<std::string, 2> splittedGenotype;
-	    for(size_t pos = 0; pos < alleles.size(); pos++)
-	      splittedGenotype.at(pos) = alleles.at(pos);
-	    in_phasedLocus.push_back(splittedGenotype);
-	  }
-	  pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
-	}
-	else if (singleLocusGenotype.find("/") != std::string::npos){
-	  strVec_t separatePlus;
-	  separatePlus = split(singleLocusGenotype, '+');
-	  strVec_t lhs = split(separatePlus.at(0), '/');
-	  strVec_t rhs = split(separatePlus.at(1), '/');
-	  strVecArr_t in_unphasedLocus;
-	  in_unphasedLocus.at(0) = lhs;
-	  in_unphasedLocus.at(1) = rhs;
-	  pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doH2Filter, expandH2Lines);
-	}
-	else{
-	  strArrVec_t in_phasedLocus;
-	  strVec_t alleles = split(singleLocusGenotype, '+');    
-	  std::array<std::string, 2> splittedGenotype;
-	  for(size_t pos = 0; pos < alleles.size(); pos++)
-	    splittedGenotype.at(pos) = alleles.at(pos);
-	  in_phasedLocus.push_back(splittedGenotype);
-	  pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
-	}
-
-	pLocus->resolve();
+	
+	GLGenotype genotypeGL(singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doH2Filter, expandH2Lines);
 
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
 	pLocus->reduce(genotypesAtLocus);
@@ -380,6 +344,7 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 	}
 	else
 	  {
+	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 	    genotypesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
 	    types.push_back(pLocus->getType());
 	  }
@@ -546,3 +511,44 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     buildListOfReports(listOfReports, genotypesAtLoci);
 }
 
+std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool expandH2Lines) const{
+
+  std::shared_ptr<Locus> pLocus;
+
+  if(singleLocusGenotype.find("|") != std::string::npos){
+    strVec_t genotypes = split(singleLocusGenotype, '|');
+    
+    strArrVec_t in_phasedLocus;
+    for(auto genotype : genotypes){
+      strVec_t alleles = split(genotype, '+');
+      std::array<std::string, 2> splittedGenotype;
+      for(size_t pos = 0; pos < alleles.size(); pos++)
+	splittedGenotype.at(pos) = alleles.at(pos);
+      in_phasedLocus.push_back(splittedGenotype);
+    }
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
+  }
+  else if (singleLocusGenotype.find("/") != std::string::npos){
+    strVec_t separatePlus;
+    separatePlus = split(singleLocusGenotype, '+');
+    strVec_t lhs = split(separatePlus.at(0), '/');
+    strVec_t rhs = split(separatePlus.at(1), '/');
+    strVecArr_t in_unphasedLocus;
+    in_unphasedLocus.at(0) = lhs;
+    in_unphasedLocus.at(1) = rhs;
+    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doH2Filter, expandH2Lines);
+  }
+  else{
+    strArrVec_t in_phasedLocus;
+    strVec_t alleles = split(singleLocusGenotype, '+');    
+    std::array<std::string, 2> splittedGenotype;
+    for(size_t pos = 0; pos < alleles.size(); pos++)
+      splittedGenotype.at(pos) = alleles.at(pos);
+    in_phasedLocus.push_back(splittedGenotype);
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
+  }
+
+  pLocus->resolve();
+
+  return pLocus;
+}
