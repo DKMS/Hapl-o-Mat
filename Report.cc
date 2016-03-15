@@ -139,19 +139,20 @@ bool ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   bool discardReport = false;
 
   auto pos = singleLocusGenotypesAlreadyDone.find(genotype->getSingleLocusGenotype());
-  if(pos == singleLocusGenotypesAlreadyDone.cend()){
-
-    std::shared_ptr<Locus> pLocus = genotype->resolve(doH2Filter, expandH2Lines);
+  if(pos == singleLocusGenotypesAlreadyDone.cend())
+    {
+      std::shared_ptr<Locus> pLocus = genotype->resolve(doH2Filter, expandH2Lines);
     
-    types.at(positionWantedLocus) = pLocus->getType();
-    pLocus->reduce(genotypesAtLocus);
-
-    singleLocusGenotypesAlreadyDone.emplace(genotype->getSingleLocusGenotype(), pLocus);
-  }
-  else{
-    types.at(positionWantedLocus) = pos->second->getType();
-    pos->second->reduce(genotypesAtLocus);
-  }
+      types.at(positionWantedLocus) = pLocus->getType();
+      pLocus->reduce(genotypesAtLocus);
+      
+      singleLocusGenotypesAlreadyDone.emplace(genotype->getSingleLocusGenotype(), pLocus);
+    }
+  else
+    {
+      types.at(positionWantedLocus) = pos->second->getType();
+      pos->second->reduce(genotypesAtLocus);
+    }
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
   if(1./numberOfReports - minimalFrequency < ZERO){
@@ -166,7 +167,6 @@ bool ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   }
   
   return discardReport;
-  
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
@@ -385,15 +385,15 @@ void MAReport::translateLine(const std::string line){
   auto locusName = lociNamesFromFile.cbegin();
   std::string entry2;
   while(ss >> entry >> entry2){
-    std::string code1 = *locusName + '*';
+    std::string allele1 = *locusName + '*';
     locusName ++;
-    std::string code2 = *locusName + '*';
+    std::string allele2 = *locusName + '*';
     locusName ++;
-    code1.append(entry);
-    code2.append(entry2);
+    allele1.append(entry);
+    allele2.append(entry2);
     strArr_t locus;
-    locus.at(0) = code1;
-    locus.at(1) = code2;
+    locus.at(0) = allele1;
+    locus.at(1) = allele2;
     lociFromFile.push_back(locus);
   }
 }
