@@ -388,9 +388,7 @@ void MAReport::translateLine(const std::string line){
 void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   auto locusNameFromFile = lociNamesFromFile.cbegin();
-  for(auto singleLocusGenotype = lociFromFile.begin();
-      singleLocusGenotype != lociFromFile.end();
-      singleLocusGenotype ++){
+  for(auto singleLocusGenotype : lociFromFile){
 
     if(!discardReport)
       {
@@ -399,7 +397,7 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
 	  { 
 	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(*singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
 	    
 	    resolveSingleLocusGenotype(genotype,
 				       positionWantedLocus);
