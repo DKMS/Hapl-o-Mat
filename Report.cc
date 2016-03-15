@@ -33,7 +33,7 @@
 #include "DataProcessing.h"
 #include "Genotypes.h"
 
-std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::lociAlreadyDone;
+std::unordered_map<std::string, std::shared_ptr<Locus>> HReport::singleLocusGenotypesAlreadyDone;
 double Report::numberH0Reports = 0.;
 double Report::numberH1Reports = 0.;
 double Report::numberH2Reports = 0.;
@@ -391,9 +391,9 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   double numberOfReports = 1.;
   bool discardReport = false;
   auto locusNameFromFile = lociNamesFromFile.cbegin();
-  for(auto locus = lociFromFile.begin();
-      locus != lociFromFile.end();
-      locus ++){
+  for(auto singleLocusGenotype = lociFromFile.begin();
+      singleLocusGenotype != lociFromFile.end();
+      singleLocusGenotype ++){
 
     auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
 
@@ -401,15 +401,15 @@ void HReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       { 
 	size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 
-	MAGenotype genotypeMA(*locus, locusAndWantedAlleleGroup->second);
+	MAGenotype genotypeMA(*singleLocusGenotype, locusAndWantedAlleleGroup->second);
 
 	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	auto pos = lociAlreadyDone.find(genotypeMA.getSingleLocusGenotype());
-	if(pos == lociAlreadyDone.cend()){
+	auto pos = singleLocusGenotypesAlreadyDone.find(genotypeMA.getSingleLocusGenotype());
+	if(pos == singleLocusGenotypesAlreadyDone.cend()){
 
 	  std::shared_ptr<Locus> pLocus = genotypeMA.resolve(doH2Filter, expandH2Lines);
 
-	  lociAlreadyDone.emplace(genotypeMA.getSingleLocusGenotype(), pLocus);
+	  singleLocusGenotypesAlreadyDone.emplace(genotypeMA.getSingleLocusGenotype(), pLocus);
 
 	  types.push_back(pLocus->getType());
 	  pLocus->reduce(genotypesAtLocus);

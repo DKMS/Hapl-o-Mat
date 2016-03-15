@@ -251,7 +251,7 @@ class HReport : public Report{
  private:
   strArrVec_t lociFromFile;
   strVec_t lociNamesFromFile;
-  static std::unordered_map<std::string, std::shared_ptr<Locus>> lociAlreadyDone;
+  static std::unordered_map<std::string, std::shared_ptr<Locus>> singleLocusGenotypesAlreadyDone;
 };
 
 
