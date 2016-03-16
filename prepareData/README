@@ -5,11 +5,10 @@ hla_nom_p.txt
 hla_nom_g.txt
 
 3)https://bioinformatics.bethematchclinical.org/HLA-Resources/Allele-Codes/Allele-Code-Lists/Allele-Code-List-in-Alphabetical-Order/
-alpha.v3.zip
-alpha.v3.txt
+Click on "Alphabetical Allele Code List (ZIP) (new nomenclature)" and save alpha.v3.zip. Extract archive to obtain alpha.v3.txt.
 
 4)https://www.ebi.ac.uk/ipd/imgt/hla/ambig.html
-ambiguity_v<>.xls (replace <> by version)
+Click on "Download Excel" for the wanted release (usually the latest) and save ambiguity_v<>.xls (replace <> by version).
 Open ambiguity_v<>.xls in Excel and save as ambiguity_v<>.xlsm
 Run the following macro which saves relevant worksheets as .txt-files:
 
