@@ -176,3 +176,90 @@ Hapl-O-mat is run by
 
 5) Tutorials
 ------------
+
+a) You find the relevant population data in Tutorials/a/populationData_a.dat. It
+   consists of 100 individuals typed for loci HLA-A, -B, -C, -DPB1, -DQB1, and 
+   -DRB1 with varying allele resolution. As ambiguities are recorded as multipe
+   allele codes, the input format is MA. We are going to infer three locus (A, B,
+   DRB1) haplotypes from this data. Alleles at loci A and B shall be translated to
+   allele groups g and alleles at locus DRB1 to 4-digits allele groups.
+
+   Preparations
+   - Provide the data required by Hapl-O-mat by copying the folder Tutorials/data
+   to folder Tutorials/a
+
+   - Copy the executable haplomat to Tutorials/a
+
+   - Copy parametersMA to Tutorials/a
+
+   Parameters
+     - Set the following file names:
+       - input data via FILENAME_INPUT=populationData_a.dat 
+       - temporary file for haplotypes via FILENAME_HAPLOTYPES=run/haplotypes.dat
+       - file with resolved genotypes via FILENAME_PHENOTYPES=run/genotypes.dat
+       - file with estimated haplotype frequencies via 
+         FILENAME_HAPLOTYPEFREQUENCIES=run/hfs.dat
+       - file for stopping criterion and log-likelihood via 
+       	 FILENAME_EPSILON=run/epsilon.dat
+     
+     - Set the loci to study together with the associated allele group via
+       LOCI_AND_ALLELEGROUPS=A:g,B:g,DRB1:4d
+     
+     - Set the threshold frequency for discarding resolved genotypes to 0.00001
+       via MINIMAL_FREQUENCY_PHENOTYPES=1e-5 (0.00001 also works)
+     
+     - Deactivate the H2 filter by setting DO_H2FILTER=false and 
+       EXPAND_H2LINES=false  
+     
+     - Initialize haplotype frequencies randomly by setting
+       INITIALISATION_HAPLOTYPE_FREQUENCIES=random
+     
+     - Set the stopping criterion via EPSILON=1e-5
+     
+     - Let Hapl-O-mat discard haplotypes with a frequency lower 1e-5 via setting
+       CUT_HAPLOTYPEFREQUENCIES=1e-5
+     
+     - Hapl-O-mat normalizes estimated haplotype frequencies by setting
+       RENORMALISE_HAPLOTYPE_FREQUENCIES=true
+     
+     - Set the seed for the random number generator via SEED=1000
+
+     - Create the folder run.
+
+   Run Haplomat  
+     - Run Hapl-O-mat via ./haplomat MA
+
+   Results
+     - Examine the resolved genotypes in run/genotypes.dat. The first column
+       corresponds to the individual's identification number. The second column	
+       indicates how ambiguities in single-locus genotypes have been resolved.
+       The third column gives the frequency of the genotype and the fourth
+       column the genotype itself. If an individual's genotype splits into a set
+       of genotypes, each genotype is written to one line starting with the same
+       identification number. The corresponding frequencies become non-integer
+       and sum to one. 
+     - The evolution of the stopping criterion and log-likelihood during
+       consecutive iterations is written to run/epsilon.dat. The first column is
+       the stopping criterion and the second one the log-likeliehood.
+     - The inferred haplotypes including estimated frequencies are listed in 
+       run/hfs.dat.
+
+b) This time ambiguities in the genotypic population data are recorded via genotype
+   list strings. As all the information is in one file, the input format is
+   GLC. Running Hapl-O-mat works exactly as in tutorial a). Just copy parametersGLC
+   instead of parametersMA (the content is the same).
+
+c) Again, ambiguities in the genotypic population data are recorded via genotype
+   list strings. Since the data is saved in two different files, the input format
+   is GL. Follow the steps from tutorial a), but use the parameter file
+   parametersGL. It has the additional option RESOLVE_UNKNOWN_GENOTYPE, which we 
+   set to "false". Furthermore, we have to specify the loci order. The first
+   individual from populationData_c.pull has GL-ids 1, 2, 3, 4, 5, and 6. We know
+   from populationData_c.pull that they correspond to loci B, A, DPB1, DRB1, C, 
+   and DQB1, respectively. Because of that we set LOCIORDER=B,A,DPB1,DRB1,C,DQB1. 
+   
+d) Finally, we test the input format READ. To this end copy one of the files
+   genotypes.dat from tutorial a), b), or c) to Tutorials/d. Additionally, copy
+   haplomat, data, and parametersREAD to the same folder. Since no genotype data
+   has to be resolved, the parameter file contains no parameters associated with
+   data processing. Choose a set of parameters and run Hapl-O-mat.
