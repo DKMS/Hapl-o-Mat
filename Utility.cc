@@ -227,13 +227,6 @@ void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
     */
 }
 
-double derivative(const double f1,
-		  const double f2,
-		  const double h){
-
-  return (f1 - f2) / h;
-}
-
 template<typename T>
 void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in){
 

@@ -97,9 +97,7 @@ std::string cutCodeKeepingLastLetter(const std::string &s, const size_t toNumber
 void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
 		       const size_t n,
 		       const size_t k);
-double derivative(const double fxh,
-		  const double fx,
-		  const double h);
+
 template<typename T>
 void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in);
 

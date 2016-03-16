@@ -57,16 +57,6 @@ class Phenotype{
 
   double computeSummedFrequencyDiplotypes () const;
   void expectation(const Haplotypes & haplotypes);
-  bool expectationAndRemove(const Haplotypes & haplotypes);
-  int derivativeHaplotypeFrequency(const size_t haplotype,
-				   const size_t haplotype_k,
-				   const size_t lastHaplotype) const;
-  double derivative(const Haplotypes & haplotypes,
-		    const size_t haplotypeId,
-		    const size_t negativeHaplotype) const;
-  double secondDerivative(const size_t haplotype_k,
-			  const size_t haplotype_l,
-			  const size_t negativeHaplotype) const;
 
  private:
   double numInDonors;
@@ -81,7 +71,6 @@ class Phenotypes : public Hash<Phenotype>{
  virtual size_t computeSizeInBytes();
  
  void expectationStep(const Haplotypes & haplotypes);
- void expectationAndRemoveStep(const Haplotypes & haplotypes);
  double computeLogLikelihood() const;
 
  private:
