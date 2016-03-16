@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
   if (argc == 2)
     inputFileFormat = argv[1];
   else{
-    std::cerr << "Specify a input file format (MA, GL, READ)" << std::endl;
+    std::cerr << "Specify a input file format (MA, GL, GLC or READ)" << std::endl;
     exit(EXIT_FAILURE);
   }
 
@@ -58,20 +58,26 @@ int main(int argc, char *argv[]){
   std::unique_ptr<Parameters> pParameters;
   std::unique_ptr<InputFile> pInputFile;
   if(inputFileFormat == "MA"){
-    std::unique_ptr<ParametersMA> pParametersTmp(new ParametersMA());
-    std::unique_ptr<InputFile> pInputFileTmp(new MA(*pParametersTmp));
+    std::unique_ptr<ParametersMA> pParametersTmp = make_unique<ParametersMA>();
+    std::unique_ptr<InputFile> pInputFileTmp = make_unique<MA>(*pParametersTmp);
     pParameters = std::move(pParametersTmp);
     pInputFile = std::move(pInputFileTmp);
   }
   else if(inputFileFormat == "GL"){
-    std::unique_ptr<ParametersGL>pParametersTmp(new ParametersGL());
-    std::unique_ptr<InputFile> pInputFileTmp(new GL(*pParametersTmp));
+    std::unique_ptr<ParametersGL>pParametersTmp = make_unique<ParametersGL>();
+    std::unique_ptr<InputFile> pInputFileTmp = make_unique<GL>(*pParametersTmp);
+    pParameters = std::move(pParametersTmp);
+    pInputFile = std::move(pInputFileTmp);
+  }
+  else if(inputFileFormat == "GLC"){
+    std::unique_ptr<ParametersGLC>pParametersTmp = make_unique<ParametersGLC>();
+    std::unique_ptr<InputFile> pInputFileTmp = make_unique<GLC>(*pParametersTmp);
     pParameters = std::move(pParametersTmp);
     pInputFile = std::move(pInputFileTmp);
   }
   else if(inputFileFormat == "READ"){
-    std::unique_ptr<ParametersReadin>pParametersTmp(new ParametersReadin());
-    std::unique_ptr<InputFile> pInputFileTmp(new InputFileToRead(*pParametersTmp));
+    std::unique_ptr<ParametersReadin>pParametersTmp = make_unique<ParametersReadin>();
+    std::unique_ptr<InputFile> pInputFileTmp = make_unique<InputFileToRead>(*pParametersTmp);
     pParameters = std::move(pParametersTmp);
     pInputFile = std::move(pInputFileTmp);
   }

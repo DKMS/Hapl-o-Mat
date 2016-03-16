@@ -27,11 +27,11 @@
 #include <vector>
 #include <fstream>
 
-#include "File.h"
 #include "Typedefs.h"
 #include "Allele.h"
 #include "Phenotype.h"
 #include "Locus.h"
+#include "Genotypes.h"
 
 class GlidFile;
 class Haplotypes;
@@ -83,10 +83,13 @@ class Report : public BasicReport{
  explicit Report(const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups)
    : BasicReport(in_lociAndWantedAlleleGroups.size()),
     lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
-    types()
-    {
-      genotypeAtLoci.reserve(numberLoci);
-    }
+    types(),
+    numberOfReports(1.),
+    discardReport(false),
+    genotypesWithFrequenciesAtLoci()
+      {
+	genotypeAtLoci.reserve(numberLoci);
+      }
   explicit Report(const strArrVec_t & in_genotypeAtLoci,
 		  const double in_frequency, 
 		  const size_t in_numberLoci,
@@ -107,8 +110,7 @@ class Report : public BasicReport{
 					 const std::vector<Locus::reportType> & in_types) = 0;
   virtual ~Report(){}
 
-  void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports,
-			  const std::vector<std::vector<std::pair<strArr_t, double>>> & genotypesAtLoci);
+  void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports);
   std::string evaluateReportType(const size_t numberReports) const;
 
   static double getNumberH0Reports() {return numberH0Reports;}
@@ -120,6 +122,9 @@ class Report : public BasicReport{
  protected:
   std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::vector<Locus::reportType> types;
+  double numberOfReports;
+  bool discardReport;
+  std::vector<std::vector<std::pair<strArr_t, double>>> genotypesWithFrequenciesAtLoci;
   static double numberH0Reports;
   static double numberH1Reports;
   static double numberH2Reports;
@@ -169,31 +174,116 @@ class GLReport : public Report{
   std::vector<size_t> glids;
 };
 
-class HReport : public Report{
-  
+class ColumnReport : public Report{
+
  public:
-  explicit HReport(const std::string line,
-		   const strVec_t & in_lociNamesFromFile,
-		   const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups)
+  explicit ColumnReport(const std::map<std::string,
+			Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+			const double in_minimalFrequency,
+			const bool in_doH2Filter,
+			const bool in_expandH2Lines)
     : Report(in_lociAndWantedAlleleGroups),
-    lociFromFile(),
-    lociNamesFromFile(in_lociNamesFromFile)
-      {
-	translateLine(line);
-      }
-  explicit HReport(const strArrVec_t & in_genotypeAtLoci,
-		   const double in_frequency,
-		   const size_t in_numberLoci, 
-		   const std::string in_id,
-		   const std::vector<Locus::reportType> & in_types)
+    minimalFrequency(in_minimalFrequency),
+    doH2Filter(in_doH2Filter),
+    expandH2Lines(in_expandH2Lines)
+    {
+      genotypesWithFrequenciesAtLoci.resize(numberLoci);
+    }
+
+  explicit ColumnReport(const strArrVec_t & in_genotypeAtLoci,
+			const double in_frequency,
+			const size_t in_numberLoci, 
+			const std::string in_id,
+			const std::vector<Locus::reportType> & in_types)
     : Report(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id, in_types){}
+  
+  virtual void translateLine(const std::string line) = 0;
+  virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports) = 0;
+
+  void resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & genotype,
+				  const size_t positionWantedLocus);
+  
+ protected:
+  double minimalFrequency;
+  bool doH2Filter;
+  bool expandH2Lines;
+  static std::unordered_map<std::string, std::shared_ptr<Locus>> singleLocusGenotypesAlreadyDone;
+};
+
+class GLCReport : public ColumnReport{
+
+ public:
+  explicit GLCReport(const std::string line,
+		     const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+		     const double in_minimalFrequency,
+		     const bool in_doH2Filter,
+		     const bool in_expandH2Lines)
+    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doH2Filter, in_expandH2Lines),
+    singleLocusGenotypes()
+  {
+    translateLine(line);
+    types.resize(numberLoci);
+  }
+  explicit GLCReport(const strArrVec_t & in_genotypeAtLoci,
+		     const double in_frequency,
+		     const size_t in_numberLoci, 
+		     const std::string in_id,
+		     const std::vector<Locus::reportType> & in_types)
+    : ColumnReport(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id, in_types){}
+  
   virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
 					 const double in_frequency, 
 					 const size_t in_numberLoci,
 					 const std::string in_id,
 					 const std::vector<Locus::reportType> & in_types)
     {
-      std::shared_ptr<Report> pReport = std::make_shared<HReport> (in_genotypeAtLoci,
+      std::shared_ptr<Report> pReport = std::make_shared<GLCReport> (in_genotypeAtLoci,
+								    in_frequency, 
+								    in_numberLoci,
+								    in_id,
+								    in_types);
+      return pReport;
+    }
+
+
+  virtual void translateLine(const std::string line);
+  virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
+
+ private:
+  strVec_t singleLocusGenotypes;
+
+};
+
+class MAReport : public ColumnReport{
+  
+ public:
+  explicit MAReport(const std::string line,
+		   const strVec_t & in_lociNamesFromFile,
+		   const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+		   const double in_minimalFrequency,
+		   const bool in_doH2Filter,
+		   const bool in_expandH2Lines)
+    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doH2Filter, in_expandH2Lines),
+    lociFromFile(),
+    lociNamesFromFile(in_lociNamesFromFile)
+      {
+	translateLine(line);
+	types.resize(numberLoci);
+      }
+  explicit MAReport(const strArrVec_t & in_genotypeAtLoci,
+		   const double in_frequency,
+		   const size_t in_numberLoci, 
+		   const std::string in_id,
+		   const std::vector<Locus::reportType> & in_types)
+    : ColumnReport(in_genotypeAtLoci, in_frequency, in_numberLoci, in_id, in_types){}
+
+  virtual std::shared_ptr<Report> create(const strArrVec_t & in_genotypeAtLoci,
+					 const double in_frequency, 
+					 const size_t in_numberLoci,
+					 const std::string in_id,
+					 const std::vector<Locus::reportType> & in_types)
+    {
+      std::shared_ptr<Report> pReport = std::make_shared<MAReport> (in_genotypeAtLoci,
 								   in_frequency, 
 								   in_numberLoci,
 								   in_id,
@@ -201,18 +291,14 @@ class HReport : public Report{
       return pReport;
     }
   
-  void translateLine(const std::string line);
-  void resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
-	       const double minimalFrequency,
-	       const bool doH2Filter,
-	       const bool expandh2Lines);
-  void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
+  virtual void translateLine(const std::string line);
+  virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
 
  private:
   strArrVec_t lociFromFile;
   strVec_t lociNamesFromFile;
-  static std::unordered_map<std::string, std::shared_ptr<Locus>> lociAlreadyDone;
-  static FileNMDPCodes fileNMDPCodes;
 };
+
+
 
 #endif

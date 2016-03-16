@@ -167,6 +167,50 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
+void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+
+  std::ifstream inputFile;
+  openFileToRead(inputFileName, inputFile);
+  std::ofstream haplotypesFile;
+  openFileToWrite(haplotypesFileName, haplotypesFile);
+  std::ofstream phenotypesFile;
+  openFileToWrite(phenotypesFileName, phenotypesFile);
+  phenotypesFile.precision(14);
+
+  haplotypeCombinations.findCombinations(numberLoci);
+
+  std::string line;
+  while(std::getline(inputFile, line)){
+
+    if(line.length() == 1 || line.length() == 0)
+      continue;
+
+    GLCReport report(line, lociAndWantedAlleleGroups, minimalFrequency, doH2Filter, expandH2Lines);
+    std::vector<std::shared_ptr<Report>> listOfpReports;
+    report.resolve(listOfpReports);
+
+    if(listOfpReports.empty())
+      numberRemovedDonors ++;
+    else{
+      numberDonors ++;
+      for(auto oneReport : listOfpReports){
+	printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
+	buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
+      }
+    }
+  }//while
+    
+  inputFile.close();
+  haplotypesFile.close();
+  phenotypesFile.close();
+
+  haplotypes.setNumberLoci(numberLoci);
+  haplotypes.setNumberDonors(numberDonors);
+  numberHaplotypes = haplotypes.getSize();
+  numberPhenotypes = phenotypes.getSize();
+}
+
+
 void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::ifstream inputFile;
@@ -188,9 +232,9 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    HReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups);
+    MAReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups, minimalFrequency, doH2Filter, expandH2Lines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
-    report.resolve(listOfpReports, minimalFrequency, doH2Filter, expandH2Lines);
+    report.resolve(listOfpReports);
 
     if(listOfpReports.empty())
       numberRemovedDonors ++;

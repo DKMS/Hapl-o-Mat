@@ -33,6 +33,12 @@
 const double ZERO = 1e-14;
 const double MAX_MEMORY = 200000.;
 
+template<typename T, typename... Args>
+  std::unique_ptr<T> make_unique(Args&&... args)
+{
+  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 std::chrono::high_resolution_clock::time_point getTime();
 size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1,
 			 const std::chrono::high_resolution_clock::time_point t2);
