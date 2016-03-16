@@ -1,0 +1,178 @@
+Hapl-O-mat -- Getting started
+=============================
+
+
+Introduction
+------------
+Hapl-O-mat is a software coded in C++ for HLA haplotype inference.
+Besides estimating haplotype frequencies via an expectation-maximization
+algorithm, it is capable of processing HLA genotype population data. This
+includes translation of alleles between various allele groups and resolving
+allelic and genotypic ambigiuites.Both common formats for recording
+HLA genotypes, multiple allele codes and genotype list strings, are supported.
+
+This guide explains how to use Hapl-O-mat. It is divided into the following
+sections:
+
+1) Data preparation
+2) Input formats
+3) Parameters
+4) Run Hapl-O-mat
+5) Tutorials
+
+For more information refer to our publication on Hapl-O-mat:
+INSERT ARTICLE
+
+
+1) Data preparation
+-------------------
+The estimation of HLA haplotypes is based on the HLA nomenclature. Information
+on the nomenclature has to be provided as input. You can create this information
+on your own by following the instructions in prepareData/README. Alternatively,
+you can download a current version of the data from INSERT LINK. Hapl-O-mat relies
+on the following files:
+
+   allAllelesExpanded.txt: A list of relevant existing HLA alleles with their
+   enclosed more-digits allele groups.
+
+   H1g.txt: A list of g-groups with their enclosed 8-digits groups.
+
+   H1.txt: A list of G-groups with their enclosed 8-digits groups.
+
+   P.txt: A list of P-groups with their enclosed 8-digits groups.
+
+   code2dna.txt: A list of multiple allele codes.
+
+   H2.txt: Basis for the H2 filter.
+
+   alleleList.txt: If your input data includes a missing single-locus genotype,
+   it can be replaced by combining all alleles of the same locus from this file.
+
+The most common HLA loci (HLA-A, B, C, DPA1, DPB1, DQA1, DQB1, DRB1, DRB3, DRB4,
+and DRB5) are included in the files. In order to incorporate further loci follow
+the instructions in prepareData/README.
+
+
+2) Input formats
+----------------
+Hapl-O-mat distinguishes four input formats, which differ in the way the input
+population data is recorded. Examples for input data can be found in the
+tutorials.
+
+    MA: Ambiguites are encoded by multiple allele (MA) codes. Except for the
+    first line, input files hold an indivdiual's identifaction number and
+    genotype per line. Genotypes are saved allele by allele, where the locus of
+    the allele is removed. Identification number and alleles are TAB-separated.
+    The first line of the file is a header file indicating the name of the first
+    column and the loci of the other columns. Same loci must be placed next to
+    each other.  
+
+    GLC: Genotypes with or without ambiguities are saved by genotype list (GL)
+    strings. Input files hold an indivdiual's identifaction number and genotype
+    per line. Identification number and single-locus genotypes are TAB-separated.
+
+    GL: Genotypes with or without ambiguities are saved by genotype list (GL)
+    strings. Population data is saved in two files. The pull-file contains an
+    invidual's identification number and a list of integer numbers, GL-ids,
+    referring to its single-locus genotype. The GL-ids are separated from the
+    identification number via ";" and, from each other via ":". The second file,
+    the glid file, contains a translation from GL-ids starting with "1" to actual
+    single-locus genotypes. GL-id and genotype are separated via ";". A GL-id of
+    "0" is interpreted as a missing typing at the corresponding locus and does 
+    not require a translation in the glid file.
+
+    READ: Processing population data, Hapl-O-mat writes resolved genotypes to
+    disk. The created file can be used as input avoiding resolving genotypes a
+    second time.    
+
+
+3) Parameters
+-------------
+Each input format requires a different set of parameters. All input formats have
+the following parameters in common:
+
+    FILENAME_HAPLOTYPES: Name of the file which temporarily saves haplotype names.
+
+    FILENAME_PHENOTYPES: Name of the file which saves resolved genotypes.
+
+    FILENAME_HAPLOTYPEFREQUENCIES: Name of the file which saves estimated
+    haplotype frequencies.
+
+    FILENAME_EPSILON: Name of the file which saves stopping criterion and 
+    log-likelihood per iteration.
+
+    INITIALISATION_HAPLOTYPE_FREQUENCIES: Initialization routine for
+    haplotype frequencies. It takes the following values:
+    "equal": All haplotype frequencies are initialized with the same frequency.
+    "numberOccurence": Haplotype frequencies are initialized according to their
+    initial number of occurence.
+    "random": Haplotype frequencies are initialized randomly.
+    "perturbation": Haplotype frequencies are initialized as in numberOccurence 
+    and then randomly modified by a small (<10%) offset.
+
+    EPSILON: Value for the stopping criterion, i.e. the maximal change between
+    consecutive haplotype frequency estimations is smaller than the assigned
+    value.
+
+    CUT_HAPLOTYPEFREQUENCIES: Estimated haplotype frequencies smaller than this
+    value are removed from the output.
+
+    RENORMALISE_HAPLOTYPE_FREQUENCIES: Takes values "true" and "false". If 
+    "true", normalise estimated haplotype frequencies to sum to one. Within
+    machine precision, this becomes necessary, if estimated haplotypes are
+    removed, e.g. via the option CUT_HAPLOTYPEFREQUENCIES.
+
+    SEED: Set the seed of the used pseudo random number generator. If set to "0",
+    the seed is initialized by the system time.
+
+The parameters are saved in the corresponding files parametersMA, parametersGLC,
+parametersGL, and parametersREAD. Dependent on the input format, additional
+parameters are:
+
+    FILENAME_INPUT (MA, GLC, READ): The file name of the input population data.
+
+    FILENAME_PULL (GL): The file name of the pull-file.
+
+    FILENAME_GLID (GL): The file name of the glid-file.
+
+    LOCI_AND_ALLELEGROUPS (MA, GL, GLC): Loci included into analysis and desired
+    allele group per locus. The list is separated by "," and contains the locus
+    name followed by ":" and the desired allele group. Supported allele groups
+    and their abbreviations are g-groups (g), P-groups (P), G-groups (G),
+    4-digits groups (4d), 6-digits groups(6d), and 8-digits groups(8d). Alleles
+    are not translated via the option asItIs (applying the H2 filter includes an
+    intrinsic translation to G-groups).
+
+    LOCIORDER (GL): Specify the order of loci the individual's GL-ids correspond
+    to. Loci are separated via ",".
+
+    RESOLVE_UNKNOWN_GENOTYPE(GL): Takes values "true" and "false". If set to
+    true, missing typings are replaced by a combination of all alleles from 
+    alleleList.txt at the locus. Else, individuals with a missing typing are
+    discarded from analysis.
+
+    MINIMAL_FREQUENCY_PHENOTYPES (MA, GL, GLC): Resolved genotypes with a
+    frequency below this threshold are excluded from analysis.
+
+    DO_H2FILTER (MA, GL, GLC): Takes values "true" and "false". The option "true"
+    activates the H2 filter.
+
+    EXPAND_H2LINES (MA, GL, GLC): Takes values "true" and "false". If set to
+    "true", matching lines with additional genotype pairs in the H2 filter are
+    allowed.
+
+Whenever specifying a file name including folders, you have to create the folders
+on your own.
+
+
+4) Run Hapl-O-mat
+-----------------
+
+After preparing input data of the format INPUTFORMAT (MA, GLC, GL, READ),
+Hapl-O-mat is run by
+
+      ./haplomat INPUTFORMAT
+
+
+5) Tutorials
+------------
