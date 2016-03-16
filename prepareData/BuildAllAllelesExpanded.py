@@ -1,6 +1,26 @@
-#Jan 2015
-#Christian Schaefer
-#input: allAlleles.txt
+#
+# Hapl-O-mat: A program for HLA haplotype frequency estimation
+# 
+# Copyright (C) 2016, DKMS gGmbH 
+# 
+# This file is part of Hapl-O-mat
+# 
+# Hapl-O-mat is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+# 
+# Hapl-O-mat is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+ 
+# You should have received a copy of the GNU General Public License
+# along with Hapl-O-mat; see the file COPYING.  If not, see
+# <http://www.gnu.org/licenses/>.
+# 
+
+
 #Read in all possible alleles from allAlleles.txt. Create a translation for alleles from lower to 8 digit precision. Left column gives
 #the allele and the right columns all extensions to higher precisions. To get a full list we also include translation from 8d to 8d.
 #The list is written to allAllelesExpanded.txt.

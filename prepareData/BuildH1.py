@@ -1,7 +1,28 @@
-#Jan 2015
-#Christian Schaefer
-#input: hla_nom_g.txt (http://hla.alleles.org/alleles/g_groups.html)
+#
+# Hapl-O-mat: A program for HLA haplotype frequency estimation
+# 
+# Copyright (C) 2016, DKMS gGmbH 
+# 
+# This file is part of Hapl-O-mat
+# 
+# Hapl-O-mat is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+# 
+# Hapl-O-mat is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+ 
+# You should have received a copy of the GNU General Public License
+# along with Hapl-O-mat; see the file COPYING.  If not, see
+# <http://www.gnu.org/licenses/>.
+# 
+
+
 #Build list of G-groups from hla_nom_g.txt and save it to H1.txt
+#Get hla_nom_g.txt from http://hla.alleles.org/alleles/g_groups.html
 
 with open('H1.txt', 'w') as outFile:
     with open('OneElementG.txt', 'w') as oneElementGFile:

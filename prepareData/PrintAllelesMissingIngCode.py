@@ -1,5 +1,26 @@
-#Dec 2015
-#Christian Schaefer
+#
+# Hapl-O-mat: A program for HLA haplotype frequency estimation
+# 
+# Copyright (C) 2016, DKMS gGmbH 
+# 
+# This file is part of Hapl-O-mat
+# 
+# Hapl-O-mat is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+# 
+# Hapl-O-mat is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+ 
+# You should have received a copy of the GNU General Public License
+# along with Hapl-O-mat; see the file COPYING.  If not, see
+# <http://www.gnu.org/licenses/>.
+# 
+
+
 #The small-g list created from G-P matching is not complete since some null-alleles exist which do not correspond to a large-G code.
 #Since they are also missing in the P-list, they cannot appear in our small-g list. This script searches allAllelexExpanded.txt for
 #alleles missing in H1g.txt. Note we only print alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
