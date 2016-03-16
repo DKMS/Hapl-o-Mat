@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
   startTime = getTime();
   double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
   if(haplotypes.getEpsilon() - minEpsilon > ZERO){
-    std::cerr << "Chosen epsilon is larger than 0.5/n" <<std::endl;
+    std::cout << "Chosen epsilon is larger than 0.5/n" <<std::endl;
   }
   else{
     haplotypes.initialiseFrequencies(phenotypes);
