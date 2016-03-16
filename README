@@ -1,0 +1,70 @@
+Hapl-O-mat v 1.0 03/16/2016
+
+General information
+-------------------
+Hapl-O-mat is a software for HLA haplotype frequency estimation via
+an expectation-maximization algorithm. It supports processing and
+resolving various forms of HLA genotype data.
+
+
+The latest version
+------------------
+The latest version can be found on the Github server under
+INSERT URL.
+
+ 
+Installing under Liunx
+----------------------
+Installing Hapl-O-mat requires a C++ compiler with C++11 support.
+Hapl-O-mat is compiled via a Makefile (g++ as default compiler):
+
+    make
+    make clean
+
+
+Usage
+-----
+Please see DOCUMENTATION.
+
+
+Citation
+--------
+If you use Hapl-O-mat for your research, please cite
+INSERT PAPER
+
+
+Contributors
+------------
+If you want to participate in actively developing Hapl-O-mat please
+join on Github INSERT URL
+
+
+Author
+------
+Christian Schäfer
+DKMS gGmbH
+Kressbach 1
+72072 Tuebingen, Germany
+
+T +49(0)7071 943-2063
+F +49(0)7071 943-2090
+cschaefer(at)dkms.de
+
+
+License
+-------
+Copyright (C) 2016, DKMS gGmbH 
+  
+Hapl-O-mat is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3, or (at your option)
+any later version.
+ 
+Hapl-O-mat is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with Hapl-O-mat; see the file COPYING.  If not, see
+<http://www.gnu.org/licenses/>.
