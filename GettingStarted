@@ -8,7 +8,7 @@ Hapl-O-mat is a software coded in C++ for HLA haplotype inference.
 Besides estimating haplotype frequencies via an expectation-maximization
 algorithm, it is capable of processing HLA genotype population data. This
 includes translation of alleles between various allele groups and resolving
-allelic and genotypic ambigiuites. Both common formats for recording
+allelic and genotypic ambiguities. Both common formats for recording
 HLA genotypes, multiple allele codes and genotype list strings, are supported.
 
 This guide explains how to use Hapl-O-mat. It is divided into the following
@@ -61,7 +61,7 @@ population data is recorded. Examples for input data can be found in the
 folder ExamplePopulations.
 
     MA: Ambiguities are encoded by multiple allele (MA) codes. Except for the
-    first line, input files hold an individiual's identification number and
+    first line, input files hold an individual's identification number and
     genotype per line. Genotypes are saved allele by allele, where the locus of
     the allele is removed. Identification number and alleles are TAB-separated.
     The first line of the file is a header file indicating the name of the first
@@ -69,7 +69,7 @@ folder ExamplePopulations.
     each other.  
 
     GLC: Genotypes with or without ambiguities are saved by genotype list (GL)
-    strings. Input files hold an individiual's identification number and genotype
+    strings. Input files hold an individual's identification number and genotype
     per line. Identification number and single-locus genotypes are TAB-separated.
 
     GL: Genotypes with or without ambiguities are saved by genotype list (GL)
@@ -253,7 +253,7 @@ You run Hapl-O-mat via
 
 It produces some output on the screen including your chosen parameters, statistics
 on the resolved genotype data and the expectation-maximization algorithm, and the
-runtime. You can easily write this output to an extra file by starting Hapl-O-mat
+run time. You can easily write this output to an extra file by starting Hapl-O-mat
 with
 
     ./haplomat MA > Log.dat
