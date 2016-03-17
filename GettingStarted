@@ -8,7 +8,7 @@ Hapl-O-mat is a software coded in C++ for HLA haplotype inference.
 Besides estimating haplotype frequencies via an expectation-maximization
 algorithm, it is capable of processing HLA genotype population data. This
 includes translation of alleles between various allele groups and resolving
-allelic and genotypic ambigiuites.Both common formats for recording
+allelic and genotypic ambigiuites. Both common formats for recording
 HLA genotypes, multiple allele codes and genotype list strings, are supported.
 
 This guide explains how to use Hapl-O-mat. It is divided into the following
@@ -60,8 +60,8 @@ Hapl-O-mat distinguishes four input formats, which differ in the way the input
 population data is recorded. Examples for input data can be found in the
 folder ExamplePopulations.
 
-    MA: Ambiguites are encoded by multiple allele (MA) codes. Except for the
-    first line, input files hold an indivdiual's identifaction number and
+    MA: Ambiguities are encoded by multiple allele (MA) codes. Except for the
+    first line, input files hold an individiual's identification number and
     genotype per line. Genotypes are saved allele by allele, where the locus of
     the allele is removed. Identification number and alleles are TAB-separated.
     The first line of the file is a header file indicating the name of the first
@@ -69,12 +69,12 @@ folder ExamplePopulations.
     each other.  
 
     GLC: Genotypes with or without ambiguities are saved by genotype list (GL)
-    strings. Input files hold an indivdiual's identifaction number and genotype
+    strings. Input files hold an individiual's identification number and genotype
     per line. Identification number and single-locus genotypes are TAB-separated.
 
     GL: Genotypes with or without ambiguities are saved by genotype list (GL)
     strings. Population data is saved in two files. The pull-file contains an
-    invidual's identification number and a list of integer numbers, GL-ids,
+    individual's identification number and a list of integer numbers, GL-ids,
     referring to its single-locus genotype. The GL-ids are separated from the
     identification number via ";" and, from each other via ":". The second file,
     the glid-file, contains a translation from GL-ids starting with "1" to actual
@@ -105,10 +105,10 @@ the following parameters in common:
     INITIALISATION_HAPLOTYPE_FREQUENCIES: Initialization routine for
     haplotype frequencies. It takes the following values:
     "equal": All haplotype frequencies are initialized with the same frequency.
-    "numberOccurence": Haplotype frequencies are initialized according to their
-    initial number of occurence.
+    "numberOccurrence": Haplotype frequencies are initialized according to their
+    initial number of occurrence.
     "random": Haplotype frequencies are initialized randomly.
-    "perturbation": Haplotype frequencies are initialized as in numberOccurence 
+    "perturbation": Haplotype frequencies are initialized as in numberOccurrence 
     and then randomly modified by a small (<10%) offset.
 
     EPSILON: Value for the stopping criterion, i.e. the maximal change between
@@ -119,7 +119,7 @@ the following parameters in common:
     value are removed from the output.
 
     RENORMALISE_HAPLOTYPE_FREQUENCIES: Takes values "true" and "false". If 
-    "true", normalise estimated haplotype frequencies to sum to one. Within
+    "true", normalize estimated haplotype frequencies to sum to one. Within
     machine precision, this becomes necessary, if estimated haplotypes are
     removed, e.g. via the option CUT_HAPLOTYPEFREQUENCIES.
 
@@ -148,7 +148,7 @@ brackets), additional parameters are:
     to. Loci are separated via ",".
 
     RESOLVE_UNKNOWN_GENOTYPE(GL): Takes values "true" and "false". If set to
-    true, missing typings are replaced by a combination of all alleles from 
+    true, a missing typing is replaced by a combination of all alleles from 
     alleleList.txt at the locus. Else, individuals with a missing typing are
     discarded from analysis.
 
@@ -185,7 +185,7 @@ allele resolutions.
 
 a) Tutorial with input format MA
 You find the relevant population data in Tutorials/a/populationData_a.dat. As
-ambiguities are recorded as multipe allele codes, the input format is MA. We are
+ambiguities are recorded as multiple allele codes, the input format is MA. We are
 going to infer three locus (A, B, DRB1) haplotypes from this data. Alleles at
 loci A and B shall be translated to allele groups g and alleles at locus DRB1 to
 4-digits allele groups.
@@ -202,7 +202,7 @@ population data. The entries of the other file names are up to you and do not ne
 to be changed in other runs. Let's call the temporary file for haplotypes
 "run/haplotypes.dat", the file with resolved genotypes "run/genotypes.dat", the
 file with the estimated haplotype frequencies "run/hfs.dat", and the file
-with evoluation of stopping criterion and log-likelihood "run/epsilon.dat". Do not
+with evolution of stopping criterion and log-likelihood "run/epsilon.dat". Do not
 forget to create the folder run before starting Hapl-O-mat.
 
 Next we set parameters with regard to resolving genotype data. Set the loci to
@@ -215,7 +215,7 @@ applying an H2 filter. Thus you can deactivate the H2 filter via DO_H2FILTER.
 Since no H2 filter is applied, the value of EXPAND_H2LINES does not matter.
 However, for consistency we set it to false.
 
-Finally, we enter paramters relevant for haplotype frequency estimation.
+Finally, we enter parameters relevant for haplotype frequency estimation.
 Initialize haplotype frequencies randomly by setting 
 INITIALISATION_HAPLOTYPE_FREQUENCIES to the corresponding value. Furthermore we
 want a stopping criterion of 0.00001 and discard final estimated haplotype
@@ -263,7 +263,7 @@ with the resolved genotypes, run/genotypes.dat. The first column corresponds to
 the individual's identification number. The second column indicates how
 ambiguities per single-locus genotypes have been resolved. If no ambiguity
 occurred the type is H0. If an ambiguity occurred and was resolved via a building
-all possible allele combiniations, the type is I. Activating the H2 filter gives
+all possible allele combinations, the type is I. Activating the H2 filter gives
 additional types: H1, if the multiple allele codes translate into one G-group per
 locus position, H2, if one matching line in the H2 file was found, and H2M if 
 multiple matching lines were found. The third column gives the frequency of the
@@ -311,7 +311,7 @@ d) Tutorial with input format READ
 Finally, we test the input format READ. Create a folder d and copy one file with
 resolved genotypes, say a/run/genotypes.dat there. Add haplomat, data, and
 parametersREAD to this folder. Using the input format READ Hapl-O-mat does not
-resolve ambiguites or translates alleles, but reads in already resolved genotype
+resolve ambiguities or translates alleles, but reads in already resolved genotype
 data. Because of that the parameter file misses some options. Just adjust the file
 names and set parameters for the haplotype frequency estimation. You run 
 Hapl-O-mat via
