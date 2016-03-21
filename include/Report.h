@@ -113,10 +113,9 @@ class Report : public BasicReport{
   void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports);
   std::string evaluateReportType(const size_t numberReports) const;
 
-  static double getNumberH0Reports() {return numberH0Reports;}
-  static double getNumberH1Reports() {return numberH1Reports;}
-  static double getNumberH2Reports() {return numberH2Reports;}
-  static double getNumberH2MReports() {return numberH2MReports;}
+  static double getNumberNReports() {return numberNReports;}
+  static double getNumberAReports() {return numberAReports;}
+  static double getNumberMReports() {return numberMReports;}
   static double getNumberIReports() {return numberIReports;}
 
  protected:
@@ -125,10 +124,9 @@ class Report : public BasicReport{
   double numberOfReports;
   bool discardReport;
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesWithFrequenciesAtLoci;
-  static double numberH0Reports;
-  static double numberH1Reports;
-  static double numberH2Reports;
-  static double numberH2MReports;
+  static double numberNReports;
+  static double numberAReports;
+  static double numberMReports;
   static double numberIReports;
 };
 

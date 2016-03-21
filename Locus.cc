@@ -98,7 +98,7 @@ void PhasedLocus::resolve(){
   }
   pAllelesAtPhasedLocus = std::move(newPAllelesAtPhasedLocus);
 
-  type = reportType::H0;
+  type = reportType::N;
 }
 
 void UnphasedLocus::resolve(){
@@ -158,16 +158,16 @@ void UnphasedLocus::resolve(){
     H2Filter h2 (possibleCodesAtBothLocusPositions, expandH2Lines);
     h2.allFilters();
     if(h2.getIsH1()){
-      type = reportType::H1;
+      type = reportType::N;
       PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
       phasedLocus.resolve();
       pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
     }
     else if(h2.getIsH2()){
       if(h2.getIsMultipleLines())
-	type = reportType::H2M;
+	type = reportType::M;
       else
-	type = reportType::H2;
+	type = reportType::A;
       PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
       phasedLocus.resolve();
       pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
@@ -181,7 +181,7 @@ void UnphasedLocus::resolve(){
     if(unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)
       type = reportType::I;
     else
-      type = reportType::H0;      
+      type = reportType::N;      
     doResolve();
   }
 }

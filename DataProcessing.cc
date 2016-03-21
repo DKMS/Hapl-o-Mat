@@ -117,10 +117,9 @@ void InputFileToEdit::printStatistics(){
   std::cout << "\t Number loci: " << numberLoci << std::endl;
   std::cout << "\t Removed reports: " << numberRemovedDonors << std::endl;
   std::cout << "\t Leftover Reports: " << numberDonors << std::endl;
-  std::cout << "\t H0 reports: " << Report::getNumberH0Reports() << std::endl;
-  std::cout << "\t H1 reports: " << Report::getNumberH1Reports() << std::endl;
-  std::cout << "\t H2 reports: " << Report::getNumberH2Reports() << std::endl;
-  std::cout << "\t H2M reports: " << Report::getNumberH2MReports() << std::endl;
+  std::cout << "\t N reports: " << Report::getNumberNReports() << std::endl;
+  std::cout << "\t A reports: " << Report::getNumberAReports() << std::endl;
+  std::cout << "\t M reports: " << Report::getNumberMReports() << std::endl;
   std::cout << "\t I reports: " << Report::getNumberIReports() <<std::endl;
   std::cout << "\t Phenotypes: " << numberPhenotypes << std::endl;
   std::cout << "\t Haplotypes: " << numberHaplotypes << std::endl;

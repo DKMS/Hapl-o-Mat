@@ -33,10 +33,9 @@ class Locus{
 
  public:
   enum reportType{
-    H0,
-    H1,
-    H2,
-    H2M,
+    N,
+    A,
+    M,
     I
   };
 
