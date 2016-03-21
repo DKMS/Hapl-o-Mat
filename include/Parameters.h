@@ -36,7 +36,7 @@ class Parameters{
   enum initialisationHaplotypeFrequencies{
     random,
     perturbation,
-    numberOccurence,
+    numberOccurrence,
     equal
   };
 
@@ -50,7 +50,7 @@ class Parameters{
     minimalFrequency(1e-5),
     doAmbiguityFilter(true),
     expandAmbiguityLines(true),
-    initType(initialisationHaplotypeFrequencies::numberOccurence),
+    initType(initialisationHaplotypeFrequencies::numberOccurrence),
     epsilon(1e-6),
     cutHaplotypeFrequencies(epsilon),
     renormaliseHaplotypeFrequencies(true),

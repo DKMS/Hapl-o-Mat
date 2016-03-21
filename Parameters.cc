@@ -68,12 +68,12 @@ void Parameters::initType_assign(const std::string line){
     initType = random;
   else if(value.compare("perturbation") == 0)
     initType = perturbation;
-  else if(value.compare("numberOccurence") == 0)
-    initType = numberOccurence;
+  else if(value.compare("numberOccurrence") == 0)
+    initType = numberOccurrence;
   else if(value.compare("equal") == 0)
     initType = equal;
   else{
-    std::cerr << "No initialisation routine for haplotype frequencies specified. Set routine to random" << std::endl;
+    std::cerr << "No initialization routine for haplotype frequencies specified. Set routine to random" << std::endl;
     initType = random;
   }
 }
@@ -138,9 +138,9 @@ std::string Parameters::printInitialisationHaplotypeFrequencies() const{
       out = "perturbation";
       break;
     }
-  case numberOccurence:
+  case numberOccurrence:
     {
-      out = "numberOccurence";
+      out = "numberOccurrence";
       break;
     }
   }
@@ -158,19 +158,19 @@ void ParametersGL::init(){
     else if(line.find("FILENAME_PULL") != std::string::npos) val_assign(pullFileName, line);
     else if(line.find("FILENAME_GLID") != std::string::npos) val_assign(glidFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
-    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
-    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandAmbiguityLines, line);
-    else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
-    else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
+    else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
+    else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
+    else if(line.find("RESOLVE_MISSING_GENOTYPES") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
+    else if(line.find("INITIALIZATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
-    else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
+    else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
       std::cerr << "Could not match "
@@ -225,11 +225,11 @@ void ParametersGL::print() const {
   for(auto locus : lociOrder){std::cout << locus << " ";}
   std::cout << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
-  std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t InitialiZation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
-    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
+    std::cout << "\t Renormalize haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << std::endl;
@@ -245,17 +245,17 @@ void ParametersGLC::init(){
     if(line.find("#") != std::string::npos) continue;
     else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
-    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
-    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandAmbiguityLines, line);
-    else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
+    else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
+    else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
+    else if(line.find("INITIALIZATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
-    else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
+    else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
       std::cerr << "Could not match "
@@ -294,11 +294,11 @@ void ParametersGLC::print() const {
   else
     std::cout << "no" << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
-  std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Initialization haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
-    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
+    std::cout << "\t Renormalize haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << std::endl;
@@ -314,17 +314,17 @@ void ParametersMA::init(){
     if(line.find("#") != std::string::npos) continue;
     else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
-    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
-    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandAmbiguityLines, line);
-    else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
+    else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
+    else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
+    else if(line.find("INITIALIZATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
-    else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
+    else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
       std::cerr << "Could not match "
@@ -365,11 +365,11 @@ void ParametersMA::print() const {
   else
     std::cout << "no" << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
-  std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Initialization haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
-    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
+    std::cout << "\t Renormalize haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << std::endl;
@@ -385,13 +385,13 @@ void ParametersReadin::init(){
     if(line.find("#") != std::string::npos) continue;
     else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_PHENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-    else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
+    else if(line.find("INITIALIZATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
-    else if(line.find("RENORMALISE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
+    else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
       std::cerr << "Could not match "
@@ -415,11 +415,11 @@ void ParametersReadin::print() const {
   std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
   std::cout << "\t Write epsilon vs steps to: " << epsilonFileName << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;
-  std::cout << "\t Initialisation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Initialization haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
   std::cout << "\t Epsilon= " << epsilon << std::endl;
   std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
-    std::cout << "\t Renormalise haplotype frequencies " << std::endl;
+    std::cout << "\t Renormalize haplotype frequencies " << std::endl;
   std::cout << "\t Zero= " << ZERO << std::endl;
   std::cout << "\t Seed= " << seed << std::endl;
   std::cout << std::endl;
