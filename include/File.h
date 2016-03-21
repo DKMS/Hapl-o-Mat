@@ -137,10 +137,10 @@ class FileAlleles : public File<strVec_t>{
   void readFile();
 };
 
-class FileH2Expanded : public File<strVecVecVec_t>{
+class FileAmbiguityExpanded : public File<strVecVecVec_t>{
 
  public:
-  explicit FileH2Expanded(const std::string in_fileName) : File(in_fileName){
+  explicit FileAmbiguityExpanded(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 
@@ -148,10 +148,10 @@ class FileH2Expanded : public File<strVecVecVec_t>{
   void readFile();
 };
 
-class FileH2 : public File<strVecVecVec_t>{
+class FileAmbiguity : public File<strVecVecVec_t>{
 
  public:
-  explicit FileH2(const std::string in_fileName) : File(in_fileName){
+  explicit FileAmbiguity(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 

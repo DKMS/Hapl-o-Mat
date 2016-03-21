@@ -54,14 +54,14 @@ class GlidFile{
   explicit GlidFile(const std::string in_fileName,
 		    const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
 		    const strVec_t & in_lociOrder,
-		    const bool in_doH2Filter,
-		    const bool in_expandH2Lines,
+		    const bool in_doAmbiguityFilter,
+		    const bool in_expandAmbiguityLines,
 		    const bool in_resolveUnknownGenotypes) 
     : lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
     fileName(in_fileName),
     lociOrder(in_lociOrder),
-    doH2Filter(in_doH2Filter),
-    expandH2Lines(in_expandH2Lines),
+    doAmbiguityFilter(in_doAmbiguityFilter),
+    expandAmbiguityLines(in_expandAmbiguityLines),
     resolveUnknownGenotypes(in_resolveUnknownGenotypes),
     list(),
     possibleGenotypesForAllLoci(){
@@ -79,8 +79,8 @@ class GlidFile{
   std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   std::string fileName;
   strVec_t lociOrder;
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
   bool resolveUnknownGenotypes;
   list_t list;
   std::vector<AllPossibleGenotypes> possibleGenotypesForAllLoci;

@@ -184,7 +184,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLCReport report(line, lociAndWantedAlleleGroups, minimalFrequency, doH2Filter, expandH2Lines);
+    GLCReport report(line, lociAndWantedAlleleGroups, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
@@ -231,7 +231,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    MAReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups, minimalFrequency, doH2Filter, expandH2Lines);
+    MAReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 

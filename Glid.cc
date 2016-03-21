@@ -92,7 +92,7 @@ void GlidFile::readAndResolveFile(){
     if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend()){
 
       GLGenotype genotypeGL(singeLocusGenotype, locusAndwantedAlleleGroup->second);
-      std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doH2Filter, expandH2Lines);
+      std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
 
       std::pair<list_t::iterator, bool> inserted = list.emplace(glid, pLocus);
       if(! inserted.second){

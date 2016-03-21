@@ -138,7 +138,7 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   auto pos = singleLocusGenotypesAlreadyDone.find(genotype->getSingleLocusGenotype());
   if(pos == singleLocusGenotypesAlreadyDone.cend())
     {
-      std::shared_ptr<Locus> pLocus = genotype->resolve(doH2Filter, expandH2Lines);
+      std::shared_ptr<Locus> pLocus = genotype->resolve(doAmbiguityFilter, expandAmbiguityLines);
     
       types.at(positionWantedLocus) = pLocus->getType();
       pLocus->reduce(genotypesAtLocus);

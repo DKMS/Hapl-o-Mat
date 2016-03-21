@@ -164,8 +164,8 @@ void ParametersGL::init(){
     else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
-    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
-    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
+    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
+    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandAmbiguityLines, line);
     else if(line.find("RESOLVE_UNKNOWN_GENOTYPE") != std::string::npos) bool_assign(resolveUnknownGenotype, line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
@@ -210,11 +210,11 @@ void ParametersGL::print() const {
     std::cout << "yes" << std::endl;
   else
     std::cout << "no" << std::endl;
-  std::cout << "\t Apply H2-filter: ";
-  if(doH2Filter){
+  std::cout << "\t Apply ambiguity filter: ";
+  if(doAmbiguityFilter){
     std::cout << "yes" << std::endl;
-    std::cout << "\t Expand H2-lines: ";
-    if(expandH2Lines)
+    std::cout << "\t Expand ambiguity lines: ";
+    if(expandAmbiguityLines)
       std::cout << "yes" << std::endl;
     else
       std::cout << "no" << std::endl;
@@ -250,8 +250,8 @@ void ParametersGLC::init(){
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
-    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
-    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
+    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
+    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandAmbiguityLines, line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
@@ -282,11 +282,11 @@ void ParametersGLC::print() const {
   for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
     std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
   }
-  std::cout << "\t Apply H2-filter: ";
-  if(doH2Filter){
+  std::cout << "\t Apply ambiguity filter: ";
+  if(doAmbiguityFilter){
     std::cout << "yes" << std::endl;
-    std::cout << "\t Expand H2-lines: ";
-    if(expandH2Lines)
+    std::cout << "\t Expand ambiguity lines: ";
+    if(expandAmbiguityLines)
       std::cout << "yes" << std::endl;
     else
       std::cout << "no" << std::endl;
@@ -319,8 +319,8 @@ void ParametersMA::init(){
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_ALLELEGROUPS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_PHENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
-    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doH2Filter, line);
-    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandH2Lines, line);
+    else if(line.find("DO_H2FILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
+    else if(line.find("EXPAND_H2LINES") != std::string::npos) bool_assign(expandAmbiguityLines, line);
     else if(line.find("INITIALISATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
@@ -353,11 +353,11 @@ void ParametersMA::print() const {
   for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
     std::cout <<  "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
   }
-  std::cout << "\t Apply H2-filter: ";
-  if(doH2Filter){
+  std::cout << "\t Apply ambiguity filter: ";
+  if(doAmbiguityFilter){
     std::cout << "yes" << std::endl;
-    std::cout << "\t Expand H2-lines: ";
-    if(expandH2Lines)
+    std::cout << "\t Expand ambiguity lines: ";
+    if(expandAmbiguityLines)
       std::cout << "yes" << std::endl;
     else
       std::cout << "no" << std::endl;

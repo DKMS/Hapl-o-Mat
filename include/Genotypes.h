@@ -34,7 +34,7 @@ class Genotype{
     : wantedAlleleGroup(in_wantedAlleleGroup),
     singleLocusGenotype(){}
 
-  virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const = 0;  
+  virtual std::shared_ptr<Locus> resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const = 0;  
 
   std::string getSingleLocusGenotype() const {return singleLocusGenotype;};
 
@@ -55,7 +55,7 @@ class GLGenotype : public Genotype{
       orderSingleLocusGenotype();
     }
   
-  virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;
+  virtual std::shared_ptr<Locus> resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const;
 
  private:
   void orderSingleLocusGenotype();
@@ -73,7 +73,7 @@ class MAGenotype : public Genotype{
   }
 
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
-  virtual std::shared_ptr<Locus> resolve(const bool doH2Filter, const bool expandH2Lines) const;  
+  virtual std::shared_ptr<Locus> resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const;  
 
  private:
   void buildSingleLocusGenotype();
