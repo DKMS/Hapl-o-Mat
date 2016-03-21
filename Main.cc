@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
   std::cout << "\t Memory requirement haplotypes: " << haplotypes.computeSizeInBytes() << " bytes" << std::endl;
   std::cout << "\t Memory requirement phenoypes: " << phenotypes.computeSizeInBytes() << " bytes" << std::endl;
   endTime = getTime();
-  timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime);
+  timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime)/1000000.;
 
   std::cout << "#########EM-algorithm" << std::endl;
   startTime = getTime();
@@ -109,16 +109,16 @@ int main(int argc, char *argv[]){
     std::cout << "\t Summed cutted haplotype frequencies: " << haplotypes.computeCuttedHaplotypeFrequencySum() << std::endl;
   }
   endTime = getTime();
-  timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime);
+  timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime)/1000000.;
 
   startTime = getTime();
   haplotypes.writeFrequenciesToFile();
   haplotypes.deleteHaplotypesFile();
   endTime = getTime();
-  timeTakenForWriting = getTimeDifference(startTime, endTime);
+  timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
 
   std::cout << "#########Time" << std::endl;
-  std::cout << "\t Data pre-processing time: " << timeTakenForDataPreProcessing << " mus" << std::endl;
-  std::cout << "\t EM-algorithm time: " << timeTakenForEMAlgorithm << " mus" << std::endl;
-  std::cout << "\t Writing time: " << timeTakenForWriting << " mus" << std::endl;
+  std::cout << "\t Data pre-processing time [s]: " << timeTakenForDataPreProcessing << std::endl;
+  std::cout << "\t EM-algorithm time [s]: " << timeTakenForEMAlgorithm << std::endl;
+  std::cout << "\t Writing time [s]: " << timeTakenForWriting << std::endl;
 }
