@@ -385,7 +385,6 @@ void ParametersReadin::init(){
     if(line.find("#") != std::string::npos) continue;
     else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("INITIALIZATION_HAPLOTYPE_FREQUENCIES") != std::string::npos) initType_assign(line);
@@ -411,7 +410,6 @@ void ParametersReadin::print() const {
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Read data from: " << inputFileName << std::endl;
   std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;
-  std::cout << "\t Write phenotypes to: " << phenotypesFileName << std::endl;
   std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
   std::cout << "\t Write epsilon vs steps to: " << epsilonFileName << std::endl;
   std::cout << "#########Parameters EM-algorithm" << std::endl;

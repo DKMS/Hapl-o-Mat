@@ -1,7 +1,6 @@
 #file names
-FILENAME_INPUT=phenotypes.dat
+FILENAME_INPUT=results/phenotypes.dat
 FILENAME_HAPLOTYPES=results/haplotypes.dat
-FILENAME_GENOTYPES=results/phenotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
 FILENAME_EPSILON=results/epsilon.dat
 #EM-algorithm
