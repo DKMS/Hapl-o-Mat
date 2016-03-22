@@ -153,7 +153,7 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
   if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "Report "
+    std::cout << "\t Report "
 	      << id
 	      << " comes below allowed frequency. Report discarded."
 	      << std::endl;
@@ -294,7 +294,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
     if(1./numberOfReports - minimalFrequency < ZERO){
       discardReport = true;
-      std::cout << "Report "
+      std::cout << "\t Report "
 		<< id
 		<< " comes below allowed frequency. Report discarded."
 		<< std::endl;

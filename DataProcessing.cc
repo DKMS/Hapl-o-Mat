@@ -117,12 +117,12 @@ void InputFileToEdit::printStatistics(){
   std::cout << "\t Number loci: " << numberLoci << std::endl;
   std::cout << "\t Removed genotypes: " << numberRemovedDonors << std::endl;
   std::cout << "\t Leftover genotypes: " << numberDonors << std::endl;
-  std::cout << "\t N genotypes: " << Report::getNumberNReports() << std::endl;
-  std::cout << "\t A genotypes: " << Report::getNumberAReports() << std::endl;
-  std::cout << "\t M genotypes: " << Report::getNumberMReports() << std::endl;
-  std::cout << "\t I genotypes: " << Report::getNumberIReports() <<std::endl;
-  std::cout << "\t Genotypes: " << numberPhenotypes << std::endl;
-  std::cout << "\t Haplotypes: " << numberHaplotypes << std::endl;
+  std::cout << "\t Type N genotypes: " << Report::getNumberNReports() << std::endl;
+  std::cout << "\t Type A genotypes: " << Report::getNumberAReports() << std::endl;
+  std::cout << "\t Type M genotypes: " << Report::getNumberMReports() << std::endl;
+  std::cout << "\t Type I genotypes: " << Report::getNumberIReports() <<std::endl;
+  std::cout << "\t Different genotypes: " << numberPhenotypes << std::endl;
+  std::cout << "\t Different haplotypes: " << numberHaplotypes << std::endl;
   std::cout << std::endl;
 }
 

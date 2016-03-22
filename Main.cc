@@ -45,8 +45,8 @@ int main(int argc, char *argv[]){
   }
 
   std::cout << std::endl;
-  std::cout << "\tHapl-O-mat" << std::endl;
-  std::cout << "\tCopyright (C) 2016 DKMS gGmbH" << std::endl;
+  std::cout << "\t Hapl-O-mat" << std::endl;
+  std::cout << "\t Copyright (C) 2016 DKMS gGmbH" << std::endl;
   std::cout << std::endl;
 
   std::cout << "#########Initialization" << std::endl;
@@ -91,8 +91,8 @@ int main(int argc, char *argv[]){
   Haplotypes haplotypes(*pParameters);
   pInputFile->dataProcessing(phenotypes, haplotypes);
   pInputFile->printStatistics();
-  std::cout << "\t Memory requirement haplotypes: " << haplotypes.computeSizeInBytes() << " bytes" << std::endl;
-  std::cout << "\t Memory requirement genotypes: " << phenotypes.computeSizeInBytes() << " bytes" << std::endl;
+  std::cout << "\t Memory requirement haplotypes [MB]: " << haplotypes.computeSizeInBytes()/1000./1000. << std::endl;
+  std::cout << "\t Memory requirement genotypes [MB]: " << phenotypes.computeSizeInBytes()/1000./1000. << std::endl;
   endTime = getTime();
   timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime)/1000000.;
 
@@ -117,8 +117,8 @@ int main(int argc, char *argv[]){
   endTime = getTime();
   timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
 
-  std::cout << "#########Time" << std::endl;
-  std::cout << "\t Data preprocessing time [s]: " << timeTakenForDataPreProcessing << std::endl;
-  std::cout << "\t EM algorithm time [s]: " << timeTakenForEMAlgorithm << std::endl;
-  std::cout << "\t Writing time [s]: " << timeTakenForWriting << std::endl;
+  std::cout << "#########Times" << std::endl;
+  std::cout << "\t Data preprocessing [s]: " << timeTakenForDataPreProcessing << std::endl;
+  std::cout << "\t EM algorithm [s]: " << timeTakenForEMAlgorithm << std::endl;
+  std::cout << "\t Writing [s]: " << timeTakenForWriting << std::endl;
 }

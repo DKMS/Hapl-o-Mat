@@ -193,19 +193,19 @@ void ParametersGL::print() const {
 
   std::cout << "\t GL format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
-  std::cout << "\t Read data from pull-file: " << pullFileName << std::endl; 
-  std::cout << "\t Read data from glid-file: " << glidFileName << std::endl; 
-  std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;
-  std::cout << "\t Write genotypes to: " << phenotypesFileName << std::endl;
-  std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
-  std::cout << "\t Write epsilon and log(L) to: " << epsilonFileName << std::endl;
+  std::cout << "\t Input pull file: " << pullFileName << std::endl; 
+  std::cout << "\t Input GL-id file: " << glidFileName << std::endl; 
+  std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << phenotypesFileName << std::endl;
+  std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
-  std::cout << "\t Minimal frequency of genotypes= " << minimalFrequency << std::endl;
-  std::cout << "\t Processed loci with target allele resolutions: " << std::endl;
+  std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
+  std::cout << "\t Loci with target allele resolutions: " << std::endl;
   for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
     std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
   }
-  std::cout << "\t Resolve reports with missing genotypes: ";
+  std::cout << "\t Resolve missing genotypes: ";
   if(resolveUnknownGenotype)
     std::cout << "yes" << std::endl;
   else
@@ -225,13 +225,13 @@ void ParametersGL::print() const {
   for(auto locus : lociOrder){std::cout << locus << " ";}
   std::cout << std::endl;
   std::cout << "#########Parameters EM algorithm" << std::endl;
-  std::cout << "\t InitialiZation haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
-  std::cout << "\t Epsilon= " << epsilon << std::endl;
-  std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  std::cout << "\t Haplotype frequency initialization: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Epsilon: " << epsilon << std::endl;
+  std::cout << "\t Cut haplotype frequencies: " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
     std::cout << "\t Renormalize haplotype frequencies " << std::endl;
-  std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t Seed= " << seed << std::endl;
+  std::cout << "\t Zero: " << ZERO << std::endl;
+  std::cout << "\t Seed: " << seed << std::endl;
   std::cout << std::endl;
 }
 
@@ -271,14 +271,14 @@ void ParametersGLC::print() const {
 
   std::cout << "\t GLC format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
-  std::cout << "\t Read data from input file: " << inputFileName << std::endl; 
-  std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;
-  std::cout << "\t Write genotypes to: " << phenotypesFileName << std::endl;
-  std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
-  std::cout << "\t Write epsilon and log(L) to: " << epsilonFileName << std::endl;
+  std::cout << "\t Input: " << inputFileName << std::endl; 
+  std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << phenotypesFileName << std::endl;
+  std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
-  std::cout << "\t Minimal frequency of genotypes= " << minimalFrequency << std::endl;
-  std::cout << "\t Processed loci with target allele resolutions: " << std::endl;
+  std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
+  std::cout << "\t Loci with target allele resolutions: " << std::endl;
   for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
     std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
   }
@@ -294,13 +294,13 @@ void ParametersGLC::print() const {
   else
     std::cout << "no" << std::endl;
   std::cout << "#########Parameters EM algorithm" << std::endl;
-  std::cout << "\t Initialization haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
-  std::cout << "\t Epsilon= " << epsilon << std::endl;
-  std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  std::cout << "\t Haplotype frequency initialization: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Epsilon: " << epsilon << std::endl;
+  std::cout << "\t Cut haplotype frequencies: " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
     std::cout << "\t Renormalize haplotype frequencies " << std::endl;
-  std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t Seed= " << seed << std::endl;
+  std::cout << "\t Zero: " << ZERO << std::endl;
+  std::cout << "\t Seed: " << seed << std::endl;
   std::cout << std::endl;
 }
 
@@ -342,14 +342,14 @@ void ParametersMA::print() const {
 
   std::cout << "\t MA format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
-  std::cout << "\t Read data from: " << inputFileName << std::endl;
-  std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;
-  std::cout << "\t Write genotypes to: " << phenotypesFileName << std::endl;
-  std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
-  std::cout << "\t Write epsilon and log(L) to: " << epsilonFileName << std::endl;
+  std::cout << "\t Input: " << inputFileName << std::endl;
+  std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << phenotypesFileName << std::endl;
+  std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
-  std::cout << "\t Minimal frequency of genotypes= " << minimalFrequency << std::endl;
-  std::cout << "\t Processed loci with target allele resolutions: " << std::endl;
+  std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
+  std::cout << "\t Loci with target allele resolutions: " << std::endl;
   for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
     std::cout <<  "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
   }
@@ -365,13 +365,13 @@ void ParametersMA::print() const {
   else
     std::cout << "no" << std::endl;
   std::cout << "#########Parameters EM algorithm" << std::endl;
-  std::cout << "\t Initialization haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
-  std::cout << "\t Epsilon= " << epsilon << std::endl;
-  std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  std::cout << "\t Haplotype frequency initialization: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Epsilon: " << epsilon << std::endl;
+  std::cout << "\t Cut haplotype frequencies: " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
     std::cout << "\t Renormalize haplotype frequencies " << std::endl;
-  std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t Seed= " << seed << std::endl;
+  std::cout << "\t Zero: " << ZERO << std::endl;
+  std::cout << "\t Seed: " << seed << std::endl;
   std::cout << std::endl;
 }
 
@@ -408,17 +408,17 @@ void ParametersReadin::print() const {
 
   std::cout << "\t Readin format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
-  std::cout << "\t Read data from: " << inputFileName << std::endl;
-  std::cout << "\t Write haplotypes to: " << haplotypesFileName << std::endl;
-  std::cout << "\t Write estimated haplotype frequencies to: " << haplotypeFrequenciesFileName << std::endl;
-  std::cout << "\t Write epsilon and log(L) to: " << epsilonFileName << std::endl;
+  std::cout << "\t Input: " << inputFileName << std::endl;
+  std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
+  std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters EM algorithm" << std::endl;
-  std::cout << "\t Initialization haplotype frequencies: " << printInitialisationHaplotypeFrequencies() << std::endl;
-  std::cout << "\t Epsilon= " << epsilon << std::endl;
-  std::cout << "\t Cut haplotype frequencies= " << cutHaplotypeFrequencies << std::endl;
+  std::cout << "\t Haplotype frequency initialization: " << printInitialisationHaplotypeFrequencies() << std::endl;
+  std::cout << "\t Epsilon: " << epsilon << std::endl;
+  std::cout << "\t Cut haplotype frequencies: " << cutHaplotypeFrequencies << std::endl;
   if(renormaliseHaplotypeFrequencies)
     std::cout << "\t Renormalize haplotype frequencies " << std::endl;
-  std::cout << "\t Zero= " << ZERO << std::endl;
-  std::cout << "\t Seed= " << seed << std::endl;
+  std::cout << "\t Zero: " << ZERO << std::endl;
+  std::cout << "\t Seed: " << seed << std::endl;
   std::cout << std::endl;
 }
