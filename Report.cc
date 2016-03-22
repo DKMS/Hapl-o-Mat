@@ -33,10 +33,9 @@
 #include "DataProcessing.h"
 
 std::unordered_map<std::string, std::shared_ptr<Locus>> ColumnReport::singleLocusGenotypesAlreadyDone;
-double Report::numberH0Reports = 0.;
-double Report::numberH1Reports = 0.;
-double Report::numberH2Reports = 0.;
-double Report::numberH2MReports = 0.;
+double Report::numberNReports = 0.;
+double Report::numberAReports = 0.;
+double Report::numberMReports = 0.;
 double Report::numberIReports = 0.;
 
 std::string BasicReport::buildPhenotypeCode() const{
@@ -139,7 +138,7 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   auto pos = singleLocusGenotypesAlreadyDone.find(genotype->getSingleLocusGenotype());
   if(pos == singleLocusGenotypesAlreadyDone.cend())
     {
-      std::shared_ptr<Locus> pLocus = genotype->resolve(doH2Filter, expandH2Lines);
+      std::shared_ptr<Locus> pLocus = genotype->resolve(doAmbiguityFilter, expandAmbiguityLines);
     
       types.at(positionWantedLocus) = pLocus->getType();
       pLocus->reduce(genotypesAtLocus);
@@ -154,7 +153,7 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
   if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "Report "
+    std::cout << "\t Report "
 	      << id
 	      << " comes below allowed frequency. Report discarded."
 	      << std::endl;
@@ -189,41 +188,32 @@ std::string Report::evaluateReportType(const size_t numberReports) const{
     numberIReports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
-	       Locus::reportType::H2M) != types.cend())
-    numberH2MReports += 1./static_cast<double>(numberReports);
+	       Locus::reportType::M) != types.cend())
+    numberMReports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
-	       Locus::reportType::H2) != types.cend())
-    numberH2Reports += 1./static_cast<double>(numberReports);
+	       Locus::reportType::A) != types.cend())
+    numberAReports += 1./static_cast<double>(numberReports);
   else if(find(types.cbegin(),
 	       types.cend(),
-	       Locus::reportType::H1) != types.cend())
-    numberH1Reports += 1./static_cast<double>(numberReports);
-  else if(find(types.cbegin(),
-	       types.cend(),
-	       Locus::reportType::H0) != types.cend())
-    numberH0Reports += 1./static_cast<double>(numberReports);
+	       Locus::reportType::N) != types.cend())
+    numberNReports += 1./static_cast<double>(numberReports);
 
   std::string totalType = "";
   for(auto type : types){
     switch(type){
-    case Locus::reportType::H0:
+    case Locus::reportType::N:
       {
-	totalType += "H0";
+	totalType += "N";
 	break;
       }
-    case Locus::reportType::H1:
-      {
-	totalType += "H1";
+    case Locus::reportType::A:
+      {	totalType += "A";
 	break;
       }
-    case Locus::reportType::H2:
-      {	totalType += "H2";
-	break;
-      }
-    case Locus::reportType::H2M:
+    case Locus::reportType::M:
       {
-	totalType += "H2M";
+	totalType += "M";
 	break;
       }
     case Locus::reportType::I:
@@ -277,9 +267,9 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }
       else{
 	discardReport = true;
-	std::cout << "Report "
+	std::cout << "\t Genotype "
 		  << id
-		  << " contains Glid 0. Report discarded."
+		  << " contains GL-id 0. Genotype discarded."
 		  << std::endl;
 	break;
       }
@@ -304,7 +294,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
     if(1./numberOfReports - minimalFrequency < ZERO){
       discardReport = true;
-      std::cout << "Report "
+      std::cout << "\t Report "
 		<< id
 		<< " comes below allowed frequency. Report discarded."
 		<< std::endl;
@@ -312,7 +302,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     }
     if(numberOfReports < ZERO){
       discardReport = true;	    
-      std::cout << "Report "
+      std::cout << "\t Genotype "
 		<< id
 		<< " contains empty loci."
 		<< std::endl;

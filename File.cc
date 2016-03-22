@@ -150,7 +150,7 @@ void FileGTog::readFile(){
   file.close();
 }
 
-void FileH2Expanded::readFile(){
+void FileAmbiguityExpanded::readFile(){
 
   std::ifstream file;
   openFileToRead(fileName, file);
@@ -164,12 +164,12 @@ void FileH2Expanded::readFile(){
     while(ss >> entry){
       blocks.push_back(entry);
     }
-    strVecVec_t H2line;
+    strVecVec_t Ambiguityline;
     for(auto block : blocks){
       strVec_t splittedBlock = split(block, ',');
-      H2line.push_back(splittedBlock);      
+      Ambiguityline.push_back(splittedBlock);      
     }
-    list.push_back(H2line);
+    list.push_back(Ambiguityline);
 
     std::string locus = getLocus(line);
     addIteratorToLocusPositions(locus, locusOld);
@@ -179,7 +179,7 @@ void FileH2Expanded::readFile(){
 }
 
 
-void FileH2::readFile(){
+void FileAmbiguity::readFile(){
  
   std::ifstream file;
   openFileToRead(fileName, file);

@@ -63,7 +63,7 @@ class InputFile{
     numberPhenotypes(0),  
     haplotypeCombinations()
       {
-	std::cout << "#########Data-preprocessing" << std::endl;
+	std::cout << "#########Data preprocessing" << std::endl;
       }
   virtual ~InputFile(){}
 
@@ -123,8 +123,8 @@ class GL : public InputFileToEdit{
     glid(glidFileName,
 	 parameters.getLociAndWantedAlleleGroups(),
 	 parameters.getLociOrder(),
-	 parameters.getDoH2Filter(),
-	 parameters.getExpandH2Lines(),
+	 parameters.getDoAmbiguityFilter(),
+	 parameters.getExpandAmbiguityLines(),
 	 parameters.getResolveUnknownGenotype())
       {
 	haplotypesFileName = parameters.getHaplotypesFileName();
@@ -149,8 +149,8 @@ class GLC : public InputFileToEdit{
  public:
   explicit GLC(const ParametersGLC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
-    doH2Filter(parameters.getDoH2Filter()),
-    expandH2Lines(parameters.getExpandH2Lines())
+    doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
+    expandAmbiguityLines(parameters.getExpandAmbiguityLines())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
@@ -162,8 +162,8 @@ class GLC : public InputFileToEdit{
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
 
  private:
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
 };
 
 class MA : public InputFileToEdit{
@@ -171,8 +171,8 @@ class MA : public InputFileToEdit{
  public:
   explicit MA(const ParametersMA & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
-    doH2Filter(parameters.getDoH2Filter()),
-    expandH2Lines(parameters.getExpandH2Lines()),
+    doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
+    expandAmbiguityLines(parameters.getExpandAmbiguityLines()),
     lociNamesFromFile()
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
@@ -187,8 +187,8 @@ class MA : public InputFileToEdit{
   void readLociNamesFromFile(const std::string line);
 
  private:
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
   strVec_t lociNamesFromFile;
 };
 

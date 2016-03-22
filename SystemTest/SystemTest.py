@@ -33,7 +33,7 @@ def copyFolder(path):
           print('Folder ' + pathNewFolder + ' already exists.')
      else:
           shutil.copytree(path, pathNewFolder)
-          #shutil.rmtree(pathNewFolder + '/results')
+          os.remove(pathNewFolder + '/estimatedHaplotypeFrequencies.dat')
           os.makedirs(pathNewFolder + '/results')
           shutil.copytree('dataSystemTest', pathNewFolder + '/data')
           shutil.copy('../haplomat', pathNewFolder)
@@ -55,7 +55,7 @@ def readResults(path):
 
 def compareResults(path):
      original = readResults(path)
-     test = readResults(path + 'New')
+     test = readResults(path + 'New/results/')
 
      missing = 0
      tooMany = 0
@@ -73,6 +73,10 @@ def compareResults(path):
                
 def clean(path):
      shutil.rmtree(path)
+
+
+
+
 
 folders = ['MA_g', 'MA_P', 'MA_4d', 'MA_G', 'MA_6d', 'MA_8d', 'GL_a', 'GL_b', 'GLC_a']
 testsPassed = 0

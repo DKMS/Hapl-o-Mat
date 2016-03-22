@@ -115,15 +115,14 @@ void InputFileToEdit::printPhenotypes(const std::shared_ptr<Report> pReport,
 void InputFileToEdit::printStatistics(){
 
   std::cout << "\t Number loci: " << numberLoci << std::endl;
-  std::cout << "\t Removed reports: " << numberRemovedDonors << std::endl;
-  std::cout << "\t Leftover Reports: " << numberDonors << std::endl;
-  std::cout << "\t H0 reports: " << Report::getNumberH0Reports() << std::endl;
-  std::cout << "\t H1 reports: " << Report::getNumberH1Reports() << std::endl;
-  std::cout << "\t H2 reports: " << Report::getNumberH2Reports() << std::endl;
-  std::cout << "\t H2M reports: " << Report::getNumberH2MReports() << std::endl;
-  std::cout << "\t I reports: " << Report::getNumberIReports() <<std::endl;
-  std::cout << "\t Phenotypes: " << numberPhenotypes << std::endl;
-  std::cout << "\t Haplotypes: " << numberHaplotypes << std::endl;
+  std::cout << "\t Removed genotypes: " << numberRemovedDonors << std::endl;
+  std::cout << "\t Leftover genotypes: " << numberDonors << std::endl;
+  std::cout << "\t Type N genotypes: " << Report::getNumberNReports() << std::endl;
+  std::cout << "\t Type A genotypes: " << Report::getNumberAReports() << std::endl;
+  std::cout << "\t Type M genotypes: " << Report::getNumberMReports() << std::endl;
+  std::cout << "\t Type I genotypes: " << Report::getNumberIReports() <<std::endl;
+  std::cout << "\t Different genotypes: " << numberPhenotypes << std::endl;
+  std::cout << "\t Different haplotypes: " << numberHaplotypes << std::endl;
   std::cout << std::endl;
 }
 
@@ -185,7 +184,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLCReport report(line, lociAndWantedAlleleGroups, minimalFrequency, doH2Filter, expandH2Lines);
+    GLCReport report(line, lociAndWantedAlleleGroups, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
@@ -232,7 +231,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    MAReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups, minimalFrequency, doH2Filter, expandH2Lines);
+    MAReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 

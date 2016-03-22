@@ -75,7 +75,7 @@ class Haplotypes : public Hash<Haplotype>{
   double getEpsilon() const {return epsilon;}
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   void initialiseFrequencies(const Phenotypes & phenotypes);
-  void initialiseNumberOccurence(const Phenotypes & phenotypes);
+  void initialiseNumberOccurrence(const Phenotypes & phenotypes);
   void initialisePerturbation();
   void EMAlgorithm(Phenotypes & phenotypes);
   void maximizationStep(const Phenotypes & phenotypes, double & largestEpsilon);

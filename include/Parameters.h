@@ -36,7 +36,7 @@ class Parameters{
   enum initialisationHaplotypeFrequencies{
     random,
     perturbation,
-    numberOccurence,
+    numberOccurrence,
     equal
   };
 
@@ -48,9 +48,9 @@ class Parameters{
     epsilonFileName("results/epsilonVsSteps.dat"),
     lociAndWantedAlleleGroups(),
     minimalFrequency(1e-5),
-    doH2Filter(true),
-    expandH2Lines(true),
-    initType(initialisationHaplotypeFrequencies::numberOccurence),
+    doAmbiguityFilter(true),
+    expandAmbiguityLines(true),
+    initType(initialisationHaplotypeFrequencies::numberOccurrence),
     epsilon(1e-6),
     cutHaplotypeFrequencies(epsilon),
     renormaliseHaplotypeFrequencies(true),
@@ -67,8 +67,8 @@ class Parameters{
   std::string getEpsilonFileName() const {return epsilonFileName;}
   const std::map<std::string, Allele::codePrecision>& getLociAndWantedAlleleGroups() const {return lociAndWantedAlleleGroups;}
   double getMinimalFrequency() const {return minimalFrequency;}
-  bool getDoH2Filter() const {return doH2Filter;}
-  bool getExpandH2Lines() const {return expandH2Lines;}
+  bool getDoAmbiguityFilter() const {return doAmbiguityFilter;}
+  bool getExpandAmbiguityLines() const {return expandAmbiguityLines;}
   initialisationHaplotypeFrequencies getInitType() const {return initType;}
   double getEpsilon() const {return epsilon;}
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
@@ -94,8 +94,8 @@ class Parameters{
 
   std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
   double minimalFrequency;
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
   initialisationHaplotypeFrequencies initType;
   double epsilon;
   double cutHaplotypeFrequencies;

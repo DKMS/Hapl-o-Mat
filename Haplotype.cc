@@ -75,14 +75,14 @@ void Haplotypes::EMAlgorithm(Phenotypes & phenotypes){
 void Haplotypes::initialiseFrequencies(const Phenotypes & phenotypes){
   
   switch(initType){
-  case Parameters::initialisationHaplotypeFrequencies::numberOccurence:
+  case Parameters::initialisationHaplotypeFrequencies::numberOccurrence:
     {
-      initialiseNumberOccurence(phenotypes);
+      initialiseNumberOccurrence(phenotypes);
       break;
     }
   case Parameters::initialisationHaplotypeFrequencies::perturbation:
     {
-      initialiseNumberOccurence(phenotypes);
+      initialiseNumberOccurrence(phenotypes);
       initialisePerturbation();
       break;
     }
@@ -116,7 +116,7 @@ void Haplotypes::initialiseFrequencies(const Phenotypes & phenotypes){
   }//switch
 }
 
-void Haplotypes::initialiseNumberOccurence(const Phenotypes & phenotypes){
+void Haplotypes::initialiseNumberOccurrence(const Phenotypes & phenotypes){
 
   double factor = static_cast<double>(pow(2, numberLoci));
   factor *= static_cast<double>(numberDonors);

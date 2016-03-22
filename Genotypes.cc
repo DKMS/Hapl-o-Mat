@@ -28,7 +28,7 @@
 
 FileNMDPCodes MAGenotype::fileNMDPCodes("data/code2dna.txt");
 
-std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool expandH2Lines) const{
+std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
   std::shared_ptr<Locus> pLocus;
 
@@ -53,7 +53,7 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doH2Filter, const bool exp
     strVecArr_t in_unphasedLocus;
     in_unphasedLocus.at(0) = lhs;
     in_unphasedLocus.at(1) = rhs;
-    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doH2Filter, expandH2Lines);
+    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doAmbiguityFilter, expandAmbiguityLines);
   }
   else{
     strArrVec_t in_phasedLocus;
@@ -188,7 +188,7 @@ void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) co
 }
 
 
-std::shared_ptr<Locus> MAGenotype::resolve(const bool doH2Filter, const bool expandH2Lines) const{
+std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
   strVecArr_t allelesAtLocusPositions;
   size_t locusPosition = 0;
@@ -211,7 +211,7 @@ std::shared_ptr<Locus> MAGenotype::resolve(const bool doH2Filter, const bool exp
     }
   else
     {
-      pLocus = std::make_shared<UnphasedLocus> (allelesAtLocusPositions, wantedAlleleGroup, doH2Filter, expandH2Lines);
+      pLocus = std::make_shared<UnphasedLocus> (allelesAtLocusPositions, wantedAlleleGroup, doAmbiguityFilter, expandAmbiguityLines);
     }
 
   pLocus->resolve();

@@ -33,10 +33,9 @@ class Locus{
 
  public:
   enum reportType{
-    H0,
-    H1,
-    H2,
-    H2M,
+    N,
+    A,
+    M,
     I
   };
 
@@ -90,8 +89,8 @@ class UnphasedLocus : public Locus{
  public:
   explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus) 
     : Locus(),
-    doH2Filter(false),
-    expandH2Lines(false),
+    doAmbiguityFilter(false),
+    expandAmbiguityLines(false),
     unphasedLocus(in_unphasedLocus),
     pAllelesAtBothLocusPositions()
     {
@@ -99,11 +98,11 @@ class UnphasedLocus : public Locus{
     }
   explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus,
 			 const Allele::codePrecision in_wantedPrecision,
-			 const bool in_doH2Filter,
-			 const bool in_expandH2Lines)
+			 const bool in_doAmbiguityFilter,
+			 const bool in_expandAmbiguityLines)
     : Locus(),
-    doH2Filter(in_doH2Filter),
-    expandH2Lines(in_expandH2Lines),
+    doAmbiguityFilter(in_doAmbiguityFilter),
+    expandAmbiguityLines(in_expandAmbiguityLines),
     unphasedLocus(in_unphasedLocus),
     pAllelesAtBothLocusPositions()
     {
@@ -117,23 +116,23 @@ class UnphasedLocus : public Locus{
   void buildResolvedPhasedLocus();
 
  private:
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
   strVecArr_t unphasedLocus;
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtBothLocusPositions;
 };
 
-class H2Filter{
+class AmbiguityFilter{
 
  public:
-  explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions,
-		    const bool in_expandH2Lines)
-    : expandH2Lines(in_expandH2Lines),
+  explicit AmbiguityFilter(const strVecVecArr_t in_codesAtBothLocusPositions,
+		    const bool in_expandAmbiguityLines)
+    : expandAmbiguityLines(in_expandAmbiguityLines),
     isH1(false),
-    isH2(false),
+    isAmbiguity(false),
     isMultipleLines(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
-    possibleH2Lines(),
+    possibleAmbiguityLines(),
     phasedLocus(),
     codesAndInAtLocusPosition1(),
     codesAndInAtLocusPosition2()
@@ -149,27 +148,27 @@ class H2Filter{
   void checkIfH1Possible(const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition);
   void preFilter();
   void filter();
-  void matchCodesToH2Lines(const std::string lhs,
+  void matchCodesToAmbiguityLines(const std::string lhs,
 			   const std::string rhs);
-  bool isH2ElementInCodesAndIn(const std::string code,
+  bool isAmbiguityElementInCodesAndIn(const std::string code,
 			       const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition);
 
   bool getIsH1() const {return isH1;}
-  bool getIsH2() const {return isH2;}
+  bool getIsAmbiguity() const {return isAmbiguity;}
   bool getIsMultipleLines() const {return isMultipleLines;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
 
  private:
-  bool expandH2Lines;
+  bool expandAmbiguityLines;
   bool isH1;
-  bool isH2;
+  bool isAmbiguity;
   bool isMultipleLines;
   strVecVecArr_t codesAtBothLocusPositions;
-  std::vector<FileH2::list_t::const_iterator> possibleH2Lines;
+  std::vector<FileAmbiguity::list_t::const_iterator> possibleAmbiguityLines;
   strArrVec_t phasedLocus;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition1;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition2;
-  static FileH2 fileH2;
+  static FileAmbiguity fileAmbiguity;
 };
 
 

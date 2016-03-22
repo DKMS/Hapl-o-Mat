@@ -27,7 +27,7 @@
 #include "Utility.h"
 #include "Allele.h"
 
-FileH2 H2Filter::fileH2("data/H2.txt"); 
+FileAmbiguity AmbiguityFilter::fileAmbiguity("data/Ambiguity.txt"); 
 
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
@@ -98,12 +98,12 @@ void PhasedLocus::resolve(){
   }
   pAllelesAtPhasedLocus = std::move(newPAllelesAtPhasedLocus);
 
-  type = reportType::H0;
+  type = reportType::N;
 }
 
 void UnphasedLocus::resolve(){
 
-  if(doH2Filter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
+  if(doAmbiguityFilter && (unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)){
 
     strVecVecArr_t possibleCodesAtBothLocusPositions;
     auto it_possibleCodesAtBothLocusPositions = possibleCodesAtBothLocusPositions.begin();
@@ -155,20 +155,20 @@ void UnphasedLocus::resolve(){
       it_possibleCodesAtBothLocusPositions ++;
     }//for locusPosition
 
-    H2Filter h2 (possibleCodesAtBothLocusPositions, expandH2Lines);
-    h2.allFilters();
-    if(h2.getIsH1()){
-      type = reportType::H1;
-      PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
+    AmbiguityFilter ambiguity (possibleCodesAtBothLocusPositions, expandAmbiguityLines);
+    ambiguity.allFilters();
+    if(ambiguity.getIsH1()){
+      type = reportType::N;
+      PhasedLocus phasedLocus(ambiguity.getPhasedLocus(), wantedPrecision);
       phasedLocus.resolve();
       pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
     }
-    else if(h2.getIsH2()){
-      if(h2.getIsMultipleLines())
-	type = reportType::H2M;
+    else if(ambiguity.getIsAmbiguity()){
+      if(ambiguity.getIsMultipleLines())
+	type = reportType::M;
       else
-	type = reportType::H2;
-      PhasedLocus phasedLocus(h2.getPhasedLocus(), wantedPrecision);
+	type = reportType::A;
+      PhasedLocus phasedLocus(ambiguity.getPhasedLocus(), wantedPrecision);
       phasedLocus.resolve();
       pAllelesAtPhasedLocus = phasedLocus.getPAllelesAtPhasedLocus();
     }
@@ -176,12 +176,12 @@ void UnphasedLocus::resolve(){
       type = reportType::I;
       doResolve();
     }
-  }//if doH2Filter
+  }//if doAmbiguityFilter
   else{
     if(unphasedLocus.at(0).size() > 1 || unphasedLocus.at(1).size() > 1)
       type = reportType::I;
     else
-      type = reportType::H0;      
+      type = reportType::N;      
     doResolve();
   }
 }
@@ -217,20 +217,20 @@ void UnphasedLocus::doResolve(){
   buildResolvedPhasedLocus();
 }
 
-void H2Filter::allFilters(){
+void AmbiguityFilter::allFilters(){
 
   h1Filter();
   if(! isH1){
     preFilter();
-    if(! possibleH2Lines.empty()){
+    if(! possibleAmbiguityLines.empty()){
       filter();
       if(! phasedLocus.empty())
-	isH2 = true;
+	isAmbiguity = true;
     }
   }
 }
 
-void H2Filter::checkIfH1Possible(const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition){
+void AmbiguityFilter::checkIfH1Possible(const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition){
 
   isH1 = true;
   strVec_t listOfGCodes;
@@ -261,7 +261,7 @@ void H2Filter::checkIfH1Possible(const std::vector<std::pair<strVec_t, bool>> & 
   }
 }
 
-void H2Filter::h1Filter(){
+void AmbiguityFilter::h1Filter(){
 
   checkIfH1Possible(codesAndInAtLocusPosition1);
   if(isH1){
@@ -275,12 +275,12 @@ void H2Filter::h1Filter(){
   }
 }
 
-void H2Filter::preFilter(){
+void AmbiguityFilter::preFilter(){
    
   std::string locus = getLocus(*codesAndInAtLocusPosition1.cbegin()->first.cbegin());
-  FileH2::list_t::const_iterator pos;
-  FileH2::list_t::const_iterator lastPos;
-  fileH2.findPositionLocus(locus, pos, lastPos);
+  FileAmbiguity::list_t::const_iterator pos;
+  FileAmbiguity::list_t::const_iterator lastPos;
+  fileAmbiguity.findPositionLocus(locus, pos, lastPos);
 
   while(pos < lastPos){
     for(auto element : *pos){    
@@ -313,7 +313,7 @@ void H2Filter::preFilter(){
 		  {
 		    return element.second;
 		  })){
-      possibleH2Lines.push_back(pos);
+      possibleAmbiguityLines.push_back(pos);
     }//if
     for(auto codesAndIn = codesAndInAtLocusPosition1.begin();
 	codesAndIn != codesAndInAtLocusPosition1.end();
@@ -330,7 +330,7 @@ void H2Filter::preFilter(){
   }//while
 }
 
-void H2Filter::matchCodesToH2Lines(const std::string lhs,
+void AmbiguityFilter::matchCodesToAmbiguityLines(const std::string lhs,
 				   const std::string rhs){
 
   auto currentPos2 = codesAndInAtLocusPosition2.begin();
@@ -381,15 +381,15 @@ void H2Filter::matchCodesToH2Lines(const std::string lhs,
 }
 
 
-void H2Filter::filter(){
+void AmbiguityFilter::filter(){
 
-  std::vector<FileH2::list_t::const_iterator> candidates;
-  for(auto line : possibleH2Lines){
+  std::vector<FileAmbiguity::list_t::const_iterator> candidates;
+  for(auto line : possibleAmbiguityLines){
     for(auto element :  *line){
       std::string lhs = element.at(0);
       std::string rhs = element.at(1);
-      matchCodesToH2Lines(lhs, rhs);
-      matchCodesToH2Lines(rhs, lhs);
+      matchCodesToAmbiguityLines(lhs, rhs);
+      matchCodesToAmbiguityLines(rhs, lhs);
     }//for element
 
     if(std::all_of(codesAndInAtLocusPosition1.cbegin(),
@@ -409,9 +409,9 @@ void H2Filter::filter(){
 	codesAndIn != codesAndInAtLocusPosition2.end();
 	codesAndIn ++)
       codesAndIn->second = false;
-  }//for possibleH2Lines
+  }//for possibleAmbiguityLines
 
-  //locus becomes phased if an H2-line was found
+  //locus becomes phased if an Ambiguity-line was found
   if(!candidates.empty()){
     //remove candidates pointing to same line
     candidates.erase(std::unique(candidates.begin(),
@@ -422,15 +422,15 @@ void H2Filter::filter(){
     for(auto candidate : candidates){
       for(auto genotype : *candidate){
 	bool addCandidateCode = true;
-	if(! expandH2Lines){
+	if(! expandAmbiguityLines){
 	  addCandidateCode = false;
-	  if(isH2ElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition1)){
-	    if(isH2ElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition2))
+	  if(isAmbiguityElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition1)){
+	    if(isAmbiguityElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition2))
 	      addCandidateCode = true;
 	  }
 	  if(addCandidateCode == false){
-	    if(isH2ElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition1)){
-	      if(isH2ElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition2))
+	    if(isAmbiguityElementInCodesAndIn(genotype[1], codesAndInAtLocusPosition1)){
+	      if(isAmbiguityElementInCodesAndIn(genotype[0], codesAndInAtLocusPosition2))
 		addCandidateCode = true;
 	    }
 	  }
@@ -450,7 +450,7 @@ void H2Filter::filter(){
   }//if candidates empty
 }
 
-bool H2Filter::isH2ElementInCodesAndIn(const std::string code,
+bool AmbiguityFilter::isAmbiguityElementInCodesAndIn(const std::string code,
 				       const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition){
 
   auto pos1 = find_if(codesAndInAtLocusPosition.cbegin(),

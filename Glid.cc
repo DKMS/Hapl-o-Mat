@@ -32,7 +32,7 @@ FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt");
 
 void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup){
 
-  std::cout << "Build list of all possible genotypes for locus " << locus << std::endl;
+  std::cout << " \t Build list of all possible genotypes for locus " << locus << std::endl;
 
   FileAlleles::list_t::const_iterator pos;
   FileAlleles::list_t::const_iterator lastPos;
@@ -75,7 +75,7 @@ void GlidFile::reserveSize(){
 
 void GlidFile::readAndResolveFile(){
 
-  std::cout << "Resolve Glids" << std::endl;
+  std::cout << "\t Resolve Glids" << std::endl;
 
   std::ifstream file;
   openFileToRead(fileName, file);
@@ -92,7 +92,7 @@ void GlidFile::readAndResolveFile(){
     if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend()){
 
       GLGenotype genotypeGL(singeLocusGenotype, locusAndwantedAlleleGroup->second);
-      std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doH2Filter, expandH2Lines);
+      std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
 
       std::pair<list_t::iterator, bool> inserted = list.emplace(glid, pLocus);
       if(! inserted.second){

@@ -113,10 +113,9 @@ class Report : public BasicReport{
   void buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports);
   std::string evaluateReportType(const size_t numberReports) const;
 
-  static double getNumberH0Reports() {return numberH0Reports;}
-  static double getNumberH1Reports() {return numberH1Reports;}
-  static double getNumberH2Reports() {return numberH2Reports;}
-  static double getNumberH2MReports() {return numberH2MReports;}
+  static double getNumberNReports() {return numberNReports;}
+  static double getNumberAReports() {return numberAReports;}
+  static double getNumberMReports() {return numberMReports;}
   static double getNumberIReports() {return numberIReports;}
 
  protected:
@@ -125,10 +124,9 @@ class Report : public BasicReport{
   double numberOfReports;
   bool discardReport;
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesWithFrequenciesAtLoci;
-  static double numberH0Reports;
-  static double numberH1Reports;
-  static double numberH2Reports;
-  static double numberH2MReports;
+  static double numberNReports;
+  static double numberAReports;
+  static double numberMReports;
   static double numberIReports;
 };
 
@@ -180,12 +178,12 @@ class ColumnReport : public Report{
   explicit ColumnReport(const std::map<std::string,
 			Allele::codePrecision> & in_lociAndWantedAlleleGroups,
 			const double in_minimalFrequency,
-			const bool in_doH2Filter,
-			const bool in_expandH2Lines)
+			const bool in_doAmbiguityFilter,
+			const bool in_expandAmbiguityLines)
     : Report(in_lociAndWantedAlleleGroups),
     minimalFrequency(in_minimalFrequency),
-    doH2Filter(in_doH2Filter),
-    expandH2Lines(in_expandH2Lines)
+    doAmbiguityFilter(in_doAmbiguityFilter),
+    expandAmbiguityLines(in_expandAmbiguityLines)
     {
       genotypesWithFrequenciesAtLoci.resize(numberLoci);
     }
@@ -205,8 +203,8 @@ class ColumnReport : public Report{
   
  protected:
   double minimalFrequency;
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
   static std::unordered_map<std::string, std::shared_ptr<Locus>> singleLocusGenotypesAlreadyDone;
 };
 
@@ -216,9 +214,9 @@ class GLCReport : public ColumnReport{
   explicit GLCReport(const std::string line,
 		     const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
 		     const double in_minimalFrequency,
-		     const bool in_doH2Filter,
-		     const bool in_expandH2Lines)
-    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doH2Filter, in_expandH2Lines),
+		     const bool in_doAmbiguityFilter,
+		     const bool in_expandAmbiguityLines)
+    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doAmbiguityFilter, in_expandAmbiguityLines),
     singleLocusGenotypes()
   {
     translateLine(line);
@@ -261,9 +259,9 @@ class MAReport : public ColumnReport{
 		   const strVec_t & in_lociNamesFromFile,
 		   const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
 		   const double in_minimalFrequency,
-		   const bool in_doH2Filter,
-		   const bool in_expandH2Lines)
-    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doH2Filter, in_expandH2Lines),
+		   const bool in_doAmbiguityFilter,
+		   const bool in_expandAmbiguityLines)
+    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doAmbiguityFilter, in_expandAmbiguityLines),
     lociFromFile(),
     lociNamesFromFile(in_lociNamesFromFile)
       {
