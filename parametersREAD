@@ -1,5 +1,5 @@
 #file names
-FILENAME_INPUT=results/phenotypes.dat
+FILENAME_INPUT=results/genotypes.dat
 FILENAME_HAPLOTYPES=results/haplotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
 FILENAME_EPSILON=results/epsilon.dat

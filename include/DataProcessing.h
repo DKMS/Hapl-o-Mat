@@ -63,7 +63,7 @@ class InputFile{
     numberPhenotypes(0),  
     haplotypeCombinations()
       {
-	std::cout << "#########Data-preprocessing" << std::endl;
+	std::cout << "#########Data preprocessing" << std::endl;
       }
   virtual ~InputFile(){}
 

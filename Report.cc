@@ -267,9 +267,9 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }
       else{
 	discardReport = true;
-	std::cout << "Report "
+	std::cout << "\t Genotype "
 		  << id
-		  << " contains Glid 0. Report discarded."
+		  << " contains GL-id 0. Genotype discarded."
 		  << std::endl;
 	break;
       }
@@ -302,7 +302,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     }
     if(numberOfReports < ZERO){
       discardReport = true;	    
-      std::cout << "Report "
+      std::cout << "\t Genotype "
 		<< id
 		<< " contains empty loci."
 		<< std::endl;

@@ -115,13 +115,13 @@ void InputFileToEdit::printPhenotypes(const std::shared_ptr<Report> pReport,
 void InputFileToEdit::printStatistics(){
 
   std::cout << "\t Number loci: " << numberLoci << std::endl;
-  std::cout << "\t Removed reports: " << numberRemovedDonors << std::endl;
-  std::cout << "\t Leftover Reports: " << numberDonors << std::endl;
-  std::cout << "\t N reports: " << Report::getNumberNReports() << std::endl;
-  std::cout << "\t A reports: " << Report::getNumberAReports() << std::endl;
-  std::cout << "\t M reports: " << Report::getNumberMReports() << std::endl;
-  std::cout << "\t I reports: " << Report::getNumberIReports() <<std::endl;
-  std::cout << "\t Phenotypes: " << numberPhenotypes << std::endl;
+  std::cout << "\t Removed genotypes: " << numberRemovedDonors << std::endl;
+  std::cout << "\t Leftover genotypes: " << numberDonors << std::endl;
+  std::cout << "\t N genotypes: " << Report::getNumberNReports() << std::endl;
+  std::cout << "\t A genotypes: " << Report::getNumberAReports() << std::endl;
+  std::cout << "\t M genotypes: " << Report::getNumberMReports() << std::endl;
+  std::cout << "\t I genotypes: " << Report::getNumberIReports() <<std::endl;
+  std::cout << "\t Genotypes: " << numberPhenotypes << std::endl;
   std::cout << "\t Haplotypes: " << numberHaplotypes << std::endl;
   std::cout << std::endl;
 }

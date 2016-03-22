@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
   std::cout << "\tCopyright (C) 2016 DKMS gGmbH" << std::endl;
   std::cout << std::endl;
 
-  std::cout << "#########Initialisation" << std::endl;
+  std::cout << "#########Initialization" << std::endl;
   timePoint startTime;
   timePoint endTime;
   double timeTakenForDataPreProcessing = 0.;
@@ -92,11 +92,11 @@ int main(int argc, char *argv[]){
   pInputFile->dataProcessing(phenotypes, haplotypes);
   pInputFile->printStatistics();
   std::cout << "\t Memory requirement haplotypes: " << haplotypes.computeSizeInBytes() << " bytes" << std::endl;
-  std::cout << "\t Memory requirement phenoypes: " << phenotypes.computeSizeInBytes() << " bytes" << std::endl;
+  std::cout << "\t Memory requirement genotypes: " << phenotypes.computeSizeInBytes() << " bytes" << std::endl;
   endTime = getTime();
   timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime)/1000000.;
 
-  std::cout << "#########EM-algorithm" << std::endl;
+  std::cout << "#########EM algorithm" << std::endl;
   startTime = getTime();
   double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
   if(haplotypes.getEpsilon() - minEpsilon > ZERO){
@@ -105,8 +105,8 @@ int main(int argc, char *argv[]){
   else{
     haplotypes.initialiseFrequencies(phenotypes);
     haplotypes.EMAlgorithm(phenotypes);
-    std::cout << "\t Summed haplotype frequencies: " << haplotypes.computeHaplotypeFrequencySum() << std::endl;
-    std::cout << "\t Summed cutted haplotype frequencies: " << haplotypes.computeCuttedHaplotypeFrequencySum() << std::endl;
+    std::cout << "\t Sum haplotype frequencies: " << haplotypes.computeHaplotypeFrequencySum() << std::endl;
+    std::cout << "\t Sum cutted haplotype frequencies: " << haplotypes.computeCuttedHaplotypeFrequencySum() << std::endl;
   }
   endTime = getTime();
   timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime)/1000000.;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]){
   timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
 
   std::cout << "#########Time" << std::endl;
-  std::cout << "\t Data pre-processing time [s]: " << timeTakenForDataPreProcessing << std::endl;
-  std::cout << "\t EM-algorithm time [s]: " << timeTakenForEMAlgorithm << std::endl;
+  std::cout << "\t Data preprocessing time [s]: " << timeTakenForDataPreProcessing << std::endl;
+  std::cout << "\t EM algorithm time [s]: " << timeTakenForEMAlgorithm << std::endl;
   std::cout << "\t Writing time [s]: " << timeTakenForWriting << std::endl;
 }
