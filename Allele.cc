@@ -200,8 +200,7 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
     }
   default:
     {
-      std::cerr << "Can not assign wanted precision to known precision." << std::endl;
-      exit (EXIT_FAILURE);
+      exit(EXIT_FAILURE);
     }
   }//switch                                             
 }
