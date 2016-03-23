@@ -25,6 +25,7 @@
 #include <algorithm>
 
 #include "Utility.h"
+#include "Exceptions.h"
 
 std::chrono::high_resolution_clock::time_point getTime(){
   return std::chrono::high_resolution_clock::now();
@@ -37,25 +38,40 @@ size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1
 
 void openFileToRead(const std::string fileName, std::ifstream & file){
 
-  file.open(fileName, std::ifstream::in);
-  if(!file.is_open()) {
-    std::cerr << "Could not open file: "
-              << fileName
-              << std::endl;
-    exit (EXIT_FAILURE);
-  }
+  try
+    {
+      file.open(fileName, std::ifstream::in);
+      if(!file.is_open())
+	{
+	  throw FileException(fileName);
+	}
+    }
+  catch(const std::exception & e)
+    {
+      std::cerr << e.what() << std::endl;
+      std::cout << "Exit Hapl-O-mat" << std::endl;
+      exit(EXIT_FAILURE);
+    }
 }
 
 void openFileToWrite(const std::string fileName, std::ofstream & file){
 
-  file.open(fileName, std::ifstream::out);
-  if(!file.is_open()) {
-    std::cerr << "Could not open file: "
-              << fileName
-              << std::endl;
-    exit (EXIT_FAILURE);
-  }
+  try
+    {
+      file.open(fileName, std::ifstream::out);
+      if(!file.is_open())
+	{
+	  throw FileException(fileName);
+	}
+    }
+  catch(const std::exception & e)
+    {
+      std::cerr << e.what() << std::endl;
+      std::cout << "Exit Hapl-O-mat" << std::endl;
+      exit(EXIT_FAILURE);
+    }
 }
+
 
 strVec_t split(const std::string &s, char delim){
 

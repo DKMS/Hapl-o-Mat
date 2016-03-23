@@ -100,3 +100,21 @@ class InputFormatException : public std::exception{
   }
 
 };
+
+
+class FileException : public std::exception{
+
+ public:
+  explicit FileException(const std::string in_filename)
+    : exception(),
+    filename(in_filename)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("Could not open " + filename + ".").c_str();
+  }
+
+ private:
+  std::string filename;
+};
