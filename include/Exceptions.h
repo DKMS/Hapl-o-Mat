@@ -37,7 +37,6 @@ class MissingAlleleException : public std::exception{
   std::string fileName;
 };
 
-
 class AlleleResolutionException : public std::exception{
 
  public:
@@ -55,4 +54,21 @@ class AlleleResolutionException : public std::exception{
   std::string allele;
 };
 
+class ResolutionException : public std::exception{
+
+
+ public:
+  explicit ResolutionException(const std::string in_locus)
+    : exception(),
+    locus(in_locus)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("Resolution specified for locus " + locus + " not known.").c_str();
+  }
+
+ private:
+  std::string locus;
+};
 
