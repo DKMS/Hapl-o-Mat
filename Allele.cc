@@ -324,7 +324,7 @@ strVec_t Allele::GToAlleles(){
   strVec_t newCodes;
   auto itFileGToAlleles = fileGToAlleles.getList().find(code);
   if(itFileGToAlleles == fileGToAlleles.getList().cend()){
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+    throw MissingAlleleException(code, fileGToAlleles.getFileName());
   }
   else{
     newCodes = itFileGToAlleles->second;
@@ -338,7 +338,7 @@ strVec_t Allele::gToAlleles(){
   strVec_t codesInPrecision;
   auto itFilegToAlleles = filegToAlleles.getList().find(code);
   if(itFilegToAlleles == filegToAlleles.getList().cend()){
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+    throw MissingAlleleException(code, filegToAlleles.getFileName());
   }
   else{
     codesInPrecision = itFilegToAlleles->second;
@@ -352,7 +352,7 @@ strVec_t Allele::PToAlleles(){
   strVec_t codesInPrecision;
   auto itFilePToAlleles = filePToAlleles.getList().find(code);
   if(itFilePToAlleles == filePToAlleles.getList().cend()){
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+    throw MissingAlleleException(code, filePToAlleles.getFileName());
   }
   else{
     codesInPrecision = itFilePToAlleles->second;
@@ -400,6 +400,11 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateTog(){
 }
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateTog(){
+
+  auto pos = filegToAlleles.getList().find(code);
+  if(pos == filegToAlleles.getList().cend()){
+    throw MissingAlleleException(code, filegToAlleles.getFileName());
+  }
 
   std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (code, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleg;
@@ -516,6 +521,11 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateToP(){
 }
 
 std::vector<std::shared_ptr<Allele>> AlleleP::translateToP(){
+
+  auto pos = filePToAlleles.getList().find(code);
+  if(pos == filePToAlleles.getList().cend()){
+    throw MissingAlleleException(code, filePToAlleles.getFileName());
+  }
 
   std::shared_ptr<Allele> pAlleleP = std::make_shared<AlleleP> (code, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleP;
@@ -694,6 +704,11 @@ std::vector<std::shared_ptr<Allele>> AlleleP::translateToG(){
 
 std::vector<std::shared_ptr<Allele>> AlleleG::translateToG(){
 
+  auto pos = fileGToAlleles.getList().find(code);
+  if(pos == fileGToAlleles.getList().cend()){
+    throw MissingAlleleException(code, fileGToAlleles.getFileName());
+  }
+
   std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (code, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAlleleG;
   listOfPAlleleG.push_back(pAlleleG);
@@ -744,6 +759,11 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateToG(){
 }
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo4d(){
+
+  auto pos = file4dToAlleles.getList().find(code);
+  if(pos == file4dToAlleles.getList().cend()){
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+  }
   
   std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele4d;
@@ -918,6 +938,11 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo6d(){
 }
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTo6d(){
+
+  auto pos = file4dToAlleles.getList().find(code);
+  if(pos == file4dToAlleles.getList().cend()){
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+  }
   
   std::shared_ptr<Allele> pAllele6d = std::make_shared<Allele6d> (code, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele6d;
@@ -1049,6 +1074,11 @@ std::vector<std::shared_ptr<Allele>> Allele6d::translateTo8d(){
 }
 
 std::vector<std::shared_ptr<Allele>> Allele8d::translateTo8d(){
+
+  auto pos = file4dToAlleles.getList().find(code);
+  if(pos == file4dToAlleles.getList().cend()){
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+  }
 
   std::shared_ptr<Allele> pAllele8d = std::make_shared<Allele8d> (code, frequency);
   std::vector<std::shared_ptr<Allele>> listOfPAllele8d;

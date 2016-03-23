@@ -29,7 +29,7 @@ class MissingAlleleException : public std::exception{
 
   virtual const char* what() const throw()
   {
-    return ("Missing translation of allele " + missingAllele + " in " + fileName + ".").c_str();
+    return ("Allele " + missingAllele + " does not exist in " + fileName + ".").c_str();
   }
 
  private:
