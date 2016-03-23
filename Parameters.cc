@@ -175,7 +175,9 @@ void ParametersGL::init(){
     else{
       std::cerr << "Could not match "
 		<< line
-		<< " of parametersGL file."
+		<< " of "
+		<< parametersFileName
+		<< "."
 		<< std::endl;
     exit(EXIT_FAILURE);
     }
@@ -261,7 +263,9 @@ void ParametersGLC::init(){
     else{
       std::cerr << "Could not match "
 		<< line
-		<< " of parametersGLC file."
+		<< " of "
+		<< parametersFileName
+		<< "."
 		<< std::endl;
     exit(EXIT_FAILURE);
     }
@@ -333,7 +337,7 @@ void ParametersMA::init(){
 		<< line
 		<< " of "
 		<< parametersFileName
-		<< " file."
+		<< "."
 		<< std::endl;
       exit(EXIT_FAILURE);
     }
@@ -400,7 +404,7 @@ void ParametersReadin::init(){
 		<< line
 		<< " of "
 		<< parametersFileName
-		<< " file."
+		<< "."
 		<< std::endl;
       exit(EXIT_FAILURE);
     }
