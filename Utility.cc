@@ -94,13 +94,6 @@ bool checkNMDPCode(const std::string code){
       in = isLetter(*it);
     }
 
-  if(shortCode.compare("XXX") == 0 || shortCode.compare("xxx") ==0){
-    in = false;
-  }
-  if(shortCode.find(":XXX") != std::string::npos || shortCode.find(":xxx") != std::string::npos){
-    in = false;
-  }
-
   return in;
 }
 
