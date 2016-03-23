@@ -224,6 +224,21 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   if(std::getline(inputFile, line))
     readLociNamesFromFile(line);
 
+  for(auto wantedLocusName : lociAndWantedAlleleGroups)
+    {
+      auto pos = find(lociNamesFromFile.cbegin(), lociNamesFromFile.cend(), wantedLocusName.first);
+      if(pos == lociNamesFromFile.cend())
+        {
+	  std::cerr << "Specified locus "
+                    << wantedLocusName.first
+                    << " not found in input file "
+                    << inputFileName
+                    << "."
+                    << std::endl;
+          exit(EXIT_FAILURE);
+        }
+    }
+
   haplotypeCombinations.findCombinations(numberLoci);
 
   while(std::getline(inputFile, line)){
