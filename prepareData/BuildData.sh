@@ -21,15 +21,15 @@
 # 
 
 
-python3 TransferAlphaToMultipleAlleleCodes.py
-python3 BuildAllAllelesFrom_hla_nom_g.py
-python3 BuildAllAllelesExpanded.py
-python3 BuildP.py
-python3 BuildG.py
-python3 Buildg.py  
-python3 BuildAmbiguity.py
-python3 AddGToH2.py
-python3 PrintAllelesMissingIngCode.py
+python TransferAlphaToMultipleAlleleCodes.py
+python BuildAllAllelesFrom_hla_nom_g.py
+python BuildAllAllelesExpanded.py
+python BuildP.py
+python BuildG.py
+python Buildg.py  
+python BuildAmbiguity.py
+python AddGToAmbiguity.py
+python PrintAllelesMissingIngCode.py
 
 
 
