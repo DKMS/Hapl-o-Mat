@@ -73,8 +73,8 @@ void Parameters::initType_assign(const std::string line){
   else if(value.compare("equal") == 0)
     initType = equal;
   else{
-    std::cerr << "No initialization routine for haplotype frequencies specified. Set routine to random" << std::endl;
-    initType = random;
+    std::cerr << "No initialization routine for haplotype frequencies specified. Set INITIALIZATION_HAPLOTYPE_FREQUENCIES to equal, numberOccurrence, random, or perturbation." << std::endl;
+    exit(EXIT_FAILURE);
   }
 }
 
