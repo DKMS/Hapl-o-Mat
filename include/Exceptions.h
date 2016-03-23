@@ -38,4 +38,21 @@ class MissingAlleleException : public std::exception{
 };
 
 
+class AlleleResolutionException : public std::exception{
+
+ public:
+  explicit AlleleResolutionException(const std::string in_allele)
+    : exception(),
+    allele(in_allele)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("Resolution of " + allele + " not known.").c_str();
+  }
+
+ private:
+  std::string allele;
+};
+
 

@@ -108,12 +108,7 @@ Allele::codePrecision Allele::identifyCodePrecision(const std::string code){
 	break;
       }
     default:
-      std::cerr << "Code "
-		<< code
-		<<" can not be assigned to known precision."
-		<< std::endl;
-      exit (EXIT_FAILURE);
-
+      throw AlleleResolutionException(code);
     }//switch
   }
 
