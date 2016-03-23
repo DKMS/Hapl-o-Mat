@@ -26,7 +26,7 @@
 #include "Typedefs.h"
 #include "Utility.h"
 
-FileNMDPCodes MAGenotype::fileNMDPCodes("data/code2dna.txt");
+FileNMDPCodes MAGenotype::fileNMDPCodes("data/MultipleAlleleCodes.txt");
 
 std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
@@ -181,7 +181,7 @@ void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) co
   if(newCodes.empty()){
     std::cerr << "Did not find allele from multi allele code "
 	      << nmdpCode
-	      << " in allAlleles.txt. Please update allAlleles.txt."
+	      << " in AllAlleles.txt. Please update AllAlleles.txt."
 	      <<std::endl;
     exit(EXIT_FAILURE);
   }
