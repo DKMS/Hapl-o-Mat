@@ -25,6 +25,7 @@
 
 #include "Allele.h"
 #include "Utility.h"
+#include "Exceptions.h"
 
 FileAllelesTogOrG Allele::fileAllelesTog("data/g.txt");
 FileAllelesTogOrG Allele::fileAllelesToG("data/G.txt");
@@ -329,13 +330,7 @@ strVec_t Allele::GToAlleles(){
   strVec_t newCodes;
   auto itFileGToAlleles = fileGToAlleles.getList().find(code);
   if(itFileGToAlleles == fileGToAlleles.getList().cend()){
-    std::cerr << "Could not find G-Code "
-              << code
-	      << " in file"
-	      << fileGToAlleles.getFileName()
-	      << "."
-              << std::endl;
-    exit (EXIT_FAILURE);
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
   }
   else{
     newCodes = itFileGToAlleles->second;
@@ -349,13 +344,7 @@ strVec_t Allele::gToAlleles(){
   strVec_t codesInPrecision;
   auto itFilegToAlleles = filegToAlleles.getList().find(code);
   if(itFilegToAlleles == filegToAlleles.getList().cend()){
-    std::cerr << "Could not find g-Code "
-              << code
-	      << " in file "
-	      << filegToAlleles.getFileName()
-	      << "."
-              << std::endl;
-    exit (EXIT_FAILURE);
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
   }
   else{
     codesInPrecision = itFilegToAlleles->second;
@@ -369,13 +358,7 @@ strVec_t Allele::PToAlleles(){
   strVec_t codesInPrecision;
   auto itFilePToAlleles = filePToAlleles.getList().find(code);
   if(itFilePToAlleles == filePToAlleles.getList().cend()){
-    std::cerr << "Could not find P-Code "
-              << code
-	      << " in file "
-	      << filePToAlleles.getFileName()
-	      << "."
-              << std::endl;
-    exit (EXIT_FAILURE);
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
   }
   else{
     codesInPrecision = itFilePToAlleles->second;
@@ -392,13 +375,7 @@ strVec_t Allele::expandPrecision(){
     codesInPrecision = pos->second;
   }
   else{
-    std::cerr << "Missing translation of "
-	      << code 
-	      << " to higher precisions in file "
-	      << file4dToAlleles.getFileName()
-	      << "."
-	      << std::endl;
-    exit (EXIT_FAILURE);
+    throw MissingAlleleException(code, file4dToAlleles.getFileName());
   }
 
   return codesInPrecision;

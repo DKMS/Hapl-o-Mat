@@ -17,5 +17,25 @@ class MultipleAlleleCodeException : public std::exception{
   std::string multipleAlleleCode;
 };
 
+class MissingAlleleException : public std::exception{
+
+ public:
+  explicit MissingAlleleException(const std::string in_missingAllele,
+				  const std::string in_fileName)
+    : exception(),
+    missingAllele(in_missingAllele),
+    fileName(in_fileName)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("Missing translation of allele " + missingAllele + " in " + fileName + ".").c_str();
+  }
+
+ private:
+  std::string missingAllele;
+  std::string fileName;
+};
+
 
 
