@@ -247,6 +247,8 @@ class GLCReport : public ColumnReport{
   virtual void translateLine(const std::string line);
   virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
 
+  void doLociMatch() const;
+
  private:
   strVec_t singleLocusGenotypes;
 

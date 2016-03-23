@@ -119,22 +119,41 @@ class FileException : public std::exception{
 };
 
 
-class NotMatchingLociException : public std::exception{
+class NotMatchingLociException_MA : public std::exception{
 
  public:
-  explicit NotMatchingLociException(const std:: string in_locus, 
-				    const std::string in_filename)
+  explicit NotMatchingLociException_MA(const std::string in_locus)
     : exception(),
-    locus(in_locus),
-    filename(in_filename)
+    locus(in_locus)
     {}
-
+  
   virtual const char* what() const throw()
   {
-    return ("Specified locus " + locus + " not found in input file " + filename + ".").c_str();
+    return ("Specified locus " + locus + " not found.").c_str();
   }
 
  private:
   std::string locus;
-  std::string filename;
+};
+
+class NotMatchingLociException_GLC : public std::exception{
+
+ public:
+  explicit NotMatchingLociException_GLC(const std::string in_locus,
+					const std::string in_id)
+    : exception(),
+    locus(in_locus),
+    id(in_id)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    //    return ("Specified locus " + locus + " not found in individual with id " + id + ".").c_str();
+    return ("Specified locus " + locus + " not found in id " + id + ".").c_str();
+
+  }
+
+ private:
+  std::string locus;
+  std::string id;
 };

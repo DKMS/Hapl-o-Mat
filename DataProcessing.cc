@@ -230,7 +230,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
       auto pos = find(lociNamesFromFile.cbegin(), lociNamesFromFile.cend(), wantedLocusName.first);
       if(pos == lociNamesFromFile.cend())
         {
-	  throw NotMatchingLociException(wantedLocusName.first, inputFileName);
+	  throw NotMatchingLociException_MA(wantedLocusName.first);
         }
     }
 
