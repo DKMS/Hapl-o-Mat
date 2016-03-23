@@ -21,9 +21,9 @@
 # 
 
 
-#Adapt format of alpha.v3.txt to code2dna.txt.
+#Adapt format of alpha.v3.txt to MultipleAlleleCodes.txt.
 
-with open('code2dna.txt', 'w') as outFile:
+with open('MultipleAlleleCodes.txt', 'w') as outFile:
     with open('alpha.v3.txt') as file:
         for line in file:
             line = line.replace('*', '')

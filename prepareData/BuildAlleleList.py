@@ -21,12 +21,12 @@
 # 
 
 
-#Extract all unique alleles from a GLid-file and save them to alleleList.txt
+#Extract all unique alleles from a GLid-file and save them to AlleleList.txt
 
 from collections import defaultdict
 
 fileInName = input("Enter input file name:\n")
-fileOutName = 'alleleList.txt'
+fileOutName = 'AlleleList.txt'
 
 allelesPerLocus = defaultdict(set)
 with open(fileInName) as fileIn:

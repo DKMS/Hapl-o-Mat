@@ -20,8 +20,8 @@
 # <http://www.gnu.org/licenses/>.
 # 
 
-#Read in list of G-groups with only one element from OneElementG.txt. These codes do not end with G in H2.txt. Thus open H2.txt and add the Gs.
-#Overwrite the old H2.txt
+#Read in list of G-groups with only one element from OneElementG.txt. These codes do not end with G in Ambiguity.txt. Thus open Ambiguity.txt and add the Gs.
+#Overwrite the old Ambiguity.txt
 
 GAndNoG = dict()
 with open('OneElementG.txt') as file:
@@ -32,8 +32,8 @@ with open('OneElementG.txt') as file:
         code = splittedLine[1]
         GAndNoG[code] = Gcode
 
-newH2 = []
-with open('H2.txt') as file:
+newAmbiguity = []
+with open('Ambiguity.txt') as file:
     for line in file:
         line = line.rstrip('\r\n')
         genotypes = line.split()
@@ -49,15 +49,15 @@ with open('H2.txt') as file:
                 newAlleles.append(newAllele)
             newGenotype = '+'.join(newAlleles)
             newGenotypes.append(newGenotype)
-        newH2.append(newGenotypes)
+        newAmbiguity.append(newGenotypes)
 
-for genotypes in newH2:
+for genotypes in newAmbiguity:
     for genotype in genotypes:
         if 'GG' in genotype:
             print('Found GG in', genotype)
 
-with open('H2.txt', 'w') as file:
-    for genotypes in newH2:
+with open('Ambiguity.txt', 'w') as file:
+    for genotypes in newAmbiguity:
         file.write('\t'.join(genotypes) + '\n')
 
 

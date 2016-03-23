@@ -23,7 +23,7 @@
 
 #Read in all possible alleles from allAlleles.txt. Create a translation for alleles from lower to 8 digit precision. Left column gives
 #the allele and the right columns all extensions to higher precisions. To get a full list we also include translation from 8d to 8d.
-#The list is written to allAllelesExpanded.txt.
+#The list is written to AllAllelesExpanded.txt.
 
 from collections import defaultdict
 
@@ -100,7 +100,7 @@ for key in endingWithLetterDict:
 
 alleleList.sort()
 
-with open('allAllelesExpanded.txt', 'w') as file:
+with open('AllAllelesExpanded.txt', 'w') as file:
     for entry in alleleList:
         file.write(entry[0] + '\t' + '\t'.join(entry[1]) + '\n')
         

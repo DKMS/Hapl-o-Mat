@@ -21,7 +21,7 @@
 # 
 
 
-#Create list of g-codes by combining lists of G and P codes. If all codes in a P-line can be found in a G-line, add codes ending with a letter to the P-line. Write results to H1g.txt
+#Create list of g-codes by combining lists of G and P codes. If all codes in a P-line can be found in a G-line, add codes ending with a letter to the P-line. Write results to g.txt
 
 #save each line of P.txt as P-code plus a set of the corresponding codes
 allPCodes = []
@@ -41,7 +41,7 @@ with open('P.txt') as file:
 
 #
 endLetters = ('N', 'L', 'S', 'Q')
-with open('H1.txt') as file:
+with open('G.txt') as file:
     for line in file:
         line = line.rstrip('\n')
         splittedLine = line.split()
@@ -59,7 +59,7 @@ with open('H1.txt') as file:
             if codes.issubset(pCode[1]) and codes:
                 pCode[1].update(codesN)
         
-with open('H1g.txt', 'w') as file:
+with open('g.txt', 'w') as file:
     for pCode in allPCodes:
 
         gCode = pCode[0][:-1]
