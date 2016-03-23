@@ -28,7 +28,7 @@
 #include "Utility.h"
 #include "Genotypes.h"
 
-FileAlleles AllPossibleGenotypes::allAlleles("data/alleleList.txt");
+FileAlleles AllPossibleGenotypes::allAlleles("data/AlleleList.txt");
 
 void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup){
 

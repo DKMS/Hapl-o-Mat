@@ -23,10 +23,10 @@ prepareData/allAlleles.txt
 prepareData/alpha.v3.txt
 prepareData/hla_nom_g.txt
 prepareData/hla_nom_p.txt
-data/allAllelesExpanded.txt
-data/alleleList.txt
-data/code2dna.txt
-data/H1g.txt
-data/H1.txt
+data/AllAllelesExpanded.txt
+data/AlleleList.txt
+data/MultipleAlleleCodes.txt
+data/g.txt
+data/G.txt
 data/Ambiguity.txt
 data/P.txt

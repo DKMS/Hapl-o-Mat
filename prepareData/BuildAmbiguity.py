@@ -21,14 +21,24 @@
 # 
 
 
-#Adapt format of alpha.v3.txt to code2dna.txt.
+#Create Ambiguity.txt from files extracted from excel sheet ambiguity_v<>.xls.
 
-with open('code2dna.txt', 'w') as outFile:
-    with open('alpha.v3.txt') as file:
+listOfLoci = ['A', 'B', 'C', 'DPA1', 'DPB1', 'DQA1', 'DQB1', 'DRB1', 'DRB3', 'DRB4', 'DRB5']
+
+ambiguityData = []
+for locus in listOfLoci:
+    fileName = 'HLA-' + locus + '.txt'
+    with open(fileName) as file:
         for line in file:
-            line = line.replace('*', '')
-            line = line.rstrip('\r\n')
-            line = line.lstrip('\t')
-            line += '\n'
-            outFile.write(line)
+            if 'Ambiguous typing combinations over' in line.strip():
+                break
+        for line in file:
+            if line.startswith(locus + '*'):
+                line = line.strip()
+                ambiguityData.append(line)
         
+ambiguityData.sort()
+
+with open('Ambiguity.txt', 'w') as out:
+    for ambiguityEntry in ambiguityData:
+        out.write(ambiguityEntry + '\n')
