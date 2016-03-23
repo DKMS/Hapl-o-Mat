@@ -53,12 +53,7 @@ void Parameters::bool_assign(bool & out, const std::string line){
   else if(value == "True") out = true;
   else if(value == "False") out = false;
   else{
-    std::cout << "Incorrect value "
-	      << value
-	      << " in "
-	      << line
-	      << std::endl;
-    exit(EXIT_FAILURE);
+    throw ParameterAssignmentException(line);
   }
 }
 
@@ -74,8 +69,7 @@ void Parameters::initType_assign(const std::string line){
   else if(value.compare("equal") == 0)
     initType = equal;
   else{
-    std::cerr << "No initialization routine for haplotype frequencies specified. Set INITIALIZATION_HAPLOTYPE_FREQUENCIES to equal, numberOccurrence, random, or perturbation." << std::endl;
-    exit(EXIT_FAILURE);
+    throw ParameterAssignmentException(line);
   }
 }
 

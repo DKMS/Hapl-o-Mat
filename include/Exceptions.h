@@ -72,3 +72,20 @@ class ResolutionException : public std::exception{
   std::string locus;
 };
 
+class ParameterAssignmentException : public std::exception{
+
+
+ public:
+  explicit ParameterAssignmentException(const std::string in_line)
+    : exception(),
+    line(in_line)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("Wrong type in parameter assignment of " + line).c_str();
+  }
+
+ private:
+  std::string line;
+};
