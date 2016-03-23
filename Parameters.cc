@@ -76,13 +76,19 @@ void Parameters::initType_assign(const std::string line){
 void Parameters::lociAndResolutions_assign(const std::string line){
   size_t pos = line.find("=");
   std::string text = line.substr(pos + 1);
+
   strVec_t lociAndResolutionsIn = split(text, ',');
   for(auto locusAndResolutionText : lociAndResolutionsIn)
     {
+      if(locusAndResolutionText.find(':') == std::string::npos)
+	{
+	  throw ParameterAssignmentException(line);
+	}
+
       strVec_t locusAndResolution = split(locusAndResolutionText, ':');
       std::string locus = locusAndResolution[0];
       std::string wantedResolution = locusAndResolution[1];
-
+      
       if(wantedResolution == "g")
 	lociAndResolutions.emplace(locus, Allele::codePrecision::g);
       else if(wantedResolution == "P")
@@ -98,7 +104,7 @@ void Parameters::lociAndResolutions_assign(const std::string line){
       else if(wantedResolution == "asItIs")
 	lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
       else{
-	throw ResolutionException(locus);
+	throw ResolutionException(wantedResolution, locus);
       }
     }
 }
