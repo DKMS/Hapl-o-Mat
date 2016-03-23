@@ -388,9 +388,21 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	  { 
 	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
 	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
-	    
-	    resolveSingleLocusGenotype(genotype,
-				       positionWantedLocus);
+
+	    try
+	      { 
+		resolveSingleLocusGenotype(genotype,
+					   positionWantedLocus);
+	      }
+	    catch(const std::exception & e)
+	      {
+		std::cout << e.what() << std::endl;      
+		discardReport = true;
+		std::cout << "Report "
+			  << id
+			  << " discarded."
+			  << std::endl;      
+	      }
 	  }
 	locusNameFromFile ++;
 	locusNameFromFile ++;

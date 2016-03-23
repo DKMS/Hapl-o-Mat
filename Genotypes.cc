@@ -148,45 +148,39 @@ void MAGenotype::buildSingleLocusGenotype(){
 
 void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
 
-  try
-    {
-      std::string nmdpCode = findNMDPCode(code);
-      auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
-      if(itFileNMDPCodes == fileNMDPCodes.getList().cend()){
-	throw(MultipleAlleleCodeException(nmdpCode));
-      }
+  std::string nmdpCode = findNMDPCode(code);
+  auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
+  if(itFileNMDPCodes == fileNMDPCodes.getList().cend()){
+    throw(MultipleAlleleCodeException(nmdpCode));
+  }
 	
-      std::string newCode = code;
-      size_t positionAsterik = code.find('*') + 1;
-      size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
-      newCode.erase(positionNMDPCodeInCode);
-      if(itFileNMDPCodes->second.find(':') != std::string::npos)
-	{
-	  std::size_t posLastColon = newCode.find_last_of(':');
-	  newCode.erase(posLastColon);
-	  posLastColon = newCode.find_last_of(':');
-	  if(posLastColon == std::string::npos)
-	    posLastColon = newCode.find_last_of('*');
-	  newCode.erase(posLastColon+1);
-	}
-
-      strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
-      for(auto itSplittedCode : splittedCode)
-	{
-	  std::string newCode2 = newCode;
-	  newCode2.append(itSplittedCode);
-	  newCodes.push_back(newCode2);
-	}//for splittedCode                                                                                                                                 
-    }
-  catch(std::exception & e)
+  std::string newCode = code;
+  size_t positionAsterik = code.find('*') + 1;
+  size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
+  newCode.erase(positionNMDPCodeInCode);
+  if(itFileNMDPCodes->second.find(':') != std::string::npos)
     {
-      std::cout << e.what() << std::endl;
+      std::size_t posLastColon = newCode.find_last_of(':');
+      newCode.erase(posLastColon);
+      posLastColon = newCode.find_last_of(':');
+      if(posLastColon == std::string::npos)
+	posLastColon = newCode.find_last_of('*');
+      newCode.erase(posLastColon+1);
     }
+
+  strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
+  for(auto itSplittedCode : splittedCode)
+    {
+      std::string newCode2 = newCode;
+      newCode2.append(itSplittedCode);
+      newCodes.push_back(newCode2);
+    }//for splittedCode                                                                                                                                 
 }
 
 
 std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
+  std::shared_ptr<Locus> pLocus;
   strVecArr_t allelesAtLocusPositions;
   size_t locusPosition = 0;
   for(auto allele : initialAllelesAtLocusPositions){
@@ -200,8 +194,7 @@ std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const b
     allelesAtLocusPositions.at(locusPosition) = alleles;
     locusPosition ++;
   }
-
-  std::shared_ptr<Locus> pLocus;
+  
   if(allelesAtLocusPositions.at(0).size() == 1 and allelesAtLocusPositions.at(1).size() == 1)
     {
       pLocus = std::make_shared<PhasedLocus>(allelesAtLocusPositions, wantedAlleleGroup);
@@ -210,7 +203,7 @@ std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const b
     {
       pLocus = std::make_shared<UnphasedLocus> (allelesAtLocusPositions, wantedAlleleGroup, doAmbiguityFilter, expandAmbiguityLines);
     }
-
+  
   pLocus->resolve();
 
   return pLocus;
