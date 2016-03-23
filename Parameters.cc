@@ -148,8 +148,7 @@ void ParametersGL::init(){
 
     std::string line;
     while(std::getline(file, line)){
-      if(line.find("#") != std::string::npos) continue;
-      else if(line.find("FILENAME_PULL") != std::string::npos) val_assign(pullFileName, line);
+      if(line.find("FILENAME_PULL") != std::string::npos) val_assign(pullFileName, line);
       else if(line.find("FILENAME_GLID") != std::string::npos) val_assign(glidFileName, line);
       else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
       else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
@@ -167,13 +166,7 @@ void ParametersGL::init(){
       else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
       else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
       else{
-	std::cerr << "Could not match "
-		  << line
-		  << " of "
-		  << parametersFileName
-		  << "."
-		  << std::endl;
-	exit(EXIT_FAILURE);
+	continue;
       }
     }//while
     file.close();
@@ -248,8 +241,7 @@ void ParametersGLC::init(){
       
       std::string line;
       while(std::getline(file, line)){
-	if(line.find("#") != std::string::npos) continue;
-	else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+	if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
 	else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
@@ -264,13 +256,7 @@ void ParametersGLC::init(){
 	else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
 	else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
 	else{
-	  std::cerr << "Could not match "
-		    << line
-		    << " of "
-		    << parametersFileName
-		    << "."
-		    << std::endl;
-	  exit(EXIT_FAILURE);
+	  continue;
 	}
       }//while
       file.close();
@@ -329,8 +315,7 @@ void ParametersMA::init(){
 
       std::string line;
       while(std::getline(file, line)){
-	if(line.find("#") != std::string::npos) continue;
-	else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+	if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
 	else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
@@ -345,13 +330,7 @@ void ParametersMA::init(){
 	else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
 	else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
 	else{
-	  std::cerr << "Could not match "
-		    << line
-		    << " of "
-		    << parametersFileName
-		    << "."
-		    << std::endl;
-	  exit(EXIT_FAILURE);
+	  continue;
 	}
       }//while
       file.close();
@@ -410,8 +389,7 @@ void ParametersReadin::init(){
 
       std::string line;
       while(std::getline(file, line)){
-	if(line.find("#") != std::string::npos) continue;
-	else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+	if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
 	else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
@@ -421,13 +399,7 @@ void ParametersReadin::init(){
 	else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
 	else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
 	else{
-	  std::cerr << "Could not match "
-		    << line
-		    << " of "
-		    << parametersFileName
-		    << "."
-		    << std::endl;
-	  exit(EXIT_FAILURE);
+	  continue;
 	}
       }//while
       file.close();
