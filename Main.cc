@@ -42,10 +42,11 @@ int main(int argc, char *argv[]){
   std::cout << "\t Copyright (C) 2016 DKMS gGmbH" << std::endl;
   std::cout << std::endl;
 
-  std::cout << "#########Initialization" << std::endl;
-  std::unique_ptr<Parameters> pParameters;
-  std::unique_ptr<InputFile> pInputFile;
   try{
+    std::cout << "#########Initialization" << std::endl;
+    std::unique_ptr<Parameters> pParameters;
+    std::unique_ptr<InputFile> pInputFile;
+
     std::string inputFileFormat;
     if(argc < 2)
       {
@@ -80,46 +81,46 @@ int main(int argc, char *argv[]){
     else{
       throw InputFormatException();
     }
+
+    timePoint startTime = getTime();
+    Phenotypes phenotypes;
+    Haplotypes haplotypes(*pParameters);
+    pInputFile->dataProcessing(phenotypes, haplotypes);
+    pInputFile->printStatistics();
+    std::cout << "\t Memory requirement haplotypes [MB]: " << haplotypes.computeSizeInBytes()/1000./1000. << std::endl;
+    std::cout << "\t Memory requirement genotypes [MB]: " << phenotypes.computeSizeInBytes()/1000./1000. << std::endl;
+    timePoint endTime = getTime();
+    double timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime)/1000000.;
+    
+    std::cout << "#########EM algorithm" << std::endl;
+    startTime = getTime();
+    double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
+    if(haplotypes.getEpsilon() - minEpsilon > ZERO){
+      std::cout << "Chosen epsilon is larger than 0.5/n" <<std::endl;
+    }
+    else{
+      haplotypes.initialiseFrequencies(phenotypes);
+      haplotypes.EMAlgorithm(phenotypes);
+      std::cout << "\t Sum haplotype frequencies: " << haplotypes.computeHaplotypeFrequencySum() << std::endl;
+      std::cout << "\t Sum cutted haplotype frequencies: " << haplotypes.computeCuttedHaplotypeFrequencySum() << std::endl;
+    }
+    endTime = getTime();
+    double timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime)/1000000.;
+    
+    startTime = getTime();
+    haplotypes.writeFrequenciesToFile();
+    haplotypes.deleteHaplotypesFile();
+    endTime = getTime();
+    double timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
+    
+    std::cout << "#########Times" << std::endl;
+    std::cout << "\t Data preprocessing [s]: " << timeTakenForDataPreProcessing << std::endl;
+    std::cout << "\t EM algorithm [s]: " << timeTakenForEMAlgorithm << std::endl;
+    std::cout << "\t Writing [s]: " << timeTakenForWriting << std::endl;
   }
   catch(const std::exception & e){
     std::cerr << e.what() << std::endl;
     std::cout << "Exit Hapl-O-mat" << std::endl;
     exit(EXIT_FAILURE);
   }
-
-  timePoint startTime = getTime();
-  Phenotypes phenotypes;
-  Haplotypes haplotypes(*pParameters);
-  pInputFile->dataProcessing(phenotypes, haplotypes);
-  pInputFile->printStatistics();
-  std::cout << "\t Memory requirement haplotypes [MB]: " << haplotypes.computeSizeInBytes()/1000./1000. << std::endl;
-  std::cout << "\t Memory requirement genotypes [MB]: " << phenotypes.computeSizeInBytes()/1000./1000. << std::endl;
-  timePoint endTime = getTime();
-  double timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime)/1000000.;
-
-  std::cout << "#########EM algorithm" << std::endl;
-  startTime = getTime();
-  double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
-  if(haplotypes.getEpsilon() - minEpsilon > ZERO){
-    std::cout << "Chosen epsilon is larger than 0.5/n" <<std::endl;
-  }
-  else{
-    haplotypes.initialiseFrequencies(phenotypes);
-    haplotypes.EMAlgorithm(phenotypes);
-    std::cout << "\t Sum haplotype frequencies: " << haplotypes.computeHaplotypeFrequencySum() << std::endl;
-    std::cout << "\t Sum cutted haplotype frequencies: " << haplotypes.computeCuttedHaplotypeFrequencySum() << std::endl;
-  }
-  endTime = getTime();
-  double timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime)/1000000.;
-
-  startTime = getTime();
-  haplotypes.writeFrequenciesToFile();
-  haplotypes.deleteHaplotypesFile();
-  endTime = getTime();
-  double timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
-
-  std::cout << "#########Times" << std::endl;
-  std::cout << "\t Data preprocessing [s]: " << timeTakenForDataPreProcessing << std::endl;
-  std::cout << "\t EM algorithm [s]: " << timeTakenForEMAlgorithm << std::endl;
-  std::cout << "\t Writing [s]: " << timeTakenForWriting << std::endl;
 }

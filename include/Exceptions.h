@@ -101,7 +101,6 @@ class InputFormatException : public std::exception{
 
 };
 
-
 class FileException : public std::exception{
 
  public:
@@ -116,5 +115,26 @@ class FileException : public std::exception{
   }
 
  private:
+  std::string filename;
+};
+
+
+class NotMatchingLociException : public std::exception{
+
+ public:
+  explicit NotMatchingLociException(const std:: string in_locus, 
+				    const std::string in_filename)
+    : exception(),
+    locus(in_locus),
+    filename(in_filename)
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("Specified locus " + locus + " not found in input file " + filename + ".").c_str();
+  }
+
+ private:
+  std::string locus;
   std::string filename;
 };

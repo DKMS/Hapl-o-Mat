@@ -30,6 +30,7 @@
 #include "Utility.h"
 #include "Phenotype.h"
 #include "Haplotype.h"
+#include "Exceptions.h"
 
 void HaplotypeCombinations::findCombinations(const size_t size){
 
@@ -229,13 +230,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
       auto pos = find(lociNamesFromFile.cbegin(), lociNamesFromFile.cend(), wantedLocusName.first);
       if(pos == lociNamesFromFile.cend())
         {
-	  std::cerr << "Specified locus "
-                    << wantedLocusName.first
-                    << " not found in input file "
-                    << inputFileName
-                    << "."
-                    << std::endl;
-          exit(EXIT_FAILURE);
+	  throw NotMatchingLociException(wantedLocusName.first, inputFileName);
         }
     }
 
