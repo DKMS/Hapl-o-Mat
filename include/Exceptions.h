@@ -76,7 +76,6 @@ class ResolutionException : public std::exception{
 
 class ParameterAssignmentException : public std::exception{
 
-
  public:
   explicit ParameterAssignmentException(const std::string in_line)
     : exception(),
@@ -90,4 +89,14 @@ class ParameterAssignmentException : public std::exception{
 
  private:
   std::string line;
+};
+
+class InputFormatException : public std::exception{
+
+ public:
+  virtual const char* what() const throw()
+  {
+    return "Wrong input format. Choose from MA, GLC, GL, and READ.";
+  }
+
 };
