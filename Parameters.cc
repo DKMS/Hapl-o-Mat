@@ -177,6 +177,7 @@ void ParametersGL::init(){
 		<< line
 		<< " of parametersGL file."
 		<< std::endl;
+    exit(EXIT_FAILURE);
     }
   }//while
   file.close();
@@ -262,6 +263,7 @@ void ParametersGLC::init(){
 		<< line
 		<< " of parametersGLC file."
 		<< std::endl;
+    exit(EXIT_FAILURE);
     }
   }//while
   file.close();
@@ -333,6 +335,7 @@ void ParametersMA::init(){
 		<< parametersFileName
 		<< " file."
 		<< std::endl;
+      exit(EXIT_FAILURE);
     }
   }//while
   file.close();
@@ -399,6 +402,7 @@ void ParametersReadin::init(){
 		<< parametersFileName
 		<< " file."
 		<< std::endl;
+      exit(EXIT_FAILURE);
     }
   }//while
   file.close();
