@@ -58,17 +58,19 @@ class ResolutionException : public std::exception{
 
 
  public:
-  explicit ResolutionException(const std::string in_locus)
+  explicit ResolutionException(const std::string in_wantedResolution, const std::string in_locus)
     : exception(),
+    wantedResolution(in_wantedResolution),
     locus(in_locus)
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Resolution specified for locus " + locus + " not known.").c_str();
+    return ("Resolution " + wantedResolution + " specified for locus " + locus + " not known.").c_str();
   }
 
  private:
+  std::string wantedResolution;
   std::string locus;
 };
 
@@ -83,7 +85,7 @@ class ParameterAssignmentException : public std::exception{
 
   virtual const char* what() const throw()
   {
-    return ("Wrong type in parameter assignment of " + line).c_str();
+    return ("Wrong format for assignment of " + line).c_str();
   }
 
  private:
