@@ -30,7 +30,7 @@
 
 FileAlleles AllPossibleGenotypes::allAlleles("data/AlleleList.txt");
 
-void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup){
+void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedResolution){
 
   std::cout << " \t Build list of all possible genotypes for locus " << locus << std::endl;
 
@@ -57,7 +57,7 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele:
   }
   
   if(!(in_phasedLocus.empty())){
-    PhasedLocus phasedLocus(in_phasedLocus, wantedAlleleGroup);
+    PhasedLocus phasedLocus(in_phasedLocus, wantedResolution);
     phasedLocus.resolve();
     phasedLocus.reduce(genotypes);
   }
@@ -88,10 +88,10 @@ void GlidFile::readAndResolveFile(){
     std::string singeLocusGenotype = entries.at(1);
 
     std::string locusName = split(singeLocusGenotype, '*')[0];
-    auto locusAndwantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
-    if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend()){
+    auto locusAndResolution = lociAndResolutions.find(locusName);
+    if(locusAndResolution != lociAndResolutions.cend()){
 
-      GLGenotype genotypeGL(singeLocusGenotype, locusAndwantedAlleleGroup->second);
+      GLGenotype genotypeGL(singeLocusGenotype, locusAndResolution->second);
       std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
 
       std::pair<list_t::iterator, bool> inserted = list.emplace(glid, pLocus);
@@ -106,9 +106,9 @@ void GlidFile::readAndResolveFile(){
 
   if(resolveUnknownGenotypes)
     {
-      for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups)
+      for(auto locusAndResolution : lociAndResolutions)
 	{
-	  possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
+	  possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndResolution.first, locusAndResolution.second));
 	}
     }
 }

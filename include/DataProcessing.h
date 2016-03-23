@@ -94,7 +94,7 @@ class InputFileToEdit : public InputFile{
   explicit InputFileToEdit(const std::string in_inputFileName)
     : InputFile(in_inputFileName),
     numberRemovedDonors(0),
-    lociAndWantedAlleleGroups(),
+    lociAndResolutions(),
     minimalFrequency(){}
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
@@ -108,7 +108,7 @@ class InputFileToEdit : public InputFile{
 
  protected:
   size_t numberRemovedDonors;
-  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndResolutions;
   double minimalFrequency;
 };
 
@@ -121,7 +121,7 @@ class GL : public InputFileToEdit{
     lociOrder(parameters.getLociOrder()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
-	 parameters.getLociAndWantedAlleleGroups(),
+	 parameters.getLociAndResolutions(),
 	 parameters.getLociOrder(),
 	 parameters.getDoAmbiguityFilter(),
 	 parameters.getExpandAmbiguityLines(),
@@ -129,8 +129,8 @@ class GL : public InputFileToEdit{
       {
 	haplotypesFileName = parameters.getHaplotypesFileName();
 	phenotypesFileName = parameters.getPhenotypesFileName();
-	lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
-	numberLoci = lociAndWantedAlleleGroups.size();
+	lociAndResolutions = parameters.getLociAndResolutions();
+	numberLoci = lociAndResolutions.size();
 	minimalFrequency = parameters.getMinimalFrequency();
       }
   
@@ -154,8 +154,8 @@ class GLC : public InputFileToEdit{
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
-      lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
-      numberLoci = lociAndWantedAlleleGroups.size();
+      lociAndResolutions = parameters.getLociAndResolutions();
+      numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
     }
 
@@ -177,8 +177,8 @@ class MA : public InputFileToEdit{
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
       phenotypesFileName = parameters.getPhenotypesFileName();
-      lociAndWantedAlleleGroups = parameters.getLociAndWantedAlleleGroups();
-      numberLoci = lociAndWantedAlleleGroups.size();
+      lociAndResolutions = parameters.getLociAndResolutions();
+      numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
     }
 

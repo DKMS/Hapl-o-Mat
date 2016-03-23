@@ -144,7 +144,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLReport report(line, lociOrder, lociAndWantedAlleleGroups);
+    GLReport report(line, lociOrder, lociAndResolutions);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
@@ -184,7 +184,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLCReport report(line, lociAndWantedAlleleGroups, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
+    GLCReport report(line, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
@@ -224,7 +224,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   if(std::getline(inputFile, line))
     readLociNamesFromFile(line);
 
-  for(auto wantedLocusName : lociAndWantedAlleleGroups)
+  for(auto wantedLocusName : lociAndResolutions)
     {
       auto pos = find(lociNamesFromFile.cbegin(), lociNamesFromFile.cend(), wantedLocusName.first);
       if(pos == lociNamesFromFile.cend())
@@ -246,7 +246,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    MAReport report(line, lociNamesFromFile, lociAndWantedAlleleGroups, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
+    MAReport report(line, lociNamesFromFile, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 

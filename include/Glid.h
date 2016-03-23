@@ -33,13 +33,13 @@
 class AllPossibleGenotypes{
 
  public:
-  explicit AllPossibleGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup)
+  explicit AllPossibleGenotypes(const std::string locus, const Allele::codePrecision wantedResolution)
     : genotypes()
       {
-	buildGenotypes(locus, wantedAlleleGroup);
+	buildGenotypes(locus, wantedResolution);
       }
 
-  void buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup);
+  void buildGenotypes(const std::string locus, const Allele::codePrecision wantedResolution);
   const std::vector<std::pair<strArr_t, double>> & getGenotypes() const {return genotypes;}
 
  private:
@@ -52,12 +52,12 @@ class GlidFile{
   typedef std::unordered_map<size_t, std::shared_ptr<Locus>> list_t;
  public:
   explicit GlidFile(const std::string in_fileName,
-		    const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+		    const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions,
 		    const strVec_t & in_lociOrder,
 		    const bool in_doAmbiguityFilter,
 		    const bool in_expandAmbiguityLines,
 		    const bool in_resolveUnknownGenotypes) 
-    : lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
+    : lociAndResolutions(in_lociAndResolutions),
     fileName(in_fileName),
     lociOrder(in_lociOrder),
     doAmbiguityFilter(in_doAmbiguityFilter),
@@ -76,7 +76,7 @@ class GlidFile{
   void reserveSize();
   void readAndResolveFile();
   
-  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndResolutions;
   std::string fileName;
   strVec_t lociOrder;
   bool doAmbiguityFilter;

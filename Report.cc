@@ -240,11 +240,11 @@ void GLReport::translateLine(const std::string line){
   auto locusName = lociOrder.cbegin();
   for(auto glidNumber : allGlids)
     {
-      auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusName);
-      if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+      auto locusAndResolution = lociAndResolutions.find(*locusName);
+      if(locusAndResolution != lociAndResolutions.cend())
 	{
 	  size_t number = stoull(glidNumber);
-	  size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+	  size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
 	  glids.at(positionWantedLocus) = number;
 	}
       locusName ++;
@@ -333,12 +333,12 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
     if(!discardReport)
       {
 	std::string locusName = split(singleLocusGenotype, '*')[0];
-	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
+	auto locusAndResolution = lociAndResolutions.find(locusName);
     
-	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+	if(locusAndResolution != lociAndResolutions.cend())
 	  {
-	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-	    std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	    size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
+	    std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndResolution->second);
 	    
 	    resolveSingleLocusGenotype(genotype,
 				       positionWantedLocus);
@@ -382,12 +382,12 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
     if(!discardReport)
       {
-	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
+	auto locusAndResolution = lociAndResolutions.find(*locusNameFromFile);
 
-	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+	if(locusAndResolution != lociAndResolutions.cend())
 	  { 
-	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	    size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
+	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndResolution->second);
 
 	    try
 	      { 

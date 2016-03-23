@@ -73,30 +73,30 @@ void Parameters::initType_assign(const std::string line){
   }
 }
 
-void Parameters::lociAndWantedAlleleGroups_assign(const std::string line){
+void Parameters::lociAndResolutions_assign(const std::string line){
   size_t pos = line.find("=");
   std::string text = line.substr(pos + 1);
-  strVec_t lociAndWantedAlleleGroupsIn = split(text, ',');
-  for(auto locusAndWantedAlleleGroupText : lociAndWantedAlleleGroupsIn)
+  strVec_t lociAndResolutionsIn = split(text, ',');
+  for(auto locusAndResolutionText : lociAndResolutionsIn)
     {
-      strVec_t locusAndWantedAlleleGroup = split(locusAndWantedAlleleGroupText, ':');
-      std::string locus = locusAndWantedAlleleGroup[0];
-      std::string wantedAlleleGroup = locusAndWantedAlleleGroup[1];
+      strVec_t locusAndResolution = split(locusAndResolutionText, ':');
+      std::string locus = locusAndResolution[0];
+      std::string wantedResolution = locusAndResolution[1];
 
-      if(wantedAlleleGroup == "g")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::g);
-      else if(wantedAlleleGroup == "P")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::P);
-      else if(wantedAlleleGroup == "4d")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::fourDigit);
-      else if(wantedAlleleGroup =="G")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::G);
-      else if(wantedAlleleGroup == "6d")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::sixDigit);
-      else if(wantedAlleleGroup == "8d")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::eightDigit);
-      else if(wantedAlleleGroup == "asItIs")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::asItIs);
+      if(wantedResolution == "g")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::g);
+      else if(wantedResolution == "P")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::P);
+      else if(wantedResolution == "4d")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::fourDigit);
+      else if(wantedResolution =="G")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::G);
+      else if(wantedResolution == "6d")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::sixDigit);
+      else if(wantedResolution == "8d")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::eightDigit);
+      else if(wantedResolution == "asItIs")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
       else{
 	throw ResolutionException(locus);
       }
@@ -155,7 +155,7 @@ void ParametersGL::init(){
       else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
       else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
       else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
-      else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
+      else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
       else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
       else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
       else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
@@ -199,8 +199,8 @@ void ParametersGL::print() const {
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
   std::cout << "\t Loci with target allele resolutions: " << std::endl;
-  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  for(auto locusAndResolution : lociAndResolutions){
+    std::cout << "\t " << locusAndResolution.first << " : " << Allele::printCodePrecision(locusAndResolution.second) << std::endl;
   }
   std::cout << "\t Resolve missing genotypes: ";
   if(resolveUnknownGenotype)
@@ -246,7 +246,7 @@ void ParametersGLC::init(){
 	else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
 	else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-	else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
+	else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
 	else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
 	else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
 	else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
@@ -281,8 +281,8 @@ void ParametersGLC::print() const {
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
   std::cout << "\t Loci with target allele resolutions: " << std::endl;
-  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  for(auto locusAndResolution : lociAndResolutions){
+    std::cout << "\t " << locusAndResolution.first << " : " << Allele::printCodePrecision(locusAndResolution.second) << std::endl;
   }
   std::cout << "\t Apply ambiguity filter: ";
   if(doAmbiguityFilter){
@@ -320,7 +320,7 @@ void ParametersMA::init(){
 	else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
 	else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
 	else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-	else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
+	else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
 	else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
 	else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
 	else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
@@ -355,8 +355,8 @@ void ParametersMA::print() const {
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
   std::cout << "\t Loci with target allele resolutions: " << std::endl;
-  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout <<  "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  for(auto locusAndResolution : lociAndResolutions){
+    std::cout <<  "\t " << locusAndResolution.first << " : " << Allele::printCodePrecision(locusAndResolution.second) << std::endl;
   }
   std::cout << "\t Apply ambiguity filter: ";
   if(doAmbiguityFilter){

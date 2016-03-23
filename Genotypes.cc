@@ -44,7 +44,7 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const b
 	splittedGenotype.at(pos) = alleles.at(pos);
       in_phasedLocus.push_back(splittedGenotype);
     }
-    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedResolution);
   }
   else if (singleLocusGenotype.find("/") != std::string::npos){
     strVec_t separatePlus;
@@ -54,7 +54,7 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const b
     strVecArr_t in_unphasedLocus;
     in_unphasedLocus.at(0) = lhs;
     in_unphasedLocus.at(1) = rhs;
-    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedAlleleGroup, doAmbiguityFilter, expandAmbiguityLines);
+    pLocus = std::make_shared<UnphasedLocus> (in_unphasedLocus, wantedResolution, doAmbiguityFilter, expandAmbiguityLines);
   }
   else{
     strArrVec_t in_phasedLocus;
@@ -63,7 +63,7 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const b
     for(size_t pos = 0; pos < alleles.size(); pos++)
       splittedGenotype.at(pos) = alleles.at(pos);
     in_phasedLocus.push_back(splittedGenotype);
-    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedAlleleGroup);
+    pLocus = std::make_shared<PhasedLocus> (in_phasedLocus, wantedResolution);
   }
 
   pLocus->resolve();
@@ -197,11 +197,11 @@ std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const b
   
   if(allelesAtLocusPositions.at(0).size() == 1 and allelesAtLocusPositions.at(1).size() == 1)
     {
-      pLocus = std::make_shared<PhasedLocus>(allelesAtLocusPositions, wantedAlleleGroup);
+      pLocus = std::make_shared<PhasedLocus>(allelesAtLocusPositions, wantedResolution);
     }
   else
     {
-      pLocus = std::make_shared<UnphasedLocus> (allelesAtLocusPositions, wantedAlleleGroup, doAmbiguityFilter, expandAmbiguityLines);
+      pLocus = std::make_shared<UnphasedLocus> (allelesAtLocusPositions, wantedResolution, doAmbiguityFilter, expandAmbiguityLines);
     }
   
   pLocus->resolve();
