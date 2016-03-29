@@ -85,7 +85,6 @@ class Report : public BasicReport{
     lociAndResolutions(in_lociAndResolutions),
     types(),
     numberOfReports(1.),
-    discardReport(false),
     genotypesWithFrequenciesAtLoci()
       {
 	genotypeAtLoci.reserve(numberLoci);
@@ -122,7 +121,6 @@ class Report : public BasicReport{
   std::map<std::string, Allele::codePrecision> lociAndResolutions;
   std::vector<Locus::reportType> types;
   double numberOfReports;
-  bool discardReport;
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesWithFrequenciesAtLoci;
   static double numberNReports;
   static double numberAReports;
