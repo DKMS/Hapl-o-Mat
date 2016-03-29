@@ -21,16 +21,15 @@
  */
 
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 #include "DataProcessing.h"
-#include "Glid.h"
+#include "Exceptions.h"
+#include "Haplotype.h"
+#include "Phenotype.h"
 #include "Report.h"
 #include "Utility.h"
-#include "Phenotype.h"
-#include "Haplotype.h"
-#include "Exceptions.h"
 
 void HaplotypeCombinations::findCombinations(const size_t size){
 
