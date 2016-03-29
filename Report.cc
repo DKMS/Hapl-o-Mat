@@ -31,6 +31,7 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 #include "DataProcessing.h"
+#include "Exceptions.h"
 
 std::unordered_map<std::string, std::shared_ptr<Locus>> ColumnReport::singleLocusGenotypesAlreadyDone;
 double Report::numberNReports = 0.;
@@ -153,9 +154,9 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
   if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "\t Report "
+    std::cout << "\t Id "
 	      << id
-	      << " comes below allowed frequency. Report discarded."
+	      << " comes below allowed frequency. Id discarded."
 	      << std::endl;
     discardReport = true;
   }
@@ -294,9 +295,9 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
     numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
     if(1./numberOfReports - minimalFrequency < ZERO){
       discardReport = true;
-      std::cout << "\t Report "
+      std::cout << "\t Id "
 		<< id
-		<< " comes below allowed frequency. Report discarded."
+		<< " comes below allowed frequency. Id discarded."
 		<< std::endl;
       break;
     }
@@ -328,29 +329,61 @@ void GLCReport::translateLine(const std::string line){
 
 void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
-  for(auto singleLocusGenotype : singleLocusGenotypes){
+  try
+    { 
+      doLociMatch();
 
-    if(!discardReport)
-      {
-	std::string locusName = split(singleLocusGenotype, '*')[0];
-	auto locusAndResolution = lociAndResolutions.find(locusName);
-    
-	if(locusAndResolution != lociAndResolutions.cend())
-	  {
-	    size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
-	    std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndResolution->second);
-	    
-	    resolveSingleLocusGenotype(genotype,
-				       positionWantedLocus);
-	  }
-      }
-  }
-
+      for(auto singleLocusGenotype : singleLocusGenotypes)
+	{
+	  if(!discardReport)
+	    {
+	      std::string locusName = split(singleLocusGenotype, '*')[0];
+	      auto locusAndResolution = lociAndResolutions.find(locusName);
+	      
+	      if(locusAndResolution != lociAndResolutions.cend())
+		{
+		  size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
+		  std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndResolution->second);
+		  
+		  resolveSingleLocusGenotype(genotype,
+					     positionWantedLocus);
+		}
+	    }
+	}
+    }
+  catch(const std::exception & e)
+    {
+      std::cout << e.what() << std::endl;      
+      discardReport = true;
+      std::cout << "Id "
+		<< id
+		<< " discarded."
+		<< std::endl;      
+    }	    
+  
   if(!discardReport){  
     buildListOfReports(listOfReports);
   }
 }
 
+void GLCReport::doLociMatch() const{
+
+  for(auto locusAndResolution : lociAndResolutions)
+    {
+      auto pos = find_if(singleLocusGenotypes.cbegin(),
+			 singleLocusGenotypes.cend(),
+			 [& locusAndResolution](const std::string singleLocusGenotype)
+			 {
+			   std::string locusName = split(singleLocusGenotype, '*')[0];
+			   return locusName == locusAndResolution.first;
+			 }); 
+
+      if(pos == singleLocusGenotypes.cend())
+	{
+	  throw NotMatchingLociException_GLC(locusAndResolution.first, id);
+	}
+    }
+}
 
 void MAReport::translateLine(const std::string line){
 
@@ -398,7 +431,7 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	      {
 		std::cout << e.what() << std::endl;      
 		discardReport = true;
-		std::cout << "Report "
+		std::cout << "Id "
 			  << id
 			  << " discarded."
 			  << std::endl;      
