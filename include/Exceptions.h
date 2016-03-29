@@ -148,12 +148,35 @@ class NotMatchingLociException_GLC : public std::exception{
 
   virtual const char* what() const throw()
   {
-    //    return ("Specified locus " + locus + " not found in individual with id " + id + ".").c_str();
     return ("Specified locus " + locus + " not found in id " + id + ".").c_str();
-
   }
 
  private:
   std::string locus;
   std::string id;
+};
+
+class MissingGenotypeException : public std::exception{
+  
+  virtual const char* what() const throw()
+  {
+    return "Encountered missing genotype.";
+  }
+};
+
+class MissingGlidException : public std::exception{
+
+ public:
+  explicit MissingGlidException(const size_t in_glid)
+    : exception(),
+    glid(std::to_string(in_glid))
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return ("GL-id " + glid + " not found in glid-file.").c_str();
+  }
+
+ private:
+  std::string glid;
 };

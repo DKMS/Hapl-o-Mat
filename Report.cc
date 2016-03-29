@@ -257,62 +257,57 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const double minimalFrequency,
 		       const bool resolveUnknownGenotype){
 
-  for(auto glidNumber = glids.cbegin();
-      glidNumber != glids.cend();
-      glidNumber ++){
+  try{
+    for(auto glidNumber = glids.cbegin();
+	glidNumber != glids.cend();
+	glidNumber ++){
 
-    if(*glidNumber == 0){
-      if(resolveUnknownGenotype){
-	size_t positionGlidNumber = glidNumber - glids.cbegin();
-	genotypesWithFrequenciesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().at(positionGlidNumber).getGenotypes());
+      if(*glidNumber == 0){
+	if(resolveUnknownGenotype){
+	  size_t positionGlidNumber = glidNumber - glids.cbegin();
+	  genotypesWithFrequenciesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().at(positionGlidNumber).getGenotypes());
+	}
+	else{
+	  throw MissingGenotypeException();
+	}
       }
       else{
+	auto itGlid = glid.getList().find(*glidNumber);
+	if(itGlid == glid.getList().cend()){
+	  throw MissingGlidException(*glidNumber);
+	}
+	else{
+	  std::shared_ptr<Locus> pLocus = itGlid->second;
+	  std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	  pLocus->reduce(genotypesAtLocus);
+	  genotypesWithFrequenciesAtLoci.push_back(genotypesAtLocus);
+	  types.push_back(pLocus->getType());
+	}
+      }//else glidNumber=0
+      
+      numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
+      if(1./numberOfReports - minimalFrequency < ZERO){
 	discardReport = true;
-	std::cout << "\t Genotype "
+	std::cout << "\t Id "
 		  << id
-		  << " contains GL-id 0. Genotype discarded."
+		  << " comes below allowed frequency. Id discarded."
 		  << std::endl;
 	break;
       }
-    }
-    else{
-      auto itGlid = glid.getList().find(*glidNumber);
-      if(itGlid == glid.getList().cend()){
-	std::cerr << "Key "
-		  << *glidNumber
-		  << " not in glid-file" << std::endl;
-	exit(EXIT_FAILURE);
-      }
-      else{
-	std::shared_ptr<Locus> pLocus = itGlid->second;
-	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	pLocus->reduce(genotypesAtLocus);
-	genotypesWithFrequenciesAtLoci.push_back(genotypesAtLocus);
-	types.push_back(pLocus->getType());
-      }
-    }//else glidNumber=0
-
-    numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
-    if(1./numberOfReports - minimalFrequency < ZERO){
+    }//for glids
+  }
+  catch(const std::exception & e){
+      std::cout << e.what() << std::endl;      
       discardReport = true;
-      std::cout << "\t Id "
+      std::cout << "Id "
 		<< id
-		<< " comes below allowed frequency. Id discarded."
-		<< std::endl;
-      break;
-    }
-    if(numberOfReports < ZERO){
-      discardReport = true;	    
-      std::cout << "\t Genotype "
-		<< id
-		<< " contains empty loci."
-		<< std::endl;
-      break;
-    }
-  }//for glids
-
+		<< " discarded."
+		<< std::endl;      
+  }
+  
   if(!discardReport)
     buildListOfReports(listOfReports);
+
 }
 
 void GLCReport::translateLine(const std::string line){
