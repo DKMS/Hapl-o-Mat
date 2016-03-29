@@ -20,20 +20,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "DataProcessing.h"
-#include "Allele.h"
-#include "Locus.h"
-#include "Typedefs.h"
-#include "Phenotype.h"
+#include "Exceptions.h"
 #include "Haplotype.h"
 #include "Parameters.h"
+#include "Phenotype.h"
 #include "Utility.h"
-#include "Report.h"
-#include "Exceptions.h"
 
 int main(int argc, char *argv[]){
 
