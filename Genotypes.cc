@@ -22,10 +22,10 @@
 
 #include <iostream>
 
+#include "Exceptions.h"
 #include "Genotypes.h"
 #include "Typedefs.h"
 #include "Utility.h"
-#include "Exceptions.h"
 
 FileNMDPCodes MAGenotype::fileNMDPCodes("data/MultipleAlleleCodes.txt");
 
