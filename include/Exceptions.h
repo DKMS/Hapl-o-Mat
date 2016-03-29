@@ -180,3 +180,17 @@ class MissingGlidException : public std::exception{
  private:
   std::string glid;
 };
+
+class SplittingGenotypeException : public std::exception{
+
+
+ public:
+  explicit SplittingGenotypeException()
+    : exception()
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return "Too broad splitting of genotype.";
+  }
+};

@@ -154,15 +154,11 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
   if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "\t Id "
-	      << id
-	      << " comes below allowed frequency. Id discarded."
-	      << std::endl;
     discardReport = true;
+    throw SplittingGenotypeException();
   }
-  else{
-    genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
-  }
+  
+  genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports){
@@ -287,12 +283,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       
       numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
       if(1./numberOfReports - minimalFrequency < ZERO){
-	discardReport = true;
-	std::cout << "\t Id "
-		  << id
-		  << " comes below allowed frequency. Id discarded."
-		  << std::endl;
-	break;
+	throw SplittingGenotypeException();
       }
     }//for glids
   }
