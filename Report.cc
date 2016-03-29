@@ -31,6 +31,7 @@
 #include "Phenotype.h"
 #include "Haplotype.h"
 #include "DataProcessing.h"
+#include "Exceptions.h"
 
 std::unordered_map<std::string, std::shared_ptr<Locus>> ColumnReport::singleLocusGenotypesAlreadyDone;
 double Report::numberNReports = 0.;
@@ -153,15 +154,10 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
   if(1./numberOfReports - minimalFrequency < ZERO){
-    std::cout << "\t Report "
-	      << id
-	      << " comes below allowed frequency. Report discarded."
-	      << std::endl;
-    discardReport = true;
+    throw SplittingGenotypeException();
   }
-  else{
-    genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
-  }
+  
+  genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports){
@@ -235,16 +231,16 @@ void GLReport::translateLine(const std::string line){
   std::string rightPartOfLine = rightOfFirstDelim(line, ';');
   strVec_t allGlids = split(rightPartOfLine, ':');
 
-  glids.resize(numberLoci);
+  glids.resize(numberLoci, 0);
 
   auto locusName = lociOrder.cbegin();
   for(auto glidNumber : allGlids)
     {
-      auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusName);
-      if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+      auto locusAndResolution = lociAndResolutions.find(*locusName);
+      if(locusAndResolution != lociAndResolutions.cend())
 	{
 	  size_t number = stoull(glidNumber);
-	  size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
+	  size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
 	  glids.at(positionWantedLocus) = number;
 	}
       locusName ++;
@@ -256,62 +252,49 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const double minimalFrequency,
 		       const bool resolveUnknownGenotype){
 
-  for(auto glidNumber = glids.cbegin();
-      glidNumber != glids.cend();
-      glidNumber ++){
+  try{
+    for(auto glidNumber = glids.cbegin();
+	glidNumber != glids.cend();
+	glidNumber ++){
 
-    if(*glidNumber == 0){
-      if(resolveUnknownGenotype){
-	size_t positionGlidNumber = glidNumber - glids.cbegin();
-	genotypesWithFrequenciesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().at(positionGlidNumber).getGenotypes());
+      if(*glidNumber == 0){
+	if(resolveUnknownGenotype){
+	  size_t positionGlidNumber = glidNumber - glids.cbegin();
+	  genotypesWithFrequenciesAtLoci.push_back(glid.getPossibleGenotypesForAllLoci().at(positionGlidNumber).getGenotypes());
+	}
+	else{
+	  throw MissingGenotypeException();
+	}
       }
       else{
-	discardReport = true;
-	std::cout << "\t Genotype "
-		  << id
-		  << " contains GL-id 0. Genotype discarded."
-		  << std::endl;
-	break;
+	auto itGlid = glid.getList().find(*glidNumber);
+	if(itGlid == glid.getList().cend()){
+	  throw MissingGlidException(*glidNumber);
+	}
+	else{
+	  std::shared_ptr<Locus> pLocus = itGlid->second;
+	  std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	  pLocus->reduce(genotypesAtLocus);
+	  genotypesWithFrequenciesAtLoci.push_back(genotypesAtLocus);
+	  types.push_back(pLocus->getType());
+	}
+      }//else glidNumber=0
+      
+      numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
+      if(1./numberOfReports - minimalFrequency < ZERO){
+	throw SplittingGenotypeException();
       }
-    }
-    else{
-      auto itGlid = glid.getList().find(*glidNumber);
-      if(itGlid == glid.getList().cend()){
-	std::cerr << "Key "
-		  << *glidNumber
-		  << " not in glid-file" << std::endl;
-	exit(EXIT_FAILURE);
-      }
-      else{
-	std::shared_ptr<Locus> pLocus = itGlid->second;
-	std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	pLocus->reduce(genotypesAtLocus);
-	genotypesWithFrequenciesAtLoci.push_back(genotypesAtLocus);
-	types.push_back(pLocus->getType());
-      }
-    }//else glidNumber=0
+    }//for glids
 
-    numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
-    if(1./numberOfReports - minimalFrequency < ZERO){
-      discardReport = true;
-      std::cout << "\t Report "
-		<< id
-		<< " comes below allowed frequency. Report discarded."
-		<< std::endl;
-      break;
-    }
-    if(numberOfReports < ZERO){
-      discardReport = true;	    
-      std::cout << "\t Genotype "
-		<< id
-		<< " contains empty loci."
-		<< std::endl;
-      break;
-    }
-  }//for glids
-
-  if(!discardReport)
     buildListOfReports(listOfReports);
+  }
+  catch(const std::exception & e){
+      std::cout << e.what() << std::endl;      
+      std::cout << "Id "
+		<< id
+		<< " discarded."
+		<< std::endl;      
+  }
 }
 
 void GLCReport::translateLine(const std::string line){
@@ -328,66 +311,98 @@ void GLCReport::translateLine(const std::string line){
 
 void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
-  for(auto singleLocusGenotype : singleLocusGenotypes){
+  try
+    { 
+      doLociMatch();
 
-    if(!discardReport)
-      {
-	std::string locusName = split(singleLocusGenotype, '*')[0];
-	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
-    
-	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
-	  {
-	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-	    std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
-	    
-	    resolveSingleLocusGenotype(genotype,
-				       positionWantedLocus);
-	  }
-      }
-  }
-
-  if(!discardReport){  
-    buildListOfReports(listOfReports);
-  }
+      for(auto singleLocusGenotype : singleLocusGenotypes)
+	{
+	  std::string locusName = split(singleLocusGenotype, '*')[0];
+	  auto locusAndResolution = lociAndResolutions.find(locusName);
+	  
+	  if(locusAndResolution != lociAndResolutions.cend())
+	    {
+	      size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
+	      std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndResolution->second);
+	      
+	      resolveSingleLocusGenotype(genotype,
+					 positionWantedLocus);
+	    }
+	}
+      buildListOfReports(listOfReports);
+    }
+  catch(const std::exception & e)
+    {
+      std::cout << e.what() << std::endl;      
+      std::cout << "Id "
+		<< id
+		<< " discarded."
+		<< std::endl;      
+    }	    
 }
 
+void GLCReport::doLociMatch() const{
+
+  for(auto locusAndResolution : lociAndResolutions)
+    {
+      auto pos = find_if(singleLocusGenotypes.cbegin(),
+			 singleLocusGenotypes.cend(),
+			 [& locusAndResolution](const std::string singleLocusGenotype)
+			 {
+			   std::string locusName = split(singleLocusGenotype, '*')[0];
+			   return locusName == locusAndResolution.first;
+			 }); 
+
+      if(pos == singleLocusGenotypes.cend())
+	{
+	  throw NotMatchingLociException_GLC(locusAndResolution.first, id);
+	}
+    }
+}
 
 void MAReport::translateLine(const std::string line){
 
   std::stringstream ss(line);
-  std::string entry;
-  if(ss >> entry)
-    id = entry;
-
-  auto locusName = lociNamesFromFile.cbegin();
-  std::string entry2;
-  while(ss >> entry >> entry2){
-    std::string allele1 = *locusName + '*';
-    locusName ++;
-    std::string allele2 = *locusName + '*';
-    locusName ++;
-    allele1.append(entry);
-    allele2.append(entry2);
-    strArr_t locus;
-    locus.at(0) = allele1;
-    locus.at(1) = allele2;
-    lociFromFile.push_back(locus);
-  }
+  if(ss >> id){}
+  
+  for(auto locusName = lociNamesFromFile.cbegin();
+      locusName != lociNamesFromFile.cend();
+      locusName ++)
+    {
+      std::string entry;
+      std::string entry2;
+      if(ss >> entry >> entry2)
+	{
+	  std::string allele1 = *locusName + '*' + entry;
+	  locusName ++;
+	  std::string allele2 = *locusName + '*' + entry2;
+	  
+	  strArr_t locus;
+	  locus.at(0) = allele1;
+	  locus.at(1) = allele2;
+	  lociFromFile.push_back(locus);
+	}
+    }
 }
 
 void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
-  auto locusNameFromFile = lociNamesFromFile.cbegin();
-  for(auto singleLocusGenotype : lociFromFile){
-
-    if(!discardReport)
-      {
-	auto locusAndWantedAlleleGroup = lociAndWantedAlleleGroups.find(*locusNameFromFile);
-
-	if(locusAndWantedAlleleGroup != lociAndWantedAlleleGroups.cend())
+  try
+    {
+      if(lociFromFile.size() != numberLoci)
+	{
+	  throw InputLineException();
+	}
+      
+      auto locusNameFromFile = lociNamesFromFile.cbegin();
+      for(auto singleLocusGenotype : lociFromFile){
+	
+	auto locusAndResolution = lociAndResolutions.find(*locusNameFromFile);
+	
+	if(locusAndResolution != lociAndResolutions.cend())
 	  { 
-	    size_t positionWantedLocus = std::distance(lociAndWantedAlleleGroups.begin(), locusAndWantedAlleleGroup);
-	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndWantedAlleleGroup->second);
+	    size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
+	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndResolution->second);
 	    
 	    resolveSingleLocusGenotype(genotype,
 				       positionWantedLocus);
@@ -395,8 +410,15 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	locusNameFromFile ++;
 	locusNameFromFile ++;
       }
-  }
-  
-  if(!discardReport)
-    buildListOfReports(listOfReports);
+      
+      buildListOfReports(listOfReports);
+    }
+  catch(const std::exception & e)
+    {
+      std::cout << e.what() << std::endl;      
+      std::cout << "Id "
+		<< id
+		<< " discarded."
+		<< std::endl;      
+    }	    
 }

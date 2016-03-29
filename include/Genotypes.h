@@ -30,8 +30,8 @@
 class Genotype{
 
  public:
-  explicit Genotype(const Allele::codePrecision in_wantedAlleleGroup)
-    : wantedAlleleGroup(in_wantedAlleleGroup),
+  explicit Genotype(const Allele::codePrecision in_wantedResolution)
+    : wantedResolution(in_wantedResolution),
     singleLocusGenotype(){}
 
   virtual std::shared_ptr<Locus> resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const = 0;  
@@ -39,7 +39,7 @@ class Genotype{
   std::string getSingleLocusGenotype() const {return singleLocusGenotype;};
 
  protected:
-  Allele::codePrecision wantedAlleleGroup;
+  Allele::codePrecision wantedResolution;
   std::string singleLocusGenotype;
 
 };
@@ -48,8 +48,8 @@ class GLGenotype : public Genotype{
 
  public:
   explicit GLGenotype(const std::string in_singleLocusGenotype, 
-		      const Allele::codePrecision in_wantedAlleleGroup)
-    : Genotype(in_wantedAlleleGroup)
+		      const Allele::codePrecision in_wantedResolution)
+    : Genotype(in_wantedResolution)
     {
       singleLocusGenotype = in_singleLocusGenotype;
       orderSingleLocusGenotype();
@@ -65,8 +65,8 @@ class MAGenotype : public Genotype{
 
  public:
   explicit MAGenotype(const strArr_t & in_initialAllelesAtLocusPositions, 
-		      const Allele::codePrecision in_wantedAlleleGroup)
-    : Genotype(in_wantedAlleleGroup),
+		      const Allele::codePrecision in_wantedResolution)
+    : Genotype(in_wantedResolution),
     initialAllelesAtLocusPositions(in_initialAllelesAtLocusPositions)
   {
     buildSingleLocusGenotype();

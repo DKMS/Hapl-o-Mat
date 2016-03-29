@@ -26,6 +26,7 @@
 
 #include "Parameters.h"
 #include "Utility.h"
+#include "Exceptions.h"
 
 void Parameters::val_assign(size_t & out, const std::string line){
   size_t pos = line.find("=");
@@ -52,12 +53,7 @@ void Parameters::bool_assign(bool & out, const std::string line){
   else if(value == "True") out = true;
   else if(value == "False") out = false;
   else{
-    std::cout << "Incorrect value "
-	      << value
-	      << " in "
-	      << line
-	      << std::endl;
-    exit(EXIT_FAILURE);
+    throw ParameterAssignmentException(line);
   }
 }
 
@@ -73,38 +69,42 @@ void Parameters::initType_assign(const std::string line){
   else if(value.compare("equal") == 0)
     initType = equal;
   else{
-    std::cerr << "No initialization routine for haplotype frequencies specified. Set INITIALIZATION_HAPLOTYPE_FREQUENCIES to equal, numberOccurrence, random, or perturbation." << std::endl;
-    exit(EXIT_FAILURE);
+    throw ParameterAssignmentException(line);
   }
 }
 
-void Parameters::lociAndWantedAlleleGroups_assign(const std::string line){
+void Parameters::lociAndResolutions_assign(const std::string line){
   size_t pos = line.find("=");
   std::string text = line.substr(pos + 1);
-  strVec_t lociAndWantedAlleleGroupsIn = split(text, ',');
-  for(auto locusAndWantedAlleleGroupText : lociAndWantedAlleleGroupsIn)
-    {
-      strVec_t locusAndWantedAlleleGroup = split(locusAndWantedAlleleGroupText, ':');
-      std::string locus = locusAndWantedAlleleGroup[0];
-      std::string wantedAlleleGroup = locusAndWantedAlleleGroup[1];
 
-      if(wantedAlleleGroup == "g")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::g);
-      else if(wantedAlleleGroup == "P")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::P);
-      else if(wantedAlleleGroup == "4d")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::fourDigit);
-      else if(wantedAlleleGroup =="G")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::G);
-      else if(wantedAlleleGroup == "6d")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::sixDigit);
-      else if(wantedAlleleGroup == "8d")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::eightDigit);
-      else if(wantedAlleleGroup == "asItIs")
-	lociAndWantedAlleleGroups.emplace(locus, Allele::codePrecision::asItIs);
+  strVec_t lociAndResolutionsIn = split(text, ',');
+  for(auto locusAndResolutionText : lociAndResolutionsIn)
+    {
+      if(locusAndResolutionText.find(':') == std::string::npos)
+	{
+	  throw ParameterAssignmentException(line);
+	}
+
+      strVec_t locusAndResolution = split(locusAndResolutionText, ':');
+      std::string locus = locusAndResolution[0];
+      std::string wantedResolution = locusAndResolution[1];
+      
+      if(wantedResolution == "g")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::g);
+      else if(wantedResolution == "P")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::P);
+      else if(wantedResolution == "4d")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::fourDigit);
+      else if(wantedResolution =="G")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::G);
+      else if(wantedResolution == "6d")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::sixDigit);
+      else if(wantedResolution == "8d")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::eightDigit);
+      else if(wantedResolution == "asItIs")
+	lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
       else{
-	std::cerr << "Allele resolution for locus " << locus << " not known" << std::endl;
-	exit(EXIT_FAILURE);
+	throw ResolutionException(wantedResolution, locus);
       }
     }
 }
@@ -116,7 +116,6 @@ void Parameters::seed_assign(size_t & out, const std::string line){
   if(out == 0){
     out = std::chrono::system_clock::now().time_since_epoch().count();
   }
-
 }
 
 std::string Parameters::printInitialisationHaplotypeFrequencies() const{
@@ -151,18 +150,17 @@ void ParametersGL::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
-
+  
   std::string line;
   while(std::getline(file, line)){
-    if(line.find("#") != std::string::npos) continue;
-    else if(line.find("FILENAME_PULL") != std::string::npos) val_assign(pullFileName, line);
+    if(line.find("FILENAME_PULL") != std::string::npos) val_assign(pullFileName, line);
     else if(line.find("FILENAME_GLID") != std::string::npos) val_assign(glidFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
-    else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
+    else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
     else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
@@ -173,13 +171,7 @@ void ParametersGL::init(){
     else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
-      std::cerr << "Could not match "
-		<< line
-		<< " of "
-		<< parametersFileName
-		<< "."
-		<< std::endl;
-    exit(EXIT_FAILURE);
+      continue;
     }
   }//while
   file.close();
@@ -205,8 +197,8 @@ void ParametersGL::print() const {
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
   std::cout << "\t Loci with target allele resolutions: " << std::endl;
-  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  for(auto locusAndResolution : lociAndResolutions){
+    std::cout << "\t " << locusAndResolution.first << " : " << Allele::printCodePrecision(locusAndResolution.second) << std::endl;
   }
   std::cout << "\t Resolve missing genotypes: ";
   if(resolveUnknownGenotype)
@@ -242,16 +234,15 @@ void ParametersGLC::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
-
+  
   std::string line;
   while(std::getline(file, line)){
-    if(line.find("#") != std::string::npos) continue;
-    else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+    if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-    else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
+    else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
     else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
@@ -261,13 +252,7 @@ void ParametersGLC::init(){
     else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
-      std::cerr << "Could not match "
-		<< line
-		<< " of "
-		<< parametersFileName
-		<< "."
-		<< std::endl;
-    exit(EXIT_FAILURE);
+      continue;
     }
   }//while
   file.close();
@@ -285,8 +270,8 @@ void ParametersGLC::print() const {
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
   std::cout << "\t Loci with target allele resolutions: " << std::endl;
-  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout << "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  for(auto locusAndResolution : lociAndResolutions){
+    std::cout << "\t " << locusAndResolution.first << " : " << Allele::printCodePrecision(locusAndResolution.second) << std::endl;
   }
   std::cout << "\t Apply ambiguity filter: ";
   if(doAmbiguityFilter){
@@ -314,16 +299,15 @@ void ParametersMA::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
-
+  
   std::string line;
   while(std::getline(file, line)){
-    if(line.find("#") != std::string::npos) continue;
-    else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+    if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
-    else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndWantedAlleleGroups_assign(line);
+    else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
     else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos) bool_assign(doAmbiguityFilter, line);
     else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos) bool_assign(expandAmbiguityLines, line);
@@ -333,13 +317,7 @@ void ParametersMA::init(){
     else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
-      std::cerr << "Could not match "
-		<< line
-		<< " of "
-		<< parametersFileName
-		<< "."
-		<< std::endl;
-      exit(EXIT_FAILURE);
+      continue;
     }
   }//while
   file.close();
@@ -357,8 +335,8 @@ void ParametersMA::print() const {
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
   std::cout << "\t Loci with target allele resolutions: " << std::endl;
-  for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups){
-    std::cout <<  "\t " << locusAndWantedAlleleGroup.first << " : " << Allele::printCodePrecision(locusAndWantedAlleleGroup.second) << std::endl;
+  for(auto locusAndResolution : lociAndResolutions){
+    std::cout <<  "\t " << locusAndResolution.first << " : " << Allele::printCodePrecision(locusAndResolution.second) << std::endl;
   }
   std::cout << "\t Apply ambiguity filter: ";
   if(doAmbiguityFilter){
@@ -386,11 +364,10 @@ void ParametersReadin::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
-
+  
   std::string line;
   while(std::getline(file, line)){
-    if(line.find("#") != std::string::npos) continue;
-    else if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
+    if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON") != std::string::npos) val_assign(epsilonFileName, line);
@@ -400,13 +377,7 @@ void ParametersReadin::init(){
     else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
     else{
-      std::cerr << "Could not match "
-		<< line
-		<< " of "
-		<< parametersFileName
-		<< "."
-		<< std::endl;
-      exit(EXIT_FAILURE);
+      continue;
     }
   }//while
   file.close();

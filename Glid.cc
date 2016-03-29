@@ -30,7 +30,7 @@
 
 FileAlleles AllPossibleGenotypes::allAlleles("data/AlleleList.txt");
 
-void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedAlleleGroup){
+void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedResolution){
 
   std::cout << " \t Build list of all possible genotypes for locus " << locus << std::endl;
 
@@ -57,7 +57,7 @@ void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele:
   }
   
   if(!(in_phasedLocus.empty())){
-    PhasedLocus phasedLocus(in_phasedLocus, wantedAlleleGroup);
+    PhasedLocus phasedLocus(in_phasedLocus, wantedResolution);
     phasedLocus.resolve();
     phasedLocus.reduce(genotypes);
   }
@@ -82,33 +82,36 @@ void GlidFile::readAndResolveFile(){
 
   std::string line;
   while(std::getline(file, line)){
-
-    strVec_t entries = split(line, ';');
-    size_t glid = stoull(entries.at(0));
-    std::string singeLocusGenotype = entries.at(1);
-
-    std::string locusName = split(singeLocusGenotype, '*')[0];
-    auto locusAndwantedAlleleGroup = lociAndWantedAlleleGroups.find(locusName);
-    if(locusAndwantedAlleleGroup != lociAndWantedAlleleGroups.cend()){
-
-      GLGenotype genotypeGL(singeLocusGenotype, locusAndwantedAlleleGroup->second);
-      std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
-
-      std::pair<list_t::iterator, bool> inserted = list.emplace(glid, pLocus);
-      if(! inserted.second){
-	std::cerr << fileName
-		  << ": Glid::readAndResolveFile: Collision of "
-		  << glid
-		  << std::endl;
+    
+    size_t glid;
+    try
+      {
+	strVec_t entries = split(line, ';');
+	glid = stoull(entries.at(0));
+	std::string singleLocusGenotype = entries.at(1);
+	
+	std::string locusName = split(singleLocusGenotype, '*')[0];
+	auto locusAndResolution = lociAndResolutions.find(locusName);
+	if(locusAndResolution != lociAndResolutions.cend()){
+	  
+	  GLGenotype genotypeGL(singleLocusGenotype, locusAndResolution->second);
+	  std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
+	  
+	  list.emplace(glid, pLocus);
+	}
       }
-    }
+    catch(const std::exception & e)
+      {
+	std::cout << e.what() << std::endl;
+	std::cout << "GL-id " << glid << " not processed." << std::endl;
+      }
   }
-
+    
   if(resolveUnknownGenotypes)
     {
-      for(auto locusAndWantedAlleleGroup : lociAndWantedAlleleGroups)
+      for(auto locusAndResolution : lociAndResolutions)
 	{
-	  possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndWantedAlleleGroup.first, locusAndWantedAlleleGroup.second));
+	  possibleGenotypesForAllLoci.push_back(AllPossibleGenotypes(locusAndResolution.first, locusAndResolution.second));
 	}
     }
 }

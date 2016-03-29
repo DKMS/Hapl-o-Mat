@@ -80,12 +80,11 @@ class ReadinReport : public BasicReport{
 class Report : public BasicReport{
 
  public:
- explicit Report(const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups)
-   : BasicReport(in_lociAndWantedAlleleGroups.size()),
-    lociAndWantedAlleleGroups(in_lociAndWantedAlleleGroups),
+ explicit Report(const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions)
+   : BasicReport(in_lociAndResolutions.size()),
+    lociAndResolutions(in_lociAndResolutions),
     types(),
     numberOfReports(1.),
-    discardReport(false),
     genotypesWithFrequenciesAtLoci()
       {
 	genotypeAtLoci.reserve(numberLoci);
@@ -96,7 +95,7 @@ class Report : public BasicReport{
 		  const std::string in_id,
 		  const std::vector<Locus::reportType> & in_types)
     : BasicReport(in_numberLoci),
-    lociAndWantedAlleleGroups(),
+    lociAndResolutions(),
     types(in_types)
       {
 	genotypeAtLoci = in_genotypeAtLoci;
@@ -119,10 +118,9 @@ class Report : public BasicReport{
   static double getNumberIReports() {return numberIReports;}
 
  protected:
-  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndResolutions;
   std::vector<Locus::reportType> types;
   double numberOfReports;
-  bool discardReport;
   std::vector<std::vector<std::pair<strArr_t, double>>> genotypesWithFrequenciesAtLoci;
   static double numberNReports;
   static double numberAReports;
@@ -135,8 +133,8 @@ class GLReport : public Report{
  public:
   explicit GLReport(const std::string line,
 		    const strVec_t & in_lociOrder,
-		    const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups) 
-    : Report(in_lociAndWantedAlleleGroups),
+		    const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions) 
+    : Report(in_lociAndResolutions),
     lociOrder(in_lociOrder)
     {
       translateLine(line);
@@ -176,11 +174,11 @@ class ColumnReport : public Report{
 
  public:
   explicit ColumnReport(const std::map<std::string,
-			Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+			Allele::codePrecision> & in_lociAndResolutions,
 			const double in_minimalFrequency,
 			const bool in_doAmbiguityFilter,
 			const bool in_expandAmbiguityLines)
-    : Report(in_lociAndWantedAlleleGroups),
+    : Report(in_lociAndResolutions),
     minimalFrequency(in_minimalFrequency),
     doAmbiguityFilter(in_doAmbiguityFilter),
     expandAmbiguityLines(in_expandAmbiguityLines)
@@ -212,11 +210,11 @@ class GLCReport : public ColumnReport{
 
  public:
   explicit GLCReport(const std::string line,
-		     const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+		     const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions,
 		     const double in_minimalFrequency,
 		     const bool in_doAmbiguityFilter,
 		     const bool in_expandAmbiguityLines)
-    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doAmbiguityFilter, in_expandAmbiguityLines),
+    : ColumnReport(in_lociAndResolutions, in_minimalFrequency, in_doAmbiguityFilter, in_expandAmbiguityLines),
     singleLocusGenotypes()
   {
     translateLine(line);
@@ -247,6 +245,8 @@ class GLCReport : public ColumnReport{
   virtual void translateLine(const std::string line);
   virtual void resolve(std::vector<std::shared_ptr<Report>> & listOfReports);
 
+  void doLociMatch() const;
+
  private:
   strVec_t singleLocusGenotypes;
 
@@ -257,11 +257,11 @@ class MAReport : public ColumnReport{
  public:
   explicit MAReport(const std::string line,
 		   const strVec_t & in_lociNamesFromFile,
-		   const std::map<std::string, Allele::codePrecision> & in_lociAndWantedAlleleGroups,
+		   const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions,
 		   const double in_minimalFrequency,
 		   const bool in_doAmbiguityFilter,
 		   const bool in_expandAmbiguityLines)
-    : ColumnReport(in_lociAndWantedAlleleGroups, in_minimalFrequency, in_doAmbiguityFilter, in_expandAmbiguityLines),
+    : ColumnReport(in_lociAndResolutions, in_minimalFrequency, in_doAmbiguityFilter, in_expandAmbiguityLines),
     lociFromFile(),
     lociNamesFromFile(in_lociNamesFromFile)
       {

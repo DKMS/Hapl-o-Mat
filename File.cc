@@ -37,14 +37,7 @@ void FileNMDPCodes::readFile(){
     std::string firstEntry;
     std::string secondEntry;
     while(ss >> firstEntry >> secondEntry){
-
-      std::pair<list_t::iterator, bool> inserted = list.emplace(firstEntry, secondEntry);
-      if(! inserted.second){
-	std::cerr << fileName
-                  << ": FileUnorderedMap::readFile: Collision of "
-                  << firstEntry
-                  << std::endl;
-      }
+      list.emplace(firstEntry, secondEntry);
     }
   }
   file.close();

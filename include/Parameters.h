@@ -46,7 +46,7 @@ class Parameters{
     phenotypesFileName("results/phenotypes.dat"),
     haplotypeFrequenciesFileName("results/estimatedHaplotypeFrequencies.dat"),
     epsilonFileName("results/epsilonVsSteps.dat"),
-    lociAndWantedAlleleGroups(),
+    lociAndResolutions(),
     minimalFrequency(1e-5),
     doAmbiguityFilter(true),
     expandAmbiguityLines(true),
@@ -65,7 +65,7 @@ class Parameters{
   std::string getPhenotypesFileName() const {return phenotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
   std::string getEpsilonFileName() const {return epsilonFileName;}
-  const std::map<std::string, Allele::codePrecision>& getLociAndWantedAlleleGroups() const {return lociAndWantedAlleleGroups;}
+  const std::map<std::string, Allele::codePrecision>& getLociAndResolutions() const {return lociAndResolutions;}
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoAmbiguityFilter() const {return doAmbiguityFilter;}
   bool getExpandAmbiguityLines() const {return expandAmbiguityLines;}
@@ -81,7 +81,7 @@ class Parameters{
   void val_assign(std::string & out, const std::string line);  
   void bool_assign(bool & out, const std::string line);
   void initType_assign(const std::string line);
-  void lociAndWantedAlleleGroups_assign(const std::string line);
+  void lociAndResolutions_assign(const std::string line);
   void seed_assign(size_t & out, const std::string line);
 
   std::string printInitialisationHaplotypeFrequencies() const;
@@ -92,7 +92,7 @@ class Parameters{
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
 
-  std::map<std::string, Allele::codePrecision> lociAndWantedAlleleGroups;
+  std::map<std::string, Allele::codePrecision> lociAndResolutions;
   double minimalFrequency;
   bool doAmbiguityFilter;
   bool expandAmbiguityLines;
