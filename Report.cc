@@ -363,46 +363,54 @@ void GLCReport::doLociMatch() const{
 void MAReport::translateLine(const std::string line){
 
   std::stringstream ss(line);
-  std::string entry;
-  if(ss >> entry)
-    id = entry;
-
-  auto locusName = lociNamesFromFile.cbegin();
-  std::string entry2;
-  while(ss >> entry >> entry2){
-    std::string allele1 = *locusName + '*';
-    locusName ++;
-    std::string allele2 = *locusName + '*';
-    locusName ++;
-    allele1.append(entry);
-    allele2.append(entry2);
-    strArr_t locus;
-    locus.at(0) = allele1;
-    locus.at(1) = allele2;
-    lociFromFile.push_back(locus);
-  }
+  if(ss >> id){}
+  
+  for(auto locusName = lociNamesFromFile.cbegin();
+      locusName != lociNamesFromFile.cend();
+      locusName ++)
+    {
+      std::string entry;
+      std::string entry2;
+      if(ss >> entry >> entry2)
+	{
+	  std::string allele1 = *locusName + '*' + entry;
+	  locusName ++;
+	  std::string allele2 = *locusName + '*' + entry2;
+	  
+	  strArr_t locus;
+	  locus.at(0) = allele1;
+	  locus.at(1) = allele2;
+	  lociFromFile.push_back(locus);
+	}
+    }
 }
 
 void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   try
-    { 
+    {
+      if(lociFromFile.size() != numberLoci)
+	{
+	  throw InputLineException();
+	}
+      
       auto locusNameFromFile = lociNamesFromFile.cbegin();
       for(auto singleLocusGenotype : lociFromFile){
-
+	
 	auto locusAndResolution = lociAndResolutions.find(*locusNameFromFile);
 	
 	if(locusAndResolution != lociAndResolutions.cend())
 	  { 
 	    size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
 	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndResolution->second);
-	
+	    
 	    resolveSingleLocusGenotype(genotype,
 				       positionWantedLocus);
 	  }
 	locusNameFromFile ++;
 	locusNameFromFile ++;
       }
+      
       buildListOfReports(listOfReports);
     }
   catch(const std::exception & e)
@@ -412,5 +420,5 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 		<< id
 		<< " discarded."
 		<< std::endl;      
-    }  
+    }	    
 }

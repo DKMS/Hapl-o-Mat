@@ -183,7 +183,6 @@ class MissingGlidException : public std::exception{
 
 class SplittingGenotypeException : public std::exception{
 
-
  public:
   explicit SplittingGenotypeException()
     : exception()
@@ -192,5 +191,14 @@ class SplittingGenotypeException : public std::exception{
   virtual const char* what() const throw()
   {
     return "Too broad splitting of genotype.";
+  }
+};
+
+class InputLineException : public std::exception{
+
+ public:
+  virtual const char* what() const throw()
+  {
+    return "Wrong line length.";
   }
 };
