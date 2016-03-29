@@ -20,12 +20,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <cmath>
-#include <fstream>
-#include <sstream>
 #include <iostream> 
-#include <algorithm>
-#include <cstdio>
 
 #include "Haplotype.h"
 #include "Phenotype.h"

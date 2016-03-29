@@ -21,12 +21,10 @@
  */
 
 #include <iostream>
-#include <cmath>
-#include <chrono>
 
+#include "Exceptions.h"
 #include "Parameters.h"
 #include "Utility.h"
-#include "Exceptions.h"
 
 void Parameters::val_assign(size_t & out, const std::string line){
   size_t pos = line.find("=");

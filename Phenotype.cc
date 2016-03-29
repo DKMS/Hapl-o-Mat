@@ -20,11 +20,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <algorithm>
 #include <iostream>
 
-#include "Phenotype.h"
 #include "Haplotype.h"
+#include "Phenotype.h"
 #include "Utility.h"
 
 double Phenotype::computeSummedFrequencyDiplotypes () const{

@@ -21,11 +21,10 @@
  */
 
 #include <iostream>
-#include <algorithm>
 
+#include "Allele.h"
 #include "Locus.h"
 #include "Utility.h"
-#include "Allele.h"
 
 FileAmbiguity AmbiguityFilter::fileAmbiguity("data/Ambiguity.txt"); 
 

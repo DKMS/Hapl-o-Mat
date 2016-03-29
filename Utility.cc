@@ -22,10 +22,9 @@
 
 #include <iostream>
 #include <sstream>
-#include <algorithm>
 
-#include "Utility.h"
 #include "Exceptions.h"
+#include "Utility.h"
 
 std::chrono::high_resolution_clock::time_point getTime(){
   return std::chrono::high_resolution_clock::now();

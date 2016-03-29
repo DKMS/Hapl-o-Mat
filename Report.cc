@@ -20,18 +20,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <sstream>
-#include <fstream>
 #include <iostream>
+#include <sstream>
 
-#include "Report.h"
-#include "Locus.h"
-#include "Glid.h"
-#include "Utility.h"
-#include "Phenotype.h"
-#include "Haplotype.h"
 #include "DataProcessing.h"
 #include "Exceptions.h"
+#include "Haplotype.h"
+#include "Locus.h"
+#include "Phenotype.h"
+#include "Report.h"
+#include "Utility.h"
 
 std::unordered_map<std::string, std::shared_ptr<Locus>> ColumnReport::singleLocusGenotypesAlreadyDone;
 double Report::numberNReports = 0.;
