@@ -97,13 +97,7 @@ void GlidFile::readAndResolveFile(){
 	  GLGenotype genotypeGL(singleLocusGenotype, locusAndResolution->second);
 	  std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
 	  
-	  std::pair<list_t::iterator, bool> inserted = list.emplace(glid, pLocus);
-	  if(! inserted.second){
-	    std::cerr << fileName
-		      << ": Glid::readAndResolveFile: Collision of "
-		      << glid
-		      << std::endl;
-	  }
+	  list.emplace(glid, pLocus);
 	}
       }
     catch(const std::exception & e)
