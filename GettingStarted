@@ -179,6 +179,13 @@ Hapl-O-mat is run by
 
       ./haplomat INPUTFORMAT
 
+Hapl-O-mat prints information on the current run to the screen. This information includes the
+used parameters, statistics on the input data, the required memory and time, and error
+messages. Depending on the error two things can happen: First, Hapl-O-mat can just quit. For
+example, this happens, if a data file is missing. Second, Hapl-O-mat does not include a
+genotype into analysis. For example, this happens, if the genotype includes a non-existent
+HLA allele.
+
 
 5) Tutorials
 ------------
@@ -323,3 +330,6 @@ names and set parameters for the haplotype frequency estimation. You run
 Hapl-O-mat via
 
     ./haplomat READ
+
+
+
