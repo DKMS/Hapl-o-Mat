@@ -232,7 +232,7 @@ void GLReport::translateLine(const std::string line){
   std::string rightPartOfLine = rightOfFirstDelim(line, ';');
   strVec_t allGlids = split(rightPartOfLine, ':');
 
-  glids.resize(numberLoci);
+  glids.resize(numberLoci, 0);
 
   auto locusName = lociOrder.cbegin();
   for(auto glidNumber : allGlids)
