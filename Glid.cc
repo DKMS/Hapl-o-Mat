@@ -20,8 +20,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <map>
 
 #include "Glid.h"
