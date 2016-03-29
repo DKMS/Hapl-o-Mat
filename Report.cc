@@ -389,7 +389,7 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   try
     {
-      if(lociFromFile.size() != numberLoci)
+      if(lociFromFile.size() < numberLoci)
 	{
 	  throw InputLineException();
 	}
