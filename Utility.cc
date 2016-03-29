@@ -102,12 +102,13 @@ bool checkNMDPCode(const std::string code){
   bool in = false;
   std::string shortCode = rightOfFirstDelim(code, '*');
 
-  auto it = std::find_if(shortCode.begin(), shortCode.end(), isLetter);
+  auto positionLetter = std::find_if(shortCode.begin(), shortCode.end(), isLetter);
+  size_t numberColons = std::count(shortCode.begin(), shortCode.end(), ':');
 
-  if(it != shortCode.end())
+  if(positionLetter != shortCode.end() and numberColons == 1)
     {
-      it++;
-      in = isLetter(*it);
+      positionLetter++;
+      in = isLetter(*positionLetter);
     }
 
   return in;
