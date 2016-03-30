@@ -113,10 +113,12 @@ int main(int argc, char *argv[]){
     std::cout << "\t Data preprocessing [s]: " << timeTakenForDataPreProcessing << std::endl;
     std::cout << "\t EM algorithm [s]: " << timeTakenForEMAlgorithm << std::endl;
     std::cout << "\t Writing [s]: " << timeTakenForWriting << std::endl;
+
+    return 0;
   }
   catch(const std::exception & e){
     std::cerr << e.what() << std::endl;
     std::cout << "Exit Hapl-O-mat" << std::endl;
-    exit(EXIT_FAILURE);
+    return -1;
   }
 }
