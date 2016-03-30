@@ -9,15 +9,16 @@ class MultipleAlleleCodeException : public std::exception{
  public:
   explicit MultipleAlleleCodeException(const std::string in_multipleAlleleCode)
     : exception(),
-    multipleAlleleCode(in_multipleAlleleCode){}
+    errorMessage("Multiple allele code " + in_multipleAlleleCode + " not found.")
+    {}
 
   virtual const char* what() const throw()
   {
-    return ("Multiple allele code " + multipleAlleleCode + " not found.").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string multipleAlleleCode;
+  std::string errorMessage;
 };
 
 class MissingAlleleException : public std::exception{
@@ -26,18 +27,16 @@ class MissingAlleleException : public std::exception{
   explicit MissingAlleleException(const std::string in_missingAllele,
 				  const std::string in_fileName)
     : exception(),
-    missingAllele(in_missingAllele),
-    fileName(in_fileName)
+    errorMessage("Allele " + in_missingAllele + " does not exist in " + in_fileName + ".")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Allele " + missingAllele + " does not exist in " + fileName + ".").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string missingAllele;
-  std::string fileName;
+  std::string errorMessage;
 };
 
 class AlleleResolutionException : public std::exception{
@@ -45,16 +44,16 @@ class AlleleResolutionException : public std::exception{
  public:
   explicit AlleleResolutionException(const std::string in_allele)
     : exception(),
-    allele(in_allele)
+    errorMessage("Resolution of " + in_allele + " not known.")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Resolution of " + allele + " not known.").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string allele;
+  std::string errorMessage;
 };
 
 class ResolutionException : public std::exception{
@@ -63,18 +62,16 @@ class ResolutionException : public std::exception{
  public:
   explicit ResolutionException(const std::string in_wantedResolution, const std::string in_locus)
     : exception(),
-    wantedResolution(in_wantedResolution),
-    locus(in_locus)
+    errorMessage("Resolution " + in_wantedResolution + " specified for locus " + in_locus + " not known.")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Resolution " + wantedResolution + " specified for locus " + locus + " not known.").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string wantedResolution;
-  std::string locus;
+  std::string errorMessage;
 };
 
 class ParameterAssignmentException : public std::exception{
@@ -82,16 +79,16 @@ class ParameterAssignmentException : public std::exception{
  public:
   explicit ParameterAssignmentException(const std::string in_line)
     : exception(),
-    line(in_line)
+    errorMessage("Wrong format for assignment of " + in_line + ".")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Wrong format for assignment of " + line).c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string line;
+  std::string errorMessage;
 };
 
 class InputFormatException : public std::exception{
@@ -109,16 +106,16 @@ class FileException : public std::exception{
  public:
   explicit FileException(const std::string in_filename)
     : exception(),
-    filename(in_filename)
+    errorMessage("Could not open " + in_filename + ".")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Could not open " + filename + ".").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string filename;
+  std::string errorMessage;
 };
 
 
@@ -127,16 +124,16 @@ class NotMatchingLociException_MA : public std::exception{
  public:
   explicit NotMatchingLociException_MA(const std::string in_locus)
     : exception(),
-    locus(in_locus)
+    errorMessage("Specified locus " + in_locus + " not found.")
     {}
   
   virtual const char* what() const throw()
   {
-    return ("Specified locus " + locus + " not found.").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string locus;
+  std::string errorMessage;
 };
 
 class NotMatchingLociException_GLC : public std::exception{
@@ -145,18 +142,16 @@ class NotMatchingLociException_GLC : public std::exception{
   explicit NotMatchingLociException_GLC(const std::string in_locus,
 					const std::string in_id)
     : exception(),
-    locus(in_locus),
-    id(in_id)
+    errorMessage("Specified locus " + in_locus + " not found in id " + in_id + ".")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("Specified locus " + locus + " not found in id " + id + ".").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string locus;
-  std::string id;
+  std::string errorMessage;
 };
 
 class MissingGenotypeException : public std::exception{
@@ -172,25 +167,21 @@ class MissingGlidException : public std::exception{
  public:
   explicit MissingGlidException(const size_t in_glid)
     : exception(),
-    glid(std::to_string(in_glid))
+    errorMessage("GL-id " + std::to_string(in_glid) + " not found in glid-file.")
     {}
 
   virtual const char* what() const throw()
   {
-    return ("GL-id " + glid + " not found in glid-file.").c_str();
+    return errorMessage.c_str();
   }
 
  private:
-  std::string glid;
+  std::string errorMessage;
 };
 
 class SplittingGenotypeException : public std::exception{
 
  public:
-  explicit SplittingGenotypeException()
-    : exception()
-    {}
-
   virtual const char* what() const throw()
   {
     return "Too broad splitting of genotype.";
