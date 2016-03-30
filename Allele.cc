@@ -191,7 +191,7 @@ std::vector<std::shared_ptr<Allele>> Allele::translate(){
     }
   default:
     {
-      exit(EXIT_FAILURE);
+      throw AlleleResolutionException(code);
     }
   }//switch                                             
 }
