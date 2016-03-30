@@ -286,6 +286,10 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 
     buildListOfReports(listOfReports);
   }
+  catch(const FileException & e)
+    {
+      throw e;
+    }
   catch(const std::exception & e){
       std::cout << e.what() << std::endl;      
       std::cout << "Id "
@@ -328,6 +332,10 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	    }
 	}
       buildListOfReports(listOfReports);
+    }
+  catch(const FileException & e)
+    {
+      throw e;
     }
   catch(const std::exception & e)
     {
@@ -408,6 +416,10 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
       }
       
       buildListOfReports(listOfReports);
+    }
+  catch(const FileException & e)
+    {
+      throw e;
     }
   catch(const std::exception & e)
     {

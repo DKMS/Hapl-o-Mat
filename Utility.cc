@@ -37,37 +37,20 @@ size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1
 
 void openFileToRead(const std::string fileName, std::ifstream & file){
 
-  try
+  file.open(fileName, std::ifstream::in);
+  if(!file.is_open())
     {
-      file.open(fileName, std::ifstream::in);
-      if(!file.is_open())
-	{
-	  throw FileException(fileName);
-	}
-    }
-  catch(const std::exception & e)
-    {
-      std::cerr << e.what() << std::endl;
-      std::cout << "Exit Hapl-O-mat" << std::endl;
-      exit(EXIT_FAILURE);
+      throw FileException(fileName);
     }
 }
 
+
 void openFileToWrite(const std::string fileName, std::ofstream & file){
 
-  try
+  file.open(fileName, std::ifstream::out);
+  if(!file.is_open())
     {
-      file.open(fileName, std::ifstream::out);
-      if(!file.is_open())
-	{
-	  throw FileException(fileName);
-	}
-    }
-  catch(const std::exception & e)
-    {
-      std::cerr << e.what() << std::endl;
-      std::cout << "Exit Hapl-O-mat" << std::endl;
-      exit(EXIT_FAILURE);
+      throw FileException(fileName);
     }
 }
 
