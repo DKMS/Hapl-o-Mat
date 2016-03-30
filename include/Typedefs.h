@@ -23,10 +23,10 @@
 #ifndef Typedefs_header
 #define Typedefs_header
 
-#include <string>
-#include <vector>
 #include <array>
 #include <chrono>
+#include <string>
+#include <vector>
 
 typedef std::chrono::high_resolution_clock::time_point timePoint;
 typedef std::vector<std::string> strVec_t;

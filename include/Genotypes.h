@@ -24,8 +24,8 @@
 #define Genotypes_header
 
 #include "Allele.h"
-#include "Locus.h"
 #include "File.h"
+#include "Locus.h"
 
 class Genotype{
 

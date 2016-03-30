@@ -25,10 +25,9 @@
 
 #include <string>
 #include <unordered_map>
-#include <memory>
 
-#include "Locus.h"
 #include "Allele.h" 
+#include "Locus.h"
 
 class AllPossibleGenotypes{
 

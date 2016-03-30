@@ -23,7 +23,7 @@
 #ifndef Haplotype_header
 #define Haplotype_header
 
-#include<random>
+#include <random>
 
 #include "Hash.h"
 #include "Parameters.h"

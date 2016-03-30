@@ -23,9 +23,10 @@
 #ifndef Phenotype_header
 #define Phenotype_header
 
-#include "Hash.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "Hash.h"
 
 class Haplotypes;
 

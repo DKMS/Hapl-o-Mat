@@ -24,10 +24,8 @@
 #define Locus_header
 
 #include <array>
-#include <memory>
 
 #include "Allele.h"
-
 
 class Locus{
 

@@ -23,12 +23,11 @@
 #ifndef Utility_header
 #define Utility_header
 
-#include <fstream>
-#include <memory>
 #include <chrono>
+#include <fstream>
 
-#include "Typedefs.h"
 #include "Allele.h"
+#include "Typedefs.h"
 
 const double ZERO = 1e-14;
 const double MAX_MEMORY = 200000.;

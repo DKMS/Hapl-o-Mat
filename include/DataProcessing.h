@@ -26,9 +26,8 @@
 #include <string>
 
 #include "Glid.h"
-#include "Typedefs.h"
-#include "Allele.h"
 #include "Parameters.h"
+#include "Typedefs.h"
 
 class Phenotypes;
 class Haplotypes;

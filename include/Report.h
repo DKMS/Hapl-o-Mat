@@ -24,14 +24,14 @@
 #define Report_header
 
 #include <array>
-#include <vector>
 #include <fstream>
+#include <vector>
 
-#include "Typedefs.h"
 #include "Allele.h"
-#include "Phenotype.h"
-#include "Locus.h"
 #include "Genotypes.h"
+#include "Locus.h"
+#include "Phenotype.h"
+#include "Typedefs.h"
 
 class GlidFile;
 class Haplotypes;

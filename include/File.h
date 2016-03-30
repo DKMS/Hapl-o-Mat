@@ -23,12 +23,12 @@
 #ifndef File_header
 #define File_header
 
+#include <algorithm>
+#include <fstream>
+#include <map>
 #include <string>
 #include <unordered_map>
-#include <map>
 #include <vector>
-#include <fstream>
-#include <algorithm>
 
 #include "Typedefs.h"
 

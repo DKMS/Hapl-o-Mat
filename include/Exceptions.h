@@ -1,3 +1,6 @@
+#ifndef Exceptions_header
+#define Exceptions_header
+
 #include <exception>
 #include <string>
 
@@ -202,3 +205,5 @@ class InputLineException : public std::exception{
     return "Wrong line length.";
   }
 };
+
+#endif
