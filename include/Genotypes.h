@@ -76,12 +76,15 @@ class MAGenotype : public Genotype{
 
   void resolveNMDPCode(const std::string code, strVec_t & newCodes) const;
   virtual std::shared_ptr<Locus> resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const;  
+  FileNMDPCodes & fileNMDPCodes() const
+    {
+      static FileNMDPCodes fileNMDPCodes("data/MultipleAlleleCodes.txt");
+      return fileNMDPCodes;
+    }
 
  private:
   void buildSingleLocusGenotype();
-
   strArr_t initialAllelesAtLocusPositions;
-  static FileNMDPCodes fileNMDPCodes;
 };
 
 #endif

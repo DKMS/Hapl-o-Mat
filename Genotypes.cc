@@ -27,8 +27,6 @@
 #include "Typedefs.h"
 #include "Utility.h"
 
-FileNMDPCodes MAGenotype::fileNMDPCodes("data/MultipleAlleleCodes.txt");
-
 std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
   std::shared_ptr<Locus> pLocus;
@@ -149,8 +147,8 @@ void MAGenotype::buildSingleLocusGenotype(){
 void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
 
   std::string nmdpCode = findNMDPCode(code);
-  auto itFileNMDPCodes = fileNMDPCodes.getList().find(nmdpCode);
-  if(itFileNMDPCodes == fileNMDPCodes.getList().cend()){
+  auto itFileNMDPCodes = fileNMDPCodes().getList().find(nmdpCode);
+  if(itFileNMDPCodes == fileNMDPCodes().getList().cend()){
     throw(MultipleAlleleCodeException(nmdpCode));
   }
 	
