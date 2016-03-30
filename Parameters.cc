@@ -78,32 +78,34 @@ void Parameters::lociAndResolutions_assign(const std::string line){
   strVec_t lociAndResolutionsIn = split(text, ',');
   for(auto locusAndResolutionText : lociAndResolutionsIn)
     {
-      if(locusAndResolutionText.find(':') == std::string::npos)
+      if(locusAndResolutionText.find(':') != std::string::npos)
+	{
+	  strVec_t locusAndResolution = split(locusAndResolutionText, ':');
+	  std::string locus = locusAndResolution[0];
+	  std::string wantedResolution = locusAndResolution[1];
+	  
+	  if(wantedResolution == "g")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::g);
+	  else if(wantedResolution == "P")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::P);
+	  else if(wantedResolution == "4d")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::fourDigit);
+	  else if(wantedResolution =="G")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::G);
+	  else if(wantedResolution == "6d")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::sixDigit);
+	  else if(wantedResolution == "8d")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::eightDigit);
+	  else if(wantedResolution == "asItIs")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
+	  else{
+	    throw ResolutionException(wantedResolution, locus);
+	  }
+	}
+      else
 	{
 	  throw ParameterAssignmentException(line);
 	}
-
-      strVec_t locusAndResolution = split(locusAndResolutionText, ':');
-      std::string locus = locusAndResolution[0];
-      std::string wantedResolution = locusAndResolution[1];
-      
-      if(wantedResolution == "g")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::g);
-      else if(wantedResolution == "P")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::P);
-      else if(wantedResolution == "4d")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::fourDigit);
-      else if(wantedResolution =="G")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::G);
-      else if(wantedResolution == "6d")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::sixDigit);
-      else if(wantedResolution == "8d")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::eightDigit);
-      else if(wantedResolution == "asItIs")
-	lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
-      else{
-	throw ResolutionException(wantedResolution, locus);
-      }
     }
 }
 

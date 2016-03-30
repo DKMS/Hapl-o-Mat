@@ -148,33 +148,35 @@ void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) co
 
   std::string nmdpCode = findNMDPCode(code);
   auto itFileNMDPCodes = fileNMDPCodes().getList().find(nmdpCode);
-  if(itFileNMDPCodes == fileNMDPCodes().getList().cend()){
-    throw(MultipleAlleleCodeException(nmdpCode));
-  }
-	
-  std::string newCode = code;
-  size_t positionAsterik = code.find('*') + 1;
-  size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
-  newCode.erase(positionNMDPCodeInCode);
-  if(itFileNMDPCodes->second.find(':') != std::string::npos)
+  if(itFileNMDPCodes != fileNMDPCodes().getList().cend())
     {
-      std::size_t posLastColon = newCode.find_last_of(':');
-      newCode.erase(posLastColon);
-      posLastColon = newCode.find_last_of(':');
-      if(posLastColon == std::string::npos)
-	posLastColon = newCode.find_last_of('*');
-      newCode.erase(posLastColon+1);
+      std::string newCode = code;
+      size_t positionAsterik = code.find('*') + 1;
+      size_t positionNMDPCodeInCode = code.find(nmdpCode, positionAsterik);
+      newCode.erase(positionNMDPCodeInCode);
+      if(itFileNMDPCodes->second.find(':') != std::string::npos)
+	{
+	  std::size_t posLastColon = newCode.find_last_of(':');
+	  newCode.erase(posLastColon);
+	  posLastColon = newCode.find_last_of(':');
+	  if(posLastColon == std::string::npos)
+	    posLastColon = newCode.find_last_of('*');
+	  newCode.erase(posLastColon+1);
+	}
+
+      strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
+      for(auto itSplittedCode : splittedCode)
+	{
+	  std::string newCode2 = newCode;
+	  newCode2.append(itSplittedCode);
+	  newCodes.push_back(newCode2);
+	}//for splittedCode                                                                                                                                 
     }
-
-  strVec_t splittedCode = split(itFileNMDPCodes->second, '/');
-  for(auto itSplittedCode : splittedCode)
+  else
     {
-      std::string newCode2 = newCode;
-      newCode2.append(itSplittedCode);
-      newCodes.push_back(newCode2);
-    }//for splittedCode                                                                                                                                 
+      throw(MultipleAlleleCodeException(nmdpCode));
+    }
 }
-
 
 std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 

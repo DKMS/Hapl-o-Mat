@@ -151,11 +151,13 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
     }
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-  if(1./numberOfReports - minimalFrequency < ZERO){
-    throw SplittingGenotypeException();
+  if(1./numberOfReports - minimalFrequency > ZERO){
+    genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
   }
-  
-  genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
+  else
+    {
+      throw SplittingGenotypeException();  
+    }
 }
 
 void Report::buildListOfReports(std::vector<std::shared_ptr<Report>> & listOfReports){
@@ -266,20 +268,22 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }
       else{
 	auto itGlid = glid.getList().find(*glidNumber);
-	if(itGlid == glid.getList().cend()){
-	  throw MissingGlidException(*glidNumber);
-	}
-	else{
-	  std::shared_ptr<Locus> pLocus = itGlid->second;
-	  std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
-	  pLocus->reduce(genotypesAtLocus);
-	  genotypesWithFrequenciesAtLoci.push_back(genotypesAtLocus);
-	  types.push_back(pLocus->getType());
-	}
+	if(itGlid != glid.getList().cend())
+	  {
+	    std::shared_ptr<Locus> pLocus = itGlid->second;
+	    std::vector<std::pair<strArr_t, double>> genotypesAtLocus;
+	    pLocus->reduce(genotypesAtLocus);
+	    genotypesWithFrequenciesAtLoci.push_back(genotypesAtLocus);
+	    types.push_back(pLocus->getType());
+	  }
+	else
+	  {
+	    throw MissingGlidException(*glidNumber);
+	  }
       }//else glidNumber=0
       
       numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
-      if(1./numberOfReports - minimalFrequency < ZERO){
+      if(1./numberOfReports - minimalFrequency > ZERO){
 	throw SplittingGenotypeException();
       }
     }//for glids
@@ -393,30 +397,32 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   try
     {
-      if(lociFromFile.size() < numberLoci)
+      if(lociFromFile.size() >= numberLoci)
 	{
-	  throw InputLineException();
-	}
-      
-      auto locusNameFromFile = lociNamesFromFile.cbegin();
-      for(auto singleLocusGenotype : lociFromFile){
+	  auto locusNameFromFile = lociNamesFromFile.cbegin();
+	  for(auto singleLocusGenotype : lociFromFile){
 	
-	auto locusAndResolution = lociAndResolutions.find(*locusNameFromFile);
+	    auto locusAndResolution = lociAndResolutions.find(*locusNameFromFile);
 	
-	if(locusAndResolution != lociAndResolutions.cend())
-	  { 
-	    size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
-	    std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndResolution->second);
-	    
-	    resolveSingleLocusGenotype(genotype,
-				       positionWantedLocus);
+	    if(locusAndResolution != lociAndResolutions.cend())
+	      { 
+		size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
+		std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndResolution->second);
+		
+		resolveSingleLocusGenotype(genotype,
+					   positionWantedLocus);
+	      }
+	    locusNameFromFile ++;
+	    locusNameFromFile ++;
 	  }
-	locusNameFromFile ++;
-	locusNameFromFile ++;
-      }
       
-      buildListOfReports(listOfReports);
-    }
+	  buildListOfReports(listOfReports);
+	}
+      else
+	{	
+	  throw InputLineException();
+	}	
+    }        
   catch(const FileException & e)
     {
       throw;
