@@ -1,3 +1,4 @@
+
 #ifndef Exceptions_header
 #define Exceptions_header
 
@@ -94,11 +95,18 @@ class ParameterAssignmentException : public std::exception{
 class InputFormatException : public std::exception{
 
  public:
+  explicit InputFormatException()
+    : exception(),
+    errorMessage("Wrong input format (MA, GLC, GL, READ).")
+    {}
+
   virtual const char* what() const throw()
   {
-    return "Wrong input format. Choose from MA, GLC, GL, and READ.";
+    return errorMessage.c_str();
   }
 
+ private:
+  std::string errorMessage;
 };
 
 class FileException : public std::exception{
