@@ -371,13 +371,11 @@ void MAReport::translateLine(const std::string line){
       std::string entry2;
       if(ss >> entry >> entry2)
 	{
-	  std::string allele1 = *locusName + '*' + entry;
-	  locusName ++;
-	  std::string allele2 = *locusName + '*' + entry2;
-	  
 	  strArr_t locus;
-	  locus.at(0) = allele1;
-	  locus.at(1) = allele2;
+	  locus.at(0) =  *locusName + '*' + entry;
+	  locusName ++;
+	  locus.at(1) =  *locusName + '*' + entry2;
+
 	  lociFromFile.push_back(locus);
 	}
     }
