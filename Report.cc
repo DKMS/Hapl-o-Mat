@@ -288,7 +288,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   }
   catch(const FileException & e)
     {
-      throw e;
+      throw;
     }
   catch(const std::exception & e){
       std::cout << e.what() << std::endl;      
@@ -335,7 +335,7 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
     }
   catch(const FileException & e)
     {
-      throw e;
+      throw;
     }
   catch(const std::exception & e)
     {
@@ -419,7 +419,7 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
     }
   catch(const FileException & e)
     {
-      throw e;
+      throw;
     }
   catch(const std::exception & e)
     {
