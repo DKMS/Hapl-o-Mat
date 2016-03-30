@@ -34,6 +34,8 @@ class Genotype{
     : wantedResolution(in_wantedResolution),
     singleLocusGenotype(){}
 
+  virtual ~Genotype(){}
+
   virtual std::shared_ptr<Locus> resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const = 0;  
 
   std::string getSingleLocusGenotype() const {return singleLocusGenotype;};
