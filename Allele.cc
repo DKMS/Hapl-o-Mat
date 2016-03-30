@@ -27,15 +27,6 @@
 #include "Utility.h"
 #include "Exceptions.h"
 
-FileAllelesTogOrG Allele::fileAllelesTog("data/g.txt");
-FileAllelesTogOrG Allele::fileAllelesToG("data/G.txt");
-FileAllelesTogOrG Allele::fileAllelesToP("data/P.txt");
-
-FilegOrGOr4dToAlleles Allele::filegToAlleles("data/g.txt");
-FilegOrGOr4dToAlleles Allele::fileGToAlleles("data/G.txt");
-FilegOrGOr4dToAlleles Allele::filePToAlleles("data/P.txt");
-FilegOrGOr4dToAlleles Allele::file4dToAlleles("data/AllAllelesExpanded.txt");
-
 std::shared_ptr<Allele> Allele::createAllele(const std::string code, const Allele::codePrecision wantedPrecision, const double alleleFrequency){
 
   std::shared_ptr<Allele> pAllele;
@@ -223,7 +214,7 @@ std::string Allele::allelesTog(){
   std::string locus = getLocus(code);
   FileAllelesTogOrG::list_t::const_iterator pos;
   FileAllelesTogOrG::list_t::const_iterator lastPos;
-  fileAllelesTog.findPositionLocus(locus, pos, lastPos);
+  fileAllelesTog().findPositionLocus(locus, pos, lastPos);
   
   bool found = false;
   while(pos != lastPos && found==false){
@@ -259,7 +250,7 @@ std::string Allele::allelesToP(){
   std::string locus = getLocus(code);
   FileAllelesTogOrG::list_t::const_iterator pos;
   FileAllelesTogOrG::list_t::const_iterator lastPos;
-  fileAllelesToP.findPositionLocus(locus, pos, lastPos);
+  fileAllelesToP().findPositionLocus(locus, pos, lastPos);
   
   bool found = false;
   while(pos != lastPos && found==false){
@@ -296,7 +287,7 @@ strVec_t Allele::allelesToG(){
   std::string locus = getLocus(code);
   FileAllelesTogOrG::list_t::const_iterator pos;
   FileAllelesTogOrG::list_t::const_iterator lastPos;
-  fileAllelesToG.findPositionLocus(locus, pos, lastPos);
+  fileAllelesToG().findPositionLocus(locus, pos, lastPos);
   
   while(pos != lastPos){
     bool found = false;
@@ -322,9 +313,9 @@ strVec_t Allele::allelesToG(){
 strVec_t Allele::GToAlleles(){
 
   strVec_t newCodes;
-  auto itFileGToAlleles = fileGToAlleles.getList().find(code);
-  if(itFileGToAlleles == fileGToAlleles.getList().cend()){
-    throw MissingAlleleException(code, fileGToAlleles.getFileName());
+  auto itFileGToAlleles = fileGToAlleles().getList().find(code);
+  if(itFileGToAlleles == fileGToAlleles().getList().cend()){
+    throw MissingAlleleException(code, fileGToAlleles().getFileName());
   }
   else{
     newCodes = itFileGToAlleles->second;
@@ -336,9 +327,9 @@ strVec_t Allele::GToAlleles(){
 strVec_t Allele::gToAlleles(){
 
   strVec_t codesInPrecision;
-  auto itFilegToAlleles = filegToAlleles.getList().find(code);
-  if(itFilegToAlleles == filegToAlleles.getList().cend()){
-    throw MissingAlleleException(code, filegToAlleles.getFileName());
+  auto itFilegToAlleles = filegToAlleles().getList().find(code);
+  if(itFilegToAlleles == filegToAlleles().getList().cend()){
+    throw MissingAlleleException(code, filegToAlleles().getFileName());
   }
   else{
     codesInPrecision = itFilegToAlleles->second;
@@ -350,9 +341,9 @@ strVec_t Allele::gToAlleles(){
 strVec_t Allele::PToAlleles(){
 
   strVec_t codesInPrecision;
-  auto itFilePToAlleles = filePToAlleles.getList().find(code);
-  if(itFilePToAlleles == filePToAlleles.getList().cend()){
-    throw MissingAlleleException(code, filePToAlleles.getFileName());
+  auto itFilePToAlleles = filePToAlleles().getList().find(code);
+  if(itFilePToAlleles == filePToAlleles().getList().cend()){
+    throw MissingAlleleException(code, filePToAlleles().getFileName());
   }
   else{
     codesInPrecision = itFilePToAlleles->second;
@@ -364,12 +355,12 @@ strVec_t Allele::PToAlleles(){
 strVec_t Allele::expandPrecision(){
 
   strVec_t codesInPrecision;
-  auto pos = file4dToAlleles.getList().find(code);
-  if(pos != file4dToAlleles.getList().cend()){
+  auto pos = file4dToAlleles().getList().find(code);
+  if(pos != file4dToAlleles().getList().cend()){
     codesInPrecision = pos->second;
   }
   else{
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+    throw MissingAlleleException(code, file4dToAlleles().getFileName());
   }
 
   return codesInPrecision;
@@ -401,9 +392,9 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateTog(){
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateTog(){
 
-  auto pos = filegToAlleles.getList().find(code);
-  if(pos == filegToAlleles.getList().cend()){
-    throw MissingAlleleException(code, filegToAlleles.getFileName());
+  auto pos = filegToAlleles().getList().find(code);
+  if(pos == filegToAlleles().getList().cend()){
+    throw MissingAlleleException(code, filegToAlleles().getFileName());
   }
 
   std::shared_ptr<Allele> pAlleleg = std::make_shared<Alleleg> (code, frequency);
@@ -522,9 +513,9 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateToP(){
 
 std::vector<std::shared_ptr<Allele>> AlleleP::translateToP(){
 
-  auto pos = filePToAlleles.getList().find(code);
-  if(pos == filePToAlleles.getList().cend()){
-    throw MissingAlleleException(code, filePToAlleles.getFileName());
+  auto pos = filePToAlleles().getList().find(code);
+  if(pos == filePToAlleles().getList().cend()){
+    throw MissingAlleleException(code, filePToAlleles().getFileName());
   }
 
   std::shared_ptr<Allele> pAlleleP = std::make_shared<AlleleP> (code, frequency);
@@ -704,9 +695,9 @@ std::vector<std::shared_ptr<Allele>> AlleleP::translateToG(){
 
 std::vector<std::shared_ptr<Allele>> AlleleG::translateToG(){
 
-  auto pos = fileGToAlleles.getList().find(code);
-  if(pos == fileGToAlleles.getList().cend()){
-    throw MissingAlleleException(code, fileGToAlleles.getFileName());
+  auto pos = fileGToAlleles().getList().find(code);
+  if(pos == fileGToAlleles().getList().cend()){
+    throw MissingAlleleException(code, fileGToAlleles().getFileName());
   }
 
   std::shared_ptr<Allele> pAlleleG = std::make_shared<AlleleG> (code, frequency);
@@ -760,9 +751,9 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateToG(){
 
 std::vector<std::shared_ptr<Allele>> Allele4d::translateTo4d(){
 
-  auto pos = file4dToAlleles.getList().find(code);
-  if(pos == file4dToAlleles.getList().cend()){
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+  auto pos = file4dToAlleles().getList().find(code);
+  if(pos == file4dToAlleles().getList().cend()){
+    throw MissingAlleleException(code, file4dToAlleles().getFileName());
   }
   
   std::shared_ptr<Allele> pAllele4d = std::make_shared<Allele4d> (code, frequency);
@@ -939,9 +930,9 @@ std::vector<std::shared_ptr<Allele>> AlleleG::translateTo6d(){
 
 std::vector<std::shared_ptr<Allele>> Allele6d::translateTo6d(){
 
-  auto pos = file4dToAlleles.getList().find(code);
-  if(pos == file4dToAlleles.getList().cend()){
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+  auto pos = file4dToAlleles().getList().find(code);
+  if(pos == file4dToAlleles().getList().cend()){
+    throw MissingAlleleException(code, file4dToAlleles().getFileName());
   }
   
   std::shared_ptr<Allele> pAllele6d = std::make_shared<Allele6d> (code, frequency);
@@ -1075,9 +1066,9 @@ std::vector<std::shared_ptr<Allele>> Allele6d::translateTo8d(){
 
 std::vector<std::shared_ptr<Allele>> Allele8d::translateTo8d(){
 
-  auto pos = file4dToAlleles.getList().find(code);
-  if(pos == file4dToAlleles.getList().cend()){
-    throw MissingAlleleException(code, file4dToAlleles.getFileName());
+  auto pos = file4dToAlleles().getList().find(code);
+  if(pos == file4dToAlleles().getList().cend()){
+    throw MissingAlleleException(code, file4dToAlleles().getFileName());
   }
 
   std::shared_ptr<Allele> pAllele8d = std::make_shared<Allele8d> (code, frequency);

@@ -84,19 +84,48 @@ class Allele{
   codePrecision getPrecision() const {return precision;}
   codePrecision getWantedPrecision() const {return wantedPrecision;}
 
+  FileAllelesTogOrG & fileAllelesTog() const
+    {
+      static FileAllelesTogOrG fileAllelesTog("data/g.txt");
+      return fileAllelesTog;
+    }
+  FileAllelesTogOrG & fileAllelesToG() const
+    {
+      static FileAllelesTogOrG fileAllelesToG("data/G.txt");
+      return fileAllelesToG;
+    }
+  FileAllelesTogOrG & fileAllelesToP() const
+    {
+      static FileAllelesTogOrG fileAllelesToP("data/P.txt");
+      return fileAllelesToP;
+    }
+  FilegOrGOr4dToAlleles & fileGToAlleles() const
+    {
+      static FilegOrGOr4dToAlleles fileGToAlleles("data/G.txt");
+      return fileGToAlleles;
+    }
+  FilegOrGOr4dToAlleles & filegToAlleles() const
+    {
+      static FilegOrGOr4dToAlleles filegToAlleles("data/g.txt");
+      return filegToAlleles;
+    }
+  FilegOrGOr4dToAlleles & filePToAlleles() const
+    {
+      static FilegOrGOr4dToAlleles filePToAlleles("data/P.txt");
+      return filePToAlleles;
+    }
+  FilegOrGOr4dToAlleles & file4dToAlleles() const
+    {
+      static FilegOrGOr4dToAlleles file4dToAlleles("data/AllAllelesExpanded.txt");
+      return file4dToAlleles;
+    }
+
  protected:
   std::string code;
   codePrecision precision;
   codePrecision wantedPrecision;
   double frequency;
-  static FileAllelesTogOrG fileAllelesTog;
-  static FileAllelesTogOrG fileAllelesToG;
-  static FileAllelesTogOrG fileAllelesToP;
-  static FilegOrGOr4dToAlleles fileGToAlleles;
-  static FilegOrGOr4dToAlleles filegToAlleles;
-  static FilegOrGOr4dToAlleles filePToAlleles;
-  static FilegOrGOr4dToAlleles file4dToAlleles;
-};
+  };
 
 class Alleleg : public Allele{
 
