@@ -41,9 +41,14 @@ class AllPossibleGenotypes{
   void buildGenotypes(const std::string locus, const Allele::codePrecision wantedResolution);
   const std::vector<std::pair<strArr_t, double>> & getGenotypes() const {return genotypes;}
 
+  FileAlleles & allAlleles() const
+    {
+      static FileAlleles allAlleles("data/AlleleList.txt");
+      return allAlleles;
+    }
+
  private:
   std::vector<std::pair<strArr_t, double>> genotypes;
-  static FileAlleles allAlleles;
 };
 
 class GlidFile{

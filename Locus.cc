@@ -26,8 +26,6 @@
 #include "Locus.h"
 #include "Utility.h"
 
-FileAmbiguity AmbiguityFilter::fileAmbiguity("data/Ambiguity.txt"); 
-
 void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
 
   //sort genotypes
@@ -279,7 +277,7 @@ void AmbiguityFilter::preFilter(){
   std::string locus = getLocus(*codesAndInAtLocusPosition1.cbegin()->first.cbegin());
   FileAmbiguity::list_t::const_iterator pos;
   FileAmbiguity::list_t::const_iterator lastPos;
-  fileAmbiguity.findPositionLocus(locus, pos, lastPos);
+  fileAmbiguity().findPositionLocus(locus, pos, lastPos);
 
   while(pos < lastPos){
     for(auto element : *pos){    

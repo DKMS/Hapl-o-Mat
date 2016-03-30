@@ -156,6 +156,12 @@ class AmbiguityFilter{
   bool getIsMultipleLines() const {return isMultipleLines;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
 
+  FileAmbiguity & fileAmbiguity() const
+    {
+      static FileAmbiguity fileAmbiguity("data/Ambiguity.txt"); 
+      return fileAmbiguity;
+    }
+
  private:
   bool expandAmbiguityLines;
   bool isH1;
@@ -166,7 +172,6 @@ class AmbiguityFilter{
   strArrVec_t phasedLocus;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition1;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition2;
-  static FileAmbiguity fileAmbiguity;
 };
 
 

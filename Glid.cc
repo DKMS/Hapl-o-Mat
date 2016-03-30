@@ -28,15 +28,13 @@
 #include "Utility.h"
 #include "Genotypes.h"
 
-FileAlleles AllPossibleGenotypes::allAlleles("data/AlleleList.txt");
-
 void AllPossibleGenotypes::buildGenotypes(const std::string locus, const Allele::codePrecision wantedResolution){
 
   std::cout << " \t Build list of all possible genotypes for locus " << locus << std::endl;
 
   FileAlleles::list_t::const_iterator pos;
   FileAlleles::list_t::const_iterator lastPos;
-  allAlleles.findPositionLocus(locus, pos, lastPos);
+  allAlleles().findPositionLocus(locus, pos, lastPos);
 
   size_t numberAlleles = distance(pos, lastPos);
   strVec_t allelesPerLocus;
