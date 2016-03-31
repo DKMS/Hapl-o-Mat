@@ -204,8 +204,8 @@ loci A and B shall be translated to allele resolution g and alleles at locus DRB
 
 Preparations
 Create a folder named a and provide the data required by Hapl-O-mat by copying
-the folder data to folder a. Additionally, copy the executable haplomat
-and the file parametersMA to folder a.
+the folder systemTest/dataSystemTest to folder a/data. Additionally, copy the
+executable haplomat and the file parametersMA to folder a.
 
 Parameters
 Specify parameters for this run in the file parametersMA. Start with setting the
