@@ -92,6 +92,24 @@ class ParameterAssignmentException : public std::exception{
   std::string errorMessage;
 };
 
+class ParameterNotFoundException : public std::exception{
+
+ public:
+  explicit ParameterNotFoundException(const std::string in_parameterName)
+    : exception(),
+    errorMessage("Parameter " + in_parameterName + " not found.")
+    {}
+
+  virtual const char* what() const throw()
+  {
+    return errorMessage.c_str();
+  }
+
+ private:
+  std::string errorMessage;
+};
+
+
 class InputFormatException : public std::exception{
 
  public:
