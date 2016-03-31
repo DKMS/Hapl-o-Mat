@@ -60,7 +60,7 @@ the instructions in prepareData/README.
 ----------------
 Hapl-O-mat distinguishes four input formats, which differ in the way the input
 population data is recorded. Examples for input data can be found in the
-folder ExamplePopulations.
+folder examplePopulations.
 
     MA: Ambiguities are encoded by multiple allele (MA) codes. Except for the
     first line, input files hold an individual's identification number and
@@ -68,12 +68,12 @@ folder ExamplePopulations.
     the allele is removed. Identification number and alleles are TAB-separated.
     The first line of the file is a header file indicating the name of the first
     column and the loci of the other columns. Same loci must be placed next to
-    each other. For an example refer to ExamplePopulations/populationData_a.dat.
+    each other. For an example refer to examplePopulations/populationData_a.dat.
 
     GLC: Genotypes with or without ambiguities are saved by genotype list (GL)
     strings. Input files hold an individual's identification number and genotype
     per line. Identification number and single-locus genotypes are TAB-separated.
-    For an example refer to ExamplePopulations/populationData_b.dat	
+    For an example refer to examplePopulations/populationData_b.dat	
 
     GL: Genotypes with or without ambiguities are saved by genotype list (GL)
     strings. Population data is saved in two files. The pull-file contains an
@@ -84,8 +84,8 @@ folder ExamplePopulations.
     single-locus genotypes. GL-id and genotype are separated via ";". A GL-id of
     "0" is interpreted as a missing typing at the corresponding locus and does 
     not require a translation in the glid-file. For an example refer to
-    ExamplePopulations/populationData_c.pull and 
-    ExamplePopulations/populationData_c.glid.
+    examplePopulations/populationData_c.pull and 
+    examplePopulations/populationData_c.glid.
 
     READ: Processing population data, Hapl-O-mat writes resolved genotypes to
     disk. The created file can be used as input avoiding resolving genotypes a
@@ -196,7 +196,7 @@ individuals typed for loci HLA-A, -B, -C, -DPB1, -DQB1, and -DRB1 with varying
 allele resolutions.
 
 a) Tutorial with input format MA
-You find the relevant population data in ExamplePopulations/populationData_a.dat. As
+You find the relevant population data in examplePopulations/populationData_a.dat. As
 ambiguities are recorded as multiple allele codes, the input format is MA. We are
 going to infer three locus (A, B, DRB1) haplotypes from this data. Alleles at
 loci A and B shall be translated to allele resolution g and alleles at locus DRB1 to
