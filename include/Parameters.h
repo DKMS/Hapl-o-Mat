@@ -54,13 +54,20 @@ class Parameters{
     epsilon(1e-6),
     cutHaplotypeFrequencies(epsilon),
     renormaliseHaplotypeFrequencies(true),
-    seed(0){}
+    seed(0)
+      {
+	fillParameterNamesAndFound();
+      }
 
   virtual ~Parameters(){}
 
   virtual void init() = 0;
   virtual void print() const = 0;
+  virtual void areAllSpecificParametersListed() = 0;
+  virtual void fillSpecificParameterNamesAndFound(){};
 
+  void areAllParametersListed();
+  void fillParameterNamesAndFound();
   std::string getHaplotypesFileName() const {return haplotypesFileName;}
   std::string getPhenotypesFileName() const {return phenotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
@@ -92,6 +99,7 @@ class Parameters{
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
 
+  std::unordered_map<std::string, bool> parameterNamesAndFound;
   std::map<std::string, Allele::codePrecision> lociAndResolutions;
   double minimalFrequency;
   bool doAmbiguityFilter;
@@ -107,19 +115,24 @@ class ParametersGL : public Parameters{
 
  public:
   explicit ParametersGL()
-    : pullFileName(),
+    : Parameters(),
+    pullFileName(),
     glidFileName(),
     lociOrder(),
     resolveUnknownGenotype(false)
       {
 	parametersFileName = "parametersGL";
+	fillSpecificParameterNamesAndFound();
+	areAllParametersListed();
 	init();
 	print();
       }
   
   virtual void init();
   virtual void print() const;
-  
+  virtual void areAllSpecificParametersListed();  
+  virtual void fillSpecificParameterNamesAndFound();
+
   std::string getGlidFileName() const {return glidFileName;}
   std::string getPullFileName() const {return pullFileName;}
   const strVec_t & getLociOrder() const {return lociOrder;}
@@ -138,15 +151,20 @@ class ParametersGLC : public Parameters{
 
  public:
   explicit ParametersGLC()
-    :inputFileName()
+    :  Parameters(),
+    inputFileName()
     {
       parametersFileName = "parametersGLC";
+      fillSpecificParameterNamesAndFound();
+      areAllParametersListed();
       init();
       print();
     }
 
   virtual void init();
   virtual void print() const;
+  virtual void areAllSpecificParametersListed();
+  virtual void fillSpecificParameterNamesAndFound();
 
   std::string getInputFileName() const {return inputFileName;}
 
@@ -159,15 +177,20 @@ class ParametersMA : public Parameters{
 
  public:
   explicit ParametersMA()
-    :inputFileName()
+    :  Parameters(),
+    inputFileName()
     {
       parametersFileName = "parametersMA";
+      fillSpecificParameterNamesAndFound();
+      areAllParametersListed();
       init();
       print();
     }
 
   virtual void init();
   virtual void print() const;
+  virtual void areAllSpecificParametersListed();
+  virtual void fillSpecificParameterNamesAndFound();
 
   std::string getInputFileName() const {return inputFileName;}
 
@@ -179,15 +202,20 @@ class ParametersReadin : public Parameters{
 
  public:
   explicit ParametersReadin()
-    : inputFileName()
+    :  Parameters(),
+    inputFileName()
     {
       parametersFileName = "parametersREAD";
+      fillSpecificParameterNamesAndFound();
+      areAllParametersListed();
       init();
       print();
     }
 
   virtual void init();
   virtual void print() const;
+  virtual void areAllSpecificParametersListed();
+  virtual void fillSpecificParameterNamesAndFound();
 
   std::string getInputFileName() const {return inputFileName;}
 

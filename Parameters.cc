@@ -147,6 +147,76 @@ std::string Parameters::printInitialisationHaplotypeFrequencies() const{
   return out;
 }
 
+void Parameters::fillParameterNamesAndFound(){
+
+  parameterNamesAndFound.emplace("FILENAME_HAPLOTYPES", false);
+  parameterNamesAndFound.emplace("FILENAME_HAPLOTYPEFREQUENCIES", false);
+  parameterNamesAndFound.emplace("FILENAME_EPSILON", false);
+  parameterNamesAndFound.emplace("INITIALIZATION_HAPLOTYPE_FREQUENCIES", false);
+  parameterNamesAndFound.emplace("EPSILON", false);
+  parameterNamesAndFound.emplace("CUT_HAPLOTYPEFREQUENCIES", false);
+  parameterNamesAndFound.emplace("RENORMALIZE_HAPLOTYPE_FREQUENCIES", false);
+  parameterNamesAndFound.emplace("SEED", false);
+}
+
+void Parameters::areAllParametersListed(){
+
+  std::ifstream file;
+  openFileToRead(parametersFileName, file);
+
+  std::string line;
+  while(std::getline(file, line))
+    {
+      if(line.find("FILENAME_HAPLOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_HAPLOTYPES") = true;
+	}
+      else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_HAPLOTYPEFREQUENCIES") = true;
+	}
+      else if(line.find("FILENAME_EPSILON") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_EPSILON") = true;
+	}
+      else if(line.find("INITIALIZATION_HAPLOTYPE_FREQUENCIES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("INITIALIZATION_HAPLOTYPE_FREQUENCIES") = true;
+	}
+      else if(line.find("EPSILON") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("EPSILON") = true;
+	}
+      else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("CUT_HAPLOTYPEFREQUENCIES") = true;
+	}
+      else if(line.find("RENORMALIZE_HAPLOTYPE_FREQUENCIES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("RENORMALIZE_HAPLOTYPE_FREQUENCIES") = true;
+	}
+      else if(line.find("SEED") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("SEED") = true;
+	}
+      else{
+	continue;
+      }
+    }
+  file.close();
+  
+  areAllSpecificParametersListed();
+
+  for(auto it : parameterNamesAndFound)
+    {
+      if(! it.second)
+	{
+	  throw ParameterNotFoundException(it.first);
+	}
+    }
+}
+
+
 void ParametersGL::init(){
 
   std::ifstream file;
@@ -231,6 +301,72 @@ void ParametersGL::print() const {
   std::cout << std::endl;
 }
 
+void ParametersGL::fillSpecificParameterNamesAndFound(){
+
+  parameterNamesAndFound.emplace("FILENAME_PULL", false);
+  parameterNamesAndFound.emplace("FILENAME_GLID", false);
+  parameterNamesAndFound.emplace("FILENAME_GENOTYPES", false);
+  parameterNamesAndFound.emplace("LOCIORDER", false);
+  parameterNamesAndFound.emplace("LOCI_AND_RESOLUTIONS", false);
+  parameterNamesAndFound.emplace("MINIMAL_FREQUENCY_GENOTYPES", false);
+  parameterNamesAndFound.emplace("DO_AMBIGUITYFILTER", false);
+  parameterNamesAndFound.emplace("EXPAND_LINES_AMBIGUITYFILTER", false);
+  parameterNamesAndFound.emplace("RESOLVE_MISSING_GENOTYPES", false);
+}
+
+void ParametersGL::areAllSpecificParametersListed(){
+
+  std::ifstream file;
+  openFileToRead(parametersFileName, file);
+
+  std::string line;
+  while(std::getline(file, line))
+    {
+      if(line.find("FILENAME_PULL") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_PULL") = true;
+	}
+      else if(line.find("FILENAME_GLID") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_GLID") = true;
+	}
+      else if(line.find("FILENAME_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_GENOTYPES") = true;
+	}
+      else if(line.find("LOCIORDER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("LOCIORDER") = true;
+	}
+      else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("LOCI_AND_RESOLUTIONS") = true;
+	}
+      else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("MINIMAL_FREQUENCY_GENOTYPES") = true;
+	}
+      else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("DO_AMBIGUITYFILTER") = true;
+	}
+      else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("EXPAND_LINES_AMBIGUITYFILTER") = true;
+	}
+      else if(line.find("RESOLVE_MISSING_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("RESOLVE_MISSING_GENOTYPES") = true;
+	}
+      else
+	{
+	  continue;
+	}
+    }
+
+  file.close();
+}
+
 void ParametersGLC::init(){
 
   std::ifstream file;
@@ -295,6 +431,58 @@ void ParametersGLC::print() const {
   std::cout << "\t Seed: " << seed << std::endl;
   std::cout << std::endl;
 }
+
+void ParametersGLC::fillSpecificParameterNamesAndFound(){
+
+  parameterNamesAndFound.emplace("FILENAME_INPUT", false);
+  parameterNamesAndFound.emplace("FILENAME_GENOTYPES", false);
+  parameterNamesAndFound.emplace("LOCI_AND_RESOLUTIONS", false);
+  parameterNamesAndFound.emplace("MINIMAL_FREQUENCY_GENOTYPES", false);
+  parameterNamesAndFound.emplace("DO_AMBIGUITYFILTER", false);
+  parameterNamesAndFound.emplace("EXPAND_LINES_AMBIGUITYFILTER", false);
+}
+
+void ParametersGLC::areAllSpecificParametersListed(){
+
+  std::ifstream file;
+  openFileToRead(parametersFileName, file);
+
+  std::string line;
+  while(std::getline(file, line))
+    {
+      if(line.find("FILENAME_INPUT") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_INPUT") = true;
+	}
+      else if(line.find("FILENAME_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_GENOTYPES") = true;
+	}
+      else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("LOCI_AND_RESOLUTIONS") = true;
+	}
+      else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("MINIMAL_FREQUENCY_GENOTYPES") = true;
+	}
+      else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("DO_AMBIGUITYFILTER") = true;
+	}
+      else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("EXPAND_LINES_AMBIGUITYFILTER") = true;
+	}
+      else
+	{
+	  continue;
+	}
+    }
+
+  file.close();
+}
+
 
 void ParametersMA::init(){
 
@@ -361,6 +549,58 @@ void ParametersMA::print() const {
   std::cout << std::endl;
 }
 
+void ParametersMA::fillSpecificParameterNamesAndFound(){
+
+  parameterNamesAndFound.emplace("FILENAME_INPUT", false);
+  parameterNamesAndFound.emplace("FILENAME_GENOTYPES", false);
+  parameterNamesAndFound.emplace("LOCI_AND_RESOLUTIONS", false);
+  parameterNamesAndFound.emplace("MINIMAL_FREQUENCY_GENOTYPES", false);
+  parameterNamesAndFound.emplace("DO_AMBIGUITYFILTER", false);
+  parameterNamesAndFound.emplace("EXPAND_LINES_AMBIGUITYFILTER", false);
+}
+
+void ParametersMA::areAllSpecificParametersListed(){
+
+  std::ifstream file;
+  openFileToRead(parametersFileName, file);
+
+  std::string line;
+  while(std::getline(file, line))
+    {
+      if(line.find("FILENAME_INPUT") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_INPUT") = true;
+	}
+      else if(line.find("FILENAME_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_GENOTYPES") = true;
+	}
+      else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("LOCI_AND_RESOLUTIONS") = true;
+	}
+      else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("MINIMAL_FREQUENCY_GENOTYPES") = true;
+	}
+      else if(line.find("DO_AMBIGUITYFILTER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("DO_AMBIGUITYFILTER") = true;
+	}
+      else if(line.find("EXPAND_LINES_AMBIGUITYFILTER") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("EXPAND_LINES_AMBIGUITYFILTER") = true;
+	}
+      else
+	{
+	  continue;
+	}
+    }
+
+  file.close();
+}
+
+
 void ParametersReadin::init(){
 
   std::ifstream file;
@@ -401,4 +641,30 @@ void ParametersReadin::print() const {
   std::cout << "\t Zero: " << ZERO << std::endl;
   std::cout << "\t Seed: " << seed << std::endl;
   std::cout << std::endl;
+}
+
+void ParametersReadin::fillSpecificParameterNamesAndFound(){
+
+  parameterNamesAndFound.emplace("FILENAME_INPUT", false);
+}
+
+void ParametersReadin::areAllSpecificParametersListed(){
+
+  std::ifstream file;
+  openFileToRead(parametersFileName, file);
+
+  std::string line;
+  while(std::getline(file, line))
+    {
+      if(line.find("FILENAME_INPUT") != std::string::npos)
+	{
+	  parameterNamesAndFound.at("FILENAME_INPUT") = true;
+	}
+      else
+	{
+	  continue;
+	}
+    }
+
+  file.close();
 }
