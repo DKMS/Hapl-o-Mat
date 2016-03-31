@@ -151,12 +151,12 @@ void ColumnReport::resolveSingleLocusGenotype(const std::unique_ptr<Genotype> & 
     }
   
   numberOfReports *= static_cast<double>(genotypesAtLocus.size());
-  if(1./numberOfReports - minimalFrequency > ZERO){
-    genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus;
+  if(1./numberOfReports - minimalFrequency >= ZERO){
+    genotypesWithFrequenciesAtLoci.at(positionWantedLocus) = genotypesAtLocus; 
   }
   else
     {
-      throw SplittingGenotypeException();  
+      throw SplittingGenotypeException(); 
     }
 }
 
@@ -401,9 +401,9 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	{
 	  auto locusNameFromFile = lociNamesFromFile.cbegin();
 	  for(auto singleLocusGenotype : lociFromFile){
-	
+	    
 	    auto locusAndResolution = lociAndResolutions.find(*locusNameFromFile);
-	
+
 	    if(locusAndResolution != lociAndResolutions.cend())
 	      { 
 		size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
@@ -415,14 +415,15 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	    locusNameFromFile ++;
 	    locusNameFromFile ++;
 	  }
-      
+	  
 	  buildListOfReports(listOfReports);
 	}
       else
-	{	
+	{
 	  throw InputLineException();
-	}	
-    }        
+	}
+    }
+
   catch(const FileException & e)
     {
       throw;

@@ -170,8 +170,8 @@ void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) co
 	  std::string newCode2 = newCode;
 	  newCode2.append(itSplittedCode);
 	  newCodes.push_back(newCode2);
-	}//for splittedCode                                                                                                                                 
-    }
+	}//for splittedCode
+    }     
   else
     {
       throw(MultipleAlleleCodeException(nmdpCode));

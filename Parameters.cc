@@ -98,9 +98,10 @@ void Parameters::lociAndResolutions_assign(const std::string line){
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::eightDigit);
 	  else if(wantedResolution == "asItIs")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
-	  else{
-	    throw ResolutionException(wantedResolution, locus);
-	  }
+	  else
+	    {
+	      throw ResolutionException(wantedResolution, locus);
+	    }
 	}
       else
 	{
