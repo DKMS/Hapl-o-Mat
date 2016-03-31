@@ -283,7 +283,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
       }//else glidNumber=0
       
       numberOfReports *= static_cast<double>(genotypesWithFrequenciesAtLoci.rbegin()->size());
-      if(1./numberOfReports - minimalFrequency > ZERO){
+      if(1./numberOfReports - minimalFrequency < ZERO){
 	throw SplittingGenotypeException();
       }
     }//for glids
