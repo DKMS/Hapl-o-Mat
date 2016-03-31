@@ -5,8 +5,8 @@ INCDIRS = -I${INC1}
 #CXXFLAGS = -Wall -pg -march=native -O2 -std=c++11 ${INCDIRS}
 CXXFLAGS = -Wall -fopenmp -march=native -Ofast -std=c++11 ${INCDIRS}
 
-sources = $(wildcard *.cc)
-OBJ = $(patsubst %.cc, %.o, $(wildcard *.cc))
+sources = $(wildcard src/*.cc)
+OBJ = $(patsubst %.cc, %.o, $(wildcard src/*.cc))
 
 haplomat: $(OBJ)
 	$(CXX) ${CXXFLAGS} -o $@ $(OBJ) 
@@ -18,7 +18,7 @@ haplomat: $(OBJ)
 	$(CXX) ${CXXFLAGS} -c $< -o $@
 
 clean:
-	$(RM) -f *.o *.d
+	$(RM) -f src/*.o *.d
 -include $(sources:.cc=.d)
 
 .PHONY: clean all
