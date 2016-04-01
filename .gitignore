@@ -26,7 +26,7 @@ prepareData/hla_nom_p.txt
 data/AllAllelesExpanded.txt
 data/AlleleList.txt
 data/MultipleAlleleCodes.txt
-data/g.txt
-data/G.txt
+data/Smallg.txt
+data/LargeG.txt
 data/Ambiguity.txt
 data/P.txt
