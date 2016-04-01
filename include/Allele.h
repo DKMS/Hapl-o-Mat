@@ -86,12 +86,12 @@ class Allele{
 
   FileAllelesTogOrG & fileAllelesTog() const
     {
-      static FileAllelesTogOrG fileAllelesTog("data/g.txt");
+      static FileAllelesTogOrG fileAllelesTog("data/Smallg.txt");
       return fileAllelesTog;
     }
   FileAllelesTogOrG & fileAllelesToG() const
     {
-      static FileAllelesTogOrG fileAllelesToG("data/G.txt");
+      static FileAllelesTogOrG fileAllelesToG("data/LargeG.txt");
       return fileAllelesToG;
     }
   FileAllelesTogOrG & fileAllelesToP() const
@@ -101,12 +101,12 @@ class Allele{
     }
   FilegOrGOr4dToAlleles & fileGToAlleles() const
     {
-      static FilegOrGOr4dToAlleles fileGToAlleles("data/G.txt");
+      static FilegOrGOr4dToAlleles fileGToAlleles("data/LargeG.txt");
       return fileGToAlleles;
     }
   FilegOrGOr4dToAlleles & filegToAlleles() const
     {
-      static FilegOrGOr4dToAlleles filegToAlleles("data/g.txt");
+      static FilegOrGOr4dToAlleles filegToAlleles("data/Smallg.txt");
       return filegToAlleles;
     }
   FilegOrGOr4dToAlleles & filePToAlleles() const
