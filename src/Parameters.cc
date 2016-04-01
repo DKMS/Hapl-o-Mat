@@ -217,7 +217,7 @@ void ParametersGL::init(){
     if(line.find("FILENAME_PULL") != std::string::npos) val_assign(pullFileName, line);
     else if(line.find("FILENAME_GLID") != std::string::npos) val_assign(glidFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(genotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON_LOGL") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
@@ -252,7 +252,7 @@ void ParametersGL::print() const {
   std::cout << "\t Input pull file: " << pullFileName << std::endl; 
   std::cout << "\t Input GL-id file: " << glidFileName << std::endl; 
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << phenotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
@@ -313,7 +313,7 @@ void ParametersGLC::init(){
   while(std::getline(file, line)){
     if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(genotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON_LOGL") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
@@ -338,7 +338,7 @@ void ParametersGLC::print() const {
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Input: " << inputFileName << std::endl; 
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << phenotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
@@ -388,7 +388,7 @@ void ParametersMA::init(){
   while(std::getline(file, line)){
     if(line.find("FILENAME_INPUT") != std::string::npos) val_assign(inputFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
-    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(phenotypesFileName, line);
+    else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(genotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
     else if(line.find("FILENAME_EPSILON_LOGL") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
@@ -413,7 +413,7 @@ void ParametersMA::print() const {
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Input: " << inputFileName << std::endl;
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << phenotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;

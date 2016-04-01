@@ -133,7 +133,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
-  openFileToWrite(phenotypesFileName, phenotypesFile);
+  openFileToWrite(genotypesFileName, phenotypesFile);
   phenotypesFile.precision(14);
 
   haplotypeCombinations.findCombinations(numberLoci);
@@ -173,7 +173,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
-  openFileToWrite(phenotypesFileName, phenotypesFile);
+  openFileToWrite(genotypesFileName, phenotypesFile);
   phenotypesFile.precision(14);
 
   haplotypeCombinations.findCombinations(numberLoci);
@@ -217,7 +217,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
-  openFileToWrite(phenotypesFileName, phenotypesFile);
+  openFileToWrite(genotypesFileName, phenotypesFile);
   phenotypesFile.precision(14);
 
   std::string line;

@@ -43,7 +43,7 @@ class Parameters{
   explicit Parameters()
     :  parametersFileName(),
     haplotypesFileName("results/haplotypes.dat"),
-    phenotypesFileName("results/phenotypes.dat"),
+    genotypesFileName("results/genotypes.dat"),
     haplotypeFrequenciesFileName("results/estimatedHaplotypeFrequencies.dat"),
     epsilonFileName("results/epsilonVsSteps.dat"),
     lociAndResolutions(),
@@ -62,7 +62,7 @@ class Parameters{
   virtual ~Parameters(){}
 
   std::string getHaplotypesFileName() const {return haplotypesFileName;}
-  std::string getPhenotypesFileName() const {return phenotypesFileName;}
+  std::string getGenotypesFileName() const {return genotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
   std::string getEpsilonFileName() const {return epsilonFileName;}
   const std::map<std::string, Allele::codePrecision>& getLociAndResolutions() const {return lociAndResolutions;}
@@ -97,7 +97,7 @@ class Parameters{
 
   std::string parametersFileName;
   std::string haplotypesFileName;
-  std::string phenotypesFileName;
+  std::string genotypesFileName;
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
 

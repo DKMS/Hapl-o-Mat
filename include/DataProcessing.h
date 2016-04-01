@@ -55,7 +55,7 @@ class InputFile{
   explicit InputFile(const std::string in_inputFileName)
     : inputFileName(in_inputFileName),
     haplotypesFileName(),
-    phenotypesFileName(),
+    genotypesFileName(),
     numberLoci(0),
     numberDonors(0),
     numberHaplotypes(0),
@@ -79,7 +79,7 @@ class InputFile{
  protected:
   std::string inputFileName;
   std::string haplotypesFileName;
-  std::string phenotypesFileName;
+  std::string genotypesFileName;
   size_t numberLoci;
   size_t numberDonors;
   size_t numberHaplotypes;
@@ -127,7 +127,7 @@ class GL : public InputFileToEdit{
 	 parameters.getResolveUnknownGenotype())
       {
 	haplotypesFileName = parameters.getHaplotypesFileName();
-	phenotypesFileName = parameters.getPhenotypesFileName();
+	genotypesFileName = parameters.getGenotypesFileName();
 	lociAndResolutions = parameters.getLociAndResolutions();
 	numberLoci = lociAndResolutions.size();
 	minimalFrequency = parameters.getMinimalFrequency();
@@ -152,7 +152,7 @@ class GLC : public InputFileToEdit{
     expandAmbiguityLines(parameters.getExpandAmbiguityLines())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
-      phenotypesFileName = parameters.getPhenotypesFileName();
+      genotypesFileName = parameters.getGenotypesFileName();
       lociAndResolutions = parameters.getLociAndResolutions();
       numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
@@ -175,7 +175,7 @@ class MA : public InputFileToEdit{
     lociNamesFromFile()
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
-      phenotypesFileName = parameters.getPhenotypesFileName();
+      genotypesFileName = parameters.getGenotypesFileName();
       lociAndResolutions = parameters.getLociAndResolutions();
       numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
@@ -198,7 +198,7 @@ class InputFileToRead : public InputFile{
     : InputFile(parameters.getInputFileName())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
-      phenotypesFileName = parameters.getPhenotypesFileName();
+      genotypesFileName = parameters.getGenotypesFileName();
     }
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
