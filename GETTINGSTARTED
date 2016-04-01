@@ -106,10 +106,10 @@ the following parameters in common:
     FILENAME_HAPLOTYPEFREQUENCIES: Name of the file which saves haplotypes and 
     estimated haplotype frequencies.
 
-    FILENAME_EPSILON: Name of the file which saves stopping criterion and 
+    FILENAME_EPSILON_LOGL: Name of the file which saves stopping criterion and 
     log-likelihood per iteration.
 
-    INITIALIZATION_HAPLOTYPE_FREQUENCIES: Initialization routine for
+    INITIALIZATION_HAPLOTYPEFREQUENCIES: Initialization routine for
     haplotype frequencies. It takes the following values:
     "equal": All haplotype frequencies are initialized with the same frequency.
     "numberOccurrence": Haplotype frequencies are initialized according to the
@@ -125,7 +125,7 @@ the following parameters in common:
     CUT_HAPLOTYPEFREQUENCIES: Estimated haplotype frequencies smaller than this
     value are removed from the output.
 
-    RENORMALIZE_HAPLOTYPE_FREQUENCIES: Takes values "true" and "false". If 
+    RENORMALIZE_HAPLOTYPEFREQUENCIES: Takes values "true" and "false". If 
     "true", normalize estimated haplotype frequencies to sum to one. Within
     machine precision, this becomes necessary, if estimated haplotypes are
     removed, e.g. via the option CUT_HAPLOTYPEFREQUENCIES.
@@ -240,12 +240,12 @@ false.
 
 Finally, we enter parameters relevant for haplotype frequency estimation.
 Initialize haplotype frequencies randomly by setting 
-INITIALIZATION_HAPLOTYPE_FREQUENCIES to the corresponding value. We want a stopping
+INITIALIZATION_HAPLOTYPEFREQUENCIES to the corresponding value. We want a stopping
 criterion of 0.00001 and discard final estimated haplotype frequencies with a
 frequency smaller than this value (hint: change parameters EPSILON and
 CUT_HAPLOTYPEFREQUENCIES). Since we remove haplotypes from the final set, a 
 normalization of the remaining haplotypes might be a clever idea. Just activate the
-normalization of haplotypes via RENORMALIZE_HAPLOTYPE_FREQUENCIES. If you use random
+normalization of haplotypes via RENORMALIZE_HAPLOTYPEFREQUENCIES. If you use random
 initial haplotype frequencies (random or perturbation), the parameter SEED is relevant
 for setting the seed of the pseudo random number generator. Set it to 1000.
 
@@ -257,17 +257,17 @@ like this:
     FILENAME_HAPLOTYPES=run/haplotypes.dat
     FILENAME_GENOTYPES=run/genotypes.dat
     FILENAME_HAPLOTYPEFREQUENCIES=run/hfs.dat
-    FILENAME_EPSILON=run/epsilon.dat
+    FILENAME_EPSILON_LOGL=run/epsilon.dat
     #reports
     LOCI_AND_RESOLUTIONS=A:g,B:g,DRB1:4d
     MINIMAL_FREQUENCY_GENOTYPES=1e-5
     DO_AMBIGUITYFILTER=false
     EXPAND_LINES_AMBIGUITYFILTER=false
     #EM-algorithm
-    INITIALIZATION_HAPLOTYPE_FREQUENCIES=random
+    INITIALIZATION_HAPLOTYPEFREQUENCIES=random
     EPSILON=1e-5
     CUT_HAPLOTYPEFREQUENCIES=1e-5
-    RENORMALIZE_HAPLOTYPE_FREQUENCIES=true
+    RENORMALIZE_HAPLOTYPEFREQUENCIES=true
     SEED=1000
 
 Run Hapl-O-mat and examine results
