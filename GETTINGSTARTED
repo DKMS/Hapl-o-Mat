@@ -4,7 +4,7 @@ Hapl-O-mat -- Getting started
 
 Introduction
 ------------
-Hapl-O-mat is a software coded in C++ for HLA haplotype inference.
+Hapl-O-mat is software for HLA haplotype inference coded in C++.
 Besides estimating haplotype frequencies via an expectation-maximization
 algorithm, it is capable of processing HLA genotype population data. This
 includes translation of alleles between various allele resolutions and resolving
@@ -64,13 +64,13 @@ folder examplePopulations.
 
     MA: Ambiguities are encoded by multiple allele (MA) codes. Except for the
     first line, input files hold an individual's identification number and
-    genotype per line. Genotypes are saved allele by allele, where the locus of
-    the allele is removed. Identification number and alleles are TAB-separated.
-    The first line of the file is a header file indicating the name of the first
-    column and the loci of the other columns. Same loci must be placed next to
-    each other. For an example refer to examplePopulations/populationData_a.dat.
+    genotype per line. Genotypes are saved allele by allele without locus name.
+    Identification number and alleles are TAB-separated. The first line of the
+    file is a header file indicating the name of the first column and the loci
+    of the other columns. Same loci must be placed next to each other. For an
+    example refer to examplePopulations/populationData_a.dat.
 
-    GLC: Genotypes with or without ambiguities are saved by genotype list (GL)
+    GLC: Genotypes with or without ambiguities are saved by genotype list
     strings. Input files hold an individual's identification number and genotype
     per line. Identification number and single-locus genotypes are TAB-separated.
     For an example refer to examplePopulations/populationData_b.dat	
@@ -87,9 +87,10 @@ folder examplePopulations.
     examplePopulations/populationData_c.pull and 
     examplePopulations/populationData_c.glid.
 
-    READ: Processing population data, Hapl-O-mat writes resolved genotypes to
-    disk. The created file can be used as input avoiding resolving genotypes a
-    second time.    
+    READ: Ambiguities are completely resolved and alleles are already translated
+    to the wanted allele resolutions. The input data is of the format as 
+    Hapl-O-mat writes processed genotype data to file. This allows for easily
+    repeating a run without the need to resolve genotype data again.
 
 
 3) Parameters
@@ -142,7 +143,7 @@ brackets), additional parameters are:
     FILENAME_GLID (GL): The file name of the glid-file.
 
     LOCI_AND_RESOLUTIONS (MA, GL, GLC): Loci included into analysis and desired
-    allele resolutin per locus. The list is separated by "," and contains the locus
+    allele resolution per locus. The list is separated by "," and contains the locus
     name followed by ":" and the desired allele resolution, e.g. A:g,B:4d,C:g.
     Supported allele resolutions and their abbreviations are g-groups (g),
     P-groups (P), G-groups (G), 4-digits groups (4d), 6-digits groups (6d), and
@@ -194,6 +195,10 @@ In the following we estimate haplotype frequencies from HLA population data in
 different formats. For each input format the population data consists of 100
 individuals typed for loci HLA-A, -B, -C, -DPB1, -DQB1, and -DRB1 with varying
 allele resolutions.
+If you have not done so yet, compile Hapl-O-mat via 
+
+   make
+   make clean
 
 a) Tutorial with input format MA
 You find the relevant population data in examplePopulations/populationData_a.dat. As
@@ -204,8 +209,9 @@ loci A and B shall be translated to allele resolution g and alleles at locus DRB
 
 Preparations
 Create a folder named a and provide the data required by Hapl-O-mat by copying
-the folder systemTest/dataSystemTest to folder a/data. Additionally, copy the
-executable haplomat and the file parametersMA to folder a.
+the folder systemTest/dataSystemTest to folder a/data. The folder must be named data
+to be found by Hapl-O-mat. Additionally, copy the executable haplomat and the file
+parametersMA to folder a.
 
 Parameters
 Specify parameters for this run in the file parametersMA. Start with setting the
@@ -248,7 +254,7 @@ like this:
     FILENAME_HAPLOTYPEFREQUENCIES=run/hfs.dat
     FILENAME_EPSILON=run/epsilon.dat
     #reports
-    LOCI_AND_RESOLUTIONS=A:g,DRB1:g,B:g
+    LOCI_AND_RESOLUTIONS=A:g,DRB1:4d,B:g
     MINIMAL_FREQUENCY_GENOTYPES=1e-5
     DO_AMBIGUITYFILTER=false
     EXPAND_LINES_AMBIGUITYFILTER=false
