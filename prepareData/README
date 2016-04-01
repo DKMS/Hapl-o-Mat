@@ -72,5 +72,5 @@ alleles of the same locus.
 and AllAllelesExpanded.txt to folder data.
 
 11)If you want to analyse data in GL-format with unresolved genotypes (GL-id=0),
-you can prepare the file alleleList.txt from the GL-id input file by running
-BuildAlleleList.py. Then move alleleList.txt to data.
+you can prepare the file AlleleList.txt from the GL-id input file by running
+BuildAlleleList.py. Then move AlleleList.txt to data.
