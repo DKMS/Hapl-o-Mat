@@ -20,8 +20,8 @@
 # <http://www.gnu.org/licenses/>.
 # 
 
-#Read in list of G-groups with only one element from OneElementG.txt. These codes do not end with G in Ambiguity.txt. Thus open Ambiguity.txt and add the Gs.
-#Overwrite the old Ambiguity.txt
+#Read in list of G-groups with only one element from OneElementG.txt. These codes do not end with G in Ambiguity.txt. Thus open Ambiguity.txt and
+#add the Gs. Overwritesthe old Ambiguity.txt
 
 GAndNoG = dict()
 with open('OneElementG.txt') as file:

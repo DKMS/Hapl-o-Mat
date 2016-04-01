@@ -23,11 +23,11 @@
 
 #The small-g list created from G-P matching is not complete since some null-alleles exist which do not correspond to a large-G code.
 #Since they are also missing in the P-list, they cannot appear in our small-g list. This script searches AllAllelexExpanded.txt for
-#alleles missing in g.txt. Note we only print alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
+#alleles missing in Smallg.txt. Note we only print alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
 
 #get loci which are in P and G file
 loci = []
-with open('G.txt') as file:
+with open('LargeG.txt') as file:
     for line in file:
         line = line.rstrip()
         alleles = line.split()
@@ -39,7 +39,7 @@ with open('G.txt') as file:
 
 #read in g
 alleleTog = dict()
-with open('g.txt') as file:
+with open('Smallg.txt') as file:
     for line in file:
         line = line.rstrip()
         alleles = line.split()
@@ -65,7 +65,7 @@ with open('AllAllelesExpanded.txt') as file:
                         missingAllelesIng.append(allele)
 
 #output missing alleles for relevant loci
-print('Alleles which must be added to g.txt')
+print('Alleles which must be added to Smallg.txt')
 missingAllelesIng.sort()
 for missingAlleleIng in missingAllelesIng:
     locus = missingAlleleIng.split('*')[0]

@@ -21,10 +21,10 @@
 # 
 
 
-#Build list of G-groups from hla_nom_g.txt and save it to G.txt
+#Build list of G-groups from hla_nom_g.txt and save it to LargeG.txt
 #Get hla_nom_g.txt from http://hla.alleles.org/alleles/g_groups.html
 
-with open('G.txt', 'w') as outFile:
+with open('LargeG.txt', 'w') as outFile:
     with open('OneElementG.txt', 'w') as oneElementGFile:
         with open('hla_nom_g.txt') as file:
             for line in file:
