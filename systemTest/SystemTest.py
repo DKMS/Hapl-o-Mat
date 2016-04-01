@@ -79,7 +79,6 @@ def clean(path):
 
 
 folders = ['MA_Mix', 'MA_g', 'MA_P', 'MA_4d', 'MA_G', 'MA_6d', 'MA_8d', 'GL_a', 'GL_b', 'GLC_a']
-folders = ['MA_Mix']
 testsPassed = 0
 
 for folder in folders:          
