@@ -66,6 +66,7 @@ class Parameters{
   virtual void fillSpecificParameterNamesAndFound(){};
 
   void areAllParametersListed();
+  bool isLineParameterAssignment(const std::string line) const;
   void fillParameterNamesAndFound();
   std::string getHaplotypesFileName() const {return haplotypesFileName;}
   std::string getPhenotypesFileName() const {return phenotypesFileName;}

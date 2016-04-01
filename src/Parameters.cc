@@ -167,17 +167,17 @@ void Parameters::areAllParametersListed(){
   std::string line;
   while(std::getline(file, line))
     {
-      if(line.find('#', 0) == std::string::npos and line.find('=') != std::string::npos)
+      if(isLineParameterAssignment(line))
 	{
 	  std::string parameterNameFromFile = split(line, '=').at(0);
 
-	  for(auto parameterName = parameterNamesAndFound.begin();
-	      parameterName != parameterNamesAndFound.end();
-	      parameterName ++)
+	  for(auto parameterNameAndFound = parameterNamesAndFound.begin();
+	      parameterNameAndFound != parameterNamesAndFound.end();
+	      parameterNameAndFound ++)
 	    {
-	      if(parameterNameFromFile.compare(parameterName->first) == 0)
+	      if(parameterNameFromFile.compare(parameterNameAndFound->first) == 0)
 		{
-		  parameterName->second = true;
+		  parameterNameAndFound->second = true;
 		  break;
 		}
 	    }
@@ -186,19 +186,26 @@ void Parameters::areAllParametersListed(){
 
   file.close();
 
-  for(auto it : parameterNamesAndFound)
+  for(auto parameterNameAndFound : parameterNamesAndFound)
     {
-      if(! it.second)
+      if(! parameterNameAndFound.second)
 	{
-	  throw ParameterNotFoundException(it.first);
+	  throw ParameterNotFoundException(parameterNameAndFound.first);
 	}
     }
 }
 
+bool Parameters::isLineParameterAssignment(const std::string line) const{
 
-
-  
-
+  if(line.find('#', 0) == std::string::npos and line.find('=') != std::string::npos)
+    {
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
 
 void ParametersGL::init(){
 
