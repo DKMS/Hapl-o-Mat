@@ -63,7 +63,6 @@ class Parameters{
 
   virtual void init() = 0;
   virtual void print() const = 0;
-  virtual void areAllSpecificParametersListed() = 0;
   virtual void fillSpecificParameterNamesAndFound(){};
 
   void areAllParametersListed();
@@ -130,7 +129,6 @@ class ParametersGL : public Parameters{
   
   virtual void init();
   virtual void print() const;
-  virtual void areAllSpecificParametersListed();  
   virtual void fillSpecificParameterNamesAndFound();
 
   std::string getGlidFileName() const {return glidFileName;}
@@ -163,7 +161,6 @@ class ParametersGLC : public Parameters{
 
   virtual void init();
   virtual void print() const;
-  virtual void areAllSpecificParametersListed();
   virtual void fillSpecificParameterNamesAndFound();
 
   std::string getInputFileName() const {return inputFileName;}
@@ -189,7 +186,6 @@ class ParametersMA : public Parameters{
 
   virtual void init();
   virtual void print() const;
-  virtual void areAllSpecificParametersListed();
   virtual void fillSpecificParameterNamesAndFound();
 
   std::string getInputFileName() const {return inputFileName;}
@@ -214,7 +210,6 @@ class ParametersReadin : public Parameters{
 
   virtual void init();
   virtual void print() const;
-  virtual void areAllSpecificParametersListed();
   virtual void fillSpecificParameterNamesAndFound();
 
   std::string getInputFileName() const {return inputFileName;}
