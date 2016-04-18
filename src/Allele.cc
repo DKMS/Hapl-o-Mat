@@ -88,22 +88,22 @@ Allele::codePrecision Allele::identifyCodePrecision(const std::string code){
   else{
     size_t numberColons = std::count(code.begin(), code.end(), ':');
     switch (numberColons){
-    case 1:
+    case 0:
       {
 	precision = Allele::codePrecision::twoDigit;
 	break;
       }
-    case 2:
+    case 1:
       {
 	precision = Allele::codePrecision::fourDigit;
 	break;
       }
-    case 3:
+    case 2:
       {
 	precision = Allele::codePrecision::sixDigit;
 	break;
       }
-    case 4:
+    case 3:
       {
 	precision = Allele::codePrecision::eightDigit;
 	break;
