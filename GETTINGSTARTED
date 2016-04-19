@@ -7,9 +7,10 @@ Introduction
 Hapl-O-mat is software for HLA haplotype inference coded in C++.
 Besides estimating haplotype frequencies via an expectation-maximization
 algorithm, it is capable of processing HLA genotype population data. This
-includes translation of alleles between various allele resolutions and resolving
+includes translation of alleles between various typing resolutions and resolving
 allelic and genotypic ambiguities. Both common formats for recording
-HLA genotypes, multiple allele codes and genotype list strings, are supported.
+HLA genotypes, multiple allele (NMDP) codes and genotype list strings, are
+supported.
 
 This guide explains how to use Hapl-O-mat. It is divided into the following
 sections:
@@ -24,24 +25,24 @@ For more information refer to our publication on Hapl-O-mat:
 INSERT ARTICLE
 
 
-1) Data preparation
+1) Data Preparation
 -------------------
 The estimation of HLA haplotypes via Hapl-O-mat requires information on the HLA
 nomenclature. You can create this information on your own by following the
 instructions in prepareData/README. Alternatively, you can download a current
-version of the data from INSERT LINK. Depending on how recent is your population
-data you should update the data files before running Hapl-O-mat. Otherwise, it is
+version of the data from INSERT LINK. Depending on how recent your population data
+is you should update the data files before running Hapl-O-mat. Otherwise, it is
 possible that Hapl-O-mat misses multiple allele codes or allele names.
 Hapl-O-mat relies on the following files:
 
    AllAllelesExpanded.txt: A list of relevant existing HLA alleles with their
    enclosed more-digits allele groups.
 
-   Smallg.txt: A list of g-groups with their enclosed 8-digits groups.
+   Smallg.txt: A list of g-groups with their enclosed alleles in 8-digit resolution.
 
-   LargeG.txt: A list of G-groups with their enclosed 8-digits groups.
+   LargeG.txt: A list of G-groups with their enclosed alleles in 8-digit resolution.
 
-   P.txt: A list of P-groups with their enclosed 8-digits groups.
+   P.txt: A list of P-groups with their enclosed alleles in 8-digit resolution.
 
    MultipleAlleleCodes.txt: A list of multiple allele codes and their translation to
    alleles.
@@ -57,7 +58,7 @@ and DRB5) are included in the files. In order to incorporate further loci follow
 the instructions in prepareData/README.
 
 
-2) Input formats
+2) Input Formats
 ----------------
 Hapl-O-mat distinguishes four input formats, which differ in the way the input
 population data is recorded. Examples for input data can be found in the
@@ -89,7 +90,7 @@ folder examplePopulations.
     examplePopulations/populationData_c.glid.
 
     READ: Ambiguities are completely resolved and alleles are already translated
-    to the wanted allele resolutions. The input data is of the format as 
+    to the wanted typing resolutions. The input data is of the format as 
     Hapl-O-mat writes processed genotype data to file. This allows for easily
     repeating a run without the need to resolve genotype data again.
 
@@ -144,12 +145,13 @@ brackets), additional parameters are:
     FILENAME_GLID (GL): The file name of the glid-file.
 
     LOCI_AND_RESOLUTIONS (MA, GL, GLC): Loci included into analysis and desired
-    allele resolution per locus. The list is separated by "," and contains the locus
-    name followed by ":" and the desired allele resolution, e.g. A:g,B:4d,C:g.
-    Supported allele resolutions and their abbreviations are g-groups (g),
-    P-groups (P), G-groups (G), 4-digits groups (4d), 6-digits groups (6d), and
-    8-digits groups (8d). Alleles are not translated via the option asItIs
-    (applying the H2 filter includes an intrinsic translation to G-groups).
+    typing resolution per locus. The list is separated by "," and contains the locus
+    name followed by ":" and the desired typing resolution, e.g. A:g,B:4d,C:g.
+    Supported typing resolutions and their abbreviations are g-groups (g),
+    P-groups (P), G-groups (G), 2-digit fields (2d), 4-digit fields (4d), 6-digit
+    fields (6d), and 8-digit fields (8d). Alleles are not translated via the option
+    asItIs (applying the ambiguity filter includes an intrinsic translation to
+    G-groups).
 
     LOCIORDER (GL): Specify the order of loci the individual's GL-ids correspond
     to. Loci are separated via ",".
@@ -167,7 +169,7 @@ brackets), additional parameters are:
 
     EXPAND_LINES_AMBIGUITYFILTER (MA, GL, GLC): Takes values "true" and "false". If set to
     "true", matching lines with additional genotype pairs in the ambiguity filter are
-    allowed.
+    considered.
 
 Whenever specifying a file name including folders, you have to create the folders
 before running Hapl-O-mat.
@@ -195,7 +197,7 @@ HLA allele.
 In the following we estimate haplotype frequencies from HLA population data in 
 different formats. For each input format the population data consists of 100
 individuals typed for loci HLA-A, -B, -C, -DPB1, -DQB1, and -DRB1 with varying
-allele resolutions.
+typing resolutions.
 If you have not done so yet, compile Hapl-O-mat via 
 
    make
@@ -207,8 +209,8 @@ a) Tutorial with input format MA
 You find the relevant population data in examplePopulations/populationData_a.dat. As
 ambiguities are recorded as multiple allele codes, the input format is MA. We are
 going to infer three locus (A, B, DRB1) haplotypes from this data. Alleles at
-loci A and B shall be translated to allele resolution g and alleles at locus DRB1 to
-4-digits allele resolution.
+loci A and B shall be translated to typing resolution g and alleles at locus DRB1 to
+4-digits typing resolution.
 
 Preparations
 Create a folder named a and provide the data required by Hapl-O-mat by copying
@@ -244,7 +246,7 @@ INITIALIZATION_HAPLOTYPEFREQUENCIES to the corresponding value. We want a stoppi
 criterion of 0.00001 and discard final estimated haplotype frequencies with a
 frequency smaller than this value (hint: change parameters EPSILON and
 CUT_HAPLOTYPEFREQUENCIES). Since we remove haplotypes from the final set, a 
-normalization of the remaining haplotypes might be a clever idea. Just activate the
+normalization of the remaining haplotypes might be a good idea. Just activate the
 normalization of haplotypes via RENORMALIZE_HAPLOTYPEFREQUENCIES. If you use random
 initial haplotype frequencies (random or perturbation), the parameter SEED is relevant
 for setting the seed of the pseudo random number generator. Set it to 1000.
@@ -287,7 +289,7 @@ with the resolved genotypes, run/genotypes.dat. The first column corresponds to
 the individual's identification number. The second column indicates how ambiguities
 per single-locus genotypes have been resolved. If no ambiguity occurred or no
 additional genotypes are formed, the type is N. If an ambiguity occurred and was
-resolved via a building all possible allele combinations, the type is I. Activating
+resolved via building all possible allele combinations, the type is I. Activating
 the ambiguity filter gives additional types: A, if one matching line in the ambiguity
 file was found, and M if multiple matching lines were found. The third column gives
 the frequency of the genotype and the fourth column the genotype itself. The genotype
@@ -341,6 +343,3 @@ names and set parameters for the haplotype frequency estimation. You run
 Hapl-O-mat via
 
     ./haplomat READ
-
-
-
