@@ -116,10 +116,10 @@ class Allele{
       static FilegOrGOr4dToAlleles filePToAlleles("data/P.txt");
       return filePToAlleles;
     }
-  FilegOrGOr4dToAlleles & file4dToAlleles() const
+  FilegOrGOr4dToAlleles & fileExpandedAlleles() const
     {
-      static FilegOrGOr4dToAlleles file4dToAlleles("data/AllAllelesExpanded.txt");
-      return file4dToAlleles;
+      static FilegOrGOr4dToAlleles fileExpandedAlleles("data/AllAllelesExpanded.txt");
+      return fileExpandedAlleles;
     }
 
  protected:
