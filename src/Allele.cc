@@ -409,7 +409,6 @@ std::vector<std::shared_ptr<Allele>> Allele4d::translateTo2d(){
   std::vector<std::shared_ptr<Allele>> listOfPAllele2d;
   listOfPAllele2d.push_back(pAllele2d);
   return listOfPAllele2d;
-
 }
 
 std::vector<std::shared_ptr<Allele>> Alleleg::translateTo2d(){
@@ -484,12 +483,6 @@ std::vector<std::shared_ptr<Allele>> Allele8d::translateTo2d(){
   listOfPAllele2d.push_back(pAllele2d);
   return listOfPAllele2d;
 }
-
-
-
-
-
-
 
 std::vector<std::shared_ptr<Allele>> Allele2d::translateTog(){
 
