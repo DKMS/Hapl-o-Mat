@@ -84,7 +84,9 @@ void Parameters::lociAndResolutions_assign(const std::string line){
 	  std::string locus = locusAndResolution[0];
 	  std::string wantedResolution = locusAndResolution[1];
 	  
-	  if(wantedResolution == "g")
+	  if(wantedResolution == "2d")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::twoDigit);
+	  else if(wantedResolution == "g")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::g);
 	  else if(wantedResolution == "P")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::P);
