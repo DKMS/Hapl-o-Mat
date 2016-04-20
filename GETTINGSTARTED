@@ -2,6 +2,9 @@ Hapl-O-mat -- Getting started
 =============================
 
 
+Please also see the README.
+
+
 Introduction
 ------------
 Hapl-O-mat is software for HLA haplotype inference coded in C++.
@@ -15,21 +18,40 @@ supported.
 This guide explains how to use Hapl-O-mat. It is divided into the following
 sections:
 
-1) Data preparation
-2) Input formats
-3) Parameters
-4) Run Hapl-O-mat
-5) Tutorials
+1) Input Files
+2) Data Preparation
+3) Input Formats
+4) Parameters
+5) Install
+6) Run Hapl-O-mat
+7) Tutorials
 
 For more information refer to our publication on Hapl-O-mat:
 INSERT ARTICLE
 
+1) Input Files
+--------------
+Hapl-O-mat requires the following files to estimate haplotype frequencies:
 
-1) Data Preparation
+    Executable: Create the executable "haplomat" via instructions in 5). 
+
+    Input file: A population sample of genotype data to study. See 3) for
+    different formats.
+
+    Parameter file: It lists all the parameters required for your run.
+    Choose from parametersMA, parametersGLC, parametersGL, or parametersREAD
+    according to your input format. See 4) for more information.
+
+    Data: Hapl-O-mat requires information on the HLA nomenclature in form of some
+    files, which have to be placed in the folder data. See 2) for instructions on
+    how to get these data.
+    
+
+2) Data Preparation
 -------------------
 The estimation of HLA haplotypes via Hapl-O-mat requires information on the HLA
 nomenclature. You can create this information on your own by following the
-instructions in prepareData/README. Alternatively, you can download a current
+instructions in "prepareData/README". Alternatively, you can download a current
 version of the data from INSERT LINK. Depending on how recent your population data
 is you should update the data files before running Hapl-O-mat. Otherwise, it is
 possible that Hapl-O-mat misses multiple allele codes or allele names.
@@ -55,14 +77,14 @@ Hapl-O-mat relies on the following files:
 
 The most common HLA loci (HLA-A, B, C, DPA1, DPB1, DQA1, DQB1, DRB1, DRB3, DRB4,
 and DRB5) are included in the files. In order to incorporate further loci follow
-the instructions in prepareData/README.
+the instructions in "prepareData/README".
 
 
-2) Input Formats
+3) Input Formats
 ----------------
 Hapl-O-mat distinguishes four input formats, which differ in the way the input
 population data is recorded. Examples for input data can be found in the
-folder examplePopulations.
+folder "examplePopulations".
 
     MA: Ambiguities are encoded by multiple allele (MA) codes. Except for the
     first line, input files hold an individual's identification number and
@@ -70,12 +92,12 @@ folder examplePopulations.
     Identification number and alleles are TAB-separated. The first line of the
     file is a header file indicating the name of the first column and the loci
     of the other columns. Same loci must be placed next to each other. For an
-    example refer to examplePopulations/populationData_a.dat.
+    example refer to "examplePopulations/populationData_a.dat".
 
     GLC: Genotypes with or without ambiguities are saved by genotype list
     strings. Input files hold an individual's identification number and genotype
     per line. Identification number and single-locus genotypes are TAB-separated.
-    For an example refer to examplePopulations/populationData_b.dat	
+    For an example refer to "examplePopulations/populationData_b.dat"	
 
     GL: Genotypes with or without ambiguities are saved by genotype list (GL)
     strings. Population data is saved in two files. The pull-file contains an
@@ -86,8 +108,8 @@ folder examplePopulations.
     single-locus genotypes. GL-id and genotype are separated via ";". A GL-id of
     "0" is interpreted as a missing typing at the corresponding locus and does 
     not require a translation in the glid-file. For an example refer to
-    examplePopulations/populationData_c.pull and 
-    examplePopulations/populationData_c.glid.
+    "examplePopulations/populationData_c.pull" and 
+    "examplePopulations/populationData_c.glid".
 
     READ: Ambiguities are completely resolved and alleles are already translated
     to the wanted typing resolutions. The input data is of the format as 
@@ -95,7 +117,7 @@ folder examplePopulations.
     repeating a run without the need to resolve genotype data again.
 
 
-3) Parameters
+4) Parameters
 -------------
 Each input format requires a different set of parameters. All input formats have
 the following parameters in common:
@@ -134,8 +156,8 @@ the following parameters in common:
     SEED: Set the seed of the used pseudo random number generator. If set to "0",
     the seed is initialized by the system time.
 
-The parameters are saved in the corresponding files parametersMA, parametersGLC,
-parametersGL, and parametersREAD. Depending on the input format (indicated in
+The parameters are saved in the corresponding files "parametersMA", "parametersGLC",
+"parametersGL", and "parametersREAD". Depending on the input format (indicated in
 brackets), additional parameters are:
 
     FILENAME_INPUT (MA, GLC, READ): The file name of the input population data.
@@ -175,7 +197,18 @@ Whenever specifying a file name including folders, you have to create the folder
 before running Hapl-O-mat.
 
 
-4) Run Hapl-O-mat
+5) Install
+----------
+Create the executable "haplomat" via Makefile. Just type in the upper folder (where this
+document lives):
+
+    make
+    make clean
+
+The executable "haplomat" appears in the same folder.
+
+
+6) Run Hapl-O-mat
 -----------------
 
 After preparing input data of the format INPUTFORMAT (MA, GLC, GL, READ),
@@ -191,54 +224,50 @@ genotype into analysis. For example, this happens, if the genotype includes a no
 HLA allele.
 
 
-5) Tutorials
+7) Tutorials
 ------------
 
 In the following we estimate haplotype frequencies from HLA population data in 
 different formats. For each input format the population data consists of 100
 individuals typed for loci HLA-A, -B, -C, -DPB1, -DQB1, and -DRB1 with varying
 typing resolutions.
-If you have not done so yet, compile Hapl-O-mat via 
-
-   make
-   make clean
-
-which produces the executable haplomat.
+If you have not done so yet, compile Hapl-O-mat as explained in 5) which produces the
+executable "haplomat".
 
 a) Tutorial with input format MA
-You find the relevant population data in examplePopulations/populationData_a.dat. As
+You find the relevant population data in "examplePopulations/populationData_a.dat". As
 ambiguities are recorded as multiple allele codes, the input format is MA. We are
 going to infer three locus (A, B, DRB1) haplotypes from this data. Alleles at
 loci A and B shall be translated to typing resolution g and alleles at locus DRB1 to
 4-digits typing resolution.
 
 Preparations
-Create a folder named a and provide the data required by Hapl-O-mat by copying
-the folder systemTest/dataSystemTest to folder a/data. The folder must be named data
-to be found by Hapl-O-mat. Additionally, copy the executable haplomat and the file
-parametersMA to folder a.
+Create a folder named "a" and provide the data required by Hapl-O-mat by copying
+the content of folder "systemTest/dataSystemTest" to folder "a/data". The folder must be
+named "data" to be found by Hapl-O-mat. Additionally, copy the executable "haplomat" and
+the file "parametersMA" to folder "a".
 
 Parameters
-Specify parameters for this run in the file parametersMA. Start with setting the
+Specify parameters for this run in the file "parametersMA". Start with setting the
 file names. The entry of FILENAME_INPUT is defined by the file name of the input
-population data. You can copy the file to folder a or give a relative path as input.
+population data. You can copy the file to folder "a" or give a relative path as input.
 Let us go with the first way. The entries of the other file names are up to you and
 do not need to be changed in other runs. Let's call the temporary file for haplotypes
 "run/haplotypes.dat", the file with resolved genotypes "run/genotypes.dat", the file
 with the estimated haplotype frequencies "run/hfs.dat", and the file with evolution
 of stopping criterion and log-likelihood "run/epsilon.dat". Do not forget to create
-the folder run before starting Hapl-O-mat.
+the folder "run" before starting Hapl-O-mat.
 
 Next we set parameters with regard to resolving genotype data. Set the loci to
 study (A, B, DRB1) and the associated target allele groups (g, g, 4d) via
 LOCI_AND_RESOLUTIONS. The order of loci does not matter. During resolving genotypes,
 some genotypes will split into a set of genotypes. We will discard genotypes which
 split into more than 100,000 genotypes by setting MINIMAL_FREQUENCY_GENOTYPES to
-0.00001 (1e-5 also works). We want to resolve the genotype data without applying an
+"0.00001" ("1e-5" also works). We want to resolve the genotype data without applying an
 ambiguity filter. Thus you can deactivate the ambiguity filter via
 DO_AMBIGUITYFILTER. Since no ambiguity filter is applied, the value of
 EXPAND_LINES_AMBIGUITYFILTER does not matter. However, for consistency we set it to
-false.
+"false".
 
 Finally, we enter parameters relevant for haplotype frequency estimation.
 Initialize haplotype frequencies randomly by setting 
@@ -249,7 +278,7 @@ CUT_HAPLOTYPEFREQUENCIES). Since we remove haplotypes from the final set, a
 normalization of the remaining haplotypes might be a good idea. Just activate the
 normalization of haplotypes via RENORMALIZE_HAPLOTYPEFREQUENCIES. If you use random
 initial haplotype frequencies (random or perturbation), the parameter SEED is relevant
-for setting the seed of the pseudo random number generator. Set it to 1000.
+for setting the seed of the pseudo random number generator. Set it to "1000".
 
 If you have followed the instructions exactly, your parameter file should look
 like this:
@@ -273,7 +302,7 @@ like this:
     SEED=1000
 
 Run Hapl-O-mat and examine results
-You run Hapl-O-mat via
+If you are not already there, go to folder "a" and run Hapl-O-mat via
 
     ./haplomat MA     
 
@@ -285,7 +314,7 @@ with
     ./haplomat MA > Log.dat
 
 Now let's examine the results produced by Hapl-O-mat. We first look into the file
-with the resolved genotypes, run/genotypes.dat. The first column corresponds to
+with the resolved genotypes, "run/genotypes.dat". The first column corresponds to
 the individual's identification number. The second column indicates how ambiguities
 per single-locus genotypes have been resolved. If no ambiguity occurred or no
 additional genotypes are formed, the type is N. If an ambiguity occurred and was
@@ -298,48 +327,49 @@ each genotype is written to one line starting with the same identification numbe
 corresponding frequencies become non-integer and sum to one.
 
 The evolution of the stopping criterion and log-likelihood while iterating
-expectation and maximization steps is written to run/epsilon.dat. The first
+expectation and maximization steps is written to "run/epsilon.dat". The first
 column is the stopping criterion and the second one the not normalized
 log-likelihood.
 
-The inferred haplotypes including estimated frequencies are listed in run/hfs.dat.
+The inferred haplotypes including estimated frequencies are listed in "run/hfs.dat".
 Haplotypes are saved in the GL format. This is the file you were aiming at. It is
 sorted by descending frequency and already normalized if you activated the
 corresponding option (we did in this tutorial).
 
 b) Tutorial with input format GLC
 This time ambiguities in the genotypic population data are recorded via genotype
-list strings. The file with the population data is called populationData_b.glc.
+list strings. The file with the population data is called "populationData_b.glc".
 As all the information is in one file, the input format is GLC. Running Hapl-O-mat
-works exactly as in tutorial a). You just use the parameter file parametersGLC
-instead of parametersMA and make the appropriate changes. Compared to tutorial a)
+works exactly as in tutorial a). You just use the parameter file "parametersGLC"
+instead of "parametersMA" and make the appropriate changes. Compared to tutorial a)
 the population data contains different genotypes. So do not wonder that you obtain
-different results. Run Hapl-O-mat with
+different results. Run Hapl-O-mat in folder "b" with
 
     ./haplomat GLC
 
 c) Tutorial with input format GL
 Again, ambiguities in the genotypic population data are recorded via genotype list
 strings. Since the data is saved in two different files, the input format is GL.
-Follow the steps from tutorial a), but use the parameter file parametersGL. The 
-file names for the population data are populationData_c.pull and 
-populationData_c.glid. I guess, you can figure out the matching positions in the
+Follow the steps from tutorial a), but use the parameter file "parametersGL". The 
+file names for the population data are "populationData_c.pull" and 
+"populationData_c.glid". I guess, you can figure out the matching positions in the
 parameter file. GL input format requires the order of loci as input, which can be
 obtained by looking in the pull- and glid-file. The first individual from
-populationData_c.pull has GL-ids 1, 2, 3, 4, 5, and 6. We know from 
-populationData_c.pull that they correspond to loci B, A, DPB1, DRB1, C, and DQB1,
-respectively. Because of that we set LOCIORDER=B,A,DPB1,DRB1,C,DQB1. Finally, set
-the additional option RESOLVE_MISSING_GENOTYPE to "false". Run Hapl-O-mat with
+"populationData_c.pull" has GL-ids 1, 2, 3, 4, 5, and 6. We know from 
+"populationData_c.pull" that they correspond to loci B, A, DPB1, DRB1, C, and DQB1,
+respectively. Because of that we set "LOCIORDER=B,A,DPB1,DRB1,C,DQB1". Finally, set
+the additional option RESOLVE_MISSING_GENOTYPE to "false". Run Hapl-O-mat in folder
+"c" with
 
     ./haplomat GL
    
 d) Tutorial with input format READ
-Finally, we test the input format READ. Create a folder d and copy one file with
-resolved genotypes, say a/run/genotypes.dat there. Add haplomat, data, and
-parametersREAD to this folder. Using the input format READ Hapl-O-mat does not
+Finally, we test the input format READ. Create a folder "d" and copy one file with
+resolved genotypes, say "a/run/genotypes.dat" there. Add "haplomat", "data", and
+"parametersREAD" to this folder. Using the input format READ Hapl-O-mat does not
 resolve ambiguities or translates alleles, but reads in already resolved genotype
 data. Because of that the parameter file misses some options. Just adjust the file
-names and set parameters for the haplotype frequency estimation. You run 
-Hapl-O-mat via
+names and set parameters for the haplotype frequency estimation. Run Hapl-O-mat in
+folder "d" via
 
     ./haplomat READ
