@@ -110,6 +110,7 @@ int main(int argc, char *argv[]){
     double timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
     
     std::cout << "#########Times" << std::endl;
+    std::cout.precision(14);
     std::cout << "\t Data preprocessing [s]: " << timeTakenForDataPreProcessing << std::endl;
     std::cout << "\t EM algorithm [s]: " << timeTakenForEMAlgorithm << std::endl;
     std::cout << "\t Writing [s]: " << timeTakenForWriting << std::endl;
