@@ -26,8 +26,13 @@ following sections:
 6) Run Hapl-O-mat
 7) Tutorials
 
-For more information refer to our publication on Hapl-O-mat:
-INSERT ARTICLE
+For more information refer to our publications on Hapl-O-mat:
+
+Journal article to come
+
+C. Schaefer, A.H. Schmidt, J. Sauter. Hapl-O-mat: A Versatile Software for
+Haplotype Frequency Estimation. HLA, 2016, 87, 236–320
+
 
 1) Input Files
 --------------
@@ -51,10 +56,11 @@ Hapl-O-mat requires the following files to estimate haplotype frequencies:
 -------------------
 The estimation of HLA haplotypes via Hapl-O-mat requires information on the HLA
 nomenclature. You can create this information on your own by following the
-instructions in "prepareData/README". Alternatively, you can download a current
-version of the data from INSERT LINK. Depending on how recent your population data
-is you should update the data files before running Hapl-O-mat. Otherwise, it is
-possible that Hapl-O-mat misses multiple allele codes or allele names.
+instructions in "prepareData/README". For a quick test, you can also use the
+data provided in "systemTest/dataSystemTest" (which we also use for the
+tutorials). However, depending on how recent your population data is, these data
+might be outdated. Then it is possible that Hapl-O-mat misses multiple allele
+codes or allele names. 
 Hapl-O-mat relies on the following files:
 
    AllAllelesExpanded.txt: A list of relevant existing HLA alleles with their
