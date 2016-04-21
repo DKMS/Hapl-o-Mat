@@ -15,8 +15,8 @@ allelic and genotypic ambiguities. Both common formats for recording
 HLA genotypes, multiple allele (NMDP) codes and genotype list strings, are
 supported.
 
-This guide explains how to use Hapl-O-mat. It is divided into the following
-sections:
+This guide explains how to use Hapl-O-mat under Linux. It is divided into the
+following sections:
 
 1) Input Files
 2) Data Preparation
