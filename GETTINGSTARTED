@@ -1,4 +1,4 @@
-Hapl-O-mat -- Getting started
+Hapl-o-Mat -- Getting started
 =============================
 
 
@@ -7,7 +7,7 @@ Please also see the README.
 
 Introduction
 ------------
-Hapl-O-mat is software for HLA haplotype inference coded in C++.
+Hapl-o-Mat is software for HLA haplotype inference coded in C++.
 Besides estimating haplotype frequencies via an expectation-maximization
 algorithm, it is capable of processing HLA genotype population data. This
 includes translation of alleles between various typing resolutions and resolving
@@ -15,7 +15,7 @@ allelic and genotypic ambiguities. Both common formats for recording
 HLA genotypes, multiple allele (NMDP) codes and genotype list strings, are
 supported.
 
-This guide explains how to use Hapl-O-mat under Linux. It is divided into the
+This guide explains how to use Hapl-o-Mat under Linux. It is divided into the
 following sections:
 
 1) Input Files
@@ -23,10 +23,10 @@ following sections:
 3) Input Formats
 4) Parameters
 5) Install
-6) Run Hapl-O-mat
+6) Run Hapl-o-Mat
 7) Tutorials
 
-For more information refer to our publications on Hapl-O-mat:
+For more information refer to our publications on Hapl-o-Mat:
 
 Journal article to come
 
@@ -36,7 +36,7 @@ Haplotype Frequency Estimation. HLA, 2016, 87, 236–320
 
 1) Input Files
 --------------
-Hapl-O-mat requires the following files to estimate haplotype frequencies:
+Hapl-o-Mat requires the following files to estimate haplotype frequencies:
 
     Executable: Create the executable "haplomat" via instructions in 5). 
 
@@ -47,21 +47,21 @@ Hapl-O-mat requires the following files to estimate haplotype frequencies:
     Choose from parametersMA, parametersGLC, parametersGL, or parametersREAD
     according to your input format. See 4) for more information.
 
-    Data: Hapl-O-mat requires information on the HLA nomenclature in form of some
+    Data: Hapl-o-Mat requires information on the HLA nomenclature in form of some
     files, which have to be placed in the folder data. See 2) for instructions on
     how to get these data.
     
 
 2) Data Preparation
 -------------------
-The estimation of HLA haplotypes via Hapl-O-mat requires information on the HLA
+The estimation of HLA haplotypes via Hapl-o-Mat requires information on the HLA
 nomenclature. You can create this information on your own by following the
 instructions in "prepareData/README". For a quick test, you can also use the
 data provided in "systemTest/dataSystemTest" (which we also use for the
 tutorials). However, depending on how recent your population data is, these data
-might be outdated. Then it is possible that Hapl-O-mat misses multiple allele
+might be outdated. Then it is possible that Hapl-o-Mat misses multiple allele
 codes or allele names. 
-Hapl-O-mat relies on the following files:
+Hapl-o-Mat relies on the following files:
 
    AllAllelesExpanded.txt: A list of relevant existing HLA alleles with their
    enclosed more-digits allele groups.
@@ -88,7 +88,7 @@ the instructions in "prepareData/README".
 
 3) Input Formats
 ----------------
-Hapl-O-mat distinguishes four input formats, which differ in the way the input
+Hapl-o-Mat distinguishes four input formats, which differ in the way the input
 population data is recorded. Examples for input data can be found in the
 folder "examplePopulations".
 
@@ -119,7 +119,7 @@ folder "examplePopulations".
 
     READ: Ambiguities are completely resolved and alleles are already translated
     to the wanted typing resolutions. The input data is of the format as 
-    Hapl-O-mat writes processed genotype data to file. This allows for easily
+    Hapl-o-Mat writes processed genotype data to file. This allows for easily
     repeating a run without the need to resolve genotype data again.
 
 
@@ -200,7 +200,7 @@ brackets), additional parameters are:
     considered.
 
 Whenever specifying a file name including folders, you have to create the folders
-before running Hapl-O-mat.
+before running Hapl-o-Mat.
 
 
 5) Install
@@ -214,18 +214,18 @@ document lives):
 The executable "haplomat" appears in the same folder.
 
 
-6) Run Hapl-O-mat
+6) Run Hapl-o-Mat
 -----------------
 
 After preparing input data of the format INPUTFORMAT (MA, GLC, GL, READ),
-Hapl-O-mat is run by
+Hapl-o-Mat is run by
 
       ./haplomat INPUTFORMAT
 
-Hapl-O-mat prints information on the current run to the screen. This information includes the
+Hapl-o-Mat prints information on the current run to the screen. This information includes the
 used parameters, statistics on the input data, the required memory and time, and error
-messages. Depending on the error two things can happen: First, Hapl-O-mat can just quit. For
-example, this happens, if a data file is missing. Second, Hapl-O-mat does not include a
+messages. Depending on the error two things can happen: First, Hapl-o-Mat can just quit. For
+example, this happens, if a data file is missing. Second, Hapl-o-Mat does not include a
 genotype into analysis. For example, this happens, if the genotype includes a non-existent
 HLA allele.
 
@@ -237,7 +237,7 @@ In the following we estimate haplotype frequencies from HLA population data in
 different formats. For each input format the population data consists of 100
 individuals typed for loci HLA-A, -B, -C, -DPB1, -DQB1, and -DRB1 with varying
 typing resolutions.
-If you have not done so yet, compile Hapl-O-mat as explained in 5) which produces the
+If you have not done so yet, compile Hapl-o-Mat as explained in 5) which produces the
 executable "haplomat".
 
 a) Tutorial with input format MA
@@ -248,9 +248,9 @@ loci A and B shall be translated to typing resolution g and alleles at locus DRB
 4-digits typing resolution.
 
 Preparations
-Create a folder named "a" and provide the data required by Hapl-O-mat by copying
+Create a folder named "a" and provide the data required by Hapl-o-Mat by copying
 the content of folder "systemTest/dataSystemTest" to folder "a/data". The folder must be
-named "data" to be found by Hapl-O-mat. Additionally, copy the executable "haplomat" and
+named "data" to be found by Hapl-o-Mat. Additionally, copy the executable "haplomat" and
 the file "parametersMA" to folder "a".
 
 Parameters
@@ -262,7 +262,7 @@ do not need to be changed in other runs. Let's call the temporary file for haplo
 "run/haplotypes.dat", the file with resolved genotypes "run/genotypes.dat", the file
 with the estimated haplotype frequencies "run/hfs.dat", and the file with evolution
 of stopping criterion and log-likelihood "run/epsilon.dat". Do not forget to create
-the folder "run" before starting Hapl-O-mat.
+the folder "run" before starting Hapl-o-Mat.
 
 Next we set parameters with regard to resolving genotype data. Set the loci to
 study (A, B, DRB1) and the associated target allele groups (g, g, 4d) via
@@ -307,19 +307,19 @@ like this:
     RENORMALIZE_HAPLOTYPEFREQUENCIES=true
     SEED=1000
 
-Run Hapl-O-mat and examine results
-If you are not already there, go to folder "a" and run Hapl-O-mat via
+Run Hapl-o-Mat and examine results
+If you are not already there, go to folder "a" and run Hapl-o-Mat via
 
     ./haplomat MA     
 
 It produces some output on the screen including your chosen parameters, statistics
 on the resolved genotype data and the expectation-maximization algorithm, and the
-run time. You can easily write this output to an extra file by starting Hapl-O-mat
+run time. You can easily write this output to an extra file by starting Hapl-o-Mat
 with
 
     ./haplomat MA > Log.dat
 
-Now let's examine the results produced by Hapl-O-mat. We first look into the file
+Now let's examine the results produced by Hapl-o-Mat. We first look into the file
 with the resolved genotypes, "run/genotypes.dat". The first column corresponds to
 the individual's identification number. The second column indicates how ambiguities
 per single-locus genotypes have been resolved. If no ambiguity occurred or no
@@ -345,11 +345,11 @@ corresponding option (we did in this tutorial).
 b) Tutorial with input format GLC
 This time ambiguities in the genotypic population data are recorded via genotype
 list strings. The file with the population data is called "populationData_b.glc".
-As all the information is in one file, the input format is GLC. Running Hapl-O-mat
+As all the information is in one file, the input format is GLC. Running Hapl-o-Mat
 works exactly as in tutorial a). You just use the parameter file "parametersGLC"
 instead of "parametersMA" and make the appropriate changes. Compared to tutorial a)
 the population data contains different genotypes. So do not wonder that you obtain
-different results. Run Hapl-O-mat in folder "b" with
+different results. Run Hapl-o-Mat in folder "b" with
 
     ./haplomat GLC
 
@@ -364,7 +364,7 @@ obtained by looking in the pull- and glid-file. The first individual from
 "populationData_c.pull" has GL-ids 1, 2, 3, 4, 5, and 6. We know from 
 "populationData_c.pull" that they correspond to loci B, A, DPB1, DRB1, C, and DQB1,
 respectively. Because of that we set "LOCIORDER=B,A,DPB1,DRB1,C,DQB1". Finally, set
-the additional option RESOLVE_MISSING_GENOTYPE to "false". Run Hapl-O-mat in folder
+the additional option RESOLVE_MISSING_GENOTYPE to "false". Run Hapl-o-Mat in folder
 "c" with
 
     ./haplomat GL
@@ -372,10 +372,10 @@ the additional option RESOLVE_MISSING_GENOTYPE to "false". Run Hapl-O-mat in fol
 d) Tutorial with input format READ
 Finally, we test the input format READ. Create a folder "d" and copy one file with
 resolved genotypes, say "a/run/genotypes.dat" there. Add "haplomat", "data", and
-"parametersREAD" to this folder. Using the input format READ Hapl-O-mat does not
+"parametersREAD" to this folder. Using the input format READ Hapl-o-Mat does not
 resolve ambiguities or translates alleles, but reads in already resolved genotype
 data. Because of that the parameter file misses some options. Just adjust the file
-names and set parameters for the haplotype frequency estimation. Run Hapl-O-mat in
+names and set parameters for the haplotype frequency estimation. Run Hapl-o-Mat in
 folder "d" via
 
     ./haplomat READ

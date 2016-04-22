@@ -1,22 +1,22 @@
 /*
- * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ * Hapl-o-Mat: A program for HLA haplotype frequency estimation
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * This file is part of Hapl-O-mat
+ * This file is part of Hapl-o-Mat
  *
- * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * Hapl-o-Mat is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  *
- * Hapl-O-mat is distributed in the hope that it will be useful,
+ * Hapl-o-Mat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * along with Hapl-o-Mat; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
 
@@ -34,7 +34,7 @@
 int main(int argc, char *argv[]){
 
   std::cout << std::endl;
-  std::cout << "\t Hapl-O-mat" << std::endl;
+  std::cout << "\t Hapl-o-Mat" << std::endl;
   std::cout << "\t Copyright (C) 2016 DKMS gGmbH" << std::endl;
   std::cout << std::endl;
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
   }
   catch(const std::exception & e){
     std::cerr << e.what() << std::endl;
-    std::cout << "Exit Hapl-O-mat" << std::endl;
+    std::cout << "Exit Hapl-o-Mat" << std::endl;
     return -1;
   }
 }

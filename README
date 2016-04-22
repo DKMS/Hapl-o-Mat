@@ -1,8 +1,8 @@
-Hapl-O-mat v 1.0 03/16/2016
+Hapl-o-Mat v 1.0 03/16/2016
 
 General information
 -------------------
-Hapl-O-mat is software for HLA haplotype inference via an
+Hapl-o-Mat is software for HLA haplotype inference via an
 expectation-maximization algorithm. It supports processing and
 resolving various forms of HLA genotype data.
 
@@ -15,8 +15,8 @@ INSERT URL.
  
 Installing under Linux
 ----------------------
-Installing Hapl-O-mat requires a C++ compiler with C++11 support.
-Hapl-O-mat is compiled via a Makefile (g++ as default compiler):
+Installing Hapl-o-Mat requires a C++ compiler with C++11 support.
+Hapl-o-Mat is compiled via a Makefile (g++ as default compiler):
 
     make
     make clean
@@ -24,13 +24,13 @@ Hapl-O-mat is compiled via a Makefile (g++ as default compiler):
 
 Usage
 -----
-For a quick guide on Hapl-O-mat and some tutorials please see file
+For a quick guide on Hapl-o-Mat and some tutorials please see file
 GETTING STARTED.
 
 
 Citation
 --------
-If you use Hapl-O-mat for your research, please cite
+If you use Hapl-o-Mat for your research, please cite
 
 (Until our journal article appears)
 C. Schaefer, A.H. Schmidt, J. Sauter. Hapl-O-mat: A Versatile Software for
@@ -39,7 +39,7 @@ Haplotype Frequency Estimation. HLA, 2016, 87, 236–320
 
 Contributors
 ------------
-If you want to participate in actively developing Hapl-O-mat please
+If you want to participate in actively developing Hapl-o-Mat please
 join via
 Github INSERT URL
 
@@ -60,16 +60,16 @@ License
 -------
 Copyright (C) 2016, DKMS gGmbH 
   
-Hapl-O-mat is free software: you can redistribute it and/or modify
+Hapl-o-Mat is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 3, or (at your option)
 any later version.
  
-Hapl-O-mat is distributed in the hope that it will be useful,
+Hapl-o-Mat is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
  
 You should have received a copy of the GNU General Public License
-along with Hapl-O-mat; see the file COPYING.  If not, see
+along with Hapl-o-Mat; see the file COPYING.  If not, see
 <http://www.gnu.org/licenses/>.
