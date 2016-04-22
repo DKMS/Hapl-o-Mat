@@ -3,7 +3,7 @@ INC1 = include
 INCDIRS = -I${INC1}
 #CXXFLAGS = -W -Wall -g -Wextra -pedantic -std=c++11 ${INCDIRS}
 #CXXFLAGS = -Wall -pg -march=native -O2 -std=c++11 ${INCDIRS}
-CXXFLAGS = -Wall -fopenmp -march=native -Ofast -std=c++11 ${INCDIRS}
+CXXFLAGS = -Wall -march=native -Ofast -std=c++11 ${INCDIRS}
 
 sources = $(wildcard src/*.cc)
 OBJ = $(patsubst %.cc, %.o, $(wildcard src/*.cc))
