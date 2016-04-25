@@ -20,17 +20,16 @@
 # <http://www.gnu.org/licenses/>.
 # 
 
-
 python TransferAlphaToMultipleAlleleCodes.py
 python BuildAllAllelesFrom_hla_nom_g.py
 python BuildAllAllelesExpanded.py
 python BuildP.py
-python BuildG.py
-python Buildg.py  
+python BuildLargeG.py
+python BuildSmallg.py
 python BuildAmbiguity.py
 python AddGToAmbiguity.py
-python PrintAllelesMissingIngCode.py
-
+python AddAllelesMissingIngCode.py
+mv AllAllelesExpanded.txt Ambiguity.txt LargeG.txt MultipleAlleleCodes.txt P.txt Smallg.txt ../data
 
 
 
