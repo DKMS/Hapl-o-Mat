@@ -23,7 +23,10 @@
 
 #The small-g list created from G-P matching is not complete since some null-alleles exist which do not correspond to a large-G code.
 #Since they are also missing in the P-list, they cannot appear in our small-g list. This script searches AllAllelexExpanded.txt for
-#alleles missing in Smallg.txt. Note we only print alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
+#alleles missing in Smallg.txt. Note we only process alleles with loci dealt with in hla_nom_p.txt and hla_nom_g.txt
+
+from collections import defaultdict
+from operator import itemgetter
 
 #get loci which are in P and G file
 loci = []
@@ -50,7 +53,7 @@ with open('Smallg.txt') as file:
             alleleTog[allele] = gCode
 
 #check which alleles from AllAllelesExpanded are not in a g-code. Only consider alleles with 4d codes splitting into more than one allele
-missingAllelesIng = []
+missingAllelesIng = defaultdict(set)
 with open('AllAllelesExpanded.txt') as file:
     for line in file:
         line = line.rstrip()
@@ -61,16 +64,38 @@ with open('AllAllelesExpanded.txt') as file:
         if len(alleles) > 1 and firstAllele.count(':') == 1:
             for allele in alleles:
                 if not allele in alleleTog:
-                    if not allele in missingAllelesIng:
-                        missingAllelesIng.append(allele)
+                    digitFields = allele.split(':', 2)
+                    allele4d = digitFields[0] + ':' +  digitFields[1]
+                    missingAllelesIng[allele4d].add(allele)
 
-#output missing alleles for relevant loci
-print('Alleles which must be added to Smallg.txt')
-missingAllelesIng.sort()
-for missingAlleleIng in missingAllelesIng:
-    locus = missingAlleleIng.split('*')[0]
-    if locus in loci:
-        print(missingAlleleIng)
+#read in g to alleles
+gToAlleles = dict()
+with open('Smallg.txt') as file:
+    for line in file:
+        line = line.rstrip()
+        alleles = line.split()
+        gCode = alleles[0]
+        alleles = alleles[1:]
 
-if not missingAllelesIng:
-    print('No missing alleles found')
+        gToAlleles[gCode] = alleles
+
+#add missing alleles to Smallg.txt
+for allele4d in missingAllelesIng:
+    if allele4d not in gToAlleles:
+        sortedAlleles = []
+        for missingAllele in missingAllelesIng[allele4d]:
+            sortedAlleles.append(missingAllele)
+        sortedAlleles.sort()
+        gToAlleles[allele4d] = sortedAlleles
+
+gToAllelesSorted = [[gCode, gToAlleles[gCode]] for gCode in gToAlleles]
+gToAllelesSorted.sort(key=itemgetter(0))
+
+with open('Smallg.txt', 'w') as out:
+    for elem in gToAllelesSorted:
+        out.write(elem[0] + '\t' + '\t'.join(elem[1]) + '\n')
+
+print('Following alleles were added:')
+for allele4d in missingAllelesIng:
+    for allele in missingAllelesIng[allele4d]:
+        print(allele)
