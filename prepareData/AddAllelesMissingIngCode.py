@@ -95,7 +95,7 @@ with open('Smallg.txt', 'w') as out:
     for elem in gToAllelesSorted:
         out.write(elem[0] + '\t' + '\t'.join(elem[1]) + '\n')
 
-print('Following alleles were added:')
-for allele4d in missingAllelesIng:
-    for allele in missingAllelesIng[allele4d]:
-        print(allele)
+#print('Following alleles were added:')
+#for allele4d in missingAllelesIng:
+#    for allele in missingAllelesIng[allele4d]:
+#        print(allele)
