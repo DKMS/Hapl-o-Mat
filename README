@@ -13,19 +13,34 @@ The latest version can be found on the Github server under
 INSERT URL.
 
  
+Requirements
+------------
+Installing Hapl-o-Mat requires a C++ compiler with C++11 support. To
+produce the required data on HLA nomenclature python is required.
+
+
 Installing under Linux
 ----------------------
-Installing Hapl-o-Mat requires a C++ compiler with C++11 support.
-Hapl-o-Mat is compiled via a Makefile (g++ as default compiler):
+Using GNU compiler collection (GCC), Hapl-o-Mat is compiled via a
+Makefile:
 
     make
     make clean
 
+If you use another compiler than GCC, adapt the compiler flags in
+the Makefile, e.g. -march=native
+
+
+Installing under Windows
+------------------------
+
+
 
 Usage
 -----
-For a quick guide on Hapl-o-Mat and some tutorials please see file
-GETTING STARTED.
+For information on how to use Hapl-o-Mat and some tutorials follow
+the guide detailedGettingStarted.pdf or GETTINGSTARTED if you are a seasoned
+Linux user.
 
 
 Citation

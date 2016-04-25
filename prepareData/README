@@ -54,23 +54,20 @@ HLA-DMB, HLA-DOA, HLA-DOB, HLA-DRB6, HLA-DRB7, HLA-DRB8, HLA-DRB9, HLA-DRB10)
 from http://hla.alleles.org/alleles/class2.html if you require those loci.
 
 8)Create files 
-    a)python2 TransferAlphaToMultipleAlleleCodes.py
-    b)python2 BuildAllAllelesFrom_hla_nom_g.py
+    a)python TransferAlphaToMultipleAlleleCodes.py
+    b)python BuildAllAllelesFrom_hla_nom_g.py
     c)add alleles from step 6) and 7) to allAlleles.txt
-    d)python2 BuildAllAllelesExpanded.py
-    e)python2 BuildP.py
-    f)python2 BuildLargeG.py
-    g)python2 BuildSmallg.py
-    h)python2 BuildAmbiguity.py
-    i)python2 AddGToAmbiguity.py
-    j)python2 PrintAllelesMissingIngCode.py
-	 
-9)Add the listed alleles to Smallg.txt. They must be added next to the other
-alleles of the same locus.
-
-10)Move LargeG.txt, P.txt, Smallg.txt, Ambiguity.txt, MultipleAlleleCodes.txt,
+    d)python BuildAllAllelesExpanded.py
+    e)python BuildP.py
+    f)python BuildLargeG.py
+    g)python BuildSmallg.py
+    h)python BuildAmbiguity.py
+    i)python AddGToAmbiguity.py
+    j)python AddAllelesMissingIngCode.py
+ 
+9)Move LargeG.txt, P.txt, Smallg.txt, Ambiguity.txt, MultipleAlleleCodes.txt,
 and AllAllelesExpanded.txt to folder data.
 
-11)If you want to analyse data in GL-format with unresolved genotypes (GL-id=0),
+10)If you want to analyse data in GL-format with unresolved genotypes (GL-id=0),
 you can prepare the file AlleleList.txt from the GL-id input file by running
 BuildAlleleList.py. Then move AlleleList.txt to data.
