@@ -28,7 +28,7 @@ Makefile:
     make clean
 
 If you use another compiler than GCC, adapt the compiler flags in
-the Makefile, e.g. -march=native
+the Makefile, e.g. -march=native.
 
 
 Installing under Windows

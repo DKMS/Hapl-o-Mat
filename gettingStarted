@@ -18,7 +18,7 @@ supported.
 This guide explains how to use Hapl-o-Mat under Linux. If you are new to Linux,
 please refer to the more detailed guide detailedGettingStarted.pdf 
 
-This guid is divided into the following sections:
+This guide is divided into the following sections:
 
 1) Input Files
 2) Data Preparation
@@ -58,7 +58,7 @@ Hapl-o-Mat requires the following files to estimate haplotype frequencies:
 -------------------
 Hapl-o-Mat relies on information on the HLA nomenclature. This information is
 provided by data files, which are placed in the folder “data”. As the HLA
-nomenclature evolves over time, i.e. by finding new alleles or adding new NMDP
+nomenclature evolves over time, e.g. by finding new alleles or adding new NMDP
 codes, it is important to update data from time to time. Hapl-o-Mat relies on
 the following files.
 
@@ -76,9 +76,9 @@ the following files.
    MultipleAlleleCodes.txt: A list of multiple allele codes and their translation to
    alleles.
 
-   Smallg.txt: A list of g-groups with their enclosed alleles in 8-digit resolution.
-
    P.txt: A list of P-groups with their enclosed alleles in 8-digit resolution.
+
+   Smallg.txt: A list of g-groups with their enclosed alleles in 8-digit resolution.
 
 In order to create this files, follow the instructions in "prepareData/README".
 
@@ -202,10 +202,14 @@ before running Hapl-o-Mat.
 
 5) Install
 ----------
-Create the executable "haplomat" via Makefile:
+Using GNU compiler collection (GCC), Hapl-o-Mat is compiled via a
+Makefile:
 
     make
     make clean
+
+If you use another compiler than GCC, adapt the compiler flags in
+the Makefile, e.g. -march=native.
 
 
 6) Run Hapl-o-Mat
@@ -257,9 +261,9 @@ Set the parameters in parametersMA to the following values:
     DO_AMBIGUITYFILTER=false
     EXPAND_LINES_AMBIGUITYFILTER=false
     #EM-algorithm
-    INITIALIZATION_HAPLOTYPEFREQUENCIES=random
-    EPSILON=1e-5
-    CUT_HAPLOTYPEFREQUENCIES=1e-5
+    INITIALIZATION_HAPLOTYPEFREQUENCIES=perturbation
+    EPSILON=1e-6
+    CUT_HAPLOTYPEFREQUENCIES=1e-6
     RENORMALIZE_HAPLOTYPEFREQUENCIES=true
     SEED=1000
 
