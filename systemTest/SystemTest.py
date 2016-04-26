@@ -25,6 +25,7 @@ import os
 import shutil
 import copy
 from subprocess import Popen
+import numpy as np
 
 def copyFolder(path):
 
@@ -33,9 +34,8 @@ def copyFolder(path):
           print('Folder ' + pathNewFolder + ' already exists.')
      else:
           shutil.copytree(path, pathNewFolder)
-          os.remove(pathNewFolder + '/estimatedHaplotypeFrequencies.dat')
-          os.makedirs(pathNewFolder + '/results')
-          shutil.copytree('dataSystemTest', pathNewFolder + '/data')
+          os.remove(pathNewFolder + '/results/estimatedHaplotypeFrequencies.dat')
+          shutil.copytree('../data', pathNewFolder + '/data')
           shutil.copy('../haplomat', pathNewFolder)
 
 def startJob(path):
@@ -44,7 +44,7 @@ def startJob(path):
 
 def readResults(path):
      haploAndFreqs = dict()
-     with open(path + '/estimatedHaplotypeFrequencies.dat') as file:
+     with open(path + '/results/estimatedHaplotypeFrequencies.dat') as file:
           for line in file:
                line = line.rstrip('\r\n')
                split = line.split()
@@ -53,23 +53,33 @@ def readResults(path):
                haploAndFreqs[haplo] = freq
      return haploAndFreqs
 
-def compareResults(path):
+def compareResults(path, epsilon):
      original = readResults(path)
-     test = readResults(path + 'New/results/')
+     test = readResults(path + 'New')
 
-     missing = 0
-     tooMany = 0
-     different = 0
-     keys = original.keys() | test.keys()
-     for key in keys:
-          if not key in original:
-               tooMany += 1
-          if not key in test:
-               missing += 1
-          if key in original and key in test:
-               if original[key] != test[key]:
-                    different += 1
-     return missing, tooMany, different
+     bothFreqs = []
+     for haplo in original.keys() | test.keys():
+          entry = []
+          if haplo in original:
+               entry.append(original[haplo])
+          else:
+               entry.append(0.)
+          if haplo in test:
+               entry.append(test[haplo])
+          else:
+               entry.append(0.)
+          bothFreqs.append(entry)
+
+     numberDifferentFreqs = 0
+     for bothFreq in bothFreqs:
+          fOrg = bothFreq[0]
+          fTest = bothFreq[1]
+          
+          if np.abs(fOrg - fTest) - epsilon > 1e-14:
+               print(fOrg, fTest)
+               numberDifferentFreqs += 1          
+
+     return numberDifferentFreqs
                
 def clean(path):
      shutil.rmtree(path)
@@ -79,22 +89,23 @@ def clean(path):
 
 
 folders = ['MA_Mix', 'MA_g', 'MA_P', 'MA_2d', 'MA_4d', 'MA_G', 'MA_6d', 'MA_8d', 'GL_a', 'GL_b', 'GLC_a']
+precisions = {'MA_Mix': 1e-4, 'MA_g': 1e-5, 'MA_P': 9e-5, 'MA_2d': 1e-5, 'MA_4d': 1e-8, 'MA_G': 9e-6, 'MA_6d': 5e-5, 'MA_8d': 1e-6,
+              'GL_a': 1e-4, 'GL_b': 1e-4, 'GLC_a': 1e-4}
+
 testsPassed = 0
 
 for folder in folders:          
      print('#########' + folder)
      copyFolder(folder)
      startJob(folder + 'New')
-     missing, tooMany, different = compareResults(folder)
-     if missing == 0 and tooMany == 0 and different == 0:
+     numberDifferentFreqs = compareResults(folder, precisions[folder])
+     if numberDifferentFreqs == 0:
           testsPassed += 1
           print('Test succeeded.')
           clean(folder + 'New')
      else:
           print('Test failed')
-          print('\t Missing haplotypes: ' + str(missing))
-          print('\t Additional haplotypes: ' + str(tooMany))
-          print('\t Haplotypes with different frequencies: ' + str(different))
+          print('\t Haplotypes with different frequencies: ' + str(numberDifferentFreqs))
           print('\n')
 
 print('\n' + str(testsPassed) + '/' + str(len(folders)) + ' tests passed.' )
