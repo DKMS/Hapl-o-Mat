@@ -4,7 +4,7 @@ FILENAME_GLID=a.glid
 FILENAME_HAPLOTYPES=results/haplotypes.dat
 FILENAME_GENOTYPES=results/genotypes.dat
 FILENAME_HAPLOTYPEFREQUENCIES=results/estimatedHaplotypeFrequencies.dat
-FILENAME_EPSILON_LOGL=results/epsilon.dat
+FILENAME_EPSILON_LOGL=results/epsilonVsSteps.dat
 #reports
 LOCIORDER=B,A,DPB1,DRB1,C,DQB1
 LOCI_AND_RESOLUTIONS=DRB1:g,DPB1:P,C:g,DQB1:4d,B:asItIs,A:4d
