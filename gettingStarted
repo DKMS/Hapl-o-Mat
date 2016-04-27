@@ -57,10 +57,10 @@ Hapl-o-Mat requires the following files to estimate haplotype frequencies:
 2) Data Preparation
 -------------------
 Hapl-o-Mat relies on information on the HLA nomenclature. This information is
-provided by data files, which are placed in the folder “data”. As the HLA
-nomenclature evolves over time, e.g. by finding new alleles or adding new NMDP
-codes, it is important to update data from time to time. Hapl-o-Mat relies on
-the following files.
+provided by data files, which must be placed in the folder “data”, which is going to
+be created during data preparation. As the HLA nomenclature evolves over time, e.g.
+by finding new alleles or adding new NMDP codes, it is important to update data from
+time to time. Hapl-o-Mat relies on the following files.
 
    AllAllelesExpanded.txt: A list of relevant existing HLA alleles with their
    enclosed more-digits typing resolutions.

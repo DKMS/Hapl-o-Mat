@@ -22,9 +22,9 @@ preambleC = '''/*
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * Christian Schäfer
+ * Christian Schaefer
  * Kressbach 1
- * 72072 Tübingen, Germany
+ * 72072 Tuebingen, Germany
  *
  * T +49 7071 943-2063
  * F +49 7071 943-2090
@@ -53,9 +53,9 @@ preamblePython = '''#
 # 
 # Copyright (C) 2016, DKMS gGmbH 
 # 
-# Christian Schäfer
+# Christian Schaefer
 # Kressbach 1
-# 72072 Tübingen, Germany
+# 72072 Tuebingen, Germany
 #
 # T +49 7071 943-2063
 # F +49 7071 943-2090
