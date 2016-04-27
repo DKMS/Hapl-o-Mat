@@ -1,87 +1,67 @@
-#Jan 2015
-#Christian Schaefer
-#input: allAlleles.txt
-#Read in all possible alleles from allAlleles.txt. Create a translation for alleles from lower to 8 digit precision. Left column gives
+#
+# Hapl-o-Mat: A software for haplotype inference
+# 
+# Copyright (C) 2016, DKMS gGmbH 
+# 
+# Christian Schäfer
+# Kressbach 1
+# 72072 Tübingen, Germany
+#
+# T +49 7071 943-2063
+# F +49 7071 943-2090
+# cschaefer(at)dkms.de
+#
+# This file is part of Hapl-o-Mat
+# 
+# Hapl-o-Mat is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+# 
+# Hapl-o-Mat is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with Hapl-o-Mat; see the file COPYING.  If not, see
+# <http://www.gnu.org/licenses/>.
+# 
+
+
+#Read in all possible alleles from allAlleles.txt. Create a translation for alleles from lower (2d, 6d, 8d) to 8 digit precision. Left column gives
 #the allele and the right columns all extensions to higher precisions. To get a full list we also include translation from 8d to 8d.
-#The list is written to allAllelesExpanded.txt.
+#The list is written to AllAllelesExpanded.txt.
 
 from collections import defaultdict
-
-fourDigitDict = defaultdict(list)
-sixDigitDict = defaultdict(list)
-eightDigitDict = defaultdict(list)
-endingWithoutLetterDict = defaultdict(list)
-endingWithLetterDict = defaultdict(list)
+from operator import itemgetter
 
 endLetters = ('N', 'L', 'S', 'Q')
+
+expandedAlleles = defaultdict(list)
 with open('allAlleles.txt') as file:
     for line in file:
-        line = line.rstrip('\r\n')
-        originalCode = line.split()[0]
-        code = originalCode
-        if code.count(':') == 2:
-            code = line.rsplit(':',1)[0]
-        if code.count(':') == 3:
-            code = line.rsplit(':',2)[0]
-        fourDigitDict[code].append(line)
+         code = line.rstrip('\n')
 
-        if originalCode.count(':') == 1:
-            if originalCode.endswith(endLetters):
-                codeWithoutLetter = code[:-1]
-                if not codeWithoutLetter in fourDigitDict:
-                    endingWithoutLetterDict[codeWithoutLetter].append(originalCode)
-        else:
-            if originalCode.endswith(endLetters):
-                code = originalCode
-                letter = originalCode[-1]
-                while code.count(':') > 1:
-                    code = code.rsplit(':',1)[0]            
-                    code += letter
-                    endingWithLetterDict[code].append(originalCode)
+         fields = code.split(':')
+         shortCode = ''
+         for field in fields:
+             shortCode += field
+             expandedAlleles[shortCode].append(code)
 
-        if originalCode.count(':') > 1:
-            code = originalCode
-            if code.count(':') == 3:
-                code = originalCode.rsplit(':',1)[0]
-            sixDigitDict[code].append(originalCode)
+             if code.endswith(endLetters):
+                 endLetter = code[-1]                 
+                 if not shortCode.endswith(endLetters):
+                     shortCodeWithLetter = shortCode + endLetter
+                     expandedAlleles[shortCodeWithLetter].append(code)
+                 else:
+                     codeWithoutLetter = shortCode[:-1]
+                     expandedAlleles[codeWithoutLetter].append(code)
+             shortCode += ':'
+             
+sortedExpandedAlleles = [[allele, expandedAlleles[allele]] for allele in expandedAlleles]
+sortedExpandedAlleles.sort(key=itemgetter(0))
 
-        if originalCode.count(':') > 2:
-            code = originalCode
-            if code.count(':') == 4:
-                code = originalCode.rsplit(':',1)[0]
-            eightDigitDict[code].append(originalCode)
-
-alleleList = []
-for key in fourDigitDict:
-    oneLine = []
-    oneLine.append(key)
-    oneLine.append(fourDigitDict[key])
-    alleleList.append(oneLine)
-for key in sixDigitDict:
-    oneLine = []
-    oneLine.append(key)
-    oneLine.append(sixDigitDict[key])
-    alleleList.append(oneLine)
-for key in eightDigitDict:
-    oneLine = []
-    oneLine.append(key)
-    oneLine.append(eightDigitDict[key])
-    alleleList.append(oneLine)
-for key in endingWithoutLetterDict:
-    oneLine = []
-    oneLine.append(key)
-    oneLine.append(endingWithoutLetterDict[key])
-    alleleList.append(oneLine)
-for key in endingWithLetterDict:
-    oneLine = []
-    oneLine.append(key)
-    oneLine.append(endingWithLetterDict[key])
-    alleleList.append(oneLine)
-
-alleleList.sort()
-
-with open('allAllelesExpanded.txt', 'w') as file:
-    for entry in alleleList:
-        file.write(entry[0] + '\t' + '\t'.join(entry[1]) + '\n')
-        
-
+with open('AllAllelesExpanded.txt', 'w') as out:
+    for allelesAndExpandedAlleles in sortedExpandedAlleles:
+        out.write(allelesAndExpandedAlleles[0] + '\t' + '\t'.join(allelesAndExpandedAlleles[1]) + '\n')

@@ -1,31 +1,40 @@
 /*
- * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ * Hapl-o-Mat: A software for haplotype inference
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * This file is part of Hapl-O-mat
+ * Christian Schäfer
+ * Kressbach 1
+ * 72072 Tübingen, Germany
  *
- * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * T +49 7071 943-2063
+ * F +49 7071 943-2090
+ * cschaefer(at)dkms.de
+ *
+ * This file is part of Hapl-o-Mat
+ *
+ * Hapl-o-Mat is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  *
- * Hapl-O-mat is distributed in the hope that it will be useful,
+ * Hapl-o-Mat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * along with Hapl-o-Mat; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
 
 #ifndef Phenotype_header
 #define Phenotype_header
 
-#include "Hash.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "Hash.h"
 
 class Haplotypes;
 
@@ -57,16 +66,6 @@ class Phenotype{
 
   double computeSummedFrequencyDiplotypes () const;
   void expectation(const Haplotypes & haplotypes);
-  bool expectationAndRemove(const Haplotypes & haplotypes);
-  int derivativeHaplotypeFrequency(const size_t haplotype,
-				   const size_t haplotype_k,
-				   const size_t lastHaplotype) const;
-  double derivative(const Haplotypes & haplotypes,
-		    const size_t haplotypeId,
-		    const size_t negativeHaplotype) const;
-  double secondDerivative(const size_t haplotype_k,
-			  const size_t haplotype_l,
-			  const size_t negativeHaplotype) const;
 
  private:
   double numInDonors;
@@ -81,7 +80,6 @@ class Phenotypes : public Hash<Phenotype>{
  virtual size_t computeSizeInBytes();
  
  void expectationStep(const Haplotypes & haplotypes);
- void expectationAndRemoveStep(const Haplotypes & haplotypes);
  double computeLogLikelihood() const;
 
  private:

@@ -1,22 +1,30 @@
 /*
- * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ * Hapl-o-Mat: A software for haplotype inference
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * This file is part of Hapl-O-mat
+ * Christian Schäfer
+ * Kressbach 1
+ * 72072 Tübingen, Germany
  *
- * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * T +49 7071 943-2063
+ * F +49 7071 943-2090
+ * cschaefer(at)dkms.de
+ *
+ * This file is part of Hapl-o-Mat
+ *
+ * Hapl-o-Mat is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  *
- * Hapl-O-mat is distributed in the hope that it will be useful,
+ * Hapl-o-Mat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * along with Hapl-o-Mat; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
 
@@ -24,19 +32,16 @@
 #define Locus_header
 
 #include <array>
-#include <memory>
 
 #include "Allele.h"
-
 
 class Locus{
 
  public:
   enum reportType{
-    H0,
-    H1,
-    H2,
-    H2M,
+    N,
+    A,
+    M,
     I
   };
 
@@ -90,8 +95,8 @@ class UnphasedLocus : public Locus{
  public:
   explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus) 
     : Locus(),
-    doH2Filter(false),
-    expandH2Lines(false),
+    doAmbiguityFilter(false),
+    expandAmbiguityLines(false),
     unphasedLocus(in_unphasedLocus),
     pAllelesAtBothLocusPositions()
     {
@@ -99,11 +104,11 @@ class UnphasedLocus : public Locus{
     }
   explicit UnphasedLocus(const strVecArr_t & in_unphasedLocus,
 			 const Allele::codePrecision in_wantedPrecision,
-			 const bool in_doH2Filter,
-			 const bool in_expandH2Lines)
+			 const bool in_doAmbiguityFilter,
+			 const bool in_expandAmbiguityLines)
     : Locus(),
-    doH2Filter(in_doH2Filter),
-    expandH2Lines(in_expandH2Lines),
+    doAmbiguityFilter(in_doAmbiguityFilter),
+    expandAmbiguityLines(in_expandAmbiguityLines),
     unphasedLocus(in_unphasedLocus),
     pAllelesAtBothLocusPositions()
     {
@@ -117,23 +122,23 @@ class UnphasedLocus : public Locus{
   void buildResolvedPhasedLocus();
 
  private:
-  bool doH2Filter;
-  bool expandH2Lines;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
   strVecArr_t unphasedLocus;
   std::vector<std::vector<std::shared_ptr<Allele>>> pAllelesAtBothLocusPositions;
 };
 
-class H2Filter{
+class AmbiguityFilter{
 
  public:
-  explicit H2Filter(const strVecVecArr_t in_codesAtBothLocusPositions,
-		    const bool in_expandH2Lines)
-    : expandH2Lines(in_expandH2Lines),
+  explicit AmbiguityFilter(const strVecVecArr_t in_codesAtBothLocusPositions,
+		    const bool in_expandAmbiguityLines)
+    : expandAmbiguityLines(in_expandAmbiguityLines),
     isH1(false),
-    isH2(false),
+    isAmbiguity(false),
     isMultipleLines(false),
     codesAtBothLocusPositions(in_codesAtBothLocusPositions),
-    possibleH2Lines(),
+    possibleAmbiguityLines(),
     phasedLocus(),
     codesAndInAtLocusPosition1(),
     codesAndInAtLocusPosition2()
@@ -149,27 +154,32 @@ class H2Filter{
   void checkIfH1Possible(const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition);
   void preFilter();
   void filter();
-  void matchCodesToH2Lines(const std::string lhs,
+  void matchCodesToAmbiguityLines(const std::string lhs,
 			   const std::string rhs);
-  bool isH2ElementInCodesAndIn(const std::string code,
+  bool isAmbiguityElementInCodesAndIn(const std::string code,
 			       const std::vector<std::pair<strVec_t, bool>> & codesAndInAtLocusPosition);
 
   bool getIsH1() const {return isH1;}
-  bool getIsH2() const {return isH2;}
+  bool getIsAmbiguity() const {return isAmbiguity;}
   bool getIsMultipleLines() const {return isMultipleLines;}
   const strArrVec_t & getPhasedLocus() const {return phasedLocus;}
 
+  FileAmbiguity & fileAmbiguity() const
+    {
+      static FileAmbiguity fileAmbiguity("data/Ambiguity.txt"); 
+      return fileAmbiguity;
+    }
+
  private:
-  bool expandH2Lines;
+  bool expandAmbiguityLines;
   bool isH1;
-  bool isH2;
+  bool isAmbiguity;
   bool isMultipleLines;
   strVecVecArr_t codesAtBothLocusPositions;
-  std::vector<FileH2::list_t::const_iterator> possibleH2Lines;
+  std::vector<FileAmbiguity::list_t::const_iterator> possibleAmbiguityLines;
   strArrVec_t phasedLocus;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition1;
   std::vector<std::pair<strVec_t, bool>> codesAndInAtLocusPosition2;
-  static FileH2 fileH2;
 };
 
 

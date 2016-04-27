@@ -1,22 +1,30 @@
 /*
- * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ * Hapl-o-Mat: A software for haplotype inference
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * This file is part of Hapl-O-mat
+ * Christian Schäfer
+ * Kressbach 1
+ * 72072 Tübingen, Germany
  *
- * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * T +49 7071 943-2063
+ * F +49 7071 943-2090
+ * cschaefer(at)dkms.de
+ *
+ * This file is part of Hapl-o-Mat
+ *
+ * Hapl-o-Mat is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  *
- * Hapl-O-mat is distributed in the hope that it will be useful,
+ * Hapl-o-Mat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * along with Hapl-o-Mat; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
 
@@ -26,9 +34,8 @@
 #include <string>
 
 #include "Glid.h"
-#include "Typedefs.h"
-#include "Allele.h"
 #include "Parameters.h"
+#include "Typedefs.h"
 
 class Phenotypes;
 class Haplotypes;
@@ -56,12 +63,15 @@ class InputFile{
   explicit InputFile(const std::string in_inputFileName)
     : inputFileName(in_inputFileName),
     haplotypesFileName(),
-    phenotypesFileName(),
+    genotypesFileName(),
     numberLoci(0),
     numberDonors(0),
     numberHaplotypes(0),
     numberPhenotypes(0),  
-    haplotypeCombinations(){}
+    haplotypeCombinations()
+      {
+	std::cout << "#########Data preprocessing" << std::endl;
+      }
   virtual ~InputFile(){}
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
@@ -72,13 +82,12 @@ class InputFile{
 				 const std::shared_ptr<BasicReport> listOfpReports,
 				 std::ofstream & HaplotypesFile);
 
-  size_t getNumberLoci() const {return numberLoci;}
   size_t getNumberDonors() const {return numberDonors;}
 
  protected:
   std::string inputFileName;
   std::string haplotypesFileName;
-  std::string phenotypesFileName;
+  std::string genotypesFileName;
   size_t numberLoci;
   size_t numberDonors;
   size_t numberHaplotypes;
@@ -92,7 +101,7 @@ class InputFileToEdit : public InputFile{
   explicit InputFileToEdit(const std::string in_inputFileName)
     : InputFile(in_inputFileName),
     numberRemovedDonors(0),
-    wantedPrecision(),
+    lociAndResolutions(),
     minimalFrequency(){}
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
@@ -106,7 +115,7 @@ class InputFileToEdit : public InputFile{
 
  protected:
   size_t numberRemovedDonors;
-  Allele::codePrecision wantedPrecision;
+  std::map<std::string, Allele::codePrecision> lociAndResolutions;
   double minimalFrequency;
 };
 
@@ -116,58 +125,78 @@ class GL : public InputFileToEdit{
   explicit GL(const ParametersGL & parameters)
     : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
-    lociToDo(parameters.getLociToDo()),
-    booleanLociToDo(buildBooleanLociToDo()),
+    lociOrder(parameters.getLociOrder()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
-	 parameters.getWantedPrecision(),
-	 updateLociToDoViaPullFile(),
-	 parameters.getDoH2Filter(),
-	 parameters.getExpandH2Lines(),
+	 parameters.getLociAndResolutions(),
+	 parameters.getLociOrder(),
+	 parameters.getDoAmbiguityFilter(),
+	 parameters.getExpandAmbiguityLines(),
 	 parameters.getResolveUnknownGenotype())
       {
 	haplotypesFileName = parameters.getHaplotypesFileName();
-	phenotypesFileName = parameters.getPhenotypesFileName();
-	wantedPrecision = parameters.getWantedPrecision();
+	genotypesFileName = parameters.getGenotypesFileName();
+	lociAndResolutions = parameters.getLociAndResolutions();
+	numberLoci = lociAndResolutions.size();
 	minimalFrequency = parameters.getMinimalFrequency();
       }
   
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
 
-  std::vector<bool> buildBooleanLociToDo();
-  strVec_t updateLociToDoViaPullFile() const;
-
  private:
   std::string glidFileName;
-  strVec_t lociToDo;
+  strVec_t lociOrder;
   std::vector<bool> booleanLociToDo;
   bool resolveUnknownGenotype;
   GlidFile glid;
 };
 
-class DKMS : public InputFileToEdit{
+class GLC : public InputFileToEdit{
 
  public:
-  explicit DKMS(const ParametersDKMS & parameters)
+  explicit GLC(const ParametersGLC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
-    doH2Filter(parameters.getDoH2Filter()),
-    expandH2Lines(parameters.getExpandH2Lines()),
-    lociNames()
+    doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
+    expandAmbiguityLines(parameters.getExpandAmbiguityLines())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
-      phenotypesFileName = parameters.getPhenotypesFileName();
-      wantedPrecision = parameters.getWantedPrecision();
+      genotypesFileName = parameters.getGenotypesFileName();
+      lociAndResolutions = parameters.getLociAndResolutions();
+      numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
     }
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
 
-  void readLociNames(const std::string line);
+ private:
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
+};
+
+class MA : public InputFileToEdit{
+
+ public:
+  explicit MA(const ParametersMA & parameters)
+    : InputFileToEdit(parameters.getInputFileName()),
+    doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
+    expandAmbiguityLines(parameters.getExpandAmbiguityLines()),
+    lociNamesFromFile()
+    {
+      haplotypesFileName = parameters.getHaplotypesFileName();
+      genotypesFileName = parameters.getGenotypesFileName();
+      lociAndResolutions = parameters.getLociAndResolutions();
+      numberLoci = lociAndResolutions.size();
+      minimalFrequency = parameters.getMinimalFrequency();
+    }
+
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
+
+  void readLociNamesFromFile(const std::string line);
 
  private:
-  bool doH2Filter;
-  bool expandH2Lines;
-  strVec_t lociNames;
+  bool doAmbiguityFilter;
+  bool expandAmbiguityLines;
+  strVec_t lociNamesFromFile;
 };
 
 class InputFileToRead : public InputFile{
@@ -177,7 +206,7 @@ class InputFileToRead : public InputFile{
     : InputFile(parameters.getInputFileName())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
-      phenotypesFileName = parameters.getPhenotypesFileName();
+      genotypesFileName = parameters.getGenotypesFileName();
     }
 
   virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);

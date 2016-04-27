@@ -1,37 +1,50 @@
 /*
- * Hapl-O-mat: A program for HLA haplotype frequency estimation
+ * Hapl-o-Mat: A software for haplotype inference
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * This file is part of Hapl-O-mat
+ * Christian Schäfer
+ * Kressbach 1
+ * 72072 Tübingen, Germany
  *
- * Hapl-O-mat is free software: you can redistribute it and/or modify
+ * T +49 7071 943-2063
+ * F +49 7071 943-2090
+ * cschaefer(at)dkms.de
+ *
+ * This file is part of Hapl-o-Mat
+ *
+ * Hapl-o-Mat is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  *
- * Hapl-O-mat is distributed in the hope that it will be useful,
+ * Hapl-o-Mat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Hapl-O-mat; see the file COPYING.  If not, see
+ * along with Hapl-o-Mat; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
 
 #ifndef Utility_header
 #define Utility_header
 
-#include <fstream>
-#include <memory>
 #include <chrono>
+#include <fstream>
 
-#include "Typedefs.h"
 #include "Allele.h"
+#include "Typedefs.h"
 
 const double ZERO = 1e-14;
 const double MAX_MEMORY = 200000.;
+
+template<typename T, typename... Args>
+  std::unique_ptr<T> make_unique(Args&&... args)
+{
+  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 std::chrono::high_resolution_clock::time_point getTime();
 size_t getTimeDifference(const std::chrono::high_resolution_clock::time_point t1,
@@ -91,9 +104,7 @@ std::string cutCodeKeepingLastLetter(const std::string &s, const size_t toNumber
 void buildCombinations(std::vector<std::vector<size_t>> & listOfCombinations,
 		       const size_t n,
 		       const size_t k);
-double derivative(const double fxh,
-		  const double fx,
-		  const double h);
+
 template<typename T>
 void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in);
 
