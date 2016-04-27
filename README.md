@@ -47,25 +47,25 @@ join via [Github](https://github.com/DKMS/Hapl-o-Mat)
 
 ##Author
 Christian Schaefer
-DKMS gGmbH
-Kressbach 1
-72072 Tuebingen, Germany
 
-T +49 7071 943-2063
-F +49 7071 943-2090
-cschaefer(at)dkms.de
+DKMS gGmbH                                                                                                                            
+Kressbach 1                                                                                                                           
+72072 Tuebingen, Germany                                                                                                              
+
+T +49 7071 943-2063                                                                                                                   
+F +49 7071 943-2090                                                                                                                   
+cschaefer(at)dkms.de                                                                                                                  
 
 ##License
 Copyright (C) 2016, DKMS gGmbH 
 
-Christian Schaefer
-DKMS gGmbH
-Kressbach 1
-72072 Tuebingen, Germany
+DKMS gGmbH                                                                                                                            
+Kressbach 1                                                                                                                           
+72072 Tuebingen, Germany                                                                                                              
 
-T +49 7071 943-2063
-F +49 7071 943-2090
-cschaefer(at)dkms.de
+T +49 7071 943-2063                                                                                                                   
+F +49 7071 943-2090                                                                                                                   
+cschaefer(at)dkms.de   
   
 Hapl-o-Mat is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
