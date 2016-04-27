@@ -2,7 +2,7 @@ Hapl-o-Mat v 1.0 03/16/2016
 
 General information
 -------------------
-Hapl-o-Mat is software for HLA haplotype inference via an
+Hapl-o-Mat is software for haplotype inference via an
 expectation-maximization algorithm. It supports processing and
 resolving various forms of HLA genotype data.
 
@@ -66,14 +66,23 @@ DKMS gGmbH
 Kressbach 1
 72072 Tuebingen, Germany
 
-T +49(0)7071 943-2063
-F +49(0)7071 943-2090
+T +49 7071 943-2063
+F +49 7071 943-2090
 cschaefer(at)dkms.de
 
 
 License
 -------
 Copyright (C) 2016, DKMS gGmbH 
+
+Christian Schäfer
+DKMS gGmbH
+Kressbach 1
+72072 Tübingen, Germany
+
+T +49 7071 943-2063
+F +49 7071 943-2090
+cschaefer(at)dkms.de
   
 Hapl-o-Mat is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

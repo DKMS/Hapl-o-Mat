@@ -1,7 +1,15 @@
 /*
- * Hapl-o-Mat: A program for HLA haplotype frequency estimation
+ * Hapl-o-Mat: A software for haplotype inference
  *
  * Copyright (C) 2016, DKMS gGmbH 
+ *
+ * Christian Schäfer
+ * Kressbach 1
+ * 72072 Tübingen, Germany
+ *
+ * T +49 7071 943-2063
+ * F +49 7071 943-2090
+ * cschaefer(at)dkms.de
  *
  * This file is part of Hapl-o-Mat
  *
