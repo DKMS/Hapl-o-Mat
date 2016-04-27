@@ -1,4 +1,4 @@
-#Hapl-o-Mat v 1.0 04/27/2016
+#Hapl-o-Mat v 1.0
 
 ##General information
 Hapl-o-Mat is software for haplotype inference via an
@@ -46,8 +46,7 @@ If you want to participate in actively developing Hapl-o-Mat please
 join via [Github](https://github.com/DKMS/Hapl-o-Mat)
 
 ##Author
-Christian Schaefer
-
+Christian Schaefer                                                                                                                    
 DKMS gGmbH                                                                                                                            
 Kressbach 1                                                                                                                           
 72072 Tuebingen, Germany                                                                                                              
