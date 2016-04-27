@@ -29,6 +29,7 @@ python BuildSmallg.py
 python BuildAmbiguity.py
 python AddGToAmbiguity.py
 python AddAllelesMissingIngCode.py
+mkdir ../data
 mv AllAllelesExpanded.txt Ambiguity.txt LargeG.txt MultipleAlleleCodes.txt P.txt Smallg.txt ../data
 
 
