@@ -28,6 +28,9 @@ If you use another compiler than GCC, adapt the compiler flags in
 the Makefile, e.g. -march=native.
 
 ##Installing under Windows
+A detailed explanation on how to install Hapl-o-Mat under Windows using
+the Eclipse IDE for C/C++ Developers can be found in
+detailedGettingStartedWindows.pdf.
 
 ##Usage
 For information on how to use Hapl-o-Mat and some tutorials follow
