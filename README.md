@@ -34,9 +34,9 @@ detailedGettingStartedWindows.pdf.
 
 ##Usage
 For information on how to use Hapl-o-Mat and some tutorials using Linux
-follow the guide detailedGettingStartedLinux.pdf or gettingStarted if you
-are a seasoned Linux user. If you use Windows, follow the guide 
-detailedGettingStartedWindows.pdf
+follow the guide detailedGettingStartedLinux.pdf. If you are a seasoned
+Linux user, refer to gettingStarted. If you use Windows, follow the guide 
+detailedGettingStartedWindows.pdf.
 
 ##Citation
 If you use Hapl-o-Mat for your research, please cite
