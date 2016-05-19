@@ -33,9 +33,10 @@ the Eclipse IDE for C/C++ Developers can be found in
 detailedGettingStartedWindows.pdf.
 
 ##Usage
-For information on how to use Hapl-o-Mat and some tutorials follow
-the guide detailedGettingStarted.pdf or gettingStarted if you are a
-seasoned Linux user.
+For information on how to use Hapl-o-Mat and some tutorials using Linux
+follow the guide detailedGettingStartedLinux.pdf or gettingStarted if you
+are a seasoned Linux user. If you use Windows, follow the guide 
+detailedGettingStartedWindows.pdf
 
 ##Citation
 If you use Hapl-o-Mat for your research, please cite
