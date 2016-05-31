@@ -96,9 +96,9 @@ def clean(path):
 
 
 
-folders = ['MA_Mix', 'MA_g', 'MA_P', 'MA_2d', 'MA_4d', 'MA_G', 'MA_6d', 'MA_8d', 'GL_a', 'GL_b', 'GLC_a']
-precisions = {'MA_Mix': 1e-4, 'MA_g': 1e-5, 'MA_P': 9e-5, 'MA_2d': 1e-5, 'MA_4d': 1e-8, 'MA_G': 9e-6, 'MA_6d': 5e-5, 'MA_8d': 1e-6,
-              'GL_a': 1e-4, 'GL_b': 1e-4, 'GLC_a': 1e-4}
+folders = ['MAC_Mix', 'MAC_g', 'MAC_P', 'MAC_2d', 'MAC_4d', 'MAC_G', 'MAC_6d', 'MAC_8d', 'GLS_a', 'GLS_b', 'GLSC_a']
+precisions = {'MAC_Mix': 1e-4, 'MAC_g': 1e-5, 'MAC_P': 9e-5, 'MAC_2d': 1e-5, 'MAC_4d': 1e-8, 'MAC_G': 9e-6, 'MAC_6d': 5e-5, 'MAC_8d': 1e-6,
+              'GLS_a': 1e-4, 'GLS_b': 1e-4, 'GLSC_a': 1e-4}
 
 testsPassed = 0
 

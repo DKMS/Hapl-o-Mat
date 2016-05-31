@@ -63,7 +63,7 @@ def clean(path):
      os.remove(path + '/Log.dat')
      os.remove(path + '/Err.dat')
 
-folders = ['MA_Mix', 'MA_g', 'MA_P', 'MA_2d', 'MA_4d', 'MA_G', 'MA_6d', 'MA_8d', 'GL_a', 'GL_b', 'GLC_a']
+folders = ['MAC_Mix', 'MAC_g', 'MAC_P', 'MAC_2d', 'MAC_4d', 'MAC_G', 'MAC_6d', 'MAC_8d', 'GLS_a', 'GLS_b', 'GLSC_a']
 
 for folder in folders:          
      print('#########' + folder)
