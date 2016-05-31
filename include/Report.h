@@ -136,10 +136,10 @@ class Report : public BasicReport{
   static double numberIReports;
 };
 
-class GLReport : public Report{
+class GLSReport : public Report{
 
  public:
-  explicit GLReport(const std::string line,
+  explicit GLSReport(const std::string line,
 		    const strVec_t & in_lociOrder,
 		    const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions) 
     : Report(in_lociAndResolutions),
@@ -147,7 +147,7 @@ class GLReport : public Report{
     {
       translateLine(line);
     }
-  explicit GLReport(const strArrVec_t & in_genotypeAtLoci,
+  explicit GLSReport(const strArrVec_t & in_genotypeAtLoci,
 		    const double in_frequency,
 		    const size_t in_numberLoci, 
 		    const std::string in_id,
@@ -159,7 +159,7 @@ class GLReport : public Report{
 					 const std::string in_id,
 					 const std::vector<Locus::reportType> & in_types)
     {
-      std::shared_ptr<Report> pReport = std::make_shared<GLReport> (in_genotypeAtLoci,
+      std::shared_ptr<Report> pReport = std::make_shared<GLSReport> (in_genotypeAtLoci,
 								    in_frequency, 
 								    in_numberLoci,
 								    in_id,
@@ -214,10 +214,10 @@ class ColumnReport : public Report{
   static std::unordered_map<std::string, std::shared_ptr<Locus>> singleLocusGenotypesAlreadyDone;
 };
 
-class GLCReport : public ColumnReport{
+class GLSCReport : public ColumnReport{
 
  public:
-  explicit GLCReport(const std::string line,
+  explicit GLSCReport(const std::string line,
 		     const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions,
 		     const double in_minimalFrequency,
 		     const bool in_doAmbiguityFilter,
@@ -228,7 +228,7 @@ class GLCReport : public ColumnReport{
     translateLine(line);
     types.resize(numberLoci);
   }
-  explicit GLCReport(const strArrVec_t & in_genotypeAtLoci,
+  explicit GLSCReport(const strArrVec_t & in_genotypeAtLoci,
 		     const double in_frequency,
 		     const size_t in_numberLoci, 
 		     const std::string in_id,
@@ -241,7 +241,7 @@ class GLCReport : public ColumnReport{
 					 const std::string in_id,
 					 const std::vector<Locus::reportType> & in_types)
     {
-      std::shared_ptr<Report> pReport = std::make_shared<GLCReport> (in_genotypeAtLoci,
+      std::shared_ptr<Report> pReport = std::make_shared<GLSCReport> (in_genotypeAtLoci,
 								    in_frequency, 
 								    in_numberLoci,
 								    in_id,
@@ -260,10 +260,10 @@ class GLCReport : public ColumnReport{
 
 };
 
-class MAReport : public ColumnReport{
+class MACReport : public ColumnReport{
   
  public:
-  explicit MAReport(const std::string line,
+  explicit MACReport(const std::string line,
 		   const strVec_t & in_lociNamesFromFile,
 		   const std::map<std::string, Allele::codePrecision> & in_lociAndResolutions,
 		   const double in_minimalFrequency,
@@ -276,7 +276,7 @@ class MAReport : public ColumnReport{
 	translateLine(line);
 	types.resize(numberLoci);
       }
-  explicit MAReport(const strArrVec_t & in_genotypeAtLoci,
+  explicit MACReport(const strArrVec_t & in_genotypeAtLoci,
 		   const double in_frequency,
 		   const size_t in_numberLoci, 
 		   const std::string in_id,
@@ -289,7 +289,7 @@ class MAReport : public ColumnReport{
 					 const std::string in_id,
 					 const std::vector<Locus::reportType> & in_types)
     {
-      std::shared_ptr<Report> pReport = std::make_shared<MAReport> (in_genotypeAtLoci,
+      std::shared_ptr<Report> pReport = std::make_shared<MACReport> (in_genotypeAtLoci,
 								   in_frequency, 
 								   in_numberLoci,
 								   in_id,

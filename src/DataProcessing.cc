@@ -134,7 +134,7 @@ void InputFileToEdit::printStatistics(){
   std::cout << std::endl;
 }
 
-void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void GLS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -152,7 +152,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLReport report(line, lociOrder, lociAndResolutions);
+    GLSReport report(line, lociOrder, lociAndResolutions);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports, glid, minimalFrequency, resolveUnknownGenotype);
 
@@ -174,7 +174,7 @@ void GL::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
-void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void GLSC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -192,7 +192,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    GLCReport report(line, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
+    GLSCReport report(line, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
@@ -218,7 +218,7 @@ void GLC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 }
 
 
-void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void MAC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -237,7 +237,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
       auto pos = find(lociNamesFromFile.cbegin(), lociNamesFromFile.cend(), wantedLocusName.first);
       if(pos == lociNamesFromFile.cend())
         {
-	  throw NotMatchingLociException_MA(wantedLocusName.first);
+	  throw NotMatchingLociException_MAC(wantedLocusName.first);
         }
     }
 
@@ -248,7 +248,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     if(line.length() == 1 || line.length() == 0)
       continue;
 
-    MAReport report(line, lociNamesFromFile, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
+    MACReport report(line, lociNamesFromFile, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
@@ -273,7 +273,7 @@ void MA::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
-void MA::readLociNamesFromFile(const std::string line){
+void MAC::readLociNamesFromFile(const std::string line){
 
   std::stringstream ss(line);
   std::string name;

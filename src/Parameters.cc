@@ -217,7 +217,7 @@ bool Parameters::isLineParameterAssignment(const std::string line) const{
     }
 }
 
-void ParametersGL::init(){
+void ParametersGLS::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
@@ -248,16 +248,16 @@ void ParametersGL::init(){
   file.close();
 }
 
-void ParametersGL::loci_assign(const std::string line){
+void ParametersGLS::loci_assign(const std::string line){
 
   size_t pos = line.find("=");
   std::string value = line.substr(pos + 1);
   lociOrder = split(value, ',');
 }
 
-void ParametersGL::print() const {
+void ParametersGLS::print() const {
 
-  std::cout << "\t GL format" << std::endl;
+  std::cout << "\t GLS format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Input pull file: " << pullFileName << std::endl; 
   std::cout << "\t Input GL-id file: " << glidFileName << std::endl; 
@@ -301,7 +301,7 @@ void ParametersGL::print() const {
   std::cout << std::endl;
 }
 
-void ParametersGL::fillSpecificParameterNamesAndFound(){
+void ParametersGLS::fillSpecificParameterNamesAndFound(){
 
   parameterNamesAndFound.emplace("FILENAME_PULL", false);
   parameterNamesAndFound.emplace("FILENAME_GLID", false);
@@ -314,7 +314,7 @@ void ParametersGL::fillSpecificParameterNamesAndFound(){
   parameterNamesAndFound.emplace("RESOLVE_MISSING_GENOTYPES", false);
 }
 
-void ParametersGLC::init(){
+void ParametersGLSC::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
@@ -342,9 +342,9 @@ void ParametersGLC::init(){
   file.close();
 }
 
-void ParametersGLC::print() const {
+void ParametersGLSC::print() const {
 
-  std::cout << "\t GLC format" << std::endl;
+  std::cout << "\t GLSC format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Input: " << inputFileName << std::endl; 
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
@@ -379,7 +379,7 @@ void ParametersGLC::print() const {
   std::cout << std::endl;
 }
 
-void ParametersGLC::fillSpecificParameterNamesAndFound(){
+void ParametersGLSC::fillSpecificParameterNamesAndFound(){
 
   parameterNamesAndFound.emplace("FILENAME_INPUT", false);
   parameterNamesAndFound.emplace("FILENAME_GENOTYPES", false);
@@ -389,7 +389,7 @@ void ParametersGLC::fillSpecificParameterNamesAndFound(){
   parameterNamesAndFound.emplace("EXPAND_LINES_AMBIGUITYFILTER", false);
 }
 
-void ParametersMA::init(){
+void ParametersMAC::init(){
 
   std::ifstream file;
   openFileToRead(parametersFileName, file);
@@ -417,7 +417,7 @@ void ParametersMA::init(){
   file.close();
 }
 
-void ParametersMA::print() const {
+void ParametersMAC::print() const {
 
   std::cout << "\t MA format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
@@ -454,7 +454,7 @@ void ParametersMA::print() const {
   std::cout << std::endl;
 }
 
-void ParametersMA::fillSpecificParameterNamesAndFound(){
+void ParametersMAC::fillSpecificParameterNamesAndFound(){
 
   parameterNamesAndFound.emplace("FILENAME_INPUT", false);
   parameterNamesAndFound.emplace("FILENAME_GENOTYPES", false);

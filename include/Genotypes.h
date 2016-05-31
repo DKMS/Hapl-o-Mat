@@ -54,10 +54,10 @@ class Genotype{
 
 };
 
-class GLGenotype : public Genotype{
+class GLSGenotype : public Genotype{
 
  public:
-  explicit GLGenotype(const std::string in_singleLocusGenotype, 
+  explicit GLSGenotype(const std::string in_singleLocusGenotype, 
 		      const Allele::codePrecision in_wantedResolution)
     : Genotype(in_wantedResolution)
     {
@@ -71,10 +71,10 @@ class GLGenotype : public Genotype{
   void orderSingleLocusGenotype();
 };
 
-class MAGenotype : public Genotype{
+class MACGenotype : public Genotype{
 
  public:
-  explicit MAGenotype(const strArr_t & in_initialAllelesAtLocusPositions, 
+  explicit MACGenotype(const strArr_t & in_initialAllelesAtLocusPositions, 
 		      const Allele::codePrecision in_wantedResolution)
     : Genotype(in_wantedResolution),
     initialAllelesAtLocusPositions(in_initialAllelesAtLocusPositions)

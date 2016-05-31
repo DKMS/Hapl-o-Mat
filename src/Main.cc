@@ -58,21 +58,21 @@ int main(int argc, char *argv[]){
       }
     inputFileFormat = argv[1];
 
-    if(inputFileFormat == "MA"){
-      std::unique_ptr<ParametersMA> pParametersTmp = make_unique<ParametersMA>();
-      std::unique_ptr<InputFile> pInputFileTmp = make_unique<MA>(*pParametersTmp);
+    if(inputFileFormat == "MAC"){
+      std::unique_ptr<ParametersMAC> pParametersTmp = make_unique<ParametersMAC>();
+      std::unique_ptr<InputFile> pInputFileTmp = make_unique<MAC>(*pParametersTmp);
       pParameters = std::move(pParametersTmp);
       pInputFile = std::move(pInputFileTmp);
     }
-    else if(inputFileFormat == "GL"){
-      std::unique_ptr<ParametersGL>pParametersTmp = make_unique<ParametersGL>();
-      std::unique_ptr<InputFile> pInputFileTmp = make_unique<GL>(*pParametersTmp);
+    else if(inputFileFormat == "GLS"){
+      std::unique_ptr<ParametersGLS>pParametersTmp = make_unique<ParametersGLS>();
+      std::unique_ptr<InputFile> pInputFileTmp = make_unique<GLS>(*pParametersTmp);
       pParameters = std::move(pParametersTmp);
       pInputFile = std::move(pInputFileTmp);
     }
-    else if(inputFileFormat == "GLC"){
-      std::unique_ptr<ParametersGLC>pParametersTmp = make_unique<ParametersGLC>();
-      std::unique_ptr<InputFile> pInputFileTmp = make_unique<GLC>(*pParametersTmp);
+    else if(inputFileFormat == "GLSC"){
+      std::unique_ptr<ParametersGLSC>pParametersTmp = make_unique<ParametersGLSC>();
+      std::unique_ptr<InputFile> pInputFileTmp = make_unique<GLSC>(*pParametersTmp);
       pParameters = std::move(pParametersTmp);
       pInputFile = std::move(pInputFileTmp);
     }

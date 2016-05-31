@@ -35,7 +35,7 @@
 #include "Typedefs.h"
 #include "Utility.h"
 
-std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
+std::shared_ptr<Locus> GLSGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
   std::shared_ptr<Locus> pLocus;
 
@@ -77,7 +77,7 @@ std::shared_ptr<Locus> GLGenotype::resolve(const bool doAmbiguityFilter, const b
   return pLocus;
 }
 
-void GLGenotype::orderSingleLocusGenotype(){
+void GLSGenotype::orderSingleLocusGenotype(){
 
   if(singleLocusGenotype.find("|") != std::string::npos){
     strVec_t genotypes = split(singleLocusGenotype, '|');
@@ -141,7 +141,7 @@ void GLGenotype::orderSingleLocusGenotype(){
   }
 }
 
-void MAGenotype::buildSingleLocusGenotype(){
+void MACGenotype::buildSingleLocusGenotype(){
 
   std::sort(initialAllelesAtLocusPositions.begin(), initialAllelesAtLocusPositions.end());
   singleLocusGenotype = "";
@@ -152,7 +152,7 @@ void MAGenotype::buildSingleLocusGenotype(){
   singleLocusGenotype.pop_back();
 }
 
-void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
+void MACGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) const{
 
   std::string nmdpCode = findNMDPCode(code);
   auto itFileNMDPCodes = fileNMDPCodes().getList().find(nmdpCode);
@@ -186,7 +186,7 @@ void MAGenotype::resolveNMDPCode(const std::string code, strVec_t & newCodes) co
     }
 }
 
-std::shared_ptr<Locus> MAGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
+std::shared_ptr<Locus> MACGenotype::resolve(const bool doAmbiguityFilter, const bool expandAmbiguityLines) const{
 
   std::shared_ptr<Locus> pLocus;
   strVecArr_t allelesAtLocusPositions;
