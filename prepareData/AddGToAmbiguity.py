@@ -54,10 +54,10 @@ def addGToAmbiguity():
                 alleles = genotype.split('+')
                 newAlleles = []
                 for allele in alleles:
-                    for code in GAndNoG:
+                    if allele in GAndNoG and not allele.endswith('g'):
                         newAllele = allele.replace(code, GAndNoG[code])
-                        if newAllele != allele:
-                            break
+                    else:
+                        newAllele = allele
                     newAlleles.append(newAllele)
                 newGenotype = '+'.join(newAlleles)
                 newGenotypes.append(newGenotype)
