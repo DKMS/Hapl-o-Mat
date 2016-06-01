@@ -32,18 +32,27 @@
 #Build list of P-groups from hla_nom_p.txt and save it to P.txt
 #Get hla_nom_p.txt from http://hla.alleles.org/alleles/p_groups.html
 
-with open('P.txt', 'w') as outFile:
-    with open('hla_nom_p.txt') as file:
-        for line in file:
-            if not line.startswith('#'):
-                line = line.rstrip('\r\n')
-                splittedLine = line.split(';')
-                codeP = splittedLine[2]
-                if codeP.endswith('P'):
-                    locus = splittedLine[0]
-                    pCode = locus + codeP
-                    codes = splittedLine[1].split('/')
-                    codesWithLocus = []
-                    for code in codes:
-                        codesWithLocus.append(locus + code)
-                    outFile.write(pCode + '\t' + '\t'.join(codesWithLocus) + '\n')
+def buildP():
+
+    print('Build P.txt from hla_nom_p.txt')
+
+    with open('P.txt', 'w') as outFile:
+        with open('hla_nom_p.txt') as file:
+            for line in file:
+                if not line.startswith('#'):
+                    line = line.rstrip('\r\n')
+                    splittedLine = line.split(';')
+                    codeP = splittedLine[2]
+                    if codeP.endswith('P'):
+                        locus = splittedLine[0]
+                        pCode = locus + codeP
+                        codes = splittedLine[1].split('/')
+                        codesWithLocus = []
+                        for code in codes:
+                            codesWithLocus.append(locus + code)
+                        outFile.write(pCode + '\t' + '\t'.join(codesWithLocus) + '\n')
+
+
+if __name__ == "__main__":
+
+    buildP()
