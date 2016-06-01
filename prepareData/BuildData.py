@@ -26,6 +26,7 @@ def buildData():
     TransferAlphaToMultipleAlleleCodes.transferAlphaToMultipleAlleleCodes()
 
     BuildAmbiguityFromXML.buildAmbiguityFromXML()
+    AddGToAmbiguity.addGToAmbiguity()
 
 def moveData():
 
