@@ -36,12 +36,15 @@ def transferAlphaToMultipleAlleleCodes():
     print('Transfer file alpha.v3.txt to file MultipleAlleleCodes.dat')
     with open('MultipleAlleleCodes.txt', 'w') as outFile:
         with open('alpha.v3.txt') as file:
+            file.readline()
+            file.readline()
             for line in file:
-                line = line.replace('*', '')
-                line = line.rstrip('\r\n')
-                line = line.lstrip('\t')
-                line += '\n'
-                outFile.write(line)
+                if not line in ('\n', '\r\n'):
+                    line = line.replace('*', '')
+                    line = line.rstrip('\r\n')
+                    line = line.lstrip('\t')
+                    line += '\n'
+                    outFile.write(line)
 
 
 
