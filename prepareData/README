@@ -1,77 +1,105 @@
 Hapl-o-Mat -- Data Preparation
 ------------------------------
 
+The data preparation requires the download and processing of some files. We
+present you with two approaches, one automatically and one manually.
 
-1)Go to the website http://hla.alleles.org/wmda/hla_nom_p.txt and save the file
-hla_nom_p.txt.
+Automatically
+-------------
+Just run
 
-2)Go to the website http://hla.alleles.org/wmda/hla_nom_g.txt and save the file
-hla_nom_g.txt.
+    python BuildData.py
 
-3)Go to the website https://bioinformatics.bethematchclinical.org/HLA-Resources
-/Allele-Codes/Allele-Code-Lists/Allele-Code-List-in-Alphabetical-Order/
-Click on "Alphabetical Allele Code List (ZIP) (new nomenclature)" and save
-alpha.v3.zip. Extract the archive to obtain alpha.v3.txt. You can remove the
-archive afterwards.
+and all files are downloaded and processed automatically.
 
-4)Go to the website https://www.ebi.ac.uk/ipd/imgt/hla/ambig.html
-Click on "Download Excel" for the wanted release (usually the latest) and save
-ambiguity_v<>.xls (replace <> by version). Open ambiguity_v<>.xls in Excel and
-save as ambiguity_v<>.xlsm to run macros.
-Run the following macro which saves relevant worksheets as .txt-files:
+Manually
+--------
 
-    ****************************
-    Sub saveSheets()
-    '
-    '
-    Dim strPath As String, NameSheet As String, NameFile As String
-    Dim ws As Excel.Worksheet
+1) Enter the folder prepareData. Download the relevant data files
+   1.1) automatically via 
 
-    strPath = Application.ActiveWorkbook.Path
+   	python DownloadData.py
 
-    For i = 2 To Worksheets.Count
+   1.2) or manually via
+      1.2.1) Go to the website http://hla.alleles.org/wmda/hla_nom_p.txt and
+      save the file hla_nom_p.txt.
 
-    Worksheets(i).Activate
-    Set ws = ActiveSheet
-    ws.Copy
+      1.2.2) Go to the website http://hla.alleles.org/wmda/hla_nom_g.txt and
+      save the file hla_nom_g.txt.
 
-    NameSheet = ActiveSheet.name
-    NameFile = strPath & "\" & NameSheet & ".txt"
-    ActiveWorkbook.SaveAs Filename:=NameFile, FileFormat:=xlText
-    ActiveWorkbook.Close False
+      1.2.3) Go to the website https://bioinformatics.bethematchclinical.org/
+      HLA-Resources/Allele-Codes/Allele-Code-Lists/
+      Allele-Code-List-in-Alphabetical-Order/. Click on
+      "Alphabetical Allele Code List (ZIP) (new nomenclature)" and save 
+      alpha.v3.zip. Extract the archive to obtain alpha.v3.txt. You can
+      remove the archive afterwards.
 
-    Next i
+      1.2.4) You can choose between two options.
+      	     1.2.4.1) Download the file
+	     https://github.com/jrob119/IMGTHLA/raw/Latest/xml/
+	     hla_ambigs.xml.zip. Extract the archive to obtain hla_ambigs.xml.
+	     You can remove the archive afterwards.
 
-    End Sub
-    *******************************
+	     1.2.4.2) Go to the website https://www.ebi.ac.uk/ipd/imgt/hla/
+	     ambig.html. Click on "Download Excel" for the wanted release
+	     (usually the latest) and save ambiguity_v<>.xls (replace <> by
+	     version). Open ambiguity_v<>.xls in Excel and save as 
+	     ambiguity_v<>.xlsm to run macros. Run the following macro which
+	     saves relevant worksheets as .txt-files:
 
-You can remove the Excel file afterwards.
+	     ****************************
+    	     Sub saveSheets()
+	     '
+	     '
+	     Dim strPath As String, NameSheet As String, NameFile As String
+	     Dim ws As Excel.Worksheet
 
-5)Move all files to folder prepareData.
+    	     strPath = Application.ActiveWorkbook.Path
+    
+	     For i = 2 To Worksheets.Count
 
-6)Create list of class 1 alleles of loci not included in hla_nom_g (HLA-E, HLA-F,
-HLA-G, HLA-H, HLA-J, HLA-K, HLA-L, HLA-P, HLA-V, HLA-Y) from
-http://hla.alleles.org/alleles/class1.html if you require those loci.
+	     Worksheets(i).Activate
+	     Set ws = ActiveSheet
+	     ws.Copy
 
-7)Create list of class 2 alleles of loci not included in hla_nom_g (HLA-DMA,
-HLA-DMB, HLA-DOA, HLA-DOB, HLA-DRB6, HLA-DRB7, HLA-DRB8, HLA-DRB9, HLA-DRB10)
-from http://hla.alleles.org/alleles/class2.html if you require those loci.
+	     NameSheet = ActiveSheet.name
+	     NameFile = strPath & "\" & NameSheet & ".txt"
+	     ActiveWorkbook.SaveAs Filename:=NameFile, FileFormat:=xlText
+	     ActiveWorkbook.Close False
 
-8)Create files 
-    a)python TransferAlphaToMultipleAlleleCodes.py
-    b)python BuildAllAllelesFrom_hla_nom_g.py
-    c)add alleles from step 6) and 7) to allAlleles.txt
-    d)python BuildAllAllelesExpanded.py
-    e)python BuildP.py
-    f)python BuildLargeG.py
-    g)python BuildSmallg.py
-    h)python BuildAmbiguity.py
-    i)python AddGToAmbiguity.py
-    j)python AddAllelesMissingIngCode.py
- 
-9)Move LargeG.txt, P.txt, Smallg.txt, Ambiguity.txt, MultipleAlleleCodes.txt,
+	     Next i
+
+	     End Sub
+	     *******************************
+
+	     You can remove the Excel file afterwards.
+
+2) If you require additional loci than the standard follow
+   2.1) Create list of class 1 alleles of loci not included in hla_nom_g (HLA-E, HLA-F,
+   HLA-G, HLA-H, HLA-J, HLA-K, HLA-L, HLA-P, HLA-V, HLA-Y) from
+   http://hla.alleles.org/alleles/class1.html if you require those loci.
+
+   2.2)Create list of class 2 alleles of loci not included in hla_nom_g (HLA-DMA,
+   HLA-DMB, HLA-DOA, HLA-DOB, HLA-DRB6, HLA-DRB7, HLA-DRB8, HLA-DRB9, HLA-DRB10)
+   from http://hla.alleles.org/alleles/class2.html if you require those loci.
+
+3) Process the data files using the following python scripts
+   3.1) python BuildAllAllelesFrom_hla_nom_g.py
+   3.2) Add alleles from 2) to allAlleles.txt
+   3.3) python BuildAllAllelesExpanded.py
+   3.4) python BuildP.py
+   3.5)	python BuildLargeG.py
+   3.6)	python BuildSmallg.py
+   3.7) python AddAllelesMissingIngCode.py
+   3.8) python TransferAlphaToMultipleAlleleCodes
+   3.9) Depending on your choice in 1.2.4) run
+   	3.8.1) python BuildAmbiguityFromXML.py if you worked with the xml file
+   	3.8.1) python BuildAmbiguityFromTextFiles.py if you worked with the Excel file
+   3.10) python AddGToAmbiguity.py
+
+4) Move LargeG.txt, P.txt, Smallg.txt, Ambiguity.txt, MultipleAlleleCodes.txt,
 and AllAllelesExpanded.txt to folder data.
 
-10)If you want to analyse data in GL-format with unresolved genotypes (GL-id=0),
+5) If you want to analyse data in GL-format with unresolved genotypes (GL-id=0),
 you can prepare the file AlleleList.txt from the GL-id input file by running
 BuildAlleleList.py. Then move AlleleList.txt to data.
