@@ -31,22 +31,31 @@
 
 #Create Ambiguity.txt from files extracted from excel sheet ambiguity_v<>.xls.
 
-listOfLoci = ['A', 'B', 'C', 'DPA1', 'DPB1', 'DQA1', 'DQB1', 'DRB1', 'DRB3', 'DRB4', 'DRB5']
+def buildAmbiguityFromTextFiles():
 
-ambiguityData = []
-for locus in listOfLoci:
-    fileName = 'HLA-' + locus + '.txt'
-    with open(fileName) as file:
-        for line in file:
-            if 'Ambiguous typing combinations over' in line.strip():
-                break
-        for line in file:
-            if line.startswith(locus + '*'):
-                line = line.strip()
-                ambiguityData.append(line)
+    print('Build Ambiguity.txt from text files extracted from hla_ambig.xls')
+
+    listOfLoci = ['A', 'B', 'C', 'DPA1', 'DPB1', 'DQA1', 'DQB1', 'DRB1', 'DRB3', 'DRB4', 'DRB5']
+
+    ambiguityData = []
+    for locus in listOfLoci:
+        fileName = 'HLA-' + locus + '.txt'
+        with open(fileName) as file:
+            for line in file:
+                if 'Ambiguous typing combinations over' in line.strip():
+                    break
+            for line in file:
+                if line.startswith(locus + '*'):
+                    line = line.strip()
+                    ambiguityData.append(line)
         
-ambiguityData.sort()
+    ambiguityData.sort()
 
-with open('Ambiguity.txt', 'w') as out:
-    for ambiguityEntry in ambiguityData:
-        out.write(ambiguityEntry + '\n')
+    with open('Ambiguity.txt', 'w') as out:
+        for ambiguityEntry in ambiguityData:
+            out.write(ambiguityEntry + '\n')
+
+
+if __name__ == "__main__":
+
+    buildAmbiguityFromTextFiles()
