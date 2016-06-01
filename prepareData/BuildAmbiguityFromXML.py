@@ -2,7 +2,7 @@ from xml.dom import minidom
 
 def buildAmbiguityFromXML():
 
-    print('Build file Ambiguity.dat from xml')
+    print('Build file Ambiguity.txt from xml')
     print('    Read in xml')
     DOMTree = minidom.parse('hla_ambigs.xml')
     collection = DOMTree.documentElement
@@ -29,7 +29,7 @@ def buildAmbiguityFromXML():
             ambiguities.append(genotypes)
 
     print('    Write data to file')
-    with open('Ambiguity.dat', 'w') as out:
+    with open('Ambiguity.txt', 'w') as out:
         for ambiguity in ambiguities:
             out.write('\t'.join(ambiguity) + '\n')
 
