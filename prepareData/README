@@ -4,17 +4,19 @@ Hapl-o-Mat -- Data Preparation
 The data preparation requires the download and processing of some files. We
 present you with two approaches, one automatically and one manually.
 
+
 Automatically
 -------------
 Just run
 
     python BuildData.py
 
-and all files are downloaded and processed automatically.
+and all files are downloaded, processed, and moved to folder data 
+automatically.
+
 
 Manually
 --------
-
 1) Enter the folder prepareData. Download the relevant data files
    1.1) automatically via 
 
@@ -47,7 +49,6 @@ Manually
 	     ambiguity_v<>.xlsm to run macros. Run the following macro which
 	     saves relevant worksheets as .txt-files:
 
-	     ****************************
     	     Sub saveSheets()
 	     '
 	     '
@@ -70,7 +71,6 @@ Manually
 	     Next i
 
 	     End Sub
-	     *******************************
 
 	     You can remove the Excel file afterwards.
 
@@ -83,7 +83,7 @@ Manually
    HLA-DMB, HLA-DOA, HLA-DOB, HLA-DRB6, HLA-DRB7, HLA-DRB8, HLA-DRB9, HLA-DRB10)
    from http://hla.alleles.org/alleles/class2.html if you require those loci.
 
-3) Process the data files using the following python scripts
+3) Process the data files using the following these steps
    3.1) python BuildAllAllelesFrom_hla_nom_g.py
    3.2) Add alleles from 2) to allAlleles.txt
    3.3) python BuildAllAllelesExpanded.py
