@@ -103,3 +103,6 @@ and AllAllelesExpanded.txt to folder data.
 5) If you want to analyse data in GL-format with unresolved genotypes (GL-id=0),
 you can prepare the file AlleleList.txt from the GL-id input file by running
 BuildAlleleList.py. Then move AlleleList.txt to data.
+
+6) You can remove the files alpha.v3.txt, hla_ambigs.xml, hla_nom_g.txt, hla_nom_p.txt,
+allAlleles.txt, and OneElementG.txt.
