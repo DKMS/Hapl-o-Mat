@@ -24,7 +24,7 @@ def buildData():
     TransferAlphaToMultipleAlleleCodes.transferAlphaToMultipleAlleleCodes()
 
     BuildAmbiguityFromXML.buildAmbiguityFromXML()
-    AddGToAmbiguity.addGToAmbiguity()
+
 
 
 if __name__ == "__main__":
