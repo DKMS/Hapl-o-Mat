@@ -31,12 +31,21 @@
 
 #Adapt format of alpha.v3.txt to MultipleAlleleCodes.txt.
 
-with open('MultipleAlleleCodes.txt', 'w') as outFile:
-    with open('alpha.v3.txt') as file:
-        for line in file:
-            line = line.replace('*', '')
-            line = line.rstrip('\r\n')
-            line = line.lstrip('\t')
-            line += '\n'
-            outFile.write(line)
+def transferAlphaToMultipleAlleleCodes():
+
+    print('Transfer file alpha.v3.txt to file MultipleAlleleCodes.dat')
+    with open('MultipleAlleleCodes.txt', 'w') as outFile:
+        with open('alpha.v3.txt') as file:
+            for line in file:
+                line = line.replace('*', '')
+                line = line.rstrip('\r\n')
+                line = line.lstrip('\t')
+                line += '\n'
+                outFile.write(line)
+
+
+
+if __name__ == "__main__":
+
+    transferAlphaToMultipleAlleleCodes()
         
