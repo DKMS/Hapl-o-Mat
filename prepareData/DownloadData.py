@@ -4,7 +4,7 @@ import os
 
 def downloadAndExtractData():
 
-    print('Download of data files')
+    print('Download data files')
 
     print('    Download hla_nom_p.txt')
     urlretrieve('http://hla.alleles.org/wmda/hla_nom_p.txt', filename='hla_nom_p.txt')
