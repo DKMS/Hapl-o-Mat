@@ -17,6 +17,9 @@ automatically.
 
 Manually
 --------
+We prepare the data step by step. A more detailed explanation can be found
+in prepareData/detailedExplanationManuallyPrepareData.pdf.
+
 1) Enter the folder prepareData. Download the relevant data files
    1.1) automatically via 
 
