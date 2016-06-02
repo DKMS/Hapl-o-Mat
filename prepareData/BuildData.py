@@ -57,7 +57,8 @@ def clean():
     os.remove('hla_nom_p.txt')
     os.remove('allAlleles.txt')
     os.remove('OneElementG.txt')
-    shutil.rmtree('__pycache__')
+    if os.path.exists('__pycache__'):
+        shutil.rmtree('__pycache__')
             
 
 if __name__ == "__main__":
