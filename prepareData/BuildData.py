@@ -1,6 +1,6 @@
+import sys
 import os
 import shutil
-import DownloadData
 import TransferAlphaToMultipleAlleleCodes
 import BuildAllAllelesFrom_hla_nom_g
 import BuildAllAllelesExpanded
@@ -13,7 +13,12 @@ import AddAllelesMissingIngCode
 
 def buildData():
 
-    DownloadData.downloadAndExtractData()
+    if sys.version_info >= (3, 0):
+        import DownloadData
+        DownloadData.downloadAndExtractData()
+    else:
+        import DownloadDataP2
+        DownloadDataP2.downloadAndExtractData()
 
     BuildAllAllelesFrom_hla_nom_g.buildAllAllelesFromHlaNomg()
     BuildAllAllelesExpanded.buildAllAllelesExpanded()
