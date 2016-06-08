@@ -36,6 +36,8 @@ except ImportError:
 
 def buildAmbiguityFromXML():
 
+    print('Extract ambiguities from XML')
+
     tree = ET.ElementTree(file='hla_ambigs.xml')
     root = tree.getroot()
     namespaces = {'tns': 'http://www.example.org/ambig-aw'}
