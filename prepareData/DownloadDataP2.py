@@ -31,7 +31,6 @@
 
 import urllib2
 import zipfile 
-import os
 
 def downloadAndExtractData():
 
@@ -54,7 +53,6 @@ def downloadAndExtractData():
     print('    Extract alpha.v3.zip')
     alphav3Zip = zipfile.ZipFile('alpha.v3.zip')
     alphav3Zip.extract('alpha.v3.txt')
-    os.remove('alpha.v3.zip')
 
     print('    Download hla_ambigs_xml.zip')
     with open('hla_ambigs.xml.zip','wb') as f:
@@ -63,7 +61,6 @@ def downloadAndExtractData():
     print('    Extract hla_ambigs_xml.zip')
     hlaAmbigZip = zipfile.ZipFile('hla_ambigs.xml.zip')
     hlaAmbigZip.extract('hla_ambigs.xml')
-    os.remove('hla_ambigs.xml.zip')
 
 
 

@@ -88,6 +88,8 @@ def clean():
     os.remove('hla_nom_p.txt')
     os.remove('allAlleles.txt')
     os.remove('OneElementG.txt')
+    os.remove('alpha.v3.zip')
+    os.remove('hla_ambigs.xml.zip')
     if os.path.exists('__pycache__'):
         shutil.rmtree('__pycache__')
             
