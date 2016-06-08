@@ -29,41 +29,33 @@
 # 
 
 
-from xml.dom import minidom
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
+    import xml.etree.ElementTree as ET
 
 def buildAmbiguityFromXML():
 
-    print('Build file Ambiguity.txt from xml')
-    print('    Read in xml')
-    DOMTree = minidom.parse('hla_ambigs.xml')
-    collection = DOMTree.documentElement
+    tree = ET.ElementTree(file='hla_ambigs.xml')
+    root = tree.getroot()
+    namespaces = {'tns': 'http://www.example.org/ambig-aw'}
 
-    ambiguities = []
-    genes = collection.getElementsByTagName('tns:gene')
-    for gene in genes:
-        print('    Work on gene %s' % gene.getAttribute('name'))
+    with open('Ambiguity.txt', 'w') as out:
+        for ambigComboGroup in tree.findall('tns:geneList/tns:gene/tns:ambigCombosList/tns:ambiguousComboGroup', namespaces):
+            alleles1 = []
+            for allele1 in ambigComboGroup.findall('tns:ambiguousComboElement/tns:ambigAllele1', namespaces):
+                alleles1.append(allele1.attrib.get('name'))
 
-        ambigGroups = gene.getElementsByTagName('tns:ambiguousComboGroup')
-        for ambigGroup in ambigGroups:
+            alleles2 = []
+            for allele2 in ambigComboGroup.findall('tns:ambiguousComboElement/tns:ambigAllele2', namespaces):
+                alleles2.append(allele2.attrib.get('name'))
+
             genotypes = []
-            ambigs = ambigGroup.getElementsByTagName('tns:ambiguousComboElement')
-            for ambig in ambigs:
-                allele1 = ambig.getElementsByTagName('tns:ambigAllele1')[0]
-                allele1Name = allele1.getAttribute('name')
-            
-                allele2 = ambig.getElementsByTagName('tns:ambigAllele2')[0]
-                allele2Name = allele2.getAttribute('name')
-
-                genotype = allele1Name + '+' + allele2Name
+            for allele1, allele2 in zip(alleles1, alleles2):
+                genotype = allele1 + '+' + allele2
                 genotypes.append(genotype)
 
-            ambiguities.append(genotypes)
-
-    print('    Write data to file')
-    with open('Ambiguity.txt', 'w') as out:
-        for ambiguity in ambiguities:
-            out.write('\t'.join(ambiguity) + '\n')
-
+            out.write('\t'.join(genotypes) + '\n')
 
 
 if __name__ == "__main__":
