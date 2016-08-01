@@ -232,7 +232,7 @@ std::string Report::evaluateReportType(const size_t numberReports) const{
   return totalType;
 }
 
-void GLReport::translateLine(const std::string line){
+void GLSReport::translateLine(const std::string line){
 
   id = leftOfFirstDelim(line, ';');
 
@@ -255,7 +255,7 @@ void GLReport::translateLine(const std::string line){
     }
 }
 				
-void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
+void GLSReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
 		       const GlidFile & glid,
 		       const double minimalFrequency,
 		       const bool resolveUnknownGenotype){
@@ -311,7 +311,7 @@ void GLReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports,
   }
 }
 
-void GLCReport::translateLine(const std::string line){
+void GLSCReport::translateLine(const std::string line){
 	
   std::stringstream ss(line);
   std::string entry;
@@ -323,7 +323,7 @@ void GLCReport::translateLine(const std::string line){
   }
 }
 
-void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
+void GLSCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   try
     { 
@@ -337,7 +337,7 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	  if(locusAndResolution != lociAndResolutions.cend())
 	    {
 	      size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
-	      std::unique_ptr<Genotype> genotype = make_unique<GLGenotype>(singleLocusGenotype, locusAndResolution->second);
+	      std::unique_ptr<Genotype> genotype = make_unique<GLSGenotype>(singleLocusGenotype, locusAndResolution->second);
 	      
 	      resolveSingleLocusGenotype(genotype,
 					 positionWantedLocus);
@@ -359,7 +359,7 @@ void GLCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
     }	    
 }
 
-void GLCReport::doLociMatch() const{
+void GLSCReport::doLociMatch() const{
 
   for(auto locusAndResolution : lociAndResolutions)
     {
@@ -373,12 +373,12 @@ void GLCReport::doLociMatch() const{
 
       if(pos == singleLocusGenotypes.cend())
 	{
-	  throw NotMatchingLociException_GLC(locusAndResolution.first, id);
+	  throw NotMatchingLociException_GLSC(locusAndResolution.first, id);
 	}
     }
 }
 
-void MAReport::translateLine(const std::string line){
+void MACReport::translateLine(const std::string line){
 
   std::stringstream ss(line);
   if(ss >> id){}
@@ -401,7 +401,7 @@ void MAReport::translateLine(const std::string line){
     }
 }
 
-void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
+void MACReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 
   try
     {
@@ -415,7 +415,7 @@ void MAReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	    if(locusAndResolution != lociAndResolutions.cend())
 	      { 
 		size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
-		std::unique_ptr<Genotype> genotype = make_unique<MAGenotype>(singleLocusGenotype, locusAndResolution->second);
+		std::unique_ptr<Genotype> genotype = make_unique<MACGenotype>(singleLocusGenotype, locusAndResolution->second);
 		
 		resolveSingleLocusGenotype(genotype,
 					   positionWantedLocus);

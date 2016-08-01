@@ -59,9 +59,6 @@ with open(fileInName) as fileIn:
         locus = alleles[0].split('*')[0]
         allelesPerLocus[locus].update(alleles)
 
-#for locus in allelesPerLocus:
-#    allelesPerLocus[locus] = sorted(allelesPerLocus[locus])
-
 sortedAllelesPerLocus = []
 for locus in allelesPerLocus:
     for allele in allelesPerLocus[locus]:
@@ -70,8 +67,5 @@ for locus in allelesPerLocus:
 sortedAllelesPerLocus.sort()
 
 with open(fileOutName, 'w') as out:
-#    for locus in allelesPerLocus:
-#        out.write('\n'.join(allelesPerLocus[locus]) + '\n')
-
     out.write('\n'.join(sortedAllelesPerLocus) + '\n')
 

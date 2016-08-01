@@ -36,32 +36,43 @@
 from collections import defaultdict
 from operator import itemgetter
 
-endLetters = ('N', 'L', 'S', 'Q')
 
-expandedAlleles = defaultdict(list)
-with open('allAlleles.txt') as file:
-    for line in file:
-         code = line.rstrip('\n')
+def buildAllAllelesExpanded():
 
-         fields = code.split(':')
-         shortCode = ''
-         for field in fields:
-             shortCode += field
-             expandedAlleles[shortCode].append(code)
+    print('Build AllAllelesExpanded.txt from allAlleles.txt')
 
-             if code.endswith(endLetters):
-                 endLetter = code[-1]                 
-                 if not shortCode.endswith(endLetters):
-                     shortCodeWithLetter = shortCode + endLetter
-                     expandedAlleles[shortCodeWithLetter].append(code)
-                 else:
-                     codeWithoutLetter = shortCode[:-1]
-                     expandedAlleles[codeWithoutLetter].append(code)
-             shortCode += ':'
+    endLetters = ('N', 'L', 'S', 'Q')
+
+    expandedAlleles = defaultdict(list)
+    with open('allAlleles.txt') as file:
+        for line in file:
+            code = line.rstrip('\n')
+
+            fields = code.split(':')
+            shortCode = ''
+            for field in fields:
+                shortCode += field
+                expandedAlleles[shortCode].append(code)
+
+                if code.endswith(endLetters):
+                    endLetter = code[-1]                 
+                    if not shortCode.endswith(endLetters):
+                        shortCodeWithLetter = shortCode + endLetter
+                        expandedAlleles[shortCodeWithLetter].append(code)
+                    else:
+                        codeWithoutLetter = shortCode[:-1]
+                        expandedAlleles[codeWithoutLetter].append(code)
+                shortCode += ':'
              
-sortedExpandedAlleles = [[allele, expandedAlleles[allele]] for allele in expandedAlleles]
-sortedExpandedAlleles.sort(key=itemgetter(0))
+    sortedExpandedAlleles = [[allele, expandedAlleles[allele]] for allele in expandedAlleles]
+    sortedExpandedAlleles.sort(key=itemgetter(0))
 
-with open('AllAllelesExpanded.txt', 'w') as out:
-    for allelesAndExpandedAlleles in sortedExpandedAlleles:
-        out.write(allelesAndExpandedAlleles[0] + '\t' + '\t'.join(allelesAndExpandedAlleles[1]) + '\n')
+    with open('AllAllelesExpanded.txt', 'w') as out:
+        for allelesAndExpandedAlleles in sortedExpandedAlleles:
+            out.write(allelesAndExpandedAlleles[0] + '\t' + '\t'.join(allelesAndExpandedAlleles[1]) + '\n')
+
+
+
+if __name__ == "__main__":
+
+    buildAllAllelesExpanded()

@@ -121,17 +121,17 @@ class Parameters{
   size_t seed;
 };
 
-class ParametersGL : public Parameters{
+class ParametersGLS : public Parameters{
 
  public:
-  explicit ParametersGL()
+  explicit ParametersGLS()
     : Parameters(),
     pullFileName(),
     glidFileName(),
     lociOrder(),
     resolveUnknownGenotype(false)
       {
-	parametersFileName = "parametersGL";
+	parametersFileName = "parametersGLS";
 	fillSpecificParameterNamesAndFound();
 	areAllParametersListed();
 	init();
@@ -157,14 +157,14 @@ class ParametersGL : public Parameters{
   bool resolveUnknownGenotype;
 };
 
-class ParametersGLC : public Parameters{
+class ParametersGLSC : public Parameters{
 
  public:
-  explicit ParametersGLC()
+  explicit ParametersGLSC()
     :  Parameters(),
     inputFileName()
     {
-      parametersFileName = "parametersGLC";
+      parametersFileName = "parametersGLSC";
       fillSpecificParameterNamesAndFound();
       areAllParametersListed();
       init();
@@ -183,14 +183,14 @@ class ParametersGLC : public Parameters{
 };
 
 
-class ParametersMA : public Parameters{
+class ParametersMAC : public Parameters{
 
  public:
-  explicit ParametersMA()
+  explicit ParametersMAC()
     :  Parameters(),
     inputFileName()
     {
-      parametersFileName = "parametersMA";
+      parametersFileName = "parametersMAC";
       fillSpecificParameterNamesAndFound();
       areAllParametersListed();
       init();

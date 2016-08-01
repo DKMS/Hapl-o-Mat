@@ -119,10 +119,10 @@ class InputFileToEdit : public InputFile{
   double minimalFrequency;
 };
 
-class GL : public InputFileToEdit{
+class GLS : public InputFileToEdit{
 
  public:
-  explicit GL(const ParametersGL & parameters)
+  explicit GLS(const ParametersGLS & parameters)
     : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
     lociOrder(parameters.getLociOrder()),
@@ -151,10 +151,10 @@ class GL : public InputFileToEdit{
   GlidFile glid;
 };
 
-class GLC : public InputFileToEdit{
+class GLSC : public InputFileToEdit{
 
  public:
-  explicit GLC(const ParametersGLC & parameters)
+  explicit GLSC(const ParametersGLSC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
     expandAmbiguityLines(parameters.getExpandAmbiguityLines())
@@ -173,10 +173,10 @@ class GLC : public InputFileToEdit{
   bool expandAmbiguityLines;
 };
 
-class MA : public InputFileToEdit{
+class MAC : public InputFileToEdit{
 
  public:
-  explicit MA(const ParametersMA & parameters)
+  explicit MAC(const ParametersMAC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
     expandAmbiguityLines(parameters.getExpandAmbiguityLines()),

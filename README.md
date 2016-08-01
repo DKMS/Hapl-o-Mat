@@ -1,4 +1,4 @@
-#Hapl-o-Mat v 1.0
+#Hapl-o-Mat v 1.1
 
 ##General information
 Hapl-o-Mat is software for haplotype inference via an
@@ -11,7 +11,8 @@ The latest version can be found on the Github server under
 
 ##Requirements
 Installing Hapl-o-Mat requires a C++ compiler with C++11 support. To
-produce the required data on HLA nomenclature python is required.
+produce the required data on HLA nomenclature python (version 2 or 3) is
+required.
 
 ##Installing under Linux
 Get Hapl-o-Mat via 
@@ -28,17 +29,21 @@ If you use another compiler than GCC, adapt the compiler flags in
 the Makefile, e.g. -march=native.
 
 ##Installing under Windows
+A detailed explanation on how to install Hapl-o-Mat under Windows using
+the Eclipse IDE for C/C++ Developers can be found in
+detailedGettingStartedWindows.pdf.
 
 ##Usage
-For information on how to use Hapl-o-Mat and some tutorials follow
-the guide detailedGettingStarted.pdf or gettingStarted if you are a
-seasoned Linux user.
+For information on how to use Hapl-o-Mat and some tutorials using Linux
+follow the guide detailedGettingStartedLinux.pdf. If you are a seasoned
+Linux user, refer to gettingStarted. If you use Windows, follow the guide 
+detailedGettingStartedWindows.pdf.
 
 ##Citation
 If you use Hapl-o-Mat for your research, please cite
 
 (Until our journal article appears)
-C. Schaefer, A.H. Schmidt, J. Sauter: Hapl-O-mat: A Versatile
+C. Schäfer, A.H. Schmidt, J. Sauter: Hapl-O-mat: A Versatile
 Software for Haplotype Frequency Estimation. HLA (2016), 87, 236–320
 
 ##Contributors
@@ -46,7 +51,7 @@ If you want to participate in actively developing Hapl-o-Mat please
 join via [Github](https://github.com/DKMS/Hapl-o-Mat)
 
 ##Author
-Christian Schaefer                                                                                                                    
+Dr. Christian Schäfer                                                                                                                    
 DKMS gGmbH                                                                                                                            
 Kressbach 1                                                                                                                           
 72072 Tuebingen, Germany                                                                                                              

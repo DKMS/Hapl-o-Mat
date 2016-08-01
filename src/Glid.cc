@@ -100,8 +100,8 @@ void GlidFile::readAndResolveFile(){
 	auto locusAndResolution = lociAndResolutions.find(locusName);
 	if(locusAndResolution != lociAndResolutions.cend()){
 	  
-	  GLGenotype genotypeGL(singleLocusGenotype, locusAndResolution->second);
-	  std::shared_ptr<Locus> pLocus = genotypeGL.resolve(doAmbiguityFilter, expandAmbiguityLines);
+	  GLSGenotype genotypeGLS(singleLocusGenotype, locusAndResolution->second);
+	  std::shared_ptr<Locus> pLocus = genotypeGLS.resolve(doAmbiguityFilter, expandAmbiguityLines);
 	  
 	  list.emplace(glid, pLocus);
 	}
@@ -109,7 +109,7 @@ void GlidFile::readAndResolveFile(){
     catch(const std::exception & e)
       {
 	std::cout << e.what() << std::endl;
-	std::cout << "GL-id " << glid << " not processed." << std::endl;
+	std::cout << "GLS-id " << glid << " not processed." << std::endl;
       }
   }
     

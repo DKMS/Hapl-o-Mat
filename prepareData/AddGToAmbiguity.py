@@ -31,41 +31,50 @@
 #Read in list of G-groups with only one element from OneElementG.txt. These codes do not end with G in Ambiguity.txt. Thus open Ambiguity.txt and
 #add the Gs. Overwritesthe old Ambiguity.txt
 
-GAndNoG = dict()
-with open('OneElementG.txt') as file:
-    for line in file:
-        line = line.rstrip('\r\n')
-        splittedLine = line.split()
-        Gcode = splittedLine[0]
-        code = splittedLine[1]
-        GAndNoG[code] = Gcode
+def addGToAmbiguity():
 
-newAmbiguity = []
-with open('Ambiguity.txt') as file:
-    for line in file:
-        line = line.rstrip('\r\n')
-        genotypes = line.split()
-        newGenotypes = []
-        for genotype in genotypes:
-            alleles = genotype.split('+')
-            newAlleles = []
-            for allele in alleles:
-                for code in GAndNoG:
-                    newAllele = allele.replace(code, GAndNoG[code])
-                    if newAllele != allele:
-                        break
-                newAlleles.append(newAllele)
-            newGenotype = '+'.join(newAlleles)
-            newGenotypes.append(newGenotype)
-        newAmbiguity.append(newGenotypes)
+    print('Add G to single element groups in Ambiguity.txt')
 
-for genotypes in newAmbiguity:
-    for genotype in genotypes:
-        if 'GG' in genotype:
-            print('Found GG in', genotype)
+    GAndNoG = dict()
+    with open('OneElementG.txt') as file:
+        for line in file:
+            line = line.rstrip('\r\n')
+            splittedLine = line.split()
+            Gcode = splittedLine[0]
+            code = splittedLine[1]
+            GAndNoG[code] = Gcode
 
-with open('Ambiguity.txt', 'w') as file:
+    newAmbiguity = []
+    with open('Ambiguity.txt') as file:
+        for line in file:
+            line = line.rstrip('\r\n')
+            genotypes = line.split()
+            newGenotypes = []
+            for genotype in genotypes:
+                alleles = genotype.split('+')
+                newAlleles = []
+                for allele in alleles:
+                    if allele in GAndNoG and not allele.endswith('g'):
+                        newAllele = allele.replace(code, GAndNoG[code])
+                    else:
+                        newAllele = allele
+                    newAlleles.append(newAllele)
+                newGenotype = '+'.join(newAlleles)
+                newGenotypes.append(newGenotype)
+            newAmbiguity.append(newGenotypes)
+
     for genotypes in newAmbiguity:
-        file.write('\t'.join(genotypes) + '\n')
+        for genotype in genotypes:
+            if 'GG' in genotype:
+                print('Found GG in', genotype)
+
+    with open('Ambiguity.txt', 'w') as file:
+        for genotypes in newAmbiguity:
+            file.write('\t'.join(genotypes) + '\n')
+
+
+if __name__ == "__main__":
+
+    addGToAmbiguity()
 
 

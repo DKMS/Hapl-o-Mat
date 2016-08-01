@@ -144,7 +144,7 @@ class InputFormatException : public std::exception{
  public:
   explicit InputFormatException()
     : exception(),
-    errorMessage("Wrong input format (MA, GLC, GL, READ).")
+    errorMessage("Wrong input format (MAC, GLSC, GLS, READ).")
     {}
 
   virtual const char* what() const throw()
@@ -174,10 +174,10 @@ class FileException : public std::exception{
 };
 
 
-class NotMatchingLociException_MA : public std::exception{
+class NotMatchingLociException_MAC : public std::exception{
 
  public:
-  explicit NotMatchingLociException_MA(const std::string in_locus)
+  explicit NotMatchingLociException_MAC(const std::string in_locus)
     : exception(),
     errorMessage("Specified locus " + in_locus + " not found.")
     {}
@@ -191,10 +191,10 @@ class NotMatchingLociException_MA : public std::exception{
   std::string errorMessage;
 };
 
-class NotMatchingLociException_GLC : public std::exception{
+class NotMatchingLociException_GLSC : public std::exception{
 
  public:
-  explicit NotMatchingLociException_GLC(const std::string in_locus,
+  explicit NotMatchingLociException_GLSC(const std::string in_locus,
 					const std::string in_id)
     : exception(),
     errorMessage("Specified locus " + in_locus + " not found in id " + in_id + ".")
@@ -222,7 +222,7 @@ class MissingGlidException : public std::exception{
  public:
   explicit MissingGlidException(const size_t in_glid)
     : exception(),
-    errorMessage("GL-id " + std::to_string(in_glid) + " not found in glid-file.")
+    errorMessage("GLS-id " + std::to_string(in_glid) + " not found in glid-file.")
     {}
 
   virtual const char* what() const throw()

@@ -32,22 +32,30 @@
 #Build list of G-groups from hla_nom_g.txt and save it to LargeG.txt
 #Get hla_nom_g.txt from http://hla.alleles.org/alleles/g_groups.html
 
-with open('LargeG.txt', 'w') as outFile:
-    with open('OneElementG.txt', 'w') as oneElementGFile:
-        with open('hla_nom_g.txt') as file:
-            for line in file:
-                if not line.startswith('#'):
-                    line = line.rstrip('\r\n')
-                    splittedLine = line.split(';')
-                    codeG = splittedLine[2]
-                    if codeG.endswith('G'):
-                        locus = splittedLine[0]
-                        pCode = locus + codeG
-                        codes = splittedLine[1].split('/')
-                        codesWithLocus = []
-                        for code in codes:
-                            codesWithLocus.append(locus + code)
-                        outFile.write(pCode + '\t' + '\t'.join(codesWithLocus) + '\n')
-                        if len(codes) == 1:
-                            oneElementGFile.write(pCode + '\t' + '\t'.join(codesWithLocus) + '\n')
-                        
+def buildLargeG():
+
+    print('Build LargeG.txt from hla_nom_g.txt')
+
+    with open('LargeG.txt', 'w') as outFile:
+        with open('OneElementG.txt', 'w') as oneElementGFile:
+            with open('hla_nom_g.txt') as file:
+                for line in file:
+                    if not line.startswith('#'):
+                        line = line.rstrip('\r\n')
+                        splittedLine = line.split(';')
+                        codeG = splittedLine[2]
+                        if codeG.endswith('G'):
+                            locus = splittedLine[0]
+                            pCode = locus + codeG
+                            codes = splittedLine[1].split('/')
+                            codesWithLocus = []
+                            for code in codes:
+                                codesWithLocus.append(locus + code)
+                            outFile.write(pCode + '\t' + '\t'.join(codesWithLocus) + '\n')
+                            if len(codes) == 1:
+                                oneElementGFile.write(pCode + '\t' + '\t'.join(codesWithLocus) + '\n')
+
+
+if __name__ == "__main__":
+
+    buildLargeG()
