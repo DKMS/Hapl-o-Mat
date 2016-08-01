@@ -1,4 +1,4 @@
-#Hapl-o-Mat v 1.0
+#Hapl-o-Mat v 1.1
 
 ##General information
 Hapl-o-Mat is software for haplotype inference via an
