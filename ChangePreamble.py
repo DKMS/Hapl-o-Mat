@@ -22,7 +22,7 @@ preambleC = '''/*
  *
  * Copyright (C) 2016, DKMS gGmbH 
  *
- * Dr. Jürgen Sauter
+ * Dr. Juergen Sauter
  * Kressbach 1
  * 72072 Tuebingen, Germany
  *
@@ -53,7 +53,7 @@ preamblePython = '''#
 # 
 # Copyright (C) 2016, DKMS gGmbH 
 # 
-# Dr. Jürgen Sauter
+# Dr. Juergen Sauter
 # Kressbach 1
 # 72072 Tuebingen, Germany
 #
