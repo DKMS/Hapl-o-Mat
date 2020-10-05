@@ -1,20 +1,20 @@
-#Hapl-o-Mat v 1.1
+# Hapl-o-Mat v 1.1
 
-##General information
+## General information
 Hapl-o-Mat is software for haplotype inference via an
 expectation-maximization algorithm. It supports processing and
 resolving various forms of HLA genotype data.
 
-##The latest version
+## The latest version
 The latest version can be found on the Github server under
 [https://github.com/DKMS/Hapl-o-Mat](https://github.com/DKMS/Hapl-o-Mat)
 
-##Requirements
+## Requirements
 Installing Hapl-o-Mat requires a C++ compiler with C++11 support. To
 produce the required data on HLA nomenclature python (version 2 or 3) is
 required.
 
-##Installing under Linux
+## Installing under Linux
 Get Hapl-o-Mat via 
 ```
 git clone https://github.com/DKMS/Hapl-o-Mat
@@ -28,32 +28,32 @@ make clean
 If you use another compiler than GCC, adapt the compiler flags in
 the Makefile, e.g. -march=native.
 
-##Installing under Windows
+## Installing under Windows
 A detailed explanation on how to install Hapl-o-Mat under Windows using
 the Eclipse IDE for C/C++ Developers can be found in
 detailedGettingStartedWindows.pdf.
 
-##Usage
+## Usage
 For information on how to use Hapl-o-Mat and some tutorials using Linux
 follow the guide detailedGettingStartedLinux.pdf. If you are a seasoned
 Linux user, refer to gettingStarted. If you use Windows, follow the guide 
 detailedGettingStartedWindows.pdf.
 
-##Citation
+## Citation
 If you use Hapl-o-Mat for your research, please cite
 
 (Until our journal article appears)
 C. Schäfer, A.H. Schmidt, J. Sauter: Hapl-O-mat: A Versatile
 Software for Haplotype Frequency Estimation. HLA (2016), 87, 236–320
 
-##Contributors
+## Contributors
 If you want to participate in actively developing Hapl-o-Mat please
 join via [Github](https://github.com/DKMS/Hapl-o-Mat)
 
-##Author
+## Author
 Dr. Christian Schäfer                                                                                                                 
 
-##Contact
+## Contact
 Dr. Jürgen Sauter
 DKMS gGmbH                                                                                                                            
 Kressbach 1                                                                                                                           
@@ -63,7 +63,7 @@ T +49 7071 943-2060
 F +49 7071 943-2090                                                                                                                   
 sauter(at)dkms.de                                                                                                                  
 
-##License
+## License
 Copyright (C) 2016, DKMS gGmbH 
 
 DKMS gGmbH                                                                                                                            
