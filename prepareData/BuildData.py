@@ -44,12 +44,18 @@ import AddAllelesMissingIngCode
 
 def buildData():
 
+
+    shallContinue = 0
     if sys.version_info >= (3, 0):
         import DownloadData
-        DownloadData.downloadAndExtractData()
+        shallContinue = DownloadData.downloadAndExtractData()
     else:
         import DownloadDataP2
-        DownloadDataP2.downloadAndExtractData()
+        shallContinue = DownloadDataP2.downloadAndExtractData()
+
+    if shallContinue > 0:
+        sys.stderr.write('\nStopping because of error in downloading or unzipping input data.')
+        sys.exit(shallContinue)
 
     BuildAllAllelesFrom_hla_nom_g.buildAllAllelesFromHlaNomg()
     BuildAllAllelesExpanded.buildAllAllelesExpanded()

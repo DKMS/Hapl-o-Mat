@@ -337,7 +337,7 @@ void GLSCReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	  if(locusAndResolution != lociAndResolutions.cend())
 	    {
 	      size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
-	      std::unique_ptr<Genotype> genotype = make_unique<GLSGenotype>(singleLocusGenotype, locusAndResolution->second);
+	      std::unique_ptr<Genotype> genotype = std∷make_unique<GLSGenotype>(singleLocusGenotype, locusAndResolution->second);
 	      
 	      resolveSingleLocusGenotype(genotype,
 					 positionWantedLocus);
@@ -415,7 +415,7 @@ void MACReport::resolve(std::vector<std::shared_ptr<Report>> & listOfReports){
 	    if(locusAndResolution != lociAndResolutions.cend())
 	      { 
 		size_t positionWantedLocus = std::distance(lociAndResolutions.begin(), locusAndResolution);
-		std::unique_ptr<Genotype> genotype = make_unique<MACGenotype>(singleLocusGenotype, locusAndResolution->second);
+		std::unique_ptr<Genotype> genotype = std∷make_unique<MACGenotype>(singleLocusGenotype, locusAndResolution->second);
 		
 		resolveSingleLocusGenotype(genotype,
 					   positionWantedLocus);
