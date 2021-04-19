@@ -125,6 +125,7 @@ class GLS : public InputFileToEdit{
   explicit GLS(const ParametersGLS & parameters)
     : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
+    writeOutputGenotypes(parameters.getWriteOutputGenotypes()),              //US: 03.02.2021 
     lociOrder(parameters.getLociOrder()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
@@ -145,6 +146,7 @@ class GLS : public InputFileToEdit{
 
  private:
   std::string glidFileName;
+  bool writeOutputGenotypes;              //US: 03.02.2021 
   strVec_t lociOrder;
   std::vector<bool> booleanLociToDo;
   bool resolveUnknownGenotype;
@@ -157,6 +159,7 @@ class GLSC : public InputFileToEdit{
   explicit GLSC(const ParametersGLSC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
+    writeOutputGenotypes(parameters.getWriteOutputGenotypes()),              //US: 03.02.2021 
     expandAmbiguityLines(parameters.getExpandAmbiguityLines())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
@@ -170,6 +173,7 @@ class GLSC : public InputFileToEdit{
 
  private:
   bool doAmbiguityFilter;
+  bool writeOutputGenotypes;              //US: 03.02.2021 
   bool expandAmbiguityLines;
 };
 
@@ -179,6 +183,7 @@ class MAC : public InputFileToEdit{
   explicit MAC(const ParametersMAC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
+    writeOutputGenotypes(parameters.getWriteOutputGenotypes()),              //US: 03.02.2021 
     expandAmbiguityLines(parameters.getExpandAmbiguityLines()),
     lociNamesFromFile()
     {
@@ -193,10 +198,11 @@ class MAC : public InputFileToEdit{
 
   void readLociNamesFromFile(const std::string line);
 
- private:
+ private:  
   bool doAmbiguityFilter;
+  bool writeOutputGenotypes;              //US: 03.02.2021 
   bool expandAmbiguityLines;
-  strVec_t lociNamesFromFile;
+  strVec_t lociNamesFromFile;  
 };
 
 class InputFileToRead : public InputFile{

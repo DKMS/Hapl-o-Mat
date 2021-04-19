@@ -62,6 +62,7 @@ class Parameters{
     epsilon(1e-6),
     cutHaplotypeFrequencies(epsilon),
     renormaliseHaplotypeFrequencies(true),
+    writeOutputGenotypes(true),       //US: 03.02.2021
     seed(0)
       {
 	fillParameterNamesAndFound();
@@ -82,6 +83,7 @@ class Parameters{
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   bool getRenormaliseHaplotypeFrequencies() const {return renormaliseHaplotypeFrequencies;}
   size_t getSeed() const {return seed;}
+  bool getWriteOutputGenotypes() const {return writeOutputGenotypes;}             //US: 03.02.2021 
 
  protected:
   virtual void init() = 0;
@@ -118,6 +120,7 @@ class Parameters{
   double epsilon;
   double cutHaplotypeFrequencies;
   bool renormaliseHaplotypeFrequencies;
+  bool writeOutputGenotypes;       //US: 03.02.2021
   size_t seed;
 };
 

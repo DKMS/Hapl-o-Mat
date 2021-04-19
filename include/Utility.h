@@ -109,4 +109,10 @@ template<typename T>
 void cartesianProduct(std::vector<std::vector<T>> & out, const std::vector<std::vector<T>> & in);
 
 
+inline std::string trimString(std::string& str) {
+    str.erase(0, str.find_first_not_of(' '));
+    str.erase(str.find_last_not_of(' ')+1);
+    return str;
+}
+
 #endif

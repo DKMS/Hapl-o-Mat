@@ -49,6 +49,7 @@ void Parameters::val_assign(double & out, const std::string line){
 void Parameters::val_assign(std::string & out, const std::string line){
   size_t pos = line.find("=");
   out = line.substr(pos + 1);
+  trimString(out);
 }
 
 void Parameters::bool_assign(bool & out, const std::string line){
@@ -240,7 +241,8 @@ void ParametersGLS::init(){
     else if(line.find("EPSILON") != std::string::npos) val_assign(epsilon, line);
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALIZE_HAPLOTYPEFREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
-    else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
+    else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);   
+    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);  //US: 03.02.2021    
     else{
       continue;
     }
@@ -262,7 +264,7 @@ void ParametersGLS::print() const {
   std::cout << "\t Input pull file: " << pullFileName << std::endl; 
   std::cout << "\t Input GL-id file: " << glidFileName << std::endl; 
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
+  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;  
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
@@ -335,6 +337,7 @@ void ParametersGLSC::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALIZE_HAPLOTYPEFREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
+    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);  //US: 03.02.2021
     else{
       continue;
     }
@@ -410,6 +413,7 @@ void ParametersMAC::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALIZE_HAPLOTYPEFREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
+    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);  //US: 03.02.2021
     else{
       continue;
     }

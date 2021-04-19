@@ -31,9 +31,9 @@
 #ifndef Allele_header
 #define Allele_header
 
-#include <cmath>
 #include <memory>
 #include <string>
+#include <cmath>
 
 #include "File.h"
 #include "Typedefs.h"
