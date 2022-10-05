@@ -39,7 +39,7 @@ def buildLargeG():
     with open('LargeG.txt', 'w') as outFile:
         with open('OneElementG.txt', 'w') as oneElementGFile:
             with open('hla_nom_g.txt') as file:
-                for line in file:
+                for line in sorted(file):
                     if not line.startswith('#'):
                         line = line.rstrip('\r\n')
                         splittedLine = line.split(';')
