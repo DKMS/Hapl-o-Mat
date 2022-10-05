@@ -38,7 +38,7 @@ def buildP():
 
     with open('P.txt', 'w') as outFile:
         with open('hla_nom_p.txt') as file:
-            for line in file:
+            for line in sorted(file):
                 if not line.startswith('#'):
                     line = line.rstrip('\r\n')
                     splittedLine = line.split(';')
