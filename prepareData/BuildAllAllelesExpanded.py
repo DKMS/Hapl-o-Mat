@@ -70,7 +70,10 @@ def buildAllAllelesExpanded():
     with open('AllAllelesExpanded.txt', 'w') as out:
         for allelesAndExpandedAlleles in sortedExpandedAlleles:
             out.write(allelesAndExpandedAlleles[0] + '\t' + '\t'.join(allelesAndExpandedAlleles[1]) + '\n')
-
+        # include empty loci DRB3/4/5
+        out.write('DRB3*NNNN\tDRB3*NNNN\n')
+        out.write('DRB4*NNNN\tDRB4*NNNN\n')
+        out.write('DRB5*NNNN\tDRB5*NNNN\n')
 
 
 if __name__ == "__main__":

@@ -94,11 +94,11 @@ def clean(path):
 
 
 
+print('Starting system test.')
 
-
-folders = ['MAC_Mix', 'MAC_Smallg', 'MAC_P', 'MAC_2d', 'MAC_4d', 'MAC_LargeG', 'MAC_6d', 'MAC_8d', 'GLS_a', 'GLS_b', 'GLSC_a']
-precisions = {'MAC_Mix': 1e-4, 'MAC_Smallg': 1e-5, 'MAC_P': 9e-5, 'MAC_2d': 1e-5, 'MAC_4d': 1e-8, 'MAC_LargeG': 9e-6, 'MAC_6d': 5e-5,
-              'MAC_8d': 1e-6, 'GLS_a': 1e-4, 'GLS_b': 1e-4, 'GLSC_a': 1e-4}
+folders = ['MAC_Mix', 'MAC_Smallg', 'MAC_P', 'MAC_1f', 'MAC_2f', 'MAC_LargeG', 'MAC_3f', 'MAC_4f', 'GLS_a', 'GLS_b', 'GLSC_a']
+precisions = {'MAC_Mix': 1e-4, 'MAC_Smallg': 1e-5, 'MAC_P': 9e-5, 'MAC_1f': 1e-5, 'MAC_2f': 1e-8, 'MAC_LargeG': 9e-6, 'MAC_3f': 5e-5,
+              'MAC_4f': 1e-6, 'GLS_a': 1e-4, 'GLS_b': 1e-4, 'GLSC_a': 1e-4}
 
 testsPassed = 0
 

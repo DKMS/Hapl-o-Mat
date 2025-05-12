@@ -37,7 +37,7 @@ def buildP():
     print('Build P.txt from hla_nom_p.txt')
 
     with open('P.txt', 'w') as outFile:
-        with open('hla_nom_p.txt') as file:
+        with open('hla_nom_p.txt', mode='r', encoding='utf-8-sig') as file:
             for line in sorted(file):
                 if not line.startswith('#'):
                     line = line.rstrip('\r\n')

@@ -58,7 +58,7 @@ class BasicReport{
   void buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
 			       Haplotypes & haplotypes,
 			       std::ofstream & haplotypesFile,
-			       const HaplotypeCombinations & haplotypeCombinations) const; 
+			       const HaplotypeCombinations & haplotypeCombinations, KeyPairs & kps) const; 
 
   std::string getId() const {return id;}
   double getFrequency() const {return frequency;}

@@ -63,7 +63,10 @@ def clean(path):
      os.remove(path + '/Log.dat')
      os.remove(path + '/Err.dat')
 
-folders = ['MAC_Mix', 'MAC_Smallg', 'MAC_P', 'MAC_2d', 'MAC_4d', 'MAC_LargeG', 'MAC_6d', 'MAC_8d', 'GLS_a', 'GLS_b', 'GLSC_a']
+
+print('Starting file creation for system test.')
+
+folders = ['MAC_Mix', 'MAC_Smallg', 'MAC_P', 'MAC_1f', 'MAC_2f', 'MAC_LargeG', 'MAC_3f', 'MAC_4f', 'GLS_a', 'GLS_b', 'GLSC_a']
 
 for folder in folders:          
      print('#########' + folder)
@@ -71,4 +74,4 @@ for folder in folders:
      startJob(folder)
      clean(folder)
 
-
+print('File creation finished.')

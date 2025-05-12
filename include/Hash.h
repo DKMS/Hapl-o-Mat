@@ -48,6 +48,7 @@ class Hash{
   c_iterator c_listEnd() const {return hashList.cend();}
   iterator listBegin() {return hashList.begin();}
   iterator listEnd() {return hashList.end();}
+  iterator listFind(const size_t hashValue) {return hashList.find(hashValue);}
 
   typename typeHash_t::const_local_iterator c_listBegin(const size_t n) const {return hashList.cbegin(n);}
   typename typeHash_t::const_local_iterator c_listEnd(const size_t n) const {return hashList.cend(n);}
@@ -63,7 +64,7 @@ class Hash{
 
   virtual std::size_t computeSizeInBytes() = 0;
 
- protected:
+protected:
   std::hash<std::string> string_hash;
   typeHash_t hashList;
 };

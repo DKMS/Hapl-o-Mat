@@ -18,7 +18,8 @@ automatically.
 Manually
 --------
 We prepare the data step by step. A more detailed explanation can be found
-in prepareData/detailedExplanationManuallyPrepareData.pdf.
+in prepareData/detailedExplanationPrepareData.pdf. (Also a semi-automated way
+to create the needed data files is described there.)
 
 1) Enter the folder prepareData. Download the relevant data files
    1.1) automatically via 
@@ -26,56 +27,20 @@ in prepareData/detailedExplanationManuallyPrepareData.pdf.
    	python DownloadData.py
 
    1.2) or manually via
-      1.2.1) Go to the website http://hla.alleles.org/wmda/hla_nom_p.txt and
+      1.2.1) Go to the website 
+      https://raw.githubusercontent.com/ANHIG/IMGTHLA/Latest/wmda/hla_nom_p.txt and
       save the file hla_nom_p.txt.
 
-      1.2.2) Go to the website http://hla.alleles.org/wmda/hla_nom_g.txt and
+      1.2.2) Go to the website 
+      https://raw.githubusercontent.com/ANHIG/IMGTHLA/Latest/wmda/hla_nom_g.txt and
       save the file hla_nom_g.txt.
 
-      1.2.3) Go to the website https://bioinformatics.bethematchclinical.org/
-      HLA-Resources/Allele-Codes/Allele-Code-Lists/
-      Allele-Code-List-in-Alphabetical-Order/. Click on
-      "Alphabetical Allele Code List (ZIP) (new nomenclature)" and save 
-      alpha.v3.zip. Extract the archive to obtain alpha.v3.txt. You can
-      remove the archive afterwards.
+      1.2.3) Download the file https://hml.nmdp.org/mac/files/alpha.v3.zip. Extract 
+      the archive to obtain alpha.v3.txt. You can remove the archive afterwards.
 
-      1.2.4) You can choose between two options.
-      	     1.2.4.1) Download the file
-	     https://github.com/jrob119/IMGTHLA/raw/Latest/xml/
-	     hla_ambigs.xml.zip. Extract the archive to obtain hla_ambigs.xml.
-	     You can remove the archive afterwards.
-
-	     1.2.4.2) Go to the website https://www.ebi.ac.uk/ipd/imgt/hla/
-	     ambig.html. Click on "Download Excel" for the wanted release
-	     (usually the latest) and save ambiguity_v<>.xls (replace <> by
-	     version). Open ambiguity_v<>.xls in Excel and save as 
-	     ambiguity_v<>.xlsm to run macros. Run the following macro which
-	     saves relevant worksheets as .txt-files:
-
-    	     Sub saveSheets()
-	     '
-	     '
-	     Dim strPath As String, NameSheet As String, NameFile As String
-	     Dim ws As Excel.Worksheet
-
-    	     strPath = Application.ActiveWorkbook.Path
-    
-	     For i = 2 To Worksheets.Count
-
-	     Worksheets(i).Activate
-	     Set ws = ActiveSheet
-	     ws.Copy
-
-	     NameSheet = ActiveSheet.name
-	     NameFile = strPath & "\" & NameSheet & ".txt"
-	     ActiveWorkbook.SaveAs Filename:=NameFile, FileFormat:=xlText
-	     ActiveWorkbook.Close False
-
-	     Next i
-
-	     End Sub
-
-	     You can remove the Excel file afterwards.
+      1.2.4) Download the file 
+      https://raw.githubusercontent.com/ANHIG/IMGTHLA/Latest/xml/hla_ambigs.xml.zip. 
+      Extract the archive to obtain hla_ambigs.xml. You can remove the archive afterwards.
 
 2) If you require additional loci than the standard follow
    2.1) Create list of class 1 alleles of loci not included in hla_nom_g (HLA-E, HLA-F,
@@ -94,11 +59,10 @@ in prepareData/detailedExplanationManuallyPrepareData.pdf.
    3.5)	python BuildLargeG.py
    3.6)	python BuildSmallg.py
    3.7) python AddAllelesMissingIngCode.py
-   3.8) python TransferAlphaToMultipleAlleleCodes
-   3.9) Depending on your choice in 1.2.4) run
-   	3.8.1) python BuildAmbiguityFromXML.py if you worked with the xml file
-   	3.8.1) python BuildAmbiguityFromTextFiles.py if you worked with the Excel file
+   3.8) python TransferAlphaToMultipleAlleleCodes.py
+   3.9) python BuildAmbiguityFromXML.py
    3.10) python AddGToAmbiguity.py
+   3.11) python TestAlleleVersions.py
 
 4) Move LargeG.txt, P.txt, Smallg.txt, Ambiguity.txt, MultipleAlleleCodes.txt,
 and AllAllelesExpanded.txt to folder data.

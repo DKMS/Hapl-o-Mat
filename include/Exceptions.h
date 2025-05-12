@@ -57,7 +57,7 @@ class MissingAlleleException : public std::exception{
   explicit MissingAlleleException(const std::string in_missingAllele,
 				  const std::string in_fileName)
     : exception(),
-    errorMessage("Allele " + in_missingAllele + " does not exist in " + in_fileName + ".")
+    errorMessage("Allele " + in_missingAllele + " does not exist in " + in_fileName + ". Please consider the information in manageInput/checkInputDeprecatedAlleles/DeprecatedMultiAlleleCodes.txt.")
     {}
 
   virtual const char* what() const throw()
@@ -251,5 +251,24 @@ class InputLineException : public std::exception{
     return "Wrong line length.";
   }
 };
+
+class UnsafeSIZE_T_Cast : public std::exception{
+
+ public:
+    explicit UnsafeSIZE_T_Cast(const std::string convertee)
+    : exception(),
+    errorMessage("Could not convert unsinged integer to size_t " +
+                convertee )
+    {}
+  
+  virtual const char* what() const throw()
+  {
+    return errorMessage.c_str();
+  }
+
+ private:
+  std::string errorMessage;
+};
+
 
 #endif

@@ -41,6 +41,7 @@ import BuildSmallg
 import BuildAmbiguityFromXML
 import AddGToAmbiguity
 import AddAllelesMissingIngCode
+import TestAlleleVersions
 
 def buildData():
 
@@ -66,9 +67,11 @@ def buildData():
     AddAllelesMissingIngCode.addAllelesMissingIngCodes()
 
     TransferAlphaToMultipleAlleleCodes.transferAlphaToMultipleAlleleCodes()
-
+    
     BuildAmbiguityFromXML.buildAmbiguityFromXML()
     AddGToAmbiguity.addGToAmbiguity()
+    
+    TestAlleleVersions.testAlleleVersions()
 
 def moveData():
 
@@ -83,6 +86,7 @@ def moveData():
     shutil.move('Ambiguity.txt', '../data/Ambiguity.txt')
     shutil.move('MultipleAlleleCodes.txt', '../data/MultipleAlleleCodes.txt')
     shutil.move('AllAllelesExpanded.txt', '../data/AllAllelesExpanded.txt')
+    shutil.move('DeprecatedMultiAlleleCodes.txt', '../manageInput/checkInputDeprecatedAlleles/DeprecatedMultiAlleleCodes.txt')
 
 def clean():
 

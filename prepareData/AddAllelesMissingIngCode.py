@@ -53,16 +53,23 @@ def addAllelesMissingIngCodes():
                 loci.append(locus)
 
     #read in g
+    gToAlleles = dict()
     alleleTog = dict()
+    allele4dTog = dict() 
     with open('Smallg.txt') as file:
         for line in file:
             line = line.rstrip()
             alleles = line.split()
             gCode = alleles[0]
             alleles = alleles[1:]
-
+            
+            gToAlleles[gCode] = alleles
+            
             for allele in alleles:
+                digitFields = allele.split(':', 2)
+                allele4d = digitFields[0] + ':' +  digitFields[1]
                 alleleTog[allele] = gCode
+                allele4dTog[allele4d] = gCode
 
     #check which alleles from AllAllelesExpanded are not in a g-code. Only consider alleles with 4d codes splitting into more than one allele
     missingAllelesIng = defaultdict(set)
@@ -78,18 +85,13 @@ def addAllelesMissingIngCodes():
                     if not allele in alleleTog:
                         digitFields = allele.split(':', 2)
                         allele4d = digitFields[0] + ':' +  digitFields[1]
-                        missingAllelesIng[allele4d].add(allele)
-
-    #read in g to alleles
-    gToAlleles = dict()
-    with open('Smallg.txt') as file:
-        for line in file:
-            line = line.rstrip()
-            alleles = line.split()
-            gCode = alleles[0]
-            alleles = alleles[1:]
-
-            gToAlleles[gCode] = alleles
+                        #Add allele to existing gGroup if allele with identical 4d(2field) stem is included, else add new group
+                        if allele4d in allele4dTog:
+                            gToAlleles[allele4dTog[allele4d]].append(allele)
+                            gToAlleles[allele4dTog[allele4d]].sort()
+                            alleleTog[allele] = allele4dTog[allele4d]
+                        else:
+                            missingAllelesIng[allele4d].add(allele)
 
     #add missing alleles to Smallg.txt
     for allele4d in missingAllelesIng:

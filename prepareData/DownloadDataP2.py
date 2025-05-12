@@ -40,6 +40,39 @@ def downloadAndExtractData():
 
     successStatus = 0
 
+
+    try:
+        parametersReadDone=0
+        with open('url_config.txt') as file:
+            for line in file:
+                if not line.startswith('#'):
+                    parametersReadDone = 1
+                    line = line.rstrip('\r\n')
+                    splittedLine = line.split('=')
+                    inputFileName = splittedLine[0]
+                    inputURL = splittedLine[1]
+
+                    if inputFileName == 'hla_nom_p.txt' :
+                        urlForHlanomp = inputURL
+                    elif inputFileName == 'hla_nom_g.txt' :
+                        urlForHlanomg = inputURL
+                    elif inputFileName == 'alpha.v3.zip' :
+                        urlForAlpha = inputURL
+                    elif inputFileName == 'hla_ambigs.xml.zip' :
+                        urlForHlaambigs = inputURL
+                    else:
+                        print('Unknown parameter in url_config.txt : ',inputFileName)
+                        sys.stderr.write('Something went wrong areading from url_config.txt')
+                        successStatus = 1
+
+        if parametersReadDone == 0:
+            sys.stderr.write('Something went wrong areading from url_config.txt')
+            successStatus = 1
+                        
+    except:
+        sys.stderr.write('Something went wrong reading from url_config.txt')
+        successStatus = 1
+
     try:
 
         if os.path.exists('hla_nom_p.txt'):
@@ -47,7 +80,7 @@ def downloadAndExtractData():
         else:
             print('    Download hla_nom_p.txt')
             with open('hla_nom_p.txt', 'wb') as f:
-                f.write(urllib2.urlopen('http://hla.alleles.org/wmda/hla_nom_p.txt').read())
+                f.write(urllib2.urlopen(urlForHlanomp).read())
                 f.close()
 
 
@@ -56,7 +89,7 @@ def downloadAndExtractData():
         else:
             print('    Download hla_nom_g.txt')
             with open('hla_nom_g.txt', 'wb') as f:
-                f.write(urllib2.urlopen('http://hla.alleles.org/wmda/hla_nom_g.txt').read())
+                f.write(urllib2.urlopen(urlForHlanomg).read())
                 f.close()
 
 
@@ -65,7 +98,7 @@ def downloadAndExtractData():
         else:
             print('    Download alpha.v3.zip')
             with open('alpha.v3.zip','wb') as f:
-                f.write(urllib2.urlopen('https://bioinformatics.bethematchclinical.org/HLA/alpha.v3.zip').read())
+                f.write(urllib2.urlopen(urlForAlpha).read())
                 f.close()
 
         
@@ -74,7 +107,7 @@ def downloadAndExtractData():
         else:
             print('    Download hla_ambigs_xml.zip')
             with open('hla_ambigs.xml.zip','wb') as f:
-                f.write(urllib2.urlopen('https://github.com/jrob119/IMGTHLA/raw/Latest/xml/hla_ambigs.xml.zip').read())
+                f.write(urllib2.urlopen(urlForHlaambigs).read())
                 f.close()
 
 

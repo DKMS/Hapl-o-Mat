@@ -93,19 +93,19 @@ void Parameters::lociAndResolutions_assign(const std::string line){
 	  std::string locus = locusAndResolution[0];
 	  std::string wantedResolution = locusAndResolution[1];
 	  
-	  if(wantedResolution == "2d")
-	    lociAndResolutions.emplace(locus, Allele::codePrecision::twoDigit);
+	  if(wantedResolution == "1f")
+	    lociAndResolutions.emplace(locus, Allele::codePrecision::firstField);
 	  else if(wantedResolution == "g")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::g);
 	  else if(wantedResolution == "P")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::P);
-	  else if(wantedResolution == "4d")
+	  else if(wantedResolution == "2f")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::fourDigit);
 	  else if(wantedResolution =="G")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::G);
-	  else if(wantedResolution == "6d")
+	  else if(wantedResolution == "3f")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::sixDigit);
-	  else if(wantedResolution == "8d")
+	  else if(wantedResolution == "4f")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::eightDigit);
 	  else if(wantedResolution == "asItIs")
 	    lociAndResolutions.emplace(locus, Allele::codePrecision::asItIs);
@@ -124,7 +124,15 @@ void Parameters::lociAndResolutions_assign(const std::string line){
 void Parameters::seed_assign(size_t & out, const std::string line){
   size_t pos = line.find("=");
   std::string value = line.substr(pos + 1);
-  out = std::stoi(value);
+  
+  try {
+    out = std::stoi(value);
+  } catch (std::out_of_range& e) {
+    out = std::chrono::system_clock::now().time_since_epoch().count();
+    std::cout << "<!> Warning! In Parameterfile: Seed exceeds limits of integer value." << std::endl;  
+    std::cout << "Assiging random value: " << out << std::endl;
+  }
+ 
   if(out == 0){
     out = std::chrono::system_clock::now().time_since_epoch().count();
   }
@@ -159,7 +167,6 @@ std::string Parameters::printInitialisationHaplotypeFrequencies() const{
 }
 
 void Parameters::fillParameterNamesAndFound(){
-
   parameterNamesAndFound.emplace("FILENAME_HAPLOTYPES", false);
   parameterNamesAndFound.emplace("FILENAME_HAPLOTYPEFREQUENCIES", false);
   parameterNamesAndFound.emplace("FILENAME_EPSILON_LOGL", false);
@@ -168,6 +175,7 @@ void Parameters::fillParameterNamesAndFound(){
   parameterNamesAndFound.emplace("CUT_HAPLOTYPEFREQUENCIES", false);
   parameterNamesAndFound.emplace("RENORMALIZE_HAPLOTYPEFREQUENCIES", false);
   parameterNamesAndFound.emplace("SEED", false);
+  parameterNamesAndFound.emplace("WRITE_GENOTYPES", false);
 }
 
 void Parameters::areAllParametersListed(){
@@ -218,6 +226,8 @@ bool Parameters::isLineParameterAssignment(const std::string line) const{
     }
 }
 
+
+// GLS Format
 void ParametersGLS::init(){
 
   std::ifstream file;
@@ -229,7 +239,8 @@ void ParametersGLS::init(){
     else if(line.find("FILENAME_GLID") != std::string::npos) val_assign(glidFileName, line);
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(genotypesFileName, line);
-    else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
+    else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos)  val_assign(haplotypeFrequenciesFileName, line);
+    else if(line.find("FILENAME_ANALYTICS") != std::string::npos) val_assign(analyticsFileName, line);
     else if(line.find("FILENAME_EPSILON_LOGL") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCIORDER") != std::string::npos) loci_assign(line);
     else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
@@ -242,7 +253,7 @@ void ParametersGLS::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALIZE_HAPLOTYPEFREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);   
-    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);  //US: 03.02.2021    
+    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);
     else{
       continue;
     }
@@ -264,8 +275,9 @@ void ParametersGLS::print() const {
   std::cout << "\t Input pull file: " << pullFileName << std::endl; 
   std::cout << "\t Input GL-id file: " << glidFileName << std::endl; 
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;  
+  if (writeOutputGenotypes) std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  if (doAnalytics) std::cout << "\t Output haplotype analytics: " << analyticsFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
@@ -316,6 +328,7 @@ void ParametersGLS::fillSpecificParameterNamesAndFound(){
   parameterNamesAndFound.emplace("RESOLVE_MISSING_GENOTYPES", false);
 }
 
+// GLSC Format
 void ParametersGLSC::init(){
 
   std::ifstream file;
@@ -327,6 +340,7 @@ void ParametersGLSC::init(){
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(genotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
+    else if(line.find("FILENAME_ANALYTICS") != std::string::npos) val_assign(analyticsFileName, line);
     else if(line.find("FILENAME_EPSILON_LOGL") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
@@ -337,7 +351,7 @@ void ParametersGLSC::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALIZE_HAPLOTYPEFREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);  //US: 03.02.2021
+    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);
     else{
       continue;
     }
@@ -351,8 +365,9 @@ void ParametersGLSC::print() const {
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Input: " << inputFileName << std::endl; 
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
+  if (writeOutputGenotypes) std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  if (doAnalytics) std::cout << "\t Output haplotype analytics: " << analyticsFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
@@ -392,6 +407,7 @@ void ParametersGLSC::fillSpecificParameterNamesAndFound(){
   parameterNamesAndFound.emplace("EXPAND_LINES_AMBIGUITYFILTER", false);
 }
 
+// MAC Format
 void ParametersMAC::init(){
 
   std::ifstream file;
@@ -403,6 +419,7 @@ void ParametersMAC::init(){
     else if(line.find("FILENAME_HAPLOTYPES") != std::string::npos) val_assign(haplotypesFileName, line);
     else if(line.find("FILENAME_GENOTYPES") != std::string::npos) val_assign(genotypesFileName, line);
     else if(line.find("FILENAME_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(haplotypeFrequenciesFileName, line);
+    else if(line.find("FILENAME_ANALYTICS") != std::string::npos) val_assign(analyticsFileName, line);
     else if(line.find("FILENAME_EPSILON_LOGL") != std::string::npos) val_assign(epsilonFileName, line);
     else if(line.find("LOCI_AND_RESOLUTIONS") != std::string::npos) lociAndResolutions_assign(line);
     else if(line.find("MINIMAL_FREQUENCY_GENOTYPES") != std::string::npos) val_assign(minimalFrequency, line);
@@ -413,7 +430,8 @@ void ParametersMAC::init(){
     else if(line.find("CUT_HAPLOTYPEFREQUENCIES") != std::string::npos) val_assign(cutHaplotypeFrequencies, line);
     else if(line.find("RENORMALIZE_HAPLOTYPEFREQUENCIES") != std::string::npos) bool_assign(renormaliseHaplotypeFrequencies, line);
     else if(line.find("SEED") != std::string::npos) seed_assign(seed, line);
-    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);  //US: 03.02.2021
+    else if(line.find("WRITE_GENOTYPES") != std::string::npos) bool_assign(writeOutputGenotypes, line);
+    else if(line.find("DO_ANALYTICS") != std::string::npos) bool_assign(doAnalytics, line);
     else{
       continue;
     }
@@ -423,12 +441,13 @@ void ParametersMAC::init(){
 
 void ParametersMAC::print() const {
 
-  std::cout << "\t MA format" << std::endl;
+  std::cout << "\t Multi allele code (MAC) format" << std::endl;
   std::cout << "#########Parameters I/O" << std::endl;
   std::cout << "\t Input: " << inputFileName << std::endl;
   std::cout << "\t Output haplotypes: " << haplotypesFileName << std::endl;
-  std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
+  if (writeOutputGenotypes) std::cout << "\t Output genotypes: " << genotypesFileName << std::endl;
   std::cout << "\t Output estimated haplotype frequencies: " << haplotypeFrequenciesFileName << std::endl;
+  if (doAnalytics) std::cout << "\t Output haplotype analytics: " << analyticsFileName << std::endl;
   std::cout << "\t Output epsilon and log(L): " << epsilonFileName << std::endl;
   std::cout << "#########Parameters resolving genotypes" << std::endl;
   std::cout << "\t Minimal frequency of genotypes: " << minimalFrequency << std::endl;
@@ -466,8 +485,12 @@ void ParametersMAC::fillSpecificParameterNamesAndFound(){
   parameterNamesAndFound.emplace("MINIMAL_FREQUENCY_GENOTYPES", false);
   parameterNamesAndFound.emplace("DO_AMBIGUITYFILTER", false);
   parameterNamesAndFound.emplace("EXPAND_LINES_AMBIGUITYFILTER", false);
+  parameterNamesAndFound.emplace("DO_ANALYTICS", false);
+  parameterNamesAndFound.emplace("FILENAME_ANALYTICS", false);
 }
 
+
+// READ Format
 void ParametersReadin::init(){
 
   std::ifstream file;

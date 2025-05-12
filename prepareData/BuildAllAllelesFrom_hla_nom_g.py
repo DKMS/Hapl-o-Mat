@@ -36,7 +36,7 @@ def buildAllAllelesFromHlaNomg():
 
     print('Build allAlleles.txt from hla_nom_g.txt')
     alleles = []
-    with open('hla_nom_g.txt') as file:
+    with open('hla_nom_g.txt', mode='r', encoding='utf-8-sig') as file:
         for line in file:
             if not line.startswith('#'):
                 line = line.rstrip('\r\n')

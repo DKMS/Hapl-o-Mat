@@ -55,6 +55,8 @@ def buildSmallg():
     endLetters = ('N', 'L', 'S', 'Q')
     with open('LargeG.txt') as file:
         for line in file:
+            
+            Gopen = True
             line = line.rstrip('\n')
             splittedLine = line.split()
             #build two sets, one containing codes with letters at the end, the other one the remaining codes
@@ -70,6 +72,49 @@ def buildSmallg():
             for pCode in allPCodes:
                 if codes.issubset(pCode[1]) and codes:
                     pCode[1].update(codesN)
+                    Gopen = False
+            
+            if Gopen:
+                # no matching P group exists for this G group (e.g., if the G group consists of two alleles, one of which is a null allele)
+                stripped = []
+                for s in splittedLine:
+                    stripped.append(s.rstrip('NLSQ'))
+                
+                # define 'smallest' allel for group name
+                listAll = [[],[],[],[]]
+                for a in stripped:
+                    aSplit = a.split(':')
+                    for i in range(4):   
+                        try:     
+                            listAll[i].append(aSplit[i])
+                        except IndexError:
+                            listAll[i].append('')
+                lastIndex = []
+                for field in listAll:                    
+                    try:
+                        fieldInt = [int(ii) for ii in field]
+                    except ValueError:
+                        fieldInt = field                    
+                    minVal = min(fieldInt)
+                    index=[idx for idx,val in enumerate(fieldInt) if val==minVal]
+                    
+                    if not lastIndex: # lastIndex empty
+                        lastIndex = index
+                    else:
+                        #intersect
+                        intersect = list(set(index) & set(lastIndex))      
+                        if len(intersect) == 1:
+                            minCode = stripped[index[0]]
+                            break
+                        lastIndex = index  
+                
+                # include group in dictionary allPCodes
+                splittedCode = minCode.split(':')
+                pGroupName = splittedCode[0] + ':' + splittedCode[1] + 'P'
+                pCode = []
+                pCode.append(pGroupName)
+                pCode.append(splittedLine)
+                allPCodes.append(pCode)
         
     with open('Smallg.txt', 'w') as file:
         for pCode in allPCodes:

@@ -28,6 +28,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+
+
 #include <iostream>
 #include <memory>
 #include <string>
@@ -38,6 +40,8 @@
 #include "Parameters.h"
 #include "Phenotype.h"
 #include "Utility.h"
+#include "Analytics.h"
+
 
 int main(int argc, char *argv[]){
 
@@ -89,13 +93,15 @@ int main(int argc, char *argv[]){
     timePoint startTime = getTime();
     Phenotypes phenotypes;
     Haplotypes haplotypes(*pParameters);
-    pInputFile->dataProcessing(phenotypes, haplotypes);
+      KeyPairs haplotypeKeys(pParameters->getDoAnalytics());
+      
+    pInputFile->dataProcessing(phenotypes, haplotypes, haplotypeKeys);
     pInputFile->printStatistics();
     std::cout << "\t Memory requirement haplotypes [MB]: " << haplotypes.computeSizeInBytes()/1000./1000. << std::endl;
     std::cout << "\t Memory requirement genotypes [MB]: " << phenotypes.computeSizeInBytes()/1000./1000. << std::endl;
     timePoint endTime = getTime();
     double timeTakenForDataPreProcessing = getTimeDifference(startTime, endTime)/1000000.;
-    
+
     std::cout << "#########EM algorithm" << std::endl;
     startTime = getTime();
     double minEpsilon = .5 / static_cast<double>(haplotypes.getNumberDonors());
@@ -110,10 +116,22 @@ int main(int argc, char *argv[]){
     }
     endTime = getTime();
     double timeTakenForEMAlgorithm = getTimeDifference(startTime, endTime)/1000000.;
-    
+
+    double timeTakenForAnalytics = 0.;
+
+    if (pParameters->getDoAnalytics()) {
+        startTime = getTime();
+        
+        analyticsHaplotypeUsage(phenotypes,haplotypes,haplotypeKeys, pParameters->getAnalyticsFileName());
+        
+        endTime = getTime();
+        timeTakenForAnalytics= getTimeDifference(startTime, endTime)/1000000.;
+        std::cout << "\t Memory requirement analytics [MB]: " << haplotypeKeys.computeSizeInBytes()/1000./1000. << std::endl;
+    }
+
     startTime = getTime();
     haplotypes.writeFrequenciesToFile();
-    haplotypes.deleteHaplotypesFile();
+    haplotypes.deleteHaplotypesFile();  
     endTime = getTime();
     double timeTakenForWriting = getTimeDifference(startTime, endTime)/1000000.;
     
@@ -121,6 +139,7 @@ int main(int argc, char *argv[]){
     std::cout.precision(14);
     std::cout << "\t Data preprocessing [s]: " << timeTakenForDataPreProcessing << std::endl;
     std::cout << "\t EM algorithm [s]: " << timeTakenForEMAlgorithm << std::endl;
+    if (pParameters->getDoAnalytics()) std::cout << "\t Analytics [s]: " << timeTakenForAnalytics << std::endl;
     std::cout << "\t Writing [s]: " << timeTakenForWriting << std::endl;
 
     return 0;

@@ -36,6 +36,8 @@
 #include "Glid.h"
 #include "Parameters.h"
 #include "Typedefs.h"
+#include "Phenotype.h"
+#include "Utility.h"
 
 class Phenotypes;
 class Haplotypes;
@@ -74,13 +76,13 @@ class InputFile{
       }
   virtual ~InputFile(){}
 
-  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList, KeyPairs & kps) = 0;
   virtual void printStatistics() = 0;
     
   void buildHaploDiploPhenoTypes(Phenotypes & phenotypes,
 				 Haplotypes & hList,
 				 const std::shared_ptr<BasicReport> listOfpReports,
-				 std::ofstream & HaplotypesFile);
+				 std::ofstream & HaplotypesFile, KeyPairs & kps);
 
   size_t getNumberDonors() const {return numberDonors;}
 
@@ -104,7 +106,7 @@ class InputFileToEdit : public InputFile{
     lociAndResolutions(),
     minimalFrequency(){}
 
-  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList) = 0;
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList, KeyPairs & kps) = 0;
   virtual void printStatistics();
 
   void printPhenotypes(const std::shared_ptr<Report> pReport,
@@ -117,6 +119,7 @@ class InputFileToEdit : public InputFile{
   size_t numberRemovedDonors;
   std::map<std::string, Allele::codePrecision> lociAndResolutions;
   double minimalFrequency;
+  bool writeOutputGenotypes;
 };
 
 class GLS : public InputFileToEdit{
@@ -125,7 +128,6 @@ class GLS : public InputFileToEdit{
   explicit GLS(const ParametersGLS & parameters)
     : InputFileToEdit(parameters.getPullFileName()),
     glidFileName(parameters.getGlidFileName()),
-    writeOutputGenotypes(parameters.getWriteOutputGenotypes()),              //US: 03.02.2021 
     lociOrder(parameters.getLociOrder()),
     resolveUnknownGenotype(parameters.getResolveUnknownGenotype()),
     glid(glidFileName,
@@ -140,13 +142,13 @@ class GLS : public InputFileToEdit{
 	lociAndResolutions = parameters.getLociAndResolutions();
 	numberLoci = lociAndResolutions.size();
 	minimalFrequency = parameters.getMinimalFrequency();
+    writeOutputGenotypes = parameters.getWriteOutputGenotypes();
       }
   
-  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList, KeyPairs & kps);
 
  private:
   std::string glidFileName;
-  bool writeOutputGenotypes;              //US: 03.02.2021 
   strVec_t lociOrder;
   std::vector<bool> booleanLociToDo;
   bool resolveUnknownGenotype;
@@ -159,7 +161,6 @@ class GLSC : public InputFileToEdit{
   explicit GLSC(const ParametersGLSC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
-    writeOutputGenotypes(parameters.getWriteOutputGenotypes()),              //US: 03.02.2021 
     expandAmbiguityLines(parameters.getExpandAmbiguityLines())
     {
       haplotypesFileName = parameters.getHaplotypesFileName();
@@ -167,13 +168,13 @@ class GLSC : public InputFileToEdit{
       lociAndResolutions = parameters.getLociAndResolutions();
       numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
+        writeOutputGenotypes = parameters.getWriteOutputGenotypes();
     }
 
-  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList, KeyPairs & kps);
 
  private:
   bool doAmbiguityFilter;
-  bool writeOutputGenotypes;              //US: 03.02.2021 
   bool expandAmbiguityLines;
 };
 
@@ -183,7 +184,6 @@ class MAC : public InputFileToEdit{
   explicit MAC(const ParametersMAC & parameters)
     : InputFileToEdit(parameters.getInputFileName()),
     doAmbiguityFilter(parameters.getDoAmbiguityFilter()),
-    writeOutputGenotypes(parameters.getWriteOutputGenotypes()),              //US: 03.02.2021 
     expandAmbiguityLines(parameters.getExpandAmbiguityLines()),
     lociNamesFromFile()
     {
@@ -192,15 +192,15 @@ class MAC : public InputFileToEdit{
       lociAndResolutions = parameters.getLociAndResolutions();
       numberLoci = lociAndResolutions.size();
       minimalFrequency = parameters.getMinimalFrequency();
+      writeOutputGenotypes = parameters.getWriteOutputGenotypes();
     }
 
-  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList, KeyPairs & kps);
 
   void readLociNamesFromFile(const std::string line);
 
  private:  
   bool doAmbiguityFilter;
-  bool writeOutputGenotypes;              //US: 03.02.2021 
   bool expandAmbiguityLines;
   strVec_t lociNamesFromFile;  
 };
@@ -215,7 +215,7 @@ class InputFileToRead : public InputFile{
       genotypesFileName = parameters.getGenotypesFileName();
     }
 
-  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList);
+  virtual void dataProcessing(Phenotypes & phenotypes, Haplotypes & hList, KeyPairs & kps);
   virtual void printStatistics();
 
   void countNumberLoci(const std::string inputFile);

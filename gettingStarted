@@ -31,12 +31,18 @@ This guide is divided into the following sections:
 
 For more information refer to our publications on Hapl-o-Mat:
 
-Journal article to come
+Schäfer C, Schmidt AH, Sauter J. Hapl-o-Mat: open-source software for HLA haplotype frequency 
+    estimation from ambiguous and heterogeneous data. BMC Bioinformatics. 2017; 18(1):284. 
+    doi: 10.1186/s12859-017-1692-y.
+Sauter J, Schäfer C, Schmidt AH. HLA Haplotype Frequency Estimation from Real-Life Data 
+    with the Hapl-o-Mat Software. Methods Mol Biol. 2018; 1802:275-284. 
+    doi: 10.1007/978-1-4939-8546-3_19. 
+Solloch UV, Schmidt AH, Sauter J. Graphical user interface for the haplotype frequency
+    estimation software Hapl-o-Mat. Hum Immunol. 2022; 83(2):107-112. 
+    doi: 10.1016/j.humimm.2021.11.002.
 
-C. Schaefer, A.H. Schmidt, J. Sauter: Hapl-O-mat: A Versatile Software for
-Haplotype Frequency Estimation. HLA (2016), 87, 236–320
+If you use Hapl-o-Mat for your research, please cite preferably the journal articles.
 
-If you use Hapl-o-Mat for your research, please cite preferably the journal article.
 
 
 1) Input Files
@@ -69,8 +75,10 @@ relies on the following files.
    enclosed more-digits typing resolutions
 
    AlleleList.txt: If your input data in GLS format includes a missing single-locus
-   genotype, it can be replaced by combining all alleles of the same locus from this
-   file. You only must create it in this case.
+   genotype, this missing locus information can be treated as an ambiguity that can be
+   resolved either by insertion of all alleles of the respective locus that are represented 
+   in your input file or by all known alleles of this locus. 
+   AlleleList.txt must only be created in these cases.
 
    Ambiguity.txt: Data for the ambiguity filter
 
@@ -86,7 +94,7 @@ relies on the following files.
 As the data-processing is a little bit tedious, we provide you with an automated script.
 If you want to build the data manually, follow the short instructions in
 “Hapl-o-Mat/prepareData/README” or the detailed version in
-“Hapl-o-Mat/prepareData/detailedExplanationManuallyPrepareData.pdf”.
+“Hapl-o-Mat/prepareData/detailedExplanationPrepareData.pdf”.
 
 To build data automatically, enter the folder "Hapl-o-Mat/prepareData" and run
 
@@ -94,6 +102,9 @@ To build data automatically, enter the folder "Hapl-o-Mat/prepareData" and run
 
 to download all relevant data, process them, and move the created files to folder
 “Hapl-o-Mat/data”.
+
+For a more detailled descriprion of the data preparation procedure Please see 
+the document in "Hapl-o-Mat/prepareData/detailedExplanationPrepareData.pdf".
 
 
 3) Input Formats
@@ -129,6 +140,43 @@ folder "examplePopulations".
     READ: ambiguities are completely resolved and alleles are already translated to the wanted
     typing resolutions. The input data is of the format as Hapl-o-Mat records processed genotype
     data. This allows for easily repeating a run without the need to resolve genotype data again.
+
+
+    Transform input genotype data to GLS format:
+    Only in GLS format, missing single-locus genotypes can be handled. It is assigned the GLS-id=0. 
+    The parameter RESOLVE_MISSING_GENOTYPES in the “parametersGLS” file offers the option (when set 
+    to “true”) to replace a missing single-locus genotype by a combination of all alleles from 
+    AlleleList.txt at the locus.
+    If your input data in MAC or GLSC format contains missing single-locus genotypes, you have the 
+    possibility to transform it to GLS input format:
+    - Transform GLSC to GLS input: Run the script “GLSC2GLS.py” in folder “manageInput/input2GLS”. 
+        You need to add the input file as argument to the command line. A valid command would be e.g. 
+        "python3 GLSC2GLS.py ../../examplePopulations/populationData_b.glc". A single missing typing 
+		at a locus will be treated as homozygous, i.e. the present typing will be duplicated.
+    - Transform MAC to GLS input: Run the script “MAC2GLS.py” in folder “manageInput/input2GLS”. 
+        During the transformation of the MAC input you have additional option to replace a single missing
+        typing at a locus as follows:
+        'remove'		treat as empty locus (remove present allele)
+        'homozygous'	treat as homozygous (duplicate present allele)
+        'any'			treat as any allele of the locus (according to AlleleList.txt)
+        You need to add the input file AND the option for missing single typings as arguments to 
+        the command line. A valid command would be e.g. 
+        "python3 MAC2GLS.py ../../examplePopulations/populationData_a.dat homozygous".
+    The resulting input files in GLS format (one .glid and one .pull file) are stored in folder “manageInput/input2GLS/results”.
+    
+    Absent loci DRB3/4/5: Some HLA loci may be absent in a genotype, for example the loci 
+    DRB3, DRB4 and DRB5. For these three loci a missing locus has to be denoted as “NNNN” in the
+    input file in order to be adequately processed by Hapl-o-Mat (DRB3*NNNN, DRB4*NNNN, DRB5*NNNN, 
+    only “NNNN” in the respective column in MAC input format!).
+    If your input data for these loci contains a different abbreviation for missing alleles, 
+    please change file "data/AllAllelesExpanded.txt" after data preparation by replacing 
+    the three lines (end of file)
+    DRB3*NNNN	DRB3*NNNN
+    DRB4*NNNN	DRB4*NNNN
+    DRB5*NNNN	DRB5*NNNN
+    the “NNNN” with a code of your liking. Please do not use Word for the file manipulation 
+    to avoid changing the EOL characters to Windows format. Please note that the code must 
+    not overlap with existing allele names or MAC.
 
 
 4) Parameters
@@ -185,8 +233,8 @@ Depending on the input format (indicated in brackets), additional parameters are
     typing resolution per locus. The list is separated by "," and contains the locus
     name followed by ":" and the desired typing resolution, e.g. A:g,B:4d,C:g.
     Supported typing resolutions and their abbreviations are g-groups (g),
-    P-groups (P), G-groups (G), 2-digit fields (2d), 4-digit fields (4d), 6-digit
-    fields (6d), and 8-digit fields (8d). Alleles are not translated via the option
+    P-groups (P), G-groups (G), first fields (1f), second fields (2f), three 
+    fields (3f), and four fields (4f). Alleles are not translated via the option
     asItIs (applying the ambiguity filter includes an intrinsic translation to
     G-groups).
 

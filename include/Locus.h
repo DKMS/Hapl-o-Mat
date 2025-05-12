@@ -51,7 +51,7 @@ class Locus{
   virtual void resolve() = 0;
 
   void checkCodes();
-  void reduce(std::vector<std::pair<strArr_t, double>> & genotypes);
+  void reduce(std::vector<std::pair<strArr_t, double> > & genotypes);
   const std::vector<std::vector<std::shared_ptr<Allele>>>& getPAllelesAtPhasedLocus() const {return pAllelesAtPhasedLocus;}
   reportType getType() const {return type;}
 

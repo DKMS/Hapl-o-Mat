@@ -34,8 +34,8 @@
 #include "Locus.h"
 #include "Utility.h"
 
-void Locus::reduce(std::vector<std::pair<strArr_t, double>> & genotypes){
-
+void Locus::reduce(std::vector<std::pair<strArr_t, double> > & genotypes){
+ 
   //sort genotypes
   for(auto pAlleleAtPhasedLocus = pAllelesAtPhasedLocus.begin();
       pAlleleAtPhasedLocus != pAllelesAtPhasedLocus.end();

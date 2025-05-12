@@ -112,10 +112,10 @@ class FileAllelesTogOrG : public File<std::vector<std::pair<std::string, strVec_
   void readFile();
 };
 
-class FilegOrGOr4dToAlleles : public File<std::unordered_map<std::string, strVec_t>>{
+class FilegOrGOr2fToAlleles : public File<std::unordered_map<std::string, strVec_t>>{
 
  public:
-  explicit FilegOrGOr4dToAlleles(const std::string in_fileName) : File(in_fileName){
+  explicit FilegOrGOr2fToAlleles(const std::string in_fileName) : File(in_fileName){
     readFile();
   }
 

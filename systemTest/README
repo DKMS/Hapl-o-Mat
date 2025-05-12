@@ -1,13 +1,21 @@
 Hapl-o-Mat -- System Test
 -------------------------
+The system test intends to test the functionality of the Hapl-o-Mat after changes to the source code 
+by comparing run results from before and after the changes for different scenarios.
 
-- The system test requires python3 to be run
+The system test requires python3
+
+Part 1: Create files for comparison before changing Hapl-o-Mat source code.
 - Compile the executable haplomat
-- Prepare the data files
-- Create AllAlleles.txt from the input file b.glid using prepareData/BuildAlleleList.py
+- Prepare the data files using prepareData/BuildData.py
+- Create AllelList.txt from the input file GLS_b/b.glid using prepareData/BuildAlleleList.py
   and move to to data
-- Run CreateFileForComparison.py to create the results
-- Make your changes to the code of Hapl-o-Mat
+- Run CleanSystemTest.py to delete all files from previous system tests.
+- Run CreateFileForComparison.py to create the results for comparison
+
+Part 2: Make your changes to the code of Hapl-o-Mat
+
+Part 3: Run system test after changing Hapl-o-Mat source code
 - Run SystemTest.py to check if you broke Hapl-o-Mat with
   your code changes.
 - The system test does not cover every feature of Hapl-o-Mat

@@ -1,6 +1,6 @@
 CXX = g++
 #CXXFLAGS = -W -Wall -g -Wextra -pedantic -std=c++14 -I include
-CXXFLAGS = -Wall -march=native -Ofast -std=c++14 -I include
+CXXFLAGS = -Wall -march=native -O3 -ffast-math -std=c++14 -I include
 
 OBJ = $(patsubst %.cc, %.o, $(wildcard src/*.cc))
 

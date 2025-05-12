@@ -54,6 +54,7 @@ class Parameters{
     genotypesFileName("results/genotypes.dat"),
     haplotypeFrequenciesFileName("results/estimatedHaplotypeFrequencies.dat"),
     epsilonFileName("results/epsilonVsSteps.dat"),
+    analyticsFileName("results/analytics_hf.dat"),
     lociAndResolutions(),
     minimalFrequency(1e-5),
     doAmbiguityFilter(false),
@@ -61,8 +62,9 @@ class Parameters{
     initType(initialisationHaplotypeFrequencies::numberOccurrence),
     epsilon(1e-6),
     cutHaplotypeFrequencies(epsilon),
-    renormaliseHaplotypeFrequencies(true),
-    writeOutputGenotypes(true),       //US: 03.02.2021
+    renormaliseHaplotypeFrequencies(false),
+    writeOutputGenotypes(false),
+    doAnalytics(false),
     seed(0)
       {
 	fillParameterNamesAndFound();
@@ -74,6 +76,7 @@ class Parameters{
   std::string getGenotypesFileName() const {return genotypesFileName;}
   std::string getHaplotypeFrequenciesFileName() const {return haplotypeFrequenciesFileName;}
   std::string getEpsilonFileName() const {return epsilonFileName;}
+  std::string getAnalyticsFileName() const {return analyticsFileName;}
   const std::map<std::string, Allele::codePrecision>& getLociAndResolutions() const {return lociAndResolutions;}
   double getMinimalFrequency() const {return minimalFrequency;}
   bool getDoAmbiguityFilter() const {return doAmbiguityFilter;}
@@ -83,7 +86,8 @@ class Parameters{
   double getCutHaplotypeFrequencies() const {return cutHaplotypeFrequencies;}
   bool getRenormaliseHaplotypeFrequencies() const {return renormaliseHaplotypeFrequencies;}
   size_t getSeed() const {return seed;}
-  bool getWriteOutputGenotypes() const {return writeOutputGenotypes;}             //US: 03.02.2021 
+  bool getWriteOutputGenotypes() const {return writeOutputGenotypes;}
+  bool getDoAnalytics() const {return doAnalytics;}
 
  protected:
   virtual void init() = 0;
@@ -110,6 +114,7 @@ class Parameters{
   std::string genotypesFileName;
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
+  std::string analyticsFileName;
 
   std::unordered_map<std::string, bool> parameterNamesAndFound;
   std::map<std::string, Allele::codePrecision> lociAndResolutions;
@@ -120,7 +125,8 @@ class Parameters{
   double epsilon;
   double cutHaplotypeFrequencies;
   bool renormaliseHaplotypeFrequencies;
-  bool writeOutputGenotypes;       //US: 03.02.2021
+  bool writeOutputGenotypes;
+  bool doAnalytics;
   size_t seed;
 };
 

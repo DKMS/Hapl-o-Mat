@@ -30,8 +30,7 @@ the Makefile, e.g. -march=native.
 
 ## Installing under Windows
 A detailed explanation on how to install Hapl-o-Mat under Windows using
-the Eclipse IDE for C/C++ Developers can be found in
-detailedGettingStartedWindows.pdf.
+Visual Studio Code can be found in detailedGettingStartedWindows.pdf.
 
 ## Usage
 For information on how to use Hapl-o-Mat and some tutorials using Linux
@@ -42,9 +41,9 @@ detailedGettingStartedWindows.pdf.
 ## Citation
 If you use Hapl-o-Mat for your research, please cite
 
-(Until our journal article appears)
-C. Schäfer, A.H. Schmidt, J. Sauter: Hapl-O-mat: A Versatile
-Software for Haplotype Frequency Estimation. HLA (2016), 87, 236–320
+Schäfer C, Schmidt AH, Sauter J. Hapl-o-Mat: open-source software for HLA haplotype frequency 
+    estimation from ambiguous and heterogeneous data. BMC Bioinformatics. 2017; 18(1):284. 
+    doi: 10.1186/s12859-017-1692-y.
 
 ## Contributors
 If you want to participate in actively developing Hapl-o-Mat please

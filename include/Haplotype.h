@@ -32,9 +32,11 @@
 #define Haplotype_header
 
 #include <random>
+#include <limits>
 
 #include "Hash.h"
 #include "Parameters.h"
+#include "Exceptions.h"
 
 class Phenotypes;
 
@@ -47,9 +49,12 @@ class Haplotype{
   void setFrequency(const double in){frequency = in;}
   void addFrequency(const double in){frequency += in;}
   void multiplyFrequency(const double in){frequency *= in;}
+//    void setName(const std::string inName){name = inName;}
+//    std::string getName() const{return name;}
 
  private:
   double frequency;
+//    std::string name;
 };
 
 class Haplotypes : public Hash<Haplotype>{
@@ -65,7 +70,8 @@ class Haplotypes : public Hash<Haplotype>{
     epsilon(parameters.getEpsilon()),
     cutHaplotypeFrequencies(parameters.getCutHaplotypeFrequencies()),
     renormaliseHaplotypeFrequencies(parameters.getRenormaliseHaplotypeFrequencies()),
-    rng(parameters.getSeed()){}
+    rng(uintcast(parameters.getSeed())){}
+    
 
   virtual std::size_t computeSizeInBytes();
 
@@ -93,6 +99,8 @@ class Haplotypes : public Hash<Haplotype>{
   double computeHaplotypeFrequencySum() const;
   double computeCuttedHaplotypeFrequencySum() const;
   void deleteHaplotypesFile() const;
+    
+   std::string getHaplotypeNameFromID(const int & ID) const ;
 
  private:
   Haplotypes(const Haplotypes &);
@@ -101,6 +109,7 @@ class Haplotypes : public Hash<Haplotype>{
   std::string haplotypesFileName;
   std::string haplotypeFrequenciesFileName;
   std::string epsilonFileName;
+
   size_t numberLoci;
   size_t numberDonors;
   Parameters::initialisationHaplotypeFrequencies initType;
@@ -108,6 +117,13 @@ class Haplotypes : public Hash<Haplotype>{
   double cutHaplotypeFrequencies;
   bool renormaliseHaplotypeFrequencies;
   std::mt19937 rng;
+    
+    unsigned int uintcast (size_t convertee) {
+        if (convertee > std::numeric_limits<size_t>::max()) {
+            throw UnsafeSIZE_T_Cast( std::to_string(convertee));
+        }
+        return static_cast<unsigned int>(convertee);
+    }
 };
 
 

@@ -56,8 +56,9 @@ void Phenotype::expectation(const Haplotypes & haplotypes){
       itDiplo ++)
     {
       if(itDiplo->id1 == itDiplo->id2){
+        
         itDiplo->frequency = haplotypes.getFrequency(itDiplo->id1);
-	itDiplo->frequency *= itDiplo->frequency;
+	      itDiplo->frequency *= itDiplo->frequency;
       }
       else{
         itDiplo->frequency = haplotypes.getFrequency(itDiplo->id1);
@@ -78,6 +79,9 @@ size_t Phenotypes::computeSizeInBytes(){
 	diplo ++){
       sizeInBytes += sizeof(*diplo);
     }
+    for (auto rep = pheno.second.c_reportListBegin(); rep !=pheno.second.c_reportListEnd(); rep++){
+          sizeInBytes += sizeof(*rep);
+    }
   }
   
   sizeInBytes += sizeof(hashList);
@@ -87,9 +91,7 @@ size_t Phenotypes::computeSizeInBytes(){
 
 void Phenotypes::expectationStep(const Haplotypes & haplotypes){
 
-  for(auto phenotype = hashList.begin();
-      phenotype != hashList.end();
-      phenotype ++){
+  for(auto phenotype = hashList.begin(); phenotype != hashList.end(); phenotype ++){
     phenotype->second.expectation(haplotypes);
   }
 }

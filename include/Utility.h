@@ -117,4 +117,67 @@ inline std::string trimString(std::string& str) {
     return str;
 }
 
+struct KeyPair{
+    size_t ID;
+    std::string name;
+};
+
+typedef std::vector<std::string> string_vector_t;
+typedef std::unordered_map<std::string, double> string_double_map_t;
+
+class KeyPairs {
+    public:
+    typedef std::vector<KeyPair> keyPairList_t;
+    typedef keyPairList_t::const_iterator c_iterator;
+    
+    explicit KeyPairs() {
+        saveList = false;
+    }
+    
+    explicit KeyPairs(bool doKeepList) {
+        saveList = doKeepList;
+    }
+    
+    
+    c_iterator cIteratorBegin() const {return keyPairList.cbegin();}
+    c_iterator cIteratorEnd() const {return keyPairList.cend();}
+    
+    std::string findNameByID(const size_t searchID){
+        std::string result = "N/F";
+        for (c_iterator itKP = this->cIteratorBegin(); itKP != this->cIteratorEnd(); itKP++){
+            if (searchID == itKP->ID) {
+                result = itKP->name;
+                break;
+            }
+        }
+        return result;
+    };
+
+    void add(const KeyPair& keyPair){
+        if (this->findNameByID(keyPair.ID) == "N/F") {keyPairList.push_back(keyPair);}
+    }
+
+    void setSaveList(const bool inputSaveList){
+        saveList = inputSaveList;
+    }
+
+    bool getSaveList() const {
+        return saveList;
+    }
+
+    size_t computeSizeInBytes() const {
+        size_t sizeInBytes = 0;
+        for (c_iterator itKP = this->cIteratorBegin(); itKP != this->cIteratorEnd(); itKP++){
+            sizeInBytes += sizeof(*itKP);
+        }
+        sizeInBytes += sizeof(keyPairList);
+        return sizeInBytes;
+    }
+    
+private:
+    
+    keyPairList_t keyPairList;
+    bool saveList;
+};
+
 #endif

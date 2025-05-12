@@ -62,8 +62,8 @@ std::string BasicReport::buildPhenotypeCode() const{
 void BasicReport::buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
 				     Haplotypes & haplotypes,
 				     std::ofstream & haplotypesFile,
-				     const HaplotypeCombinations & haplotypeCombinations) const{
-
+				     const HaplotypeCombinations & haplotypeCombinations, KeyPairs & kps) const{
+    
   auto i1end = haplotypeCombinations.getList().cend();
   for(auto i1 = haplotypeCombinations.getList().cbegin();
       i1 != i1end;
@@ -98,6 +98,8 @@ void BasicReport::buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
       //add haplotypes to list                                                                                                                     
       std::pair<Haplotypes::iterator, bool> inserted1 = haplotypes.add(codeHaplotype1);
       std::pair<Haplotypes::iterator, bool> inserted2 = haplotypes.add(codeHaplotype2);
+
+
       
       if(inserted1.second){
 	haplotypesFile << codeHaplotype1 << std::endl;
@@ -109,13 +111,24 @@ void BasicReport::buildHaploAndDiplotypes(Phenotypes::iterator itPhenotype,
       //build diplotype                                                                                                                          
       size_t id1 = inserted1.first->first;
       size_t id2 = inserted2.first->first;
-      
+
       Diplotype diplotype;
       diplotype.id1 = id1;
       diplotype.id2 = id2;
-      
+
       itPhenotype->second.addDiplotype(diplotype);
-    }//haplotypeCombinations  
+
+      if ( kps.getSaveList() ) {
+            KeyPair kP;
+            kP.ID = id1; kP.name = codeHaplotype1;
+            kps.add(kP);
+            kP.ID = id2; kP.name = codeHaplotype2;
+            kps.add(kP);
+            itPhenotype->second.addReportIDs(this->getId());
+       }
+
+    }//haplotypeCombinations
+
 }
 
 void ReadinReport::translateLine(const std::string line){

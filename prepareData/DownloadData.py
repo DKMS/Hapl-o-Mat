@@ -41,33 +41,66 @@ def downloadAndExtractData():
     successStatus = 0
 
     try:
-        if os.path.isfile('hla_nom_p.txt'):
-            print('    File hla_nom_p.txt already present in directory', flush=True)
-        else:
-            print('    Download hla_nom_p.txt', flush=True)
-            urlretrieve('http://hla.alleles.org/wmda/hla_nom_p.txt', filename='hla_nom_p.txt')
-    
-        if os.path.isfile('hla_nom_g.txt'):
-            print('    File hla_nom_g.txt already present in directory', flush=True)
-        else:
-            print('    Download hla_nom_g.txt', flush=True)
-            urlretrieve('http://hla.alleles.org/wmda/hla_nom_g.txt', filename='hla_nom_g.txt')
+        parametersReadDone=0
+        with open('url_config.txt') as file:
+            for line in file:
+                if not line.startswith('#'):
+                    parametersReadDone = 1
+                    line = line.rstrip('\r\n')
+                    splittedLine = line.split('=')
+                    inputFileName = splittedLine[0]
+                    inputURL = splittedLine[1]
 
-        if os.path.isfile('alpha.v3.zip'):
-            print('    File alpha.v3.zip is already present in directory', flush=True)
-        else:
-            print('    Download alpha.v3.zip', flush=True)
-            urlretrieve('https://bioinformatics.bethematchclinical.org/HLA/alpha.v3.zip', filename='alpha.v3.zip')
+                    if inputFileName == 'hla_nom_p.txt' :
+                        urlForHlanomp = inputURL
+                    elif inputFileName == 'hla_nom_g.txt' :
+                        urlForHlanomg = inputURL
+                    elif inputFileName == 'alpha.v3.zip' :
+                        urlForAlpha = inputURL
+                    elif inputFileName == 'hla_ambigs.xml.zip' :
+                        urlForHlaambigs = inputURL
+                    else:
+                        print('Unknown parameter in url_config.txt : ',inputFileName, flush=True)
+                        sys.stderr.write('Something went wrong areading from url_config.txt')
+                        successStatus = 1
 
-        if os.path.isfile('hla_ambigs.xml.zip'):
-            print('    File hla_ambigs.xml.zip is already present in directory', flush=True)
-        else:
-            print('    Download hla_ambigs.xml.zip', flush=True)
-            urlretrieve('https://github.com/jrob119/IMGTHLA/raw/Latest/xml/hla_ambigs.xml.zip', filename='hla_ambigs.xml.zip')
-
+        if parametersReadDone == 0:
+            sys.stderr.write('Something went wrong areading from url_config.txt')
+            successStatus = 1
+                        
     except:
-        sys.stderr.write('Something went wrong downloading files. You might want to check proxies or firewalls. You can also manually download the files.')
+        sys.stderr.write('Something went wrong reading from url_config.txt')
         successStatus = 1
+
+    if successStatus < 1 :
+        try:
+            if os.path.isfile('hla_nom_p.txt'):
+                print('    File hla_nom_p.txt already present in directory', flush=True)
+            else:
+                print('    Download hla_nom_p.txt', flush=True)
+                urlretrieve(urlForHlanomp, filename='hla_nom_p.txt')
+        
+            if os.path.isfile('hla_nom_g.txt'):
+                print('    File hla_nom_g.txt already present in directory', flush=True)
+            else:
+                print('    Download hla_nom_g.txt', flush=True)
+                urlretrieve(urlForHlanomg, filename='hla_nom_g.txt')
+
+            if os.path.isfile('alpha.v3.zip'):
+                print('    File alpha.v3.zip is already present in directory', flush=True)
+            else:
+                print('    Download alpha.v3.zip', flush=True)
+                urlretrieve(urlForAlpha, filename='alpha.v3.zip')
+
+            if os.path.isfile('hla_ambigs.xml.zip'):
+                print('    File hla_ambigs.xml.zip is already present in directory', flush=True)
+            else:
+                print('    Download hla_ambigs.xml.zip', flush=True)
+                urlretrieve(urlForHlaambigs, filename='hla_ambigs.xml.zip')
+
+        except:
+            sys.stderr.write('Something went wrong downloading files. You might want to check proxies or firewalls. You can also manually download the files.')
+            successStatus = 1
 
     if successStatus < 1:
         try:

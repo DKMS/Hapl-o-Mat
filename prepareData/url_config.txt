@@ -1,0 +1,4 @@
+hla_nom_p.txt=https://raw.githubusercontent.com/ANHIG/IMGTHLA/Latest/wmda/hla_nom_p.txt
+hla_nom_g.txt=https://raw.githubusercontent.com/ANHIG/IMGTHLA/Latest/wmda/hla_nom_g.txt
+alpha.v3.zip=https://hml.nmdp.org/mac/files/alpha.v3.zip
+hla_ambigs.xml.zip=https://raw.githubusercontent.com/ANHIG/IMGTHLA/Latest/xml/hla_ambigs.xml.zip

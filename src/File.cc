@@ -77,7 +77,7 @@ void FileAllelesTogOrG::readFile(){
   file.close();
 }
 
-void FilegOrGOr4dToAlleles::readFile(){
+void FilegOrGOr2fToAlleles::readFile(){
 
   std::ifstream file;
   openFileToRead(fileName, file);

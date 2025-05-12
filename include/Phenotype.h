@@ -36,6 +36,12 @@
 
 #include "Hash.h"
 
+#include "Utility.h"
+
+
+
+
+
 class Haplotypes;
 
 struct Diplotype{
@@ -50,8 +56,9 @@ class Phenotype{
  public:
   typedef std::vector<Diplotype> diplotypeList_t;
   typedef diplotypeList_t::const_iterator c_iterator;
+
   
-  explicit  Phenotype() :  numInDonors(0.), diplotypeList() {}
+  explicit  Phenotype() :  numInDonors(0.), diplotypeList(), reportID("") {}
 
   c_iterator c_diplotypeListBegin() const {return diplotypeList.cbegin();}
   c_iterator c_diplotypeListEnd() const {return diplotypeList.cend();}
@@ -60,16 +67,57 @@ class Phenotype{
   void addToNumInDonors(const double val){numInDonors += val;}
   void multiplyToNumInDonors(const double val){numInDonors *= val;}
 
-  void addDiplotype(const Diplotype& diplotype){
-    diplotypeList.push_back(diplotype);
+  void addDiplotype(const Diplotype& diplotype){ diplotypeList.push_back(diplotype); }
+
+  auto c_reportListBegin() const {return reportIDList.cbegin();}
+  auto c_reportListEnd() const {return reportIDList.cend();}
+
+  size_t getNumberOfReports() const {return reportIDList.size();}
+    
+  std::string getReportID_concat() const {
+      std::string result = "";
+      int i = 0;
+      for (std::string s : reportIDList){
+          if (i > 0) {
+              result += " " + s;
+          } else {
+              result = s;
+          }
+          i++;
+      }
+      return result;
+  }
+    
+  string_vector_t getReportID_all() const {
+      return reportIDList;
+  }
+
+  bool isReportIDKnown(const std::string searchID) const {
+      bool result = false;
+      for (std::string s : reportIDList){
+          if (s == searchID){
+              result = true;
+              break;
+          }
+      }
+      return result;
+  }
+
+  void addReportIDs(const std::string &repID){
+      if (!isReportIDKnown(repID)) {
+          reportIDList.push_back(repID);
+      }
   }
 
   double computeSummedFrequencyDiplotypes () const;
   void expectation(const Haplotypes & haplotypes);
 
  private:
-  double numInDonors;
-  diplotypeList_t diplotypeList;
+    double numInDonors;
+    diplotypeList_t diplotypeList;
+    std::string reportID;
+    string_vector_t reportIDList;
+ 
 };
 
 class Phenotypes : public Hash<Phenotype>{
@@ -83,6 +131,7 @@ class Phenotypes : public Hash<Phenotype>{
  double computeLogLikelihood() const;
 
  private:
+  KeyPairs kPs;
   Phenotypes(const Phenotypes &);
   Phenotypes & operator=(const Phenotypes &);
 };

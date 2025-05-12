@@ -98,13 +98,16 @@ void HaplotypeCombinations::writeCombinations() const {
 void InputFile::buildHaploDiploPhenoTypes(Phenotypes & phenotypes,
 				     Haplotypes & haplotypes,
 				     const std::shared_ptr<BasicReport> pReport,
-				     std::ofstream & haplotypesFile){
+				     std::ofstream & haplotypesFile, KeyPairs & kps){
 
   std::string phenotypeCode = pReport->buildPhenotypeCode();
   std::pair<Phenotypes::iterator, bool> inserted = phenotypes.add(phenotypeCode);
   inserted.first->second.addToNumInDonors(pReport->getFrequency());
-  if(inserted.second)
-    pReport->buildHaploAndDiplotypes(inserted.first, haplotypes, haplotypesFile, haplotypeCombinations);
+    if(inserted.second) {
+    pReport->buildHaploAndDiplotypes(inserted.first, haplotypes, haplotypesFile, haplotypeCombinations, kps);
+    } else {
+        inserted.first->second.addReportIDs(pReport->getId());
+    }
 }
 
 void InputFileToEdit::printPhenotypes(const std::shared_ptr<Report> pReport,
@@ -134,17 +137,17 @@ void InputFileToEdit::printStatistics(){
   std::cout << std::endl;
 }
 
-void GLS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void GLS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes, KeyPairs & kps){
   
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
-  if(writeOutputGenotypes){         //US: 03.02.2021
-    openFileToWrite(genotypesFileName, phenotypesFile);
+  if(writeOutputGenotypes) {
+     openFileToWrite(genotypesFileName, phenotypesFile);
+     phenotypesFile.precision(14);
   }
-  phenotypesFile.precision(14);
 
   haplotypeCombinations.findCombinations(numberLoci);
 
@@ -163,14 +166,13 @@ void GLS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     else{
       numberDonors ++;
       for(auto oneReport : listOfpReports){
-        if(writeOutputGenotypes){         //US: 03.02.2021
-            printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-        }
-        buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
+        if(writeOutputGenotypes) printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
+        buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile, kps);
       }
     }
   }//while
 
+  if(writeOutputGenotypes) phenotypesFile.close();
   inputFile.close();
   haplotypes.setNumberLoci(numberLoci);
   haplotypes.setNumberDonors(numberDonors);
@@ -178,17 +180,18 @@ void GLS::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
   numberPhenotypes = phenotypes.getSize();
 }
 
-void GLSC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void GLSC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes, KeyPairs & kps){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
-  if(writeOutputGenotypes){         //US: 03.02.2021
-    openFileToWrite(genotypesFileName, phenotypesFile);
-  }
-  phenotypesFile.precision(14);
+    if(writeOutputGenotypes) {
+        openFileToWrite(genotypesFileName, phenotypesFile);
+        phenotypesFile.precision(14);
+        
+    }
 
   haplotypeCombinations.findCombinations(numberLoci);
 
@@ -207,14 +210,13 @@ void GLSC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     else{
       numberDonors ++;
       for(auto oneReport : listOfpReports){
-        if(writeOutputGenotypes){         //US: 03.02.2021
-            printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-        }
-        buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
+        if(writeOutputGenotypes) printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
+        buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile, kps);
       }
     }
   }//while
-    
+  
+  if(writeOutputGenotypes) phenotypesFile.close();
   inputFile.close();
   haplotypesFile.close();
   phenotypesFile.close();
@@ -226,17 +228,17 @@ void GLSC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 }
 
 
-void MAC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void MAC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes, KeyPairs & kps){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
   std::ofstream haplotypesFile;
   openFileToWrite(haplotypesFileName, haplotypesFile);
   std::ofstream phenotypesFile;
-  if(writeOutputGenotypes){         //US: 03.02.2021 output genotypes conditioned by Boolean in parameter file
-    openFileToWrite(genotypesFileName, phenotypesFile);
-  }
-  phenotypesFile.precision(14);
+    if(writeOutputGenotypes) {
+        openFileToWrite(genotypesFileName, phenotypesFile);
+        phenotypesFile.precision(14);
+    }
 
   std::string line;
   if(std::getline(inputFile, line))
@@ -257,8 +259,9 @@ void MAC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
 
     if(line.length() == 1 || line.length() == 0)
       continue;
-
+      
     MACReport report(line, lociNamesFromFile, lociAndResolutions, minimalFrequency, doAmbiguityFilter, expandAmbiguityLines);
+      
     std::vector<std::shared_ptr<Report>> listOfpReports;
     report.resolve(listOfpReports);
 
@@ -267,14 +270,13 @@ void MAC::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
     else{
       numberDonors ++;
       for(auto oneReport : listOfpReports){
-        if(writeOutputGenotypes){         //US: 03.02.2021 output genotypes conditioned by Boolean in parameter file
-            printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
-        }
-        buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile);
+        if(writeOutputGenotypes) printPhenotypes(oneReport, listOfpReports.size(), phenotypesFile);
+        buildHaploDiploPhenoTypes(phenotypes, haplotypes, oneReport, haplotypesFile, kps);
       }
     }
   }//while
     
+  if(writeOutputGenotypes) phenotypesFile.close();
   inputFile.close();
   haplotypesFile.close();
   phenotypesFile.close();
@@ -296,7 +298,7 @@ void MAC::readLociNamesFromFile(const std::string line){
   }
 }
 
-void InputFileToRead::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes){
+void InputFileToRead::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplotypes, KeyPairs & kps){
 
   std::ifstream inputFile;
   openFileToRead(inputFileName, inputFile);
@@ -320,7 +322,7 @@ void InputFileToRead::dataProcessing(Phenotypes & phenotypes, Haplotypes & haplo
     std::shared_ptr<BasicReport> pReport = std::make_shared<ReadinReport> (line, numberLoci);
     decimalNumberDonors += pReport->getFrequency();
 
-    buildHaploDiploPhenoTypes(phenotypes, haplotypes, pReport, haplotypesFile);
+    buildHaploDiploPhenoTypes(phenotypes, haplotypes, pReport, haplotypesFile, kps);
   }//while
     
   inputFile.close();
